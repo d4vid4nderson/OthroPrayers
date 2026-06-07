@@ -29,11 +29,13 @@ COVER = '''<section class="cover" id="top">
 </section>'''
 
 TOPNAV = '''<nav class="topnav" aria-label="Sections">
-  <a class="home" href="#top">&#10016;</a>
-  <a href="#morning">Morning</a>
-  <a href="#table">Table</a>
-  <a href="#hours">Hours</a>
-  <a href="#sleep">Before Sleep</a>
+  <span class="links">
+    <a class="home" href="#top">&#10016;</a>
+    <a href="#morning">Morning</a>
+    <a href="#table">Table</a>
+    <a href="#hours">Hours</a>
+    <a href="#sleep">Before Sleep</a>
+  </span>
   <span class="controls">
     <button id="size-dn" type="button" title="Smaller text" aria-label="Smaller text">A&minus;</button>
     <button id="size-up" type="button" title="Larger text" aria-label="Larger text">A+</button>

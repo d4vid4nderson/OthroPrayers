@@ -252,20 +252,32 @@ figure.banner img{ width:min(100%, 30rem); }
   background:rgba(255,253,248,.94);
   backdrop-filter:saturate(1.2) blur(3px);
   border-bottom:1px solid #e7e0d4;
-  text-align:center;
   font-variant-caps:small-caps;
   letter-spacing:.04em;
+  display:flex;
+  align-items:center;            /* keep controls on the row, vertically centred */
+}
+.topnav .links{
+  flex:1 1 auto; min-width:0;
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
 }
 .topnav a{
   display:inline-block;
   color:var(--rubric);
   text-decoration:none;
-  padding:.55rem .7rem;
+  padding:.55rem .55rem;
   font-size:1rem;
 }
 .topnav a:hover{ text-decoration:underline; }
 .topnav .home{ color:var(--ink); }
-.topnav .controls{ white-space:nowrap; }
+.topnav .controls{
+  flex:0 0 auto;                 /* never shrinks away — always visible */
+  white-space:nowrap;
+  display:flex; align-items:center;
+  border-left:1px solid #e7e0d4;
+  margin-left:.15rem;
+}
+html[data-theme="dark"] .topnav .controls{ border-left-color:#43434a; }
 .topnav .controls button{
   background:none; border:0; cursor:pointer; color:var(--rubric);
   font-family:inherit; font-size:1rem; line-height:1; padding:.5rem .45rem;
