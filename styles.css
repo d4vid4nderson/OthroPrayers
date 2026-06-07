@@ -98,7 +98,7 @@ html{ -webkit-text-size-adjust:100%; }
 
 body{
   margin:0;
-  background:var(--desk);
+  background:var(--paper);   /* match the page so there's no mismatched band at top/bottom */
   color:var(--ink);
   font-family:var(--serif);
   font-feature-settings:"liga" 1, "onum" 1, "kern" 1;
