@@ -37,23 +37,23 @@
   --serif:  "Arno Pro", "EB Garamond", Garamond, "Hoefler Text", "Times New Roman", serif;
 }
 
-/* ---- dark theme ------------------------------------------------------- */
+/* ---- dark theme: dark-gray paper, light + red text -------------------- */
 html[data-theme="dark"]{
-  --ink:    #e7e0d2;
-  --rubric: #ef7c8c;   /* lifted for contrast on dark paper */
-  --link:   #7fb2e6;
-  --paper:  #16130f;
-  --desk:   #0c0a08;
+  --ink:    #e8e6e2;   /* light text */
+  --rubric: #f26d77;   /* red text, legible on gray */
+  --link:   #88b6ea;
+  --paper:  #2c2c30;   /* dark-gray page */
+  --desk:   #1d1d20;   /* slightly darker behind the page */
 }
 html[data-theme="dark"] figure img{
   /* the red icons sit on white in the source art; present them as plaques so
-     they read on dark paper */
+     they read on the dark-gray page */
   background:#fbf7ef;
   padding:.7rem;
   border-radius:4px;
 }
-html[data-theme="dark"] .colophon{ color:#a59c8c; border-top-color:#2c2620; }
-html[data-theme="dark"] .topnav{ background:rgba(22,19,15,.94); border-bottom-color:#2c2620; }
+html[data-theme="dark"] .colophon{ color:#aaa7a0; border-top-color:#43434a; }
+html[data-theme="dark"] .topnav{ background:rgba(44,44,48,.94); border-bottom-color:#43434a; }
 
 /* ---- text-size steps (set on <html> by the control; rem scales all type) */
 html{ font-size:100%; }
