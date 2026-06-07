@@ -103,7 +103,7 @@ body{
   font-family:var(--serif);
   font-feature-settings:"liga" 1, "onum" 1, "kern" 1;
   line-height:1.46;
-  padding-bottom:calc(3.4rem + env(safe-area-inset-bottom));   /* clear bottom bar */
+  padding-bottom:calc(4rem + env(safe-area-inset-bottom));   /* clear bottom bar */
 }
 
 /* ---- the "booklet" page ---------------------------------------------- */
@@ -290,7 +290,17 @@ figure.banner img{ width:min(100%, 30rem); }
   backdrop-filter:saturate(1.2) blur(3px);
   border-top:1px solid #e7e0d4;
   display:flex; align-items:center; justify-content:space-between;
-  padding-bottom:env(safe-area-inset-bottom);   /* clear the iOS home indicator */
+  min-height:3rem;
+  /* lift the bar's contents above the iOS home indicator. max() guarantees a
+     floor even when env(safe-area-inset-bottom) reports 0 (e.g. some installed
+     web-app contexts); constant() is the legacy iOS 11 spelling. */
+  padding-bottom:calc(constant(safe-area-inset-bottom) + .4rem);
+  padding-bottom:max(.6rem, calc(env(safe-area-inset-bottom) + .4rem));
+}
+/* installed web-app (no browser chrome): guarantee generous home-indicator room */
+@media (display-mode:standalone){
+  .topnav{ padding-bottom:max(2.6rem, calc(env(safe-area-inset-bottom) + .9rem)); }
+  body{ padding-bottom:max(5.6rem, calc(4.4rem + env(safe-area-inset-bottom))); }
 }
 html[data-theme="dark"] .topnav{ border-top-color:#43434a; }
 .brand{
