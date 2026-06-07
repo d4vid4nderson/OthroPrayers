@@ -1,0 +1,253 @@
+/* Prayers for Morning, Day & Night — web edition
+ *
+ * The original booklet (St. Tikhon's Monastery Press, 2019) is set in
+ * Adobe's ARNO PRO. Arno Pro is a licensed font and cannot be redistributed
+ * for the web, so this edition uses EB Garamond — the closest freely-licensed
+ * Aldine/Garalde serif — as a stand-in. If you own an Arno Pro web licence,
+ * drop the files in /fonts and add it to the front of --serif below; the page
+ * will use it automatically.
+ *
+ * Exact colours taken from the source PDF:
+ *   ink    #231f20   rubric/red  #e54e62   link  #1e5e9e
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+:root{
+  --ink:    #231f20;
+  --rubric: #e54e62;
+  --link:   #1e5e9e;
+  --paper:  #ffffff;   /* the booklet is printed on white; matches the icon art */
+  --desk:   #ddd7ca;
+  --serif:  "Arno Pro", "EB Garamond", Garamond, "Hoefler Text", "Times New Roman", serif;
+}
+
+*{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  background:var(--desk);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-feature-settings:"liga" 1, "onum" 1, "kern" 1;
+  line-height:1.46;
+}
+
+/* ---- the "booklet" page ---------------------------------------------- */
+.book{
+  max-width:34rem;
+  margin:0 auto;
+  background:var(--paper);
+  padding:clamp(1.75rem, 5vw, 4rem) clamp(1.4rem, 5vw, 3.5rem) 5rem;
+  box-shadow:0 0 1px rgba(0,0,0,.25), 0 18px 50px rgba(60,40,20,.18);
+}
+@media (min-width:40rem){
+  body{ padding:2.5rem 1rem; }
+}
+
+/* ---- body text -------------------------------------------------------- */
+p{
+  margin:0;
+  font-size:1.165rem;
+  text-align:justify;
+  text-indent:1.4em;          /* the booklet marks paragraphs by indent only */
+  hyphens:auto;
+  -webkit-hyphens:auto;
+}
+p:first-of-type{ text-indent:0; }
+
+/* first paragraph after any heading / rubric is not indented if it leads with
+   a drop-cap or the ornamental initial */
+p.lead,
+p:has(> .dropcap:first-child){ text-indent:0; }
+
+.r{ color:var(--rubric); }
+.i{ font-style:italic; }
+.sc{ font-variant-caps:small-caps; font-feature-settings:"smcp" 1; letter-spacing:.015em; }
+
+/* the ℟ response mark and ✠ cross */
+.resp{ color:var(--rubric); font-style:normal; }
+.cross{ color:var(--rubric); }
+.bullet{ color:var(--rubric); }
+
+/* ---- drop caps -------------------------------------------------------- */
+.dropcap{
+  float:left;
+  color:var(--rubric);
+  font-size:3.15em;
+  line-height:.74;
+  margin:.02em .07em -.04em 0;
+  font-weight:500;
+}
+
+/* ornamental illuminated "T" of the "Through the prayers…" opening */
+.initial{ float:left; height:2.9em; margin:.06em .2em -.1em 0; }
+.initial img{ height:100%; width:auto; display:block; }
+.initial .vh{                       /* keep a real "T" for selection / a11y */
+  position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);
+}
+p.lead{ min-height:2.9em; }
+
+/* ---- rubrics (red instructions) -------------------------------------- */
+p.rubric{
+  color:var(--rubric);
+  text-align:center;
+  text-indent:0;
+  margin:1.15em 0 .5em;
+  font-size:1.06rem;
+  line-height:1.3;
+  /* italics come from the source per-span (.i) so roman titles/fasting rubrics
+     stay roman while genuine instructions stay italic */
+}
+
+/* centred couplets (invocations, the Jesus Prayer, the closing colophon) */
+p.verse{
+  text-align:center;
+  text-indent:0;
+  margin:.8em 0;
+  line-height:1.4;
+}
+
+/* ---- section sub-heads (AT THE MORNING MEAL …) ----------------------- */
+h2.subhead{
+  color:var(--rubric);
+  text-align:center;
+  font-weight:500;
+  font-size:1.18rem;
+  font-variant-caps:small-caps;
+  letter-spacing:.18em;
+  text-transform:lowercase;     /* feed small-caps clean lowercase */
+  margin:1.8em 0 .8em;
+}
+
+/* ---- the priest / layman hanging table ------------------------------- */
+.hang{
+  display:grid;
+  grid-template-columns:5.2em 1fr;
+  column-gap:.6em;
+  margin:.45em 0;
+}
+.hang .label{
+  color:var(--rubric);
+  font-style:italic;
+  text-align:left;
+  font-size:1.02rem;
+  line-height:1.4;
+  padding-top:.08em;
+}
+.hang p{ text-indent:0; margin:0; }
+
+/* ---- section divider pages ------------------------------------------- */
+.divider{
+  text-align:center;
+  margin:3.2em 0 1.6em;
+  scroll-margin-top:4.5rem;
+}
+.divider:first-child{ margin-top:.5em; }
+.divider .cross{
+  display:block;
+  font-size:1.7rem;
+  margin-bottom:.15em;
+}
+.divider h1{
+  font-weight:400;
+  font-size:clamp(1.7rem, 6vw, 2.25rem);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin:0;
+  color:var(--ink);
+  line-height:1.25;
+}
+.divider.hours h1{
+  letter-spacing:.02em;
+  text-transform:none;          /* mixed roman + italic, like the cover */
+}
+.divider.hours h1 .i{ letter-spacing:0; }
+
+/* ---- ornamental break (•) -------------------------------------------- */
+.ornament{
+  text-align:center;
+  color:var(--rubric);
+  font-size:1.2rem;
+  margin:1.4em 0;
+  letter-spacing:.2em;
+}
+
+/* ---- icons ----------------------------------------------------------- */
+figure{ margin:1.6em 0; text-align:center; }
+figure img{ max-width:100%; height:auto; }
+figure.icon img{ width:min(74%, 19rem); }
+figure.banner img{ width:min(100%, 30rem); }
+
+/* ---- cover ----------------------------------------------------------- */
+.cover{ text-align:center; padding-top:.5rem; }
+.cover .coverimg{ width:min(62%, 16rem); margin:0 auto .2rem; }
+.cover h1{
+  font-weight:400;
+  font-size:clamp(1.6rem, 6.5vw, 2.3rem);
+  letter-spacing:.06em;
+  line-height:1.3;
+  margin:.6em 0 1.4em;
+}
+.cover h1 .i{ letter-spacing:0; }
+.cover nav{ margin:1.4rem auto 2rem; display:inline-block; text-align:left; }
+.cover nav a{
+  display:block;
+  color:var(--link);
+  text-decoration:none;
+  font-size:1.3rem;
+  margin:.42em 0;
+  border-bottom:1px solid transparent;
+  width:max-content;
+}
+.cover nav a:hover{ border-bottom-color:var(--link); }
+.colophon{
+  font-size:.92rem;
+  font-style:italic;
+  line-height:1.45;
+  text-align:left;
+  color:#4a4441;
+  text-indent:0;
+  margin-top:2.2rem;
+  border-top:1px solid #e7e0d4;
+  padding-top:1.2rem;
+}
+.colophon cite{ font-style:italic; }
+
+/* ---- small top navigation (web convenience, not in the booklet) ------ */
+.topnav{
+  position:sticky; top:0; z-index:10;
+  background:rgba(255,253,248,.94);
+  backdrop-filter:saturate(1.2) blur(3px);
+  border-bottom:1px solid #e7e0d4;
+  text-align:center;
+  font-variant-caps:small-caps;
+  letter-spacing:.04em;
+}
+.topnav a{
+  display:inline-block;
+  color:var(--rubric);
+  text-decoration:none;
+  padding:.55rem .7rem;
+  font-size:1rem;
+}
+.topnav a:hover{ text-decoration:underline; }
+.topnav .home{ color:var(--ink); }
+
+.totop{
+  position:fixed; right:1rem; bottom:1rem;
+  background:var(--rubric); color:#fff; text-decoration:none;
+  width:2.4rem; height:2.4rem; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.2); font-size:1.2rem;
+  opacity:.85;
+}
+.totop:hover{ opacity:1; }
+
+@media print{
+  body{ background:#fff; }
+  .book{ box-shadow:none; max-width:none; }
+  .topnav, .totop{ display:none; }
+}
