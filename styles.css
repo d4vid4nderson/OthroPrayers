@@ -120,14 +120,6 @@ p:has(> .dropcap:first-child){ text-indent:0; }
   font-weight:500;
 }
 
-/* ornamental illuminated "T" of the "Through the prayers…" opening */
-.initial{ float:left; height:2.9em; margin:.06em .2em -.1em 0; }
-.initial img{ height:100%; width:auto; display:block; }
-.initial .vh{                       /* keep a real "T" for selection / a11y */
-  position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);
-}
-p.lead{ min-height:2.9em; }
-
 /* ---- rubrics (red instructions) -------------------------------------- */
 p.rubric{
   color:var(--rubric);

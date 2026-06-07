@@ -380,19 +380,16 @@ SUBHEADS = {"atthemorningmeal": "At the Morning Meal",
 def nokey(h):
     return re.sub(r"[^a-z]", "", plain(h).lower())
 
-INITIAL_T = ('<span class="initial"><img src="assets/img/initial_T.png" alt="T">'
-             '<span class="vh">T</span></span>')
-
 out = []
 for el in elements:
     t = el["type"]
     if t == "p":
         h = el["html"]
-        if h.startswith("HROUGH"):     # ornamental illuminated "T"
-            h = INITIAL_T + '<span class="sc">HROUGH</span>' + h[len("HROUGH"):]
-            out.append(f'<p class="lead">{h}</p>')
-        else:
-            out.append(f"<p>{h}</p>")
+        # "Through the prayers…" has no T glyph in the PDF (it was a drawn
+        # initial); render it as a plain red drop-cap T so it matches the others
+        if h.startswith("HROUGH"):
+            h = '<span class="dropcap">T</span><span class="sc">HROUGH</span>' + h[len("HROUGH"):]
+        out.append(f"<p>{h}</p>")
     elif t == "verse":
         out.append(f'<p class="verse">{el["html"]}</p>')
     elif t == "rubric":
