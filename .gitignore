@@ -1,0 +1,7 @@
+# build / dev artifacts
+preview*.png
+preview*.pdf
+render/
+*.pyc
+__pycache__/
+.DS_Store

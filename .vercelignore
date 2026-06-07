@@ -1,0 +1,8 @@
+# only the static site needs to be deployed; keep build inputs out of Vercel
+source.pdf
+generate.py
+build.py
+prayers.content.html
+README.md
+.gitignore
+assets/icons/app-icon.png
