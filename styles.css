@@ -27,6 +27,22 @@
   font-display:swap;
   src:url(fonts/ebgaramond-italic.woff2) format("woff2");
 }
+/* OpenDyslexic (SIL OFL — see fonts/OpenDyslexic-LICENSE.txt) for reading mode */
+@font-face{
+  font-family:"OpenDyslexic";
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url(fonts/opendyslexic-400-normal.woff2) format("woff2");
+}
+@font-face{
+  font-family:"OpenDyslexic";
+  font-style:normal; font-weight:700; font-display:swap;
+  src:url(fonts/opendyslexic-700-normal.woff2) format("woff2");
+}
+@font-face{
+  font-family:"OpenDyslexic";
+  font-style:italic; font-weight:400; font-display:swap;
+  src:url(fonts/opendyslexic-400-italic.woff2) format("woff2");
+}
 
 :root{
   --ink:    #231f20;
@@ -59,6 +75,22 @@ html[data-theme="dark"] .topnav{ background:rgba(44,44,48,.94); border-bottom-co
 html{ font-size:100%; }
 html[data-size="l"]{  font-size:114%; }
 html[data-size="xl"]{ font-size:128%; }
+
+/* ---- dyslexia-friendly reading mode ---------------------------------- */
+html[data-font="dyslexic"]{
+  --serif:"OpenDyslexic", Verdana, "Trebuchet MS", sans-serif;
+}
+html[data-font="dyslexic"] .book{
+  line-height:1.8;
+  word-spacing:.14em;
+  letter-spacing:.015em;
+}
+html[data-font="dyslexic"] .book p:not(.rubric):not(.verse){
+  text-align:left;            /* ragged right is easier to track */
+  hyphens:none; -webkit-hyphens:none;
+}
+html[data-font="dyslexic"] p{ font-size:1.05rem; }
+html[data-font="dyslexic"] .dropcap{ font-weight:700; }
 
 *{ box-sizing:border-box; }
 
@@ -248,45 +280,96 @@ figure.banner img{ width:min(100%, 30rem); }
 
 /* ---- small top navigation (web convenience, not in the booklet) ------ */
 .topnav{
-  position:sticky; top:0; z-index:10;
-  background:rgba(255,253,248,.94);
+  position:sticky; top:0; z-index:20;
+  background:rgba(255,253,248,.96);
   backdrop-filter:saturate(1.2) blur(3px);
   border-bottom:1px solid #e7e0d4;
   font-variant-caps:small-caps;
   letter-spacing:.04em;
   display:flex;
-  align-items:center;            /* keep controls on the row, vertically centred */
+  align-items:center;
 }
+html[data-theme="dark"] .topnav{ border-bottom-color:#43434a; }
+/* section links: a single non-wrapping strip that scrolls if it overflows */
 .topnav .links{
   flex:1 1 auto; min-width:0;
-  display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  display:flex; align-items:center;
+  overflow-x:auto; white-space:nowrap;
+  scrollbar-width:none; -ms-overflow-style:none;
 }
+.topnav .links::-webkit-scrollbar{ display:none; }
 .topnav a{
-  display:inline-block;
-  color:var(--rubric);
-  text-decoration:none;
-  padding:.55rem .55rem;
-  font-size:1rem;
+  flex:0 0 auto;
+  color:var(--rubric); text-decoration:none;
+  padding:.6rem .5rem; font-size:1rem;
 }
 .topnav a:hover{ text-decoration:underline; }
 .topnav .home{ color:var(--ink); }
-.topnav .controls{
-  flex:0 0 auto;                 /* never shrinks away — always visible */
-  white-space:nowrap;
-  display:flex; align-items:center;
+
+/* settings dropdown */
+.settings{ flex:0 0 auto; position:relative; }
+.iconbtn{
+  display:flex; align-items:center; justify-content:center;
+  width:2.6rem; height:2.6rem; padding:0;
+  background:none; border:0; cursor:pointer; color:var(--ink);
   border-left:1px solid #e7e0d4;
-  margin-left:.15rem;
 }
-html[data-theme="dark"] .topnav .controls{ border-left-color:#43434a; }
-.topnav .controls button{
-  background:none; border:0; cursor:pointer; color:var(--rubric);
-  font-family:inherit; font-size:1rem; line-height:1; padding:.5rem .45rem;
-  vertical-align:middle;
+html[data-theme="dark"] .iconbtn{ border-left-color:#43434a; }
+.iconbtn svg{ width:1.25rem; height:1.25rem; }
+.iconbtn:hover{ color:var(--rubric); }
+
+.menu{
+  position:absolute; right:.4rem; top:calc(100% + .3rem);
+  width:15rem; padding:.4rem;
+  background:var(--paper); color:var(--ink);
+  border:1px solid #e7e0d4; border-radius:10px;
+  box-shadow:0 10px 30px rgba(40,30,20,.22);
+  font-variant-caps:normal; letter-spacing:0;
 }
-.topnav .controls button:hover{ text-decoration:underline; }
-#size-dn{ font-size:.82rem; }
-#size-up{ font-size:1.12rem; }
-#theme{ font-size:1.05rem; }
+html[data-theme="dark"] .menu{ border-color:#43434a; box-shadow:0 10px 30px rgba(0,0,0,.5); }
+.menu[hidden]{ display:none; }
+.menu-row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.6rem; padding:.55rem .55rem; font-size:1rem;
+}
+.menu-row + .menu-row{ border-top:1px solid #efe8db; }
+html[data-theme="dark"] .menu-row + .menu-row{ border-top-color:#37373c; }
+.menu-label{ font-family:var(--serif); }
+
+/* segmented icon/text controls inside the menu */
+.seg{ display:inline-flex; border:1px solid #d9d2c4; border-radius:8px; overflow:hidden; }
+html[data-theme="dark"] .seg{ border-color:#4a4a51; }
+.seg button{
+  display:flex; align-items:center; justify-content:center;
+  min-width:2.2rem; height:2rem; padding:0 .5rem;
+  background:none; border:0; cursor:pointer; color:var(--ink);
+  font-family:var(--serif); line-height:1;
+}
+.seg button + button{ border-left:1px solid #d9d2c4; }
+html[data-theme="dark"] .seg button + button{ border-left-color:#4a4a51; }
+.seg button svg{ width:1.05rem; height:1.05rem; }
+.seg button[aria-pressed="true"]{ background:var(--rubric); color:#fff; }
+.seg button:not([aria-pressed="true"]):hover{ background:rgba(0,0,0,.05); }
+html[data-theme="dark"] .seg button:not([aria-pressed="true"]):hover{ background:rgba(255,255,255,.07); }
+#size-dn{ font-size:.85rem; }
+#size-up{ font-size:1.15rem; }
+
+/* on/off switch (dyslexia-friendly) */
+.switch{
+  --w:2.7rem; --h:1.5rem;
+  position:relative; width:var(--w); height:var(--h); flex:0 0 auto;
+  border:0; border-radius:999px; cursor:pointer; padding:0;
+  background:#cfc8ba; transition:background .15s;
+}
+html[data-theme="dark"] .switch{ background:#4a4a51; }
+.switch .knob{
+  position:absolute; top:2px; left:2px;
+  width:calc(var(--h) - 4px); height:calc(var(--h) - 4px);
+  background:#fff; border-radius:50%; transition:left .15s;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.switch[aria-checked="true"]{ background:var(--rubric); }
+.switch[aria-checked="true"] .knob{ left:calc(var(--w) - var(--h) + 2px); }
 
 .totop{
   position:fixed; right:1rem; bottom:1rem;

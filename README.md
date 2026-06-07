@@ -61,9 +61,17 @@ from Google Fonts.
 
 If you own an Arno Pro web licence, drop the font files in a `fonts/` folder,
 add an `@font-face`, and put `"Arno Pro"` at the front of the `--serif`
-variable in `styles.css`; the page will use it automatically. To remove the
-Google Fonts dependency you can also self-host EB Garamond (it's OFL, so this
-is permitted).
+variable in `styles.css`; the page will use it automatically.
+
+### Reader settings
+
+The top-bar gear (⚙) opens a settings menu with **text size**, **light / dark
+theme** (sun & moon icons; dark is a dark-gray page with light + red text), and
+a **dyslexia-friendly** reading mode that switches to **OpenDyslexic** with
+left-aligned, loosened spacing. Choices persist in `localStorage` and the theme
+follows the OS setting by default. Both EB Garamond and OpenDyslexic are
+self-hosted under the SIL Open Font License (`fonts/OFL.txt`,
+`fonts/OpenDyslexic-LICENSE.txt`) — no third-party font requests.
 
 ## Attribution & copyright
 
