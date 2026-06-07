@@ -29,33 +29,27 @@ COVER = '''<section class="cover" id="top">
 </section>'''
 
 # inline SVG icons (stroke uses currentColor; no emoji)
-GEAR = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
-        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/>'
-        '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 '
-        '1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 '
-        '0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 '
-        '0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 '
-        '1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 '
-        '2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 '
-        '0-1.51 1z"/></svg>')
+BURGER = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+          'stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/>'
+          '<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>')
 SUN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
        'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2M12 20.5v2'
        'M3.9 3.9l1.4 1.4M18.7 18.7l1.4 1.4M1.5 12h2M20.5 12h2M3.9 20.1l1.4-1.4M18.7 5.3l1.4-1.4"/></svg>')
 MOON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>')
 
-TOPNAV = '''<nav class="topnav" aria-label="Navigation">
-  <span class="links">
-    <a class="home" href="#top" aria-label="Top">&#10016;</a>
-    <a href="#morning">Morning</a>
-    <a href="#table">Table</a>
-    <a href="#hours">Hours</a>
-    <a href="#sleep">Before Sleep</a>
-  </span>
-  <div class="settings">
-    <button id="gear" class="iconbtn" type="button" aria-haspopup="true" aria-expanded="false"
-            aria-controls="settings-menu" title="Settings" aria-label="Settings">{GEAR}</button>
-    <div id="settings-menu" class="menu" role="menu" hidden>
+TOPNAV = '''<nav class="topnav" aria-label="Header">
+  <a class="brand" href="#top"><span class="cross">&#10016;</span> Daily Prayers</a>
+  <button id="burger" class="iconbtn" type="button" aria-haspopup="true" aria-expanded="false"
+          aria-controls="menu" title="Menu" aria-label="Open menu">{BURGER}</button>
+  <div id="menu-backdrop" class="backdrop"></div>
+  <div id="menu" class="drawer" role="menu">
+    <a class="drawer-link" href="#morning">Morning Prayers</a>
+    <a class="drawer-link" href="#table">Prayers at Table</a>
+    <a class="drawer-link" href="#hours">Prayers for the Hours</a>
+    <a class="drawer-link" href="#sleep">Prayers Before Sleep</a>
+    <div class="drawer-settings">
+      <div class="drawer-heading">Settings</div>
       <div class="menu-row">
         <span class="menu-label">Text size</span>
         <span class="seg" role="group" aria-label="Text size">
@@ -77,7 +71,7 @@ TOPNAV = '''<nav class="topnav" aria-label="Navigation">
       </div>
     </div>
   </div>
-</nav>'''.format(GEAR=GEAR, SUN=SUN, MOON=MOON)
+</nav>'''.format(BURGER=BURGER, SUN=SUN, MOON=MOON)
 
 # applied in <head> before paint to avoid a flash of the wrong theme/size/font
 EARLY_JS = '''<script>
@@ -89,11 +83,15 @@ if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";})();
 CONTROL_JS = '''<script>
 (function(){
   var r=document.documentElement, d=document, L=localStorage;
-  var menu=d.getElementById("settings-menu"), gear=d.getElementById("gear");
-  function open(o){ menu.hidden=!o; gear.setAttribute("aria-expanded", o?"true":"false"); }
-  gear.addEventListener("click", function(e){ e.stopPropagation(); open(menu.hidden); });
-  d.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target) && !gear.contains(e.target)) open(false); });
+  var menu=d.getElementById("menu"), burger=d.getElementById("burger"),
+      backdrop=d.getElementById("menu-backdrop");
+  function open(o){ menu.classList.toggle("open",o); backdrop.classList.toggle("open",o);
+    burger.setAttribute("aria-expanded", o?"true":"false"); }
+  burger.addEventListener("click", function(e){ e.stopPropagation(); open(!menu.classList.contains("open")); });
+  backdrop.addEventListener("click", function(){ open(false); });
   d.addEventListener("keydown", function(e){ if(e.key==="Escape") open(false); });
+  Array.prototype.forEach.call(menu.querySelectorAll(".drawer-link"), function(a){
+    a.addEventListener("click", function(){ open(false); }); });
 
   var sizes=["","l","xl"];
   function cur(){ return Math.max(0, sizes.indexOf(r.dataset.size||"")); }
@@ -141,12 +139,11 @@ HTML = f'''<!doctype html>
 {EARLY_JS}
 </head>
 <body>
-{TOPNAV}
 <main class="book">
 {COVER}
 {content}
 </main>
-<a class="totop" href="#top" aria-label="Back to top">&#8593;</a>
+{TOPNAV}
 {CONTROL_JS}
 </body>
 </html>
