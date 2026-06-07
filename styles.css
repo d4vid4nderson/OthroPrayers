@@ -291,8 +291,15 @@ figure.banner img{ width:min(100%, 30rem); }
   border-top:1px solid #e7e0d4;
   display:flex; align-items:center; justify-content:space-between;
   min-height:3rem;
-  /* lift the bar's contents above the iOS home indicator */
+  /* lift the bar's contents above the iOS home indicator
+     (constant() is the legacy iOS 11 spelling, env() the modern one) */
+  padding-bottom:calc(constant(safe-area-inset-bottom) + .35rem);
   padding-bottom:calc(env(safe-area-inset-bottom) + .35rem);
+}
+/* installed web-app (no browser chrome): give the home indicator extra room */
+@media (display-mode:standalone){
+  .topnav{ padding-bottom:calc(env(safe-area-inset-bottom) + .85rem); }
+  body{ padding-bottom:calc(4.6rem + env(safe-area-inset-bottom)); }
 }
 html[data-theme="dark"] .topnav{ border-top-color:#43434a; }
 .brand{
