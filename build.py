@@ -37,13 +37,19 @@ SUN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=
        'M3.9 3.9l1.4 1.4M18.7 18.7l1.4 1.4M1.5 12h2M20.5 12h2M3.9 20.1l1.4-1.4M18.7 5.3l1.4-1.4"/></svg>')
 MOON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>')
+CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+         'aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>')
 
 TOPNAV = '''<nav class="topnav" aria-label="Header">
   <a class="brand" href="#top"><span class="cross">&#10016;</span> Daily Prayers</a>
   <button id="burger" class="iconbtn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" title="Menu" aria-label="Open menu">{BURGER}</button>
   <div id="menu-backdrop" class="backdrop"></div>
-  <div id="menu" class="drawer" role="menu">
+  <div id="menu" class="drawer" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="drawer-head">
+      <span class="grab" aria-hidden="true"></span>
+      <button id="menu-close" class="drawer-close" type="button" aria-label="Close menu">{CLOSE}</button>
+    </div>
     <a class="drawer-link" href="#morning">Morning Prayers</a>
     <a class="drawer-link" href="#table">Prayers at Table</a>
     <a class="drawer-link" href="#hours">Prayers for the Hours</a>
@@ -71,7 +77,7 @@ TOPNAV = '''<nav class="topnav" aria-label="Header">
       </div>
     </div>
   </div>
-</nav>'''.format(BURGER=BURGER, SUN=SUN, MOON=MOON)
+</nav>'''.format(BURGER=BURGER, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
 
 # applied in <head> before paint to avoid a flash of the wrong theme/size/font
 EARLY_JS = '''<script>
@@ -84,14 +90,20 @@ CONTROL_JS = '''<script>
 (function(){
   var r=document.documentElement, d=document, L=localStorage;
   var menu=d.getElementById("menu"), burger=d.getElementById("burger"),
-      backdrop=d.getElementById("menu-backdrop");
+      backdrop=d.getElementById("menu-backdrop"), closeBtn=d.getElementById("menu-close");
   function open(o){ menu.classList.toggle("open",o); backdrop.classList.toggle("open",o);
-    burger.setAttribute("aria-expanded", o?"true":"false"); }
+    r.classList.toggle("menu-open",o); burger.setAttribute("aria-expanded", o?"true":"false"); }
   burger.addEventListener("click", function(e){ e.stopPropagation(); open(!menu.classList.contains("open")); });
   backdrop.addEventListener("click", function(){ open(false); });
+  closeBtn.addEventListener("click", function(){ open(false); });
   d.addEventListener("keydown", function(e){ if(e.key==="Escape") open(false); });
   Array.prototype.forEach.call(menu.querySelectorAll(".drawer-link"), function(a){
     a.addEventListener("click", function(){ open(false); }); });
+  // drag the sheet down to dismiss (the page behind is scroll-locked while open)
+  var sy=null, dy=0;
+  menu.addEventListener("touchstart", function(e){ sy=e.touches[0].clientY; dy=0; menu.style.transition="none"; }, {passive:true});
+  menu.addEventListener("touchmove", function(e){ if(sy===null) return; dy=e.touches[0].clientY-sy; if(dy>0) menu.style.transform="translateY("+dy+"px)"; }, {passive:true});
+  menu.addEventListener("touchend", function(){ menu.style.transition=""; menu.style.transform=""; if(dy>70) open(false); sy=null; });
 
   var sizes=["","l","xl"];
   function cur(){ return Math.max(0, sizes.indexOf(r.dataset.size||"")); }
