@@ -83,7 +83,8 @@ TOPNAV = '''<nav class="topnav" aria-label="Header">
 EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
-if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";})();
+if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2c2c30":"#ffffff");})();
 </script>'''
 
 CONTROL_JS = '''<script>
@@ -112,10 +113,11 @@ CONTROL_JS = '''<script>
   d.getElementById("size-up").onclick=function(){ setSize(cur()+1); };
   d.getElementById("size-dn").onclick=function(){ setSize(cur()-1); };
 
-  var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark");
+  var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
-    tl.setAttribute("aria-pressed", dark?"false":"true"); }
+    tl.setAttribute("aria-pressed", dark?"false":"true");
+    if(tc) tc.setAttribute("content", dark?"#2c2c30":"#ffffff"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 
@@ -145,8 +147,8 @@ HTML = f'''<!doctype html>
 <meta name="apple-mobile-web-app-title" content="Prayers">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fffdf8">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d1d20">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" id="tc" content="#ffffff">
 <link rel="stylesheet" href="styles.css">
 {EARLY_JS}
 </head>
