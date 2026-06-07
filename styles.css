@@ -11,7 +11,22 @@
  *   ink    #231f20   rubric/red  #e54e62   link  #1e5e9e
  */
 
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+/* self-hosted EB Garamond (SIL OFL — see fonts/OFL.txt). Variable files cover
+   the whole weight range, so 400/500/600 all render from one file per style. */
+@font-face{
+  font-family:"EB Garamond";
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url(fonts/ebgaramond.woff2) format("woff2");
+}
+@font-face{
+  font-family:"EB Garamond";
+  font-style:italic;
+  font-weight:400 800;
+  font-display:swap;
+  src:url(fonts/ebgaramond-italic.woff2) format("woff2");
+}
 
 :root{
   --ink:    #231f20;
@@ -21,6 +36,29 @@
   --desk:   #ddd7ca;
   --serif:  "Arno Pro", "EB Garamond", Garamond, "Hoefler Text", "Times New Roman", serif;
 }
+
+/* ---- dark theme ------------------------------------------------------- */
+html[data-theme="dark"]{
+  --ink:    #e7e0d2;
+  --rubric: #ef7c8c;   /* lifted for contrast on dark paper */
+  --link:   #7fb2e6;
+  --paper:  #16130f;
+  --desk:   #0c0a08;
+}
+html[data-theme="dark"] figure img{
+  /* the red icons sit on white in the source art; present them as plaques so
+     they read on dark paper */
+  background:#fbf7ef;
+  padding:.7rem;
+  border-radius:4px;
+}
+html[data-theme="dark"] .colophon{ color:#a59c8c; border-top-color:#2c2620; }
+html[data-theme="dark"] .topnav{ background:rgba(22,19,15,.94); border-bottom-color:#2c2620; }
+
+/* ---- text-size steps (set on <html> by the control; rem scales all type) */
+html{ font-size:100%; }
+html[data-size="l"]{  font-size:114%; }
+html[data-size="xl"]{ font-size:128%; }
 
 *{ box-sizing:border-box; }
 
@@ -235,6 +273,16 @@ figure.banner img{ width:min(100%, 30rem); }
 }
 .topnav a:hover{ text-decoration:underline; }
 .topnav .home{ color:var(--ink); }
+.topnav .controls{ white-space:nowrap; }
+.topnav .controls button{
+  background:none; border:0; cursor:pointer; color:var(--rubric);
+  font-family:inherit; font-size:1rem; line-height:1; padding:.5rem .45rem;
+  vertical-align:middle;
+}
+.topnav .controls button:hover{ text-decoration:underline; }
+#size-dn{ font-size:.82rem; }
+#size-up{ font-size:1.12rem; }
+#theme{ font-size:1.05rem; }
 
 .totop{
   position:fixed; right:1rem; bottom:1rem;

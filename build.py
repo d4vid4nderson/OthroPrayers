@@ -34,7 +34,38 @@ TOPNAV = '''<nav class="topnav" aria-label="Sections">
   <a href="#table">Table</a>
   <a href="#hours">Hours</a>
   <a href="#sleep">Before Sleep</a>
+  <span class="controls">
+    <button id="size-dn" type="button" title="Smaller text" aria-label="Smaller text">A&minus;</button>
+    <button id="size-up" type="button" title="Larger text" aria-label="Larger text">A+</button>
+    <button id="theme" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">&#9790;</button>
+  </span>
 </nav>'''
+
+# applied in <head> before paint to avoid a flash of the wrong theme/size
+EARLY_JS = '''<script>
+(function(){var r=document.documentElement,t=localStorage.getItem("theme"),s=localStorage.getItem("size");
+if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches))r.dataset.theme="dark";
+if(s)r.dataset.size=s;})();
+</script>'''
+
+CONTROL_JS = '''<script>
+(function(){
+  var r=document.documentElement, sizes=["","l","xl"];
+  function cur(){return Math.max(0,sizes.indexOf(r.dataset.size||""));}
+  function setSize(i){i=Math.max(0,Math.min(sizes.length-1,i));var v=sizes[i];
+    if(v){r.dataset.size=v;localStorage.setItem("size",v);}
+    else{delete r.dataset.size;localStorage.removeItem("size");}}
+  document.getElementById("size-up").onclick=function(){setSize(cur()+1);};
+  document.getElementById("size-dn").onclick=function(){setSize(cur()-1);};
+  var tb=document.getElementById("theme");
+  function paint(){tb.innerHTML=r.dataset.theme==="dark"?"\\u2600":"\\u263e";}
+  tb.onclick=function(){
+    if(r.dataset.theme==="dark"){delete r.dataset.theme;localStorage.setItem("theme","light");}
+    else{r.dataset.theme="dark";localStorage.setItem("theme","dark");}
+    paint();};
+  paint();
+})();
+</script>'''
 
 HTML = f'''<!doctype html>
 <html lang="en">
@@ -45,9 +76,8 @@ HTML = f'''<!doctype html>
 <meta name="description" content="Orthodox prayers for morning, the table, the
   hours of the day and night, and before sleep — a web edition of the booklet
   published by St. Tikhon's Monastery Press / OCA.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="styles.css">
+{EARLY_JS}
 </head>
 <body>
 {TOPNAV}
@@ -56,6 +86,7 @@ HTML = f'''<!doctype html>
 {content}
 </main>
 <a class="totop" href="#top" aria-label="Back to top">&#8593;</a>
+{CONTROL_JS}
 </body>
 </html>
 '''
