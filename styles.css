@@ -331,12 +331,24 @@ html[data-theme="dark"] .topnav{ border-top-color:#43434a; }
 }
 .drawer.open{ transform:translateY(0); visibility:visible; }
 html[data-theme="dark"] .drawer{ border-color:#43434a; box-shadow:0 -14px 36px rgba(0,0,0,.55); }
-/* a small grab-handle at the top of the sheet */
-.drawer::before{
-  content:""; display:block; width:2.4rem; height:.28rem; margin:.1rem auto .5rem;
+/* sheet header: centred grab-handle + a close button on the right */
+.drawer-head{ position:relative; height:1.7rem; }
+.grab{
+  display:block; width:2.4rem; height:.28rem; margin:.45rem auto 0;
   background:#cfc8ba; border-radius:999px;
 }
-html[data-theme="dark"] .drawer::before{ background:#54545c; }
+html[data-theme="dark"] .grab{ background:#54545c; }
+.drawer-close{
+  position:absolute; top:-.15rem; right:-.1rem;
+  width:2.6rem; height:2.6rem; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:0; cursor:pointer; color:var(--ink);
+}
+.drawer-close:hover{ color:var(--rubric); }
+.drawer-close svg{ width:1.3rem; height:1.3rem; }
+
+/* lock the page behind the open sheet so dragging doesn't scroll it */
+html.menu-open{ overflow:hidden; }
 .drawer-link{
   display:block; color:var(--ink); text-decoration:none;
   padding:.7rem .7rem; font-size:1.12rem; border-radius:8px;
