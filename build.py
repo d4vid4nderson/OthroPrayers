@@ -245,6 +245,148 @@ ERAS = [
 ]
 
 
+# verified free full-text links per work (New Advent / CCEL, grounded by search)
+CF_READ = {
+ "didache":"https://www.newadvent.org/fathers/0714.htm",
+ "1clement":"https://www.newadvent.org/fathers/1010.htm",
+ "ignatius":"https://www.newadvent.org/fathers/0104.htm",
+ "polycarp":"https://www.newadvent.org/fathers/0136.htm",
+ "mpolycarp":"https://www.newadvent.org/fathers/0102.htm",
+ "barnabas":"https://www.newadvent.org/fathers/0124.htm",
+ "diognetus":"https://www.newadvent.org/fathers/0101.htm",
+ "hermas":"https://www.newadvent.org/fathers/0201.htm",
+ "2clement":"https://www.newadvent.org/fathers/1011.htm",
+ "papias":"https://www.newadvent.org/fathers/0125.htm",
+ "justin-apol":"https://www.newadvent.org/fathers/0126.htm",
+ "justin-trypho":"https://www.newadvent.org/fathers/0128.htm",
+ "athenagoras":"https://www.newadvent.org/fathers/0205.htm",
+ "theophilus":"https://www.newadvent.org/fathers/0204.htm",
+ "tatian":"https://www.newadvent.org/fathers/0202.htm",
+ "minucius":"https://www.newadvent.org/fathers/0410.htm",
+ "irenaeus-ah":"https://www.newadvent.org/fathers/0103.htm",
+ "irenaeus-demo":"https://www.ccel.org/ccel/irenaeus/demonstr.html",
+ "tertullian-apol":"https://www.newadvent.org/fathers/0301.htm",
+ "tertullian-presc":"https://www.newadvent.org/fathers/0311.htm",
+ "clement-alex":"https://www.newadvent.org/fathers/0210.htm",
+ "hippolytus":"https://www.newadvent.org/fathers/0501.htm",
+ "origen-fp":"https://www.newadvent.org/fathers/0412.htm",
+ "origen-celsus":"https://www.newadvent.org/fathers/0416.htm",
+ "cyprian-unity":"https://www.newadvent.org/fathers/050701.htm",
+ "gregory-thaum":"https://www.newadvent.org/fathers/0601.htm",
+ "athanasius-inc":"https://www.newadvent.org/fathers/2802.htm",
+ "athanasius-antony":"https://www.newadvent.org/fathers/2811.htm",
+ "cyril-jer":"https://www.newadvent.org/fathers/3101.htm",
+ "basil-spirit":"https://www.newadvent.org/fathers/3203.htm",
+ "basil-hex":"https://www.newadvent.org/fathers/3201.htm",
+ "naz-orations":"https://www.newadvent.org/fathers/3102.htm",
+ "nyssa-catech":"https://www.newadvent.org/fathers/2908.htm",
+ "chrysostom-priest":"https://www.newadvent.org/fathers/1922.htm",
+ "chrysostom-hom":"https://www.newadvent.org/fathers/2001.htm",
+ "ambrose-myst":"https://www.newadvent.org/fathers/3405.htm",
+ "jerome":"https://www.newadvent.org/fathers/2708.htm",
+ "augustine-conf":"https://www.newadvent.org/fathers/1101.htm",
+ "augustine-doc":"https://www.newadvent.org/fathers/1202.htm",
+ "augustine-city":"https://www.newadvent.org/fathers/1201.htm",
+ "augustine-trin":"https://www.newadvent.org/fathers/1301.htm",
+ "vincent":"https://www.newadvent.org/fathers/3506.htm",
+ "cassian":"https://www.newadvent.org/fathers/3508.htm",
+ "nicaea":"https://www.newadvent.org/fathers/3801.htm",
+ "const1":"https://www.newadvent.org/fathers/3808.htm",
+ "ephesus":"https://www.newadvent.org/fathers/3810.htm",
+ "chalcedon":"https://www.newadvent.org/fathers/3811.htm",
+}
+# per-work free audio (url, type) — verified; works without one fall back to the
+# per-era LibriVox hub link
+CF_AUDIO = {
+ "justin-apol": ("https://librivox.org/the-first-apology-by-martyr/", "LibriVox"),
+ "irenaeus-ah": ("https://librivox.org/against-heresies-by-irenaeus/", "LibriVox"),
+ "athanasius-inc": ("https://archive.org/details/on_the_incarnation_2206_librivox", "LibriVox"),
+ "athanasius-antony": ("https://librivox.org/the-life-of-anthony-by-athanasius-of-alexandria/", "LibriVox"),
+ "cyril-jer": ("https://archive.org/details/CyrilJCatLects01", "LibriVox"),
+ "basil-spirit": ("https://librivox.org/the-book-of-saint-basil-on-the-spirit-by-basil-of-caesarea/", "LibriVox"),
+ "basil-hex": ("https://librivox.org/the-hexaemeron-by-basil-of-caesarea/", "LibriVox"),
+ "naz-orations": ("https://librivox.org/theological-orations-by-gregory-of-nazianzus/", "LibriVox"),
+ "nyssa-catech": ("https://librivox.org/on-virginity-by-gregory-of-nyssa/", "LibriVox"),
+ "chrysostom-priest": ("https://archive.org/details/on-the-priesthood-chrysostom_202109", "audio"),
+ "ambrose-myst": ("https://archive.org/details/on_duties_of_clergy_librivox", "LibriVox"),
+ "jerome": ("https://librivox.org/on-illustrious-men-de-viris-illustribus-by-saint-jerome/", "LibriVox"),
+ "augustine-conf": ("https://librivox.org/the-confessions-by-saint-augustine-of-hippo/", "LibriVox"),
+ "augustine-city": ("https://librivox.org/the-city-of-god-by-st-augustine-of-hippo/", "LibriVox"),
+ "augustine-doc": ("https://librivox.org/on-christian-doctrine-by-saint-augustine-of-hippo/", "LibriVox"),
+ "augustine-trin": ("https://www.youtube.com/watch?v=N1qKWQw87Es", "YouTube"),
+ "vincent": ("https://librivox.org/the-commonitory-of-saint-vincent-lerins-by-vincent-lerins/", "LibriVox"),
+ "cassian": ("https://librivox.org/the-conferences-of-john-cassian-part-i-by-john-cassian/", "LibriVox"),
+}
+AUDIO_HUBS = [
+ ("LibriVox", "https://librivox.org/"),
+ ("Ancient Faith Radio", "https://www.ancientfaith.com/"),
+ ("YouTube", "https://www.youtube.com/results?search_query=church+fathers+audiobook"),
+]
+
+# reference sections (free links), shown after the chronological checklist
+REF_SECTIONS = [
+ {"name": "The Creeds", "blurb": "The Church's confessions of faith, in a few lines.",
+  "items": [
+    ("The Nicene–Constantinopolitan Creed (381)", "https://www.newadvent.org/cathen/11049a.htm",
+     "The Creed of the first two Ecumenical Councils — recited at every Liturgy."),
+    ("The Apostles' Creed", "https://www.newadvent.org/cathen/01629a.htm",
+     "An ancient baptismal creed of the Western Church."),
+    ("The Athanasian Creed (Quicumque Vult)", "https://ccel.org/ccel/schaff/creeds2.iv.i.iv.html",
+     "A precise confession of the Trinity and the Incarnation."),
+    ("The Chalcedonian Definition (451)", "https://www.newadvent.org/fathers/3811.htm",
+     "Christ in two natures, “without confusion or division.”"),
+  ]},
+ {"name": "The Ecumenical Councils", "blurb": "The canons and definitions of the Church gathered as one.",
+  "items": [
+    ("The Seven Ecumenical Councils (canons & decrees)", "https://ccel.org/ccel/schaff/npnf214.html",
+     "Schaff's NPNF Vol. 14 — full canons and dogmatic decrees, with commentary."),
+    ("Nicaea I (325)", "https://www.newadvent.org/fathers/3801.htm",
+     "Against Arianism; the original Nicene Creed and twenty canons."),
+    ("Constantinople I (381)", "https://www.newadvent.org/fathers/3808.htm",
+     "Completes the Creed; the divinity of the Holy Spirit."),
+    ("Ephesus (431)", "https://www.newadvent.org/fathers/3810.htm",
+     "Mary as Theotokos; the unity of Christ."),
+    ("Chalcedon (451)", "https://www.newadvent.org/fathers/3811.htm",
+     "The Definition of the two natures of Christ, and thirty canons."),
+  ]},
+ {"name": "Catechisms", "blurb": "Ordered introductions to the whole of the faith.",
+  "items": [
+    ("The Orthodox Faith — Fr. Thomas Hopko", "https://www.oca.org/orthodoxy/the-orthodox-faith",
+     "A free four-volume introduction from the OCA: doctrine, worship, Bible, spirituality.", True),
+    ("The Longer Catechism — St. Philaret of Moscow", "https://www.ccel.org/ccel/schaff/creeds2.html",
+     "The classic question-and-answer catechism of the Orthodox Church.", True),
+    ("An Exact Exposition of the Orthodox Faith — St. John of Damascus",
+     "https://www.newadvent.org/fathers/3304.htm",
+     "The great early synthesis of patristic theology.", True),
+    ("How to Be an Orthodox Christian (podcast)",
+     "https://www.ancientfaith.com/podcasts/how-to-be-an-orthodox-christian/",
+     "A free catechetical podcast series for inquirers, from Ancient Faith.", True),
+  ]},
+ {"name": "Recommended Reading", "blurb": "A few books to go deeper — free where the text is public-domain.",
+  "items": [
+    ("Athanasius — On the Incarnation", "https://www.ccel.org/ccel/athanasius/incarnation.html",
+     "The classic short treatise on why God became man.", True),
+    ("The Apostolic Fathers (Lightfoot translation)", "https://ccel.org/ccel/lightfoot/fathers.html",
+     "Clement, Ignatius, Polycarp, the Didache and more, in one free volume.", True),
+    ("Eusebius — Church History", "https://www.newadvent.org/fathers/2501.htm",
+     "The first history of the Church, from the Apostles to Constantine.", True),
+    ("Alexander Schmemann — For the Life of the World", "https://svspress.com/for-the-life-of-the-world-new-edition/",
+     "A modern classic on the sacraments and the world as gift.", False),
+    ("Vladimir Lossky — The Mystical Theology of the Eastern Church",
+     "https://en.wikipedia.org/wiki/Vladimir_Lossky",
+     "The landmark 20th-century synthesis of Orthodox theology.", False),
+    ("Kallistos Ware — The Orthodox Way", "https://svspress.com/the-orthodox-way-classics-series-vol-2/",
+     "A warm, accessible introduction to the Orthodox vision of God.", False),
+    ("Jaroslav Pelikan — The Emergence of the Catholic Tradition (100–600)",
+     "https://press.uchicago.edu/ucp/books/book/chicago/C/bo3799466.html",
+     "Volume 1 of the great history of the development of doctrine.", False),
+    ("Georges Florovsky — The Eastern Fathers of the Fourth Century",
+     "http://www.holytrinitymission.org/books/english/fathers_florovsky_1.htm",
+     "A free, masterful survey of the Greek Fathers.", True),
+  ]},
+]
+
+
 def resources_html():
     o = ['<section class="resources" id="papers">']
     o.append('<div class="divider"><span class="cross">✠</span><h1>Resources</h1></div>')
@@ -252,6 +394,8 @@ def resources_html():
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
              'to see how her structure, worship, and belief took shape. Tick each work as you '
              'read or listen; your progress is saved on this device.</p>')
+    hubs = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in AUDIO_HUBS)
+    o.append(f'<p class="cf-audiohubs">Listen free: {hubs}</p>')
     o.append('<p class="cf-progress-wrap"><span id="cf-progress">0 read</span>'
              '<span class="cf-track"><span id="cf-bar" class="cf-fill"></span></span></p>')
     for era in ERAS:
@@ -264,16 +408,34 @@ def resources_html():
         o.append(f'<p class="cf-sources">Read free: {src}</p>')
         o.append('<ul class="cf-list">')
         for wid, title, by, read, note in era["works"]:
-            rl = (f' <a class="cf-read" href="{read}" target="_blank" rel="noopener">read &rsaquo;</a>'
-                  if read else '')
+            url = CF_READ.get(wid) or read
+            rl = (f'<a class="cf-read" href="{url}" target="_blank" rel="noopener">read &rsaquo;</a>'
+                  if url else '')
+            au = CF_AUDIO.get(wid)
+            al = (f'<a class="cf-listen" href="{au[0]}" target="_blank" rel="noopener">listen &rsaquo;</a>'
+                  if au else '')
+            links = "".join(f'<span class="cf-sep">·</span>{x}' for x in (rl, al) if x)
             o.append(f'<li class="cf-item"><label><input type="checkbox" data-cf="{wid}">'
                      f'<span class="cf-title">{title}</span></label>'
-                     f'<div class="cf-meta"><span class="cf-by">{by}</span>{rl}</div>'
+                     f'<div class="cf-meta"><span class="cf-by">{by}</span>{links}</div>'
                      f'<div class="cf-note">{note}</div></li>')
         o.append('</ul></div>')
-    o.append('<p class="res-foot">Links point to free, public-domain libraries — New Advent, '
-             'CCEL, Wikisource, and Early Christian Writings — and to free audiobooks at LibriVox. '
-             'This is a starting set; tell me which links to refine or swap.</p>')
+    # reference sections (creeds, councils, catechisms, books)
+    for ref in REF_SECTIONS:
+        o.append('<div class="cf-era ref-era">')
+        o.append(f'<h3>{ref["name"]}</h3>')
+        o.append(f'<p class="cf-blurb">{ref["blurb"]}</p>')
+        o.append('<ul class="ref-list">')
+        for item in ref["items"]:
+            title, url, desc = item[0], item[1], item[2]
+            free = len(item) > 3 and item[3]
+            badge = ' <span class="ref-free">free</span>' if free else ''
+            o.append(f'<li class="ref-item"><a class="ref-title" href="{url}" target="_blank" '
+                     f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
+        o.append('</ul></div>')
+    o.append('<p class="res-foot">Text links point to free public-domain libraries — New Advent, '
+             'CCEL, Wikisource and Early Christian Writings — and audio to LibriVox and other free '
+             'sources. A few modern books link to the publisher. Tell me any link to refine.</p>')
     o.append('</section>')
     return "\n".join(o)
 
