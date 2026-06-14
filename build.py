@@ -509,11 +509,11 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="icon" href="favicon.ico" sizes="32x32">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
-<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="favicon.ico?v=2" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=2">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=2">
+<link rel="manifest" href="site.webmanifest?v=2">
 <meta name="apple-mobile-web-app-title" content="Prayers">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
