@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Assemble index.html from the cover template + generated prayer content.
+"""Assemble index.html (the prayer booklet) and resources.html (the Resources
+area, incl. the Early Church Fathers reading checklist) from a shared shell.
 Run `python3 generate.py` first to (re)produce prayers.content.html."""
 
 import re
+from urllib.parse import quote
+
 content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
@@ -18,6 +21,7 @@ COVER = '''<section class="cover" id="top">
     <a href="#table">Prayers at Table</a>
     <a href="#hours">Prayers for the Hours of the Day and Night</a>
     <a href="#sleep">Prayers Before Sleep</a>
+    <a href="resources.html">Resources</a>
   </nav>
   <p class="colophon">These prayers are excerpted from <cite>Orthodox Christian
     Prayers</cite>, edited by Priest John Mikitish &amp; Hieromonk Herman
@@ -40,8 +44,8 @@ MOON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
 CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
          'aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>')
 
-TOPNAV = '''<nav class="topnav" aria-label="Header">
-  <a class="brand" href="#top"><span class="cross">&#10016;</span> Daily Prayers</a>
+TOPNAV_TMPL = '''<nav class="topnav" aria-label="Header">
+  <a class="brand" href="{brand_href}"><span class="cross">&#10016;</span> Daily Prayers</a>
   <button id="burger" class="iconbtn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" title="Menu" aria-label="Open menu">{BURGER}</button>
   <div id="menu-backdrop" class="backdrop"></div>
@@ -50,10 +54,7 @@ TOPNAV = '''<nav class="topnav" aria-label="Header">
       <span class="grab" aria-hidden="true"></span>
       <button id="menu-close" class="drawer-close" type="button" aria-label="Close menu">{CLOSE}</button>
     </div>
-    <a class="drawer-link" href="#morning">Morning Prayers</a>
-    <a class="drawer-link" href="#table">Prayers at Table</a>
-    <a class="drawer-link" href="#hours">Prayers for the Hours</a>
-    <a class="drawer-link" href="#sleep">Prayers Before Sleep</a>
+    {links}
     <div class="drawer-settings">
       <div class="drawer-heading">Settings</div>
       <div class="menu-row">
@@ -77,9 +78,207 @@ TOPNAV = '''<nav class="topnav" aria-label="Header">
       </div>
     </div>
   </div>
-</nav>'''.format(BURGER=BURGER, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
+</nav>'''
 
-# applied in <head> before paint to avoid a flash of the wrong theme/size/font
+
+def topnav(page):
+    if page == "resources":
+        brand = "index.html"
+        items = [("index.html#morning", "Morning Prayers"), ("index.html#table", "Prayers at Table"),
+                 ("index.html#hours", "Prayers for the Hours"), ("index.html#sleep", "Prayers Before Sleep"),
+                 ("#papers", "Resources")]
+    else:
+        brand = "#top"
+        items = [("#morning", "Morning Prayers"), ("#table", "Prayers at Table"),
+                 ("#hours", "Prayers for the Hours"), ("#sleep", "Prayers Before Sleep"),
+                 ("resources.html", "Resources")]
+    links = "\n    ".join(f'<a class="drawer-link" href="{h}">{t}</a>' for h, t in items)
+    return TOPNAV_TMPL.format(brand_href=brand, links=links,
+                              BURGER=BURGER, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
+
+
+# ---- Early Church Fathers reading checklist --------------------------------
+NA   = "https://www.newadvent.org/fathers/"
+CCEL = "https://www.ccel.org/fathers"
+ECW  = "https://www.earlychristianwritings.com/"
+WSA  = "https://en.wikisource.org/wiki/Ante-Nicene_Fathers"
+WSN  = "https://en.wikisource.org/wiki/Nicene_and_Post-Nicene_Fathers"
+
+
+def lv(term):  # a LibriVox search that always resolves to results
+    return "https://librivox.org/search?q=" + quote(term) + "&search_form=advanced"
+
+
+# each work: (id, title, author/date, read-url-or-None, note)
+ERAS = [
+ {"name": "The Apostolic Fathers", "dates": "c. AD 70–155",
+  "blurb": "The first generation after the Apostles — the earliest evidence of how the Church worshipped, was governed, and confessed its faith.",
+  "read": [("New Advent", NA), ("Early Christian Writings", ECW), ("Wikisource (ANF I)", WSA)],
+  "audio": lv("apostolic fathers"),
+  "works": [
+    ("didache", "The Didache", "Anonymous, c. 90", ECW+"didache.html",
+     "A church manual — baptism, the Eucharist, fasting, and the “two ways” of life and death."),
+    ("1clement", "First Epistle of Clement", "Clement of Rome, c. 96", ECW+"1clement.html",
+     "Rome writes to Corinth on order and ministry — an early witness to apostolic succession."),
+    ("ignatius", "The Seven Epistles", "Ignatius of Antioch, c. 107", ECW+"ignatius.html",
+     "Written on the road to martyrdom: the bishop, the Eucharist, and the unity of the Church."),
+    ("polycarp", "Letter to the Philippians", "Polycarp of Smyrna, c. 110", ECW+"polycarp.html",
+     "A disciple of the Apostle John exhorts the Church to faith and righteousness."),
+    ("mpolycarp", "The Martyrdom of Polycarp", "Church of Smyrna, c. 155", ECW+"martyrdompolycarp.html",
+     "The earliest detailed account of a Christian martyrdom outside the New Testament."),
+    ("barnabas", "The Epistle of Barnabas", "Anonymous, c. 130", ECW+"barnabas.html",
+     "An early reading of the Old Testament as fulfilled in Christ."),
+    ("diognetus", "The Epistle to Diognetus", "Mathetes, c. 130", ECW+"diognetus.html",
+     "A luminous early apology describing Christians as “the soul of the world.”"),
+    ("hermas", "The Shepherd of Hermas", "Hermas, c. 140", ECW+"shepherd.html",
+     "Visions and parables on repentance; treasured and widely read in the early Church."),
+    ("2clement", "Second Clement", "Anonymous, c. 150", ECW+"2clement.html",
+     "The earliest surviving Christian sermon."),
+    ("papias", "Fragments", "Papias of Hierapolis, c. 110", ECW+"papias.html",
+     "Early traditions about the origins of the Gospels."),
+  ]},
+ {"name": "The Apologists", "dates": "c. AD 120–200",
+  "blurb": "Defenders who explained the faith to emperors and philosophers, articulating doctrine in dialogue with the wider world.",
+  "read": [("New Advent", NA), ("Early Christian Writings", ECW), ("Wikisource (ANF)", WSA)],
+  "audio": lv("Justin Martyr"),
+  "works": [
+    ("justin-apol", "First & Second Apology", "Justin Martyr, c. 155", ECW+"justinmartyr.html",
+     "A philosopher’s defense — and the earliest description of Sunday worship and the Eucharist."),
+    ("justin-trypho", "Dialogue with Trypho", "Justin Martyr, c. 160", ECW+"justinmartyr.html",
+     "A sustained discussion of Christ in the Hebrew Scriptures."),
+    ("athenagoras", "A Plea for the Christians", "Athenagoras, c. 177", ECW+"athenagoras.html",
+     "Answers the slanders against Christians and defends the resurrection."),
+    ("theophilus", "To Autolycus", "Theophilus of Antioch, c. 180", ECW+"theophilus.html",
+     "The first Christian use of the word “Trinity.”"),
+    ("tatian", "Address to the Greeks", "Tatian, c. 170", ECW+"tatian.html",
+     "A sharp critique of pagan culture; Tatian later compiled the Diatessaron gospel harmony."),
+    ("minucius", "Octavius", "Minucius Felix, c. 200", None,
+     "An elegant Latin dialogue defending the faith against its cultured despisers."),
+  ]},
+ {"name": "The Ante-Nicene Fathers", "dates": "c. AD 180–300",
+  "blurb": "As the Church spread, these teachers confronted heresy and laid the groundwork of theology, the canon, and the rule of faith.",
+  "read": [("New Advent", NA), ("CCEL (ANF)", CCEL), ("Wikisource (ANF)", WSA)],
+  "audio": lv("Tertullian"),
+  "works": [
+    ("irenaeus-ah", "Against Heresies", "Irenaeus of Lyons, c. 180", ECW+"irenaeus.html",
+     "Refutes Gnosticism and defines apostolic succession and the rule of faith — foundational."),
+    ("irenaeus-demo", "On the Apostolic Preaching", "Irenaeus of Lyons, c. 190", None,
+     "A short, warm catechism of the Christian faith."),
+    ("tertullian-apol", "Apology", "Tertullian, c. 197", None,
+     "“The blood of the martyrs is the seed of the Church.” The father of Latin theology."),
+    ("tertullian-presc", "Prescription Against Heretics", "Tertullian, c. 200", None,
+     "Argues that the Scriptures rightly belong to the Church."),
+    ("clement-alex", "The Instructor & Stromateis", "Clement of Alexandria, c. 198", None,
+     "Faith and learning joined; Christ as the teacher of the whole person."),
+    ("hippolytus", "The Apostolic Tradition", "Hippolytus of Rome, c. 215", None,
+     "An early church order: ordination, baptism, and the Eucharistic prayer."),
+    ("origen-fp", "On First Principles", "Origen, c. 225", None,
+     "The first attempt at a systematic theology."),
+    ("origen-celsus", "Against Celsus", "Origen, c. 248", None,
+     "A major reasoned defense of Christianity against a pagan critic."),
+    ("cyprian-unity", "On the Unity of the Church", "Cyprian of Carthage, c. 251", None,
+     "On the episcopate and the grave danger of schism."),
+    ("gregory-thaum", "Declaration of Faith", "Gregory Thaumaturgus, c. 260", None,
+     "An early Trinitarian creed."),
+  ]},
+ {"name": "The Nicene Age & the Greek Fathers", "dates": "AD 325–451",
+  "blurb": "The age of the great councils, when the Trinitarian and Christological debates defined the Creed.",
+  "read": [("New Advent", NA), ("CCEL (NPNF)", CCEL), ("Wikisource (NPNF)", WSN)],
+  "audio": lv("Athanasius incarnation"),
+  "works": [
+    ("athanasius-inc", "On the Incarnation", "Athanasius of Alexandria, c. 318", None,
+     "Why God became man — a perennial introduction to the faith."),
+    ("athanasius-antony", "The Life of Antony", "Athanasius, c. 360", None,
+     "The book that spread monasticism across the world."),
+    ("cyril-jer", "Catechetical Lectures", "Cyril of Jerusalem, c. 350", None,
+     "Instructions to the newly baptized — an early window into liturgy and creed."),
+    ("basil-spirit", "On the Holy Spirit", "Basil the Great, c. 375", None,
+     "Defends the divinity of the Spirit and the place of tradition in worship."),
+    ("basil-hex", "The Hexaemeron", "Basil the Great, c. 370", None,
+     "Homilies on the six days of creation."),
+    ("naz-orations", "Five Theological Orations", "Gregory of Nazianzus, c. 380", None,
+     "The most refined defense of the Trinity — earning him the title “the Theologian.”"),
+    ("nyssa-catech", "The Great Catechism", "Gregory of Nyssa, c. 385", None,
+     "A systematic exposition of the faith for teachers."),
+    ("chrysostom-priest", "On the Priesthood", "John Chrysostom, c. 388", None,
+     "On the dignity and the burden of the pastoral office."),
+    ("chrysostom-hom", "Homilies on the Gospels", "John Chrysostom, c. 390", None,
+     "“Golden-mouthed” preaching on Scripture and the Christian life."),
+  ]},
+ {"name": "The Latin Fathers", "dates": "AD 340–450",
+  "blurb": "The Western fathers who shaped Latin Christianity, the Scriptures, and the doctrine of grace.",
+  "read": [("New Advent", NA), ("CCEL (NPNF)", CCEL), ("Project Gutenberg", "https://www.gutenberg.org/")],
+  "audio": lv("Augustine Confessions"),
+  "works": [
+    ("ambrose-myst", "On the Mysteries", "Ambrose of Milan, c. 390", None,
+     "On baptism and the Eucharist, by the bishop who baptized Augustine."),
+    ("jerome", "On Illustrious Men & Letters", "Jerome, c. 392", None,
+     "The translator of the Latin Vulgate and a great scholar of Scripture."),
+    ("augustine-conf", "Confessions", "Augustine of Hippo, c. 398",
+     "https://www.gutenberg.org/ebooks/3296",
+     "The first spiritual autobiography — “our heart is restless until it rests in Thee.”"),
+    ("augustine-doc", "On Christian Doctrine", "Augustine, c. 397", None,
+     "How to read, interpret, and teach the Scriptures."),
+    ("augustine-city", "The City of God", "Augustine, c. 426", None,
+     "History and theology written after the fall of Rome."),
+    ("augustine-trin", "On the Trinity", "Augustine, c. 417", None,
+     "The great Latin synthesis of Trinitarian theology."),
+    ("vincent", "The Commonitory", "Vincent of Lérins, c. 434", None,
+     "“What has been believed everywhere, always, and by all” — a rule for discerning tradition."),
+    ("cassian", "The Conferences", "John Cassian, c. 426", None,
+     "Brings the wisdom of the Egyptian desert monks to the West."),
+  ]},
+ {"name": "The Ecumenical Councils & Creeds", "dates": "AD 325–451",
+  "blurb": "Where the Church, gathered as one, confessed the faith in the Creed and the great definitions of the Person of Christ.",
+  "read": [("New Advent", NA), ("CCEL (NPNF II)", CCEL), ("Wikisource", WSN)],
+  "audio": None,
+  "works": [
+    ("nicaea", "First Council of Nicaea — the Nicene Creed", "AD 325", None,
+     "Christ “of one essence (homoousios) with the Father,” against Arianism."),
+    ("const1", "First Council of Constantinople", "AD 381", None,
+     "Completes the Creed and affirms the divinity of the Holy Spirit."),
+    ("ephesus", "Council of Ephesus", "AD 431", None,
+     "Mary as Theotokos and the unity of Christ’s person."),
+    ("chalcedon", "Council of Chalcedon — the Definition", "AD 451", None,
+     "Christ acknowledged in two natures, “without confusion or division.”"),
+  ]},
+]
+
+
+def resources_html():
+    o = ['<section class="resources" id="papers">']
+    o.append('<div class="divider"><span class="cross">✠</span><h1>Resources</h1></div>')
+    o.append('<h2 class="res-sub">Papers from the Early Church Fathers</h2>')
+    o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
+             'to see how her structure, worship, and belief took shape. Tick each work as you '
+             'read or listen; your progress is saved on this device.</p>')
+    o.append('<p class="cf-progress-wrap"><span id="cf-progress">0 read</span>'
+             '<span class="cf-track"><span id="cf-bar" class="cf-fill"></span></span></p>')
+    for era in ERAS:
+        o.append('<div class="cf-era">')
+        o.append(f'<h3>{era["name"]} <span class="cf-dates">{era["dates"]}</span></h3>')
+        o.append(f'<p class="cf-blurb">{era["blurb"]}</p>')
+        src = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in era["read"])
+        if era.get("audio"):
+            src += f' &nbsp;·&nbsp; Audio: <a href="{era["audio"]}" target="_blank" rel="noopener">LibriVox</a>'
+        o.append(f'<p class="cf-sources">Read free: {src}</p>')
+        o.append('<ul class="cf-list">')
+        for wid, title, by, read, note in era["works"]:
+            rl = (f' <a class="cf-read" href="{read}" target="_blank" rel="noopener">read &rsaquo;</a>'
+                  if read else '')
+            o.append(f'<li class="cf-item"><label><input type="checkbox" data-cf="{wid}">'
+                     f'<span class="cf-title">{title}</span></label>'
+                     f'<div class="cf-meta"><span class="cf-by">{by}</span>{rl}</div>'
+                     f'<div class="cf-note">{note}</div></li>')
+        o.append('</ul></div>')
+    o.append('<p class="res-foot">Links point to free, public-domain libraries — New Advent, '
+             'CCEL, Wikisource, and Early Christian Writings — and to free audiobooks at LibriVox. '
+             'This is a starting set; tell me which links to refine or swap.</p>')
+    o.append('</section>')
+    return "\n".join(o)
+
+
+# ---- scripts ---------------------------------------------------------------
 EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
@@ -100,7 +299,6 @@ CONTROL_JS = '''<script>
   d.addEventListener("keydown", function(e){ if(e.key==="Escape") open(false); });
   Array.prototype.forEach.call(menu.querySelectorAll(".drawer-link"), function(a){
     a.addEventListener("click", function(){ open(false); }); });
-  // drag the sheet down to dismiss (the page behind is scroll-locked while open)
   var sy=null, dy=0;
   menu.addEventListener("touchstart", function(e){ sy=e.touches[0].clientY; dy=0; menu.style.transition="none"; }, {passive:true});
   menu.addEventListener("touchmove", function(e){ if(sy===null) return; dy=e.touches[0].clientY-sy; if(dy>0) menu.style.transform="translateY("+dy+"px)"; }, {passive:true});
@@ -126,19 +324,29 @@ CONTROL_JS = '''<script>
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
+  // reading-checklist progress (saved per device)
+  var boxes=d.querySelectorAll('input[type=checkbox][data-cf]');
+  function progress(){ if(!boxes.length) return; var done=0;
+    Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
+    var p=d.getElementById("cf-progress"); if(p) p.textContent=done+" of "+boxes.length+" read";
+    var b=d.getElementById("cf-bar"); if(b) b.style.width=(100*done/boxes.length)+"%"; }
+  Array.prototype.forEach.call(boxes,function(cb){
+    var k="cf:"+cb.getAttribute("data-cf");
+    if(L.getItem(k)==="1") cb.checked=true;
+    cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
+  progress();
+
   paintTheme(); paintDys();
 })();
 </script>'''
 
-HTML = f'''<!doctype html>
+HEAD_TMPL = '''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Prayers for Morning, Day &amp; Night</title>
-<meta name="description" content="Orthodox prayers for morning, the table, the
-  hours of the day and night, and before sleep — a web edition of the booklet
-  published by St. Tikhon's Monastery Press / OCA.">
+<title>{title}</title>
+<meta name="description" content="{desc}">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
@@ -150,18 +358,32 @@ HTML = f'''<!doctype html>
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#ffffff">
 <link rel="stylesheet" href="styles.css">
-{EARLY_JS}
+{early}
 </head>
 <body>
 <main class="book">
-{COVER}
-{content}
+{body}
 </main>
-{TOPNAV}
-{CONTROL_JS}
+{topnav}
+{control}
 </body>
 </html>
 '''
 
-open("index.html", "w").write(HTML)
-print("wrote index.html", len(HTML), "bytes")
+
+def page(path, title, desc, body, which):
+    html = HEAD_TMPL.format(title=title, desc=desc, body=body,
+                            topnav=topnav(which), control=CONTROL_JS, early=EARLY_JS)
+    open(path, "w").write(html)
+    print("wrote", path, len(html), "bytes")
+
+
+page("index.html", "Prayers for Morning, Day &amp; Night",
+     "Orthodox prayers for morning, the table, the hours of the day and night, and before "
+     "sleep — a web edition of the booklet published by St. Tikhon's Monastery Press / OCA.",
+     COVER + "\n" + content, "index")
+
+page("resources.html", "Resources — Daily Prayers",
+     "A reading checklist of the early Church Fathers, with free text and audio links, for "
+     "understanding the formation of the Church's structure and belief.",
+     resources_html(), "resources")
