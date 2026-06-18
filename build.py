@@ -528,14 +528,15 @@ HEAD_TMPL = '''<!doctype html>
 </main>
 {topnav}
 {control}
+{scripts}
 </body>
 </html>
 '''
 
 
-def page(path, title, desc, body, which):
-    html = HEAD_TMPL.format(title=title, desc=desc, body=body,
-                            topnav=topnav(which), control=CONTROL_JS, early=EARLY_JS)
+def page(path, title, desc, body, which, scripts=""):
+    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=topnav(which),
+                            control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
     open(path, "w").write(html)
     print("wrote", path, len(html), "bytes")
 
@@ -543,7 +544,8 @@ def page(path, title, desc, body, which):
 page("index.html", "Prayers for Morning, Day &amp; Night",
      "Orthodox prayers for morning, the table, the hours of the day and night, and before "
      "sleep — a web edition of the booklet published by St. Tikhon's Monastery Press / OCA.",
-     COVER + "\n" + content, "index")
+     COVER + "\n" + content, "index",
+     scripts='<script src="player.js?v=1" defer></script>')
 
 page("resources.html", "Resources — Daily Prayers",
      "A reading checklist of the early Church Fathers, with free text and audio links, for "
