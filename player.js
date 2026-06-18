@@ -47,6 +47,13 @@
 
   var cur = -1, gen = 0, paused = false, active = false;
 
+  // playback speed (persisted)
+  var SPEEDS = [0.75, 1, 1.25, 1.5, 2];
+  var rate = parseFloat(localStorage.getItem('ttsrate'));
+  var si = SPEEDS.indexOf(rate);
+  if (si < 0) { rate = 1; si = SPEEDS.indexOf(1); }
+  function speedLabel() { return (String(rate).replace(/\.0$/, '')) + '×'; }
+
   // per-prayer play buttons
   items.forEach(function (el, idx) {
     el.classList.add('sayable');
@@ -74,9 +81,17 @@
   bar.innerHTML = btn('prev', 'Previous prayer', ICON.prev) +
                   btn('toggle', 'Pause', ICON.pause) +
                   btn('next', 'Next prayer', ICON.next) +
-                  btn('stop', 'Stop', ICON.stop);
+                  btn('stop', 'Stop', ICON.stop) +
+                  '<button type="button" class="tts-speed" data-act="speed" aria-label="Playback speed"></button>';
   document.body.appendChild(bar);
   var toggleBtn = bar.querySelector('[data-act=toggle]');
+  var speedBtn = bar.querySelector('[data-act=speed]');
+  speedBtn.textContent = speedLabel();
+  function cycleSpeed() {
+    si = (si + 1) % SPEEDS.length; rate = SPEEDS[si];
+    localStorage.setItem('ttsrate', rate); speedBtn.textContent = speedLabel();
+    if (active && !paused) { gen++; synth.cancel(); setTimeout(speakCur, 60); } // apply now
+  }
 
   function highlight() {
     items.forEach(function (el) { el.classList.remove('speaking'); });
@@ -99,7 +114,7 @@
     var g = gen;
     var u = new SpeechSynthesisUtterance(textOf(items[cur]));
     if (voice) u.voice = voice;
-    u.rate = 0.95; u.pitch = 1;
+    u.rate = rate; u.pitch = 1;
     u.onend = function () { if (g !== gen) return; cur++; if (cur < items.length) speakCur(); else stop(); };
     u.onerror = function () { if (g !== gen) return; cur++; if (cur < items.length) speakCur(); else stop(); };
     synth.speak(u);
@@ -119,6 +134,7 @@
     var a = b.getAttribute('data-act');
     if (a === 'toggle') toggle(); else if (a === 'next') next();
     else if (a === 'prev') prev(); else if (a === 'stop') stop();
+    else if (a === 'speed') cycleSpeed();
   });
   window.addEventListener('pagehide', function () { try { synth.cancel(); } catch (e) {} });
 })();

@@ -515,6 +515,10 @@ html[data-theme="dark"] .ttsbar{ border-color:#43434a; box-shadow:0 8px 24px rgb
 html[data-theme="dark"] .ttsbar button:hover{ background:rgba(255,255,255,.08); }
 .ttsbar [data-act=toggle]{ color:var(--rubric); }
 .ttsbar svg{ width:1.45rem; height:1.45rem; fill:currentColor; }
+.ttsbar .tts-speed{
+  width:auto; min-width:2.7rem; padding:0 .55rem; border-radius:1.35rem;
+  font-family:var(--serif); font-size:1rem; font-variant-numeric:tabular-nums;
+}
 
 @media print{
   body{ background:#fff; padding-bottom:0; }
