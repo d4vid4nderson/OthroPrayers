@@ -492,6 +492,9 @@ html[data-theme="dark"] .res-foot{ border-top-color:#3a3a40; }
 .say-btn svg{ width:1.1em; height:1.1em; fill:currentColor; }
 .sayable.speaking{ background:rgba(229,78,98,.12); border-radius:8px; }
 html[data-theme="dark"] .sayable.speaking{ background:rgba(242,109,119,.16); }
+/* while reading, tapping a prayer skips the audio to it */
+html.tts-on .sayable{ cursor:pointer; }
+html.tts-on .sayable:hover{ background:rgba(229,78,98,.06); border-radius:8px; }
 
 .ttsbar{
   position:fixed; left:0; right:0; z-index:25;

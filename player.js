@@ -56,6 +56,12 @@
     b.innerHTML = ICON.play;
     b.addEventListener('click', function (e) { e.stopPropagation(); startAt(idx); });
     el.insertBefore(b, el.firstChild);
+    // while reading, tap a prayer to skip the audio to it
+    el.addEventListener('click', function (e) {
+      if (!active || e.target.closest('.say-btn')) return;
+      if (window.getSelection && String(window.getSelection()).trim()) return; // keep text selection
+      startAt(idx);
+    });
   });
 
   // floating mini-player
@@ -98,8 +104,8 @@
     u.onerror = function () { if (g !== gen) return; cur++; if (cur < items.length) speakCur(); else stop(); };
     synth.speak(u);
   }
-  function startAt(idx) { gen++; synth.cancel(); cur = idx; active = true; setPaused(false); bar.hidden = false; setTimeout(speakCur, 60); }
-  function stop() { gen++; active = false; setPaused(false); synth.cancel(); items.forEach(function (el) { el.classList.remove('speaking'); }); bar.hidden = true; }
+  function startAt(idx) { gen++; synth.cancel(); cur = idx; active = true; setPaused(false); bar.hidden = false; document.documentElement.classList.add('tts-on'); setTimeout(speakCur, 60); }
+  function stop() { gen++; active = false; setPaused(false); synth.cancel(); items.forEach(function (el) { el.classList.remove('speaking'); }); bar.hidden = true; document.documentElement.classList.remove('tts-on'); }
   function next() { if (!active) return; gen++; synth.cancel(); cur++; setPaused(false); if (cur < items.length) setTimeout(speakCur, 60); else stop(); }
   function prev() { if (!active) return; gen++; synth.cancel(); cur = Math.max(0, cur - 1); setPaused(false); setTimeout(speakCur, 60); }
   function toggle() {
