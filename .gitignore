@@ -5,3 +5,7 @@ render/
 *.pyc
 __pycache__/
 .DS_Store
+voice/voice.json
+voice/*.mp3
+voice/*.wav
+*.env
