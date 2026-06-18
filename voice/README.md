@@ -18,6 +18,7 @@ export ELEVENLABS_API_KEY="sk_...your key..."   # from elevenlabs.io → Profile
 ```bash
 # 1) Create a reusable voice from clean sample audio (Instant Voice Cloning).
 #    Use ~1–3 minutes of clear, single-speaker audio (mp3/wav/m4a).
+#    Need something to read? See recording-script.md.
 python3 elevenlabs_voice.py clone --name "Reader" --files sample1.mp3 sample2.wav --denoise
 
 # 2) Inspect your account
