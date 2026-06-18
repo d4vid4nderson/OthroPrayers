@@ -528,6 +528,5 @@ html[data-theme="dark"] .ttsbar button:hover{ background:rgba(255,255,255,.08); 
 @media print{
   body{ background:#fff; padding-bottom:0; }
   .book{ box-shadow:none; max-width:none; }
-  .topnav, .backdrop, .drawer, .ttsbar, .say-btn{ display:none; }
-  .sayable{ padding-left:0; }
+  .topnav, .backdrop, .drawer, .ttsbar, .tts-fab{ display:none; }
 }
