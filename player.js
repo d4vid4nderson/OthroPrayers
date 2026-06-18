@@ -64,30 +64,33 @@
     });
   });
 
-  // the ONLY way to start: a floating "Listen" button
-  var fab = document.createElement('button');
-  fab.className = 'tts-fab'; fab.type = 'button';
-  fab.setAttribute('aria-label', 'Listen to the prayers');
-  fab.innerHTML = ICON.play + '<span>Listen</span>';
-  fab.addEventListener('click', startFromView);
-  document.body.appendChild(fab);
-
-  // mini-player (shown only while reading)
-  var bar = document.createElement('div');
-  bar.className = 'ttsbar'; bar.setAttribute('role', 'toolbar');
-  bar.setAttribute('aria-label', 'Read aloud controls'); bar.hidden = true;
+  // one morphing control: a play circle that expands into the audio controls
   function btn(act, label, icon) {
     return '<button type="button" data-act="' + act + '" aria-label="' + label + '">' + icon + '</button>';
   }
-  bar.innerHTML = btn('prev', 'Previous prayer', ICON.prev) +
-                  btn('toggle', 'Pause', ICON.pause) +
-                  btn('next', 'Next prayer', ICON.next) +
-                  btn('stop', 'Stop', ICON.stop) +
-                  '<button type="button" class="tts-speed" data-act="speed" aria-label="Playback speed"></button>';
-  document.body.appendChild(bar);
-  var toggleBtn = bar.querySelector('[data-act=toggle]');
-  var speedBtn = bar.querySelector('[data-act=speed]');
+  var player = document.createElement('div');
+  player.className = 'tts-player';
+  player.innerHTML =
+    '<button type="button" class="tts-play" aria-label="Listen to the prayers">' + ICON.play + '</button>' +
+    '<div class="tts-controls" role="toolbar" aria-label="Read aloud controls">' +
+      btn('prev', 'Previous prayer', ICON.prev) +
+      btn('toggle', 'Pause', ICON.pause) +
+      btn('next', 'Next prayer', ICON.next) +
+      btn('stop', 'Stop', ICON.stop) +
+      '<button type="button" class="tts-speed" data-act="speed" aria-label="Playback speed"></button>' +
+    '</div>';
+  document.body.appendChild(player);
+  var toggleBtn = player.querySelector('[data-act=toggle]');
+  var speedBtn = player.querySelector('[data-act=speed]');
   speedBtn.textContent = speedLabel();
+  player.querySelector('.tts-play').addEventListener('click', startFromView);
+  player.querySelector('.tts-controls').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var a = b.getAttribute('data-act');
+    if (a === 'toggle') toggle(); else if (a === 'next') next();
+    else if (a === 'prev') prev(); else if (a === 'stop') stop();
+    else if (a === 'speed') cycleSpeed();
+  });
   function cycleSpeed() {
     si = (si + 1) % SPEEDS.length; rate = SPEEDS[si];
     localStorage.setItem('ttsrate', rate); speedBtn.textContent = speedLabel();
@@ -129,14 +132,14 @@
   }
   function startAt(idx) {
     gen++; synth.cancel(); cur = idx; active = true; setPaused(false);
-    bar.hidden = false; fab.hidden = true;
+    player.classList.add('open');                 // morph play circle -> controls
     document.documentElement.classList.add('tts-on');
     setTimeout(speakCur, 60);
   }
   function stop() {
     gen++; active = false; setPaused(false); synth.cancel();
     items.forEach(function (el) { el.classList.remove('speaking'); });
-    bar.hidden = true; fab.hidden = false;
+    player.classList.remove('open');              // morph back to the play circle
     document.documentElement.classList.remove('tts-on');
   }
   function next() { if (!active) return; gen++; synth.cancel(); cur++; setPaused(false); if (cur < items.length) setTimeout(speakCur, 60); else stop(); }
@@ -147,12 +150,5 @@
     else { setPaused(true); try { synth.pause(); } catch (e) {} }
   }
 
-  bar.addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    var a = b.getAttribute('data-act');
-    if (a === 'toggle') toggle(); else if (a === 'next') next();
-    else if (a === 'prev') prev(); else if (a === 'stop') stop();
-    else if (a === 'speed') cycleSpeed();
-  });
   window.addEventListener('pagehide', function () { try { synth.cancel(); } catch (e) {} });
 })();
