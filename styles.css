@@ -488,45 +488,47 @@ html[data-theme="dark"] .sayable.speaking{ background:rgba(242,109,119,.16); }
 html.tts-on .sayable{ cursor:pointer; }
 html.tts-on .sayable:hover{ background:rgba(229,78,98,.06); border-radius:8px; }
 
-/* the only control that starts the reader */
-.tts-fab{
-  position:fixed; z-index:25;
-  right:1rem; bottom:calc(3.5rem + env(safe-area-inset-bottom));
-  display:flex; align-items:center; gap:.35rem;
-  padding:.55rem .95rem .55rem .75rem; border:0; border-radius:999px; cursor:pointer;
-  background:var(--rubric); color:#fff;
-  box-shadow:0 6px 18px rgba(0,0,0,.28);
-  font-family:var(--serif); font-size:1.05rem; letter-spacing:.01em;
+/* morphing audio control: a play circle (idle) that expands into the controls.
+   Sits well clear of the bottom nav bar. */
+.tts-player{
+  position:fixed; right:1rem; z-index:25;
+  bottom:calc(4.9rem + env(safe-area-inset-bottom));
+  display:inline-flex; align-items:center; overflow:hidden;
+  background:var(--rubric); color:#fff; border:1px solid transparent;
+  border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.28);
+  transition:background .25s ease, border-color .25s ease;
 }
-.tts-fab svg{ width:1.3rem; height:1.3rem; fill:currentColor; }
-.tts-fab[hidden]{ display:none; }
+.tts-player.open{ background:var(--paper); color:var(--ink); border-color:#e7e0d4; }
+html[data-theme="dark"] .tts-player.open{ border-color:#43434a; box-shadow:0 8px 24px rgba(0,0,0,.55); }
 
-.ttsbar{
-  position:fixed; left:0; right:0; z-index:25;
-  bottom:calc(3.4rem + env(safe-area-inset-bottom));
-  margin-inline:auto; width:max-content; max-width:92vw;
-  display:flex; gap:.15rem; padding:.3rem;
-  background:var(--paper); border:1px solid #e7e0d4; border-radius:999px;
-  box-shadow:0 8px 24px rgba(40,30,20,.28);
+.tts-play{
+  flex:0 0 auto; width:3.3rem; height:3.3rem; padding:0; border:0; cursor:pointer;
+  background:none; color:inherit; display:flex; align-items:center; justify-content:center;
+  transition:width .28s ease, opacity .18s ease;
 }
-html[data-theme="dark"] .ttsbar{ border-color:#43434a; box-shadow:0 8px 24px rgba(0,0,0,.55); }
-.ttsbar[hidden]{ display:none; }
-.ttsbar button{
-  width:2.7rem; height:2.7rem; padding:0; border:0; border-radius:50%;
-  background:none; color:var(--ink); cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
+.tts-play svg{ width:1.5rem; height:1.5rem; fill:currentColor; }
+.tts-player.open .tts-play{ width:0; opacity:0; pointer-events:none; }
+
+.tts-controls{
+  display:flex; align-items:center;
+  max-width:0; opacity:0; overflow:hidden;
+  transition:max-width .3s ease, opacity .25s ease;
 }
-.ttsbar button:hover{ color:var(--rubric); background:rgba(0,0,0,.05); }
-html[data-theme="dark"] .ttsbar button:hover{ background:rgba(255,255,255,.08); }
-.ttsbar [data-act=toggle]{ color:var(--rubric); }
-.ttsbar svg{ width:1.45rem; height:1.45rem; fill:currentColor; }
-.ttsbar .tts-speed{
-  width:auto; min-width:2.7rem; padding:0 .55rem; border-radius:1.35rem;
+.tts-player.open .tts-controls{ max-width:30rem; opacity:1; }
+.tts-controls button{
+  flex:0 0 auto; width:2.9rem; height:3.3rem; padding:0; border:0; cursor:pointer;
+  background:none; color:var(--ink); display:flex; align-items:center; justify-content:center;
+}
+.tts-controls button:hover{ color:var(--rubric); }
+.tts-controls [data-act=toggle]{ color:var(--rubric); }
+.tts-controls svg{ width:1.45rem; height:1.45rem; fill:currentColor; }
+.tts-controls .tts-speed{
+  width:auto; min-width:2.9rem; padding:0 .55rem;
   font-family:var(--serif); font-size:1rem; font-variant-numeric:tabular-nums;
 }
 
 @media print{
   body{ background:#fff; padding-bottom:0; }
   .book{ box-shadow:none; max-width:none; }
-  .topnav, .backdrop, .drawer, .ttsbar, .tts-fab{ display:none; }
+  .topnav, .backdrop, .drawer, .tts-player{ display:none; }
 }

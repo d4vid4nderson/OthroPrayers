@@ -545,7 +545,7 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "Orthodox prayers for morning, the table, the hours of the day and night, and before "
      "sleep — a web edition of the booklet published by St. Tikhon's Monastery Press / OCA.",
      COVER + "\n" + content, "index",
-     scripts='<script src="player.js?v=4" defer></script>')
+     scripts='<script src="player.js?v=5" defer></script>')
 
 page("resources.html", "Resources — Daily Prayers",
      "A reading checklist of the early Church Fathers, with free text and audio links, for "
