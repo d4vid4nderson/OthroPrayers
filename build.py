@@ -457,8 +457,18 @@ TOPICS = [
 def resources_html():
     o = ['<section class="resources" id="papers">']
     o.append('<div class="divider"><span class="cross">✠</span><h1>Resources</h1></div>')
+    # ---- in-page contents (jump links) ----
+    o.append('<nav class="res-toc" aria-label="On this page">'
+             '<a href="#topic-thetheotokos">The Theotokos</a>'
+             '<a href="#topic-thepriesthood">The Priesthood</a>'
+             '<a href="#fathers">Church Fathers</a>'
+             '<a href="#creeds">Creeds</a>'
+             '<a href="#councils">Councils</a>'
+             '<a href="#catechisms">Catechisms</a>'
+             '<a href="#books">Reading</a>'
+             '</nav>')
     # ---- in-depth topics ----
-    o.append('<h2 class="res-sub">Topics to Explore</h2>')
+    o.append('<h2 class="res-sub" id="topics">Topics to Explore</h2>')
     o.append('<p class="res-intro">Short introductions to central parts of the faith, with '
              'early-Church writings and trusted explanations.</p>')
     for t in TOPICS:
@@ -473,7 +483,7 @@ def resources_html():
                      f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
         o.append('</ul></div>')
     # ---- the reading checklist ----
-    o.append('<h2 class="res-sub">Papers from the Early Church Fathers</h2>')
+    o.append('<h2 class="res-sub" id="fathers">Papers from the Early Church Fathers</h2>')
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
              'to see how her structure, worship, and belief took shape. Tick each work as you '
              'read or listen; your progress is saved on this device.</p>')
@@ -504,8 +514,10 @@ def resources_html():
                      f'<div class="cf-note">{note}</div></li>')
         o.append('</ul></div>')
     # reference sections (creeds, councils, catechisms, books)
+    ref_ids = {"The Creeds": "creeds", "The Ecumenical Councils": "councils",
+               "Catechisms": "catechisms", "Recommended Reading": "books"}
     for ref in REF_SECTIONS:
-        o.append('<div class="cf-era ref-era">')
+        o.append(f'<div class="cf-era ref-era" id="{ref_ids.get(ref["name"], "")}">')
         o.append(f'<h3>{ref["name"]}</h3>')
         o.append(f'<p class="cf-blurb">{ref["blurb"]}</p>')
         o.append('<ul class="ref-list">')

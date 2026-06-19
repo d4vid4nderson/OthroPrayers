@@ -27,7 +27,8 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <main class="book">
 <section class="resources" id="papers">
 <div class="divider"><span class="cross">✠</span><h1>Resources</h1></div>
-<h2 class="res-sub">Topics to Explore</h2>
+<nav class="res-toc" aria-label="On this page"><a href="#topic-thetheotokos">The Theotokos</a><a href="#topic-thepriesthood">The Priesthood</a><a href="#fathers">Church Fathers</a><a href="#creeds">Creeds</a><a href="#councils">Councils</a><a href="#catechisms">Catechisms</a><a href="#books">Reading</a></nav>
+<h2 class="res-sub" id="topics">Topics to Explore</h2>
 <p class="res-intro">Short introductions to central parts of the faith, with early-Church writings and trusted explanations.</p>
 <div class="cf-era topic" id="topic-thetheotokos">
 <h3>The Theotokos</h3>
@@ -55,7 +56,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <li class="ref-item"><a class="ref-title" href="https://www.oca.org/orthodoxy/the-orthodox-faith/worship/the-sacraments/holy-orders" target="_blank" rel="noopener">The Orthodox Faith — Holy Orders (OCA)</a> <span class="ref-free">free</span><div class="cf-note">The Orthodox understanding of ordination and the clergy.</div></li>
 <li class="ref-item"><a class="ref-title" href="https://www.oca.org/orthodoxy/the-orthodox-faith/doctrine-scripture/salvation-history/priesthood" target="_blank" rel="noopener">The Orthodox Faith — Priesthood (OCA)</a> <span class="ref-free">free</span><div class="cf-note">Christ’s priesthood and the ministry of the Church.</div></li>
 </ul></div>
-<h2 class="res-sub">Papers from the Early Church Fathers</h2>
+<h2 class="res-sub" id="fathers">Papers from the Early Church Fathers</h2>
 <p class="res-intro">A reading path through the first centuries of the Church — to see how her structure, worship, and belief took shape. Tick each work as you read or listen; your progress is saved on this device.</p>
 <p class="cf-audiohubs">Listen free: <a href="https://librivox.org/" target="_blank" rel="noopener">LibriVox</a> · <a href="https://www.ancientfaith.com/" target="_blank" rel="noopener">Ancient Faith Radio</a> · <a href="https://www.youtube.com/results?search_query=church+fathers+audiobook" target="_blank" rel="noopener">YouTube</a></p>
 <p class="cf-progress-wrap"><span id="cf-progress">0 read</span><span class="cf-track"><span id="cf-bar" class="cf-fill"></span></span></p>
@@ -142,7 +143,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <li class="cf-item"><label><input type="checkbox" data-cf="ephesus"><span class="cf-title">Council of Ephesus</span></label><div class="cf-meta"><span class="cf-by">AD 431</span><span class="cf-sep">·</span><a class="cf-read" href="https://www.newadvent.org/fathers/3810.htm" target="_blank" rel="noopener">read &rsaquo;</a></div><div class="cf-note">Mary as Theotokos and the unity of Christ’s person.</div></li>
 <li class="cf-item"><label><input type="checkbox" data-cf="chalcedon"><span class="cf-title">Council of Chalcedon — the Definition</span></label><div class="cf-meta"><span class="cf-by">AD 451</span><span class="cf-sep">·</span><a class="cf-read" href="https://www.newadvent.org/fathers/3811.htm" target="_blank" rel="noopener">read &rsaquo;</a></div><div class="cf-note">Christ acknowledged in two natures, “without confusion or division.”</div></li>
 </ul></div>
-<div class="cf-era ref-era">
+<div class="cf-era ref-era" id="creeds">
 <h3>The Creeds</h3>
 <p class="cf-blurb">The Church's confessions of faith, in a few lines.</p>
 <ul class="ref-list">
@@ -151,7 +152,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <li class="ref-item"><a class="ref-title" href="https://ccel.org/ccel/schaff/creeds2.iv.i.iv.html" target="_blank" rel="noopener">The Athanasian Creed (Quicumque Vult)</a><div class="cf-note">A precise confession of the Trinity and the Incarnation.</div></li>
 <li class="ref-item"><a class="ref-title" href="https://www.newadvent.org/fathers/3811.htm" target="_blank" rel="noopener">The Chalcedonian Definition (451)</a><div class="cf-note">Christ in two natures, “without confusion or division.”</div></li>
 </ul></div>
-<div class="cf-era ref-era">
+<div class="cf-era ref-era" id="councils">
 <h3>The Ecumenical Councils</h3>
 <p class="cf-blurb">The canons and definitions of the Church gathered as one.</p>
 <ul class="ref-list">
@@ -161,7 +162,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <li class="ref-item"><a class="ref-title" href="https://www.newadvent.org/fathers/3810.htm" target="_blank" rel="noopener">Ephesus (431)</a><div class="cf-note">Mary as Theotokos; the unity of Christ.</div></li>
 <li class="ref-item"><a class="ref-title" href="https://www.newadvent.org/fathers/3811.htm" target="_blank" rel="noopener">Chalcedon (451)</a><div class="cf-note">The Definition of the two natures of Christ, and thirty canons.</div></li>
 </ul></div>
-<div class="cf-era ref-era">
+<div class="cf-era ref-era" id="catechisms">
 <h3>Catechisms</h3>
 <p class="cf-blurb">Ordered introductions to the whole of the faith.</p>
 <ul class="ref-list">
@@ -170,7 +171,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <li class="ref-item"><a class="ref-title" href="https://www.newadvent.org/fathers/3304.htm" target="_blank" rel="noopener">An Exact Exposition of the Orthodox Faith — St. John of Damascus</a> <span class="ref-free">free</span><div class="cf-note">The great early synthesis of patristic theology.</div></li>
 <li class="ref-item"><a class="ref-title" href="https://www.ancientfaith.com/podcasts/how-to-be-an-orthodox-christian/" target="_blank" rel="noopener">How to Be an Orthodox Christian (podcast)</a> <span class="ref-free">free</span><div class="cf-note">A free catechetical podcast series for inquirers, from Ancient Faith.</div></li>
 </ul></div>
-<div class="cf-era ref-era">
+<div class="cf-era ref-era" id="books">
 <h3>Recommended Reading</h3>
 <p class="cf-blurb">A few books to go deeper — free where the text is public-domain.</p>
 <ul class="ref-list">

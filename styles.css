@@ -422,6 +422,18 @@ html[data-theme="dark"] .switch{ background:#4a4a51; }
   text-indent:0; text-align:center; max-width:34ch;
   margin:0 auto 1.6em; font-style:italic;
 }
+/* in-page contents (jump chips) */
+.res-toc{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; margin:0 0 2.4em; }
+.res-toc a{
+  display:inline-block; padding:.35rem .85rem;
+  border:1px solid var(--rubric); border-radius:999px;
+  color:var(--rubric); text-decoration:none;
+  font-size:.95rem; font-variant-caps:small-caps; letter-spacing:.03em;
+}
+.res-toc a:hover{ background:var(--rubric); color:#fff; }
+/* land jump targets a little below the top edge */
+.res-sub, .cf-era, .ref-era{ scroll-margin-top:1rem; }
+
 .topic-intro{ text-indent:0; margin:0 0 .9em; }
 .cf-progress-wrap{ text-indent:0; text-align:center; margin:0 0 2.2em; }
 #cf-progress{
