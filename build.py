@@ -3,6 +3,7 @@
 area, incl. the Early Church Fathers reading checklist) from a shared shell.
 Run `python3 generate.py` first to (re)produce prayers.content.html."""
 
+import os
 import re
 from urllib.parse import quote
 
@@ -200,18 +201,22 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
 
 def _drawer_links(pairs, current):
     out = []
-    for href, label in pairs:
-        here = href == current
+    for p in pairs:
+        href, label = p[0], p[1]
+        pill = p[2] if len(p) > 2 else ""
+        here = href == current or (pill == "ancient" and current.startswith("af-"))
         cls = " active" if here else ""
         cur = ' aria-current="page"' if here else ""
-        out.append(f'<a class="drawer-link{cls}"{cur} href="{href}">{label}</a>')
+        tag = ' <span class="pill pill-ancient pill-sm">Ancient</span>' if pill == "ancient" else ""
+        out.append(f'<a class="drawer-link{cls}"{cur} href="{href}">{label}{tag}</a>')
     return "\n".join(out)
 
 
 def tabbar(active="", current=""):
     prayer_pairs = [("morning.html", "Morning Prayers"), ("table.html", "Prayers at Table"),
                     ("hours.html", "Prayers for the Hours of the Day &amp; Night"),
-                    ("sleep.html", "Prayers Before Sleep")]
+                    ("sleep.html", "Prayers Before Sleep"),
+                    ("ancient.html", "The Ancient Faith Prayer Book", "ancient")]
     res_pairs = [(href, name) for name, href, _ in RES_CARDS]
     return TABBAR_TMPL.format(
         h_act=" active" if active == "home" else "",
@@ -677,6 +682,50 @@ def hub_page():
     return "\n".join(o)
 
 
+# ---- The Ancient Faith Prayer Book (converted from the EPUB; opt-in) --------
+# slug, page/menu title, short blurb for the hub cards
+AFPB = [
+    ("af-morning",      "Morning Prayers",                "On rising — the morning rule."),
+    ("af-midday",       "Midday Prayers",                 "For the middle of the day."),
+    ("af-meals",        "Prayers at Meals",               "Blessings before and after eating."),
+    ("af-evening",      "Evening Prayers",                "The evening rule."),
+    ("af-night",        "Prayers at the Close of Day",    "At the very end of the day."),
+    ("af-precommunion", "Preparation for Holy Communion", "Prayers before receiving the Mysteries."),
+    ("af-communion",    "Holy Communion",                 "At the reception of Communion."),
+    ("af-thanksgiving", "Thanksgiving After Communion",   "Prayers of thanksgiving."),
+    ("af-confession",   "Before Confession",              "In preparation for confession."),
+    ("af-departed",     "Prayers for the Departed",       "For those who have fallen asleep."),
+    ("af-occasions",    "Prayers for Various Occasions",  "For many needs and times of life."),
+    ("af-saints",       "Prayers to the Saints",          "Troparia and prayers to the saints."),
+]
+AFPB_TITLES = {slug: title for slug, title, _ in AFPB}
+
+PILL = '<span class="pill pill-ancient">Ancient Faith Prayer Book</span>'
+
+_ancient_src = open("ancient.content.html").read() if os.path.exists("ancient.content.html") else ""
+_amarks = list(re.finditer(r'<section class="divider afpb" id="(af-[a-z]+)">', _ancient_src))
+ANCIENT = {}
+for _ai, _am in enumerate(_amarks):
+    _aend = _amarks[_ai + 1].start() if _ai + 1 < len(_amarks) else len(_ancient_src)
+    ANCIENT[_am.group(1)] = _ancient_src[_am.start():_aend]
+
+
+def afpb_hub():
+    o = ['<section class="resources afpb-hub" id="top">',
+         _divider("The Ancient Faith Prayer Book"),
+         '<p class="res-intro">Prayers from <em>The Ancient Faith Prayer Book</em> '
+         '(Ancient Faith Publishing). ' + PILL + '</p>',
+         '<div class="res-hub">']
+    for slug, title, blurb in AFPB:
+        if slug not in ANCIENT:
+            continue
+        o.append(f'<a class="res-card afpb-card" href="{slug}.html">'
+                 f'<span class="res-card-t">{title}</span>'
+                 f'<span class="res-card-d">{blurb}</span></a>')
+    o.append('</div></section>')
+    return "\n".join(o)
+
+
 # ---- scripts ---------------------------------------------------------------
 EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
@@ -873,6 +922,21 @@ for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
          with_jump_nav(PRAYERS[slug]) + CLOSING, active="prayers", scripts=PLAYER)
+
+# The Ancient Faith Prayer Book: a hub + one page per office (read-aloud on each)
+if ANCIENT:
+    page("ancient.html", "The Ancient Faith Prayer Book — Daily Prayers",
+         "Prayers from The Ancient Faith Prayer Book (Ancient Faith Publishing): "
+         "morning, midday, evening and night prayers, Holy Communion, confession and more.",
+         afpb_hub(), active="prayers")
+    _credit = f'<p class="afpb-credit">{PILL}</p>'
+    for slug, title, blurb in AFPB:
+        if slug not in ANCIENT:
+            continue
+        body = with_jump_nav(ANCIENT[slug]).replace('</section>\n', '</section>\n' + _credit, 1)
+        page(f"{slug}.html", f"{title} — The Ancient Faith Prayer Book",
+             f"{title}, from The Ancient Faith Prayer Book (Ancient Faith Publishing).",
+             body + CLOSING, active="prayers", scripts=PLAYER)
 
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
