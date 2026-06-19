@@ -185,9 +185,6 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     <span class="grab" aria-hidden="true"></span>
     <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
   </div>
-  <figure class="menu-art"><img src="assets/img/icon_p21.png" width="600" height="191"
-       alt="Crucifixion — IC XC NIKA"></figure>
-  <div class="menu-sep" aria-hidden="true"></div>
   <div class="drawer-heading">Settings</div>
   <div class="menu-row">
     <span class="menu-label">Text size</span>
