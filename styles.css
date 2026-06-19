@@ -93,16 +93,27 @@ html[data-font="dyslexic"] .dropcap{ font-weight:700; }
 
 *{ box-sizing:border-box; }
 
-html{ -webkit-text-size-adjust:100%; }
+html{ -webkit-text-size-adjust:100%; height:100%; }
 
+/* app shell: the page content scrolls inside .scroll while the bottom tab bar
+   stays a fixed-height flex child — so the bar never drifts with the scroll
+   (the iOS Safari position:fixed quirk) */
 body{
   margin:0;
+  display:flex; flex-direction:column;
+  height:100vh;        /* fallback */
+  height:100dvh;       /* tracks the dynamic viewport (toolbars show/hide) */
+  overflow:hidden;
   background:var(--paper);   /* match the page so there's no mismatched band at top/bottom */
   color:var(--ink);
   font-family:var(--serif);
   font-feature-settings:"liga" 1, "onum" 1, "kern" 1;
   line-height:1.46;
-  padding-bottom:calc(4.8rem + env(safe-area-inset-bottom));   /* clear tab bar */
+}
+.scroll{
+  flex:1 1 auto; min-height:0;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
 
 /* ---- the "booklet" page ---------------------------------------------- */
@@ -310,7 +321,7 @@ html[data-theme="dark"] .landing-cta .cta-ghost{ color:var(--ink); }
 
 /* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
 .tabbar{
-  position:fixed; left:0; right:0; bottom:0; z-index:30;
+  flex:0 0 auto; z-index:30;
   display:flex; align-items:stretch;
   background:rgba(255,253,248,.97);
   backdrop-filter:saturate(1.2) blur(3px);
@@ -334,7 +345,6 @@ html[data-theme="dark"] .tabbar{ border-top-color:#43434a; background:rgba(28,28
 /* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
   .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
-  body{ padding-bottom:max(6rem, calc(5rem + env(safe-area-inset-bottom))); }
 }
 
 /* dimming backdrop behind the open sheet */
@@ -594,7 +604,9 @@ html[data-theme="dark"] .tts-player.open{ border-color:#43434a; box-shadow:0 8px
 }
 
 @media print{
-  body{ background:#fff; padding-bottom:0; }
+  html, body{ height:auto; }
+  body{ display:block; overflow:visible; background:#fff; }
+  .scroll{ overflow:visible; }
   .book{ box-shadow:none; max-width:none; }
   .tabbar, .backdrop, .drawer, .tts-player{ display:none; }
 }
