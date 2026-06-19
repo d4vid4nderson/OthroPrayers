@@ -651,6 +651,63 @@ for _i, _m in enumerate(_marks):
     _end = _marks[_i + 1].start() if _i + 1 < len(_marks) else len(content)
     PRAYERS[_m.group(1)] = content[_m.start():_end]
 
+# --- per-page "jump to" nav: chips that link to the sections within a prayer page ---
+_TITLE_RE = re.compile(
+    r'^(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth)\s+prayer'
+    r'|^(a|two)\s+(prayer|prayers|song|songs)\b'
+    r'|^morning prayer\b'
+    r'|^prayers?\s+(of|at|for|before|throughout)\b'
+    r'|^the symbol of faith\b|^psalm\b', re.I)
+
+
+def _label(inner):
+    # join the title lines, but stop at an attribution ("by …") or parenthetical
+    out = []
+    for ln in re.split(r'<br\s*/?>', inner):
+        t = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', ln)).strip()
+        if not t:
+            continue
+        if out and re.match(r'^(by\b|\()', t, re.I):
+            break
+        out.append(t)
+    lab = " ".join(out)
+    lab = re.sub(r'\s*:?\s*by the same\b.*$', '', lab, flags=re.I).strip().rstrip(':').strip()
+    return lab
+
+
+def with_jump_nav(seg):
+    targets = []
+    cnt = [0]
+
+    def nid():
+        cnt[0] += 1
+        return f'j{cnt[0]}'
+
+    def on_h2(m):
+        inner = m.group(1)
+        lab = re.sub(r'^(at the |at |after the |after )', '', _label(inner), flags=re.I).strip() or _label(inner)
+        sid = nid(); targets.append((sid, lab))
+        return f'<h2 class="subhead" id="{sid}">{inner}</h2>'
+
+    seg = re.sub(r'<h2 class="subhead">(.*?)</h2>', on_h2, seg, flags=re.S)
+
+    def on_rub(m):
+        inner = m.group(1)
+        lab = _label(inner)
+        if not _TITLE_RE.search(lab):
+            return m.group(0)
+        sid = nid(); targets.append((sid, lab))
+        return f'<p class="rubric" id="{sid}">{inner}</p>'
+
+    seg = re.sub(r'<p class="rubric">(.*?)</p>', on_rub, seg, flags=re.S)
+    if len(targets) < 2:
+        return seg
+    chips = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
+    nav = f'<nav class="page-toc" aria-label="On this page">{chips}</nav>'
+    parts = seg.split('</section>', 1)               # place after the section title
+    return (parts[0] + '</section>\n' + nav + parts[1]) if len(parts) == 2 else nav + seg
+
+
 PLAYER = '<script src="player.js?v=5" defer></script>'
 
 # home / cover
@@ -665,7 +722,7 @@ PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
 for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
-         PRAYERS[slug], active=f"{slug}.html", scripts=PLAYER)
+         with_jump_nav(PRAYERS[slug]), active=f"{slug}.html", scripts=PLAYER)
 
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
