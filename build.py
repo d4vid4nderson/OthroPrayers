@@ -691,9 +691,15 @@ def fathers_page(ornament=""):
                      f'<div class="cf-meta"><span class="cf-by">{by}</span>{links}</div>'
                      f'<div class="cf-note">{note}</div></li>')
         o.append('</ul></div>')
-    o.append('<p class="res-foot">Text links point to free public-domain libraries — New Advent, '
-             'CCEL, Wikisource and Early Christian Writings — and audio to LibriVox and other free '
-             'sources. A few modern books link to the publisher.</p>')
+    o.append('<p class="res-foot">The Fathers and Councils gathered here belong to the '
+             '<em>undivided</em> early Church — the common inheritance of the Orthodox and the '
+             'wider Christian world, not the property of any one later tradition. The texts are '
+             'linked from free public-domain libraries (including the Catholic-run New Advent and '
+             'the ecumenical CCEL, Wikisource and Early Christian Writings), which simply host the '
+             'standard public-domain translations; the <em>Orthodox</em> reading of them is drawn '
+             'from the Orthodox sources (OCA, GOARCH, OrthoChristian, Ancient Faith) linked in the '
+             'Topics. Audio is from LibriVox and other free sources; a few modern books link to the '
+             'publisher.</p>')
     if ornament:
         o.append(art(ornament, foot=True))
     o.append('</section>')
