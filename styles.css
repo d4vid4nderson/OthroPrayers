@@ -67,13 +67,13 @@
 
 /* ---- dark theme: dark-gray paper, light + red text -------------------- */
 html[data-theme="dark"]{
-  --ink:        #ece7dd;   /* warm off-white text (candlelit vellum) */
-  --rubric:     #e0776a;   /* warmed vermilion, legible on warm charcoal */
-  --rubric-deep:#cf877b;   /* muted oxblood for inline directions */
+  --ink:        #e8e6e2;   /* neutral light-gray text */
+  --rubric:     #c83e2f;   /* the ivory cinnabar, lifted just enough to read on gray */
+  --rubric-deep:#b3322a;   /* the exact ivory red, for the gilt plaques + initials */
   --link:       #88b6ea;
   --gold:       #d9b85e;   /* lighter gold for the dark page */
-  --paper:      #2b2722;   /* warm charcoal-brown page (aged vellum at night) */
-  --desk:       #1c1916;   /* darker warm tone behind the page */
+  --paper:      #232327;   /* neutral dark gray page (no brown) */
+  --desk:       #161619;   /* darker neutral behind the page */
 }
 html[data-theme="dark"] figure img{
   /* the red icons sit on white in the source art; present them as plaques so
@@ -380,7 +380,7 @@ figure.art svg{ display:inline-block; height:auto; }
 html[data-theme="dark"] .art-roundel svg,
 html[data-theme="dark"] .art-mono svg,
 html[data-theme="dark"] .art-chirho svg{
-  background:#fbf7ef; padding:.75rem; border-radius:6px; color:#d8455a;
+  background:#fbf7ef; padding:.75rem; border-radius:6px; color:#b3322a;
 }
 
 /* ---- cover ----------------------------------------------------------- */
@@ -467,7 +467,7 @@ html[data-theme="dark"] .landing-cta .cta-ghost{ color:var(--ink); }
      safe-area inset reports 0 in some installed web-app contexts) */
   padding-bottom:max(.25rem, env(safe-area-inset-bottom));
 }
-html[data-theme="dark"] .tabbar{ border-top-color:#4a4034; background:rgba(34,30,26,.96); }
+html[data-theme="dark"] .tabbar{ border-top-color:#43434a; background:rgba(30,30,34,.96); }
 .tab{
   position:relative;
   flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -510,14 +510,14 @@ html[data-theme="dark"] .tabbar{ border-top-color:#4a4034; background:rgba(34,30
   transition:transform .32s cubic-bezier(.22,.61,.36,1);  /* a gentle settle */
 }
 .drawer.open{ transform:translateY(0); visibility:visible; }
-html[data-theme="dark"] .drawer{ border-color:#4a4034; box-shadow:0 -14px 36px rgba(0,0,0,.55); }
+html[data-theme="dark"] .drawer{ border-color:#43434a; box-shadow:0 -14px 36px rgba(0,0,0,.55); }
 /* sheet header: centred grab-handle + a close button on the right */
 .drawer-head{ position:relative; height:1.7rem; }
 .grab{
   display:block; width:2.4rem; height:.28rem; margin:.45rem auto 0;
   background:#cbbfa6; border-radius:999px;
 }
-html[data-theme="dark"] .grab{ background:#544d40; }
+html[data-theme="dark"] .grab{ background:#54545c; }
 .drawer-close{
   position:absolute; top:-.15rem; right:-.1rem;
   width:2.6rem; height:2.6rem; padding:0;
