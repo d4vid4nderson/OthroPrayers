@@ -17,10 +17,10 @@ COVER = '''<section class="cover" id="top">
   </figure>
   <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>
   <nav aria-label="Contents">
-    <a href="#morning">Morning Prayers</a>
-    <a href="#table">Prayers at Table</a>
-    <a href="#hours">Prayers for the Hours of the Day and Night</a>
-    <a href="#sleep">Prayers Before Sleep</a>
+    <a href="morning.html">Morning Prayers</a>
+    <a href="table.html">Prayers at Table</a>
+    <a href="hours.html">Prayers for the Hours of the Day and Night</a>
+    <a href="sleep.html">Prayers Before Sleep</a>
     <a href="resources.html">Resources</a>
   </nav>
   <p class="colophon">These prayers are excerpted from <cite>Orthodox Christian
@@ -81,19 +81,15 @@ TOPNAV_TMPL = '''<nav class="topnav" aria-label="Header">
 </nav>'''
 
 
-def topnav(page):
-    if page == "resources":
-        brand = "index.html"
-        items = [("index.html#morning", "Morning Prayers"), ("index.html#table", "Prayers at Table"),
-                 ("index.html#hours", "Prayers for the Hours"), ("index.html#sleep", "Prayers Before Sleep"),
-                 ("#papers", "Resources")]
-    else:
-        brand = "#top"
-        items = [("#morning", "Morning Prayers"), ("#table", "Prayers at Table"),
-                 ("#hours", "Prayers for the Hours"), ("#sleep", "Prayers Before Sleep"),
-                 ("resources.html", "Resources")]
-    links = "\n    ".join(f'<a class="drawer-link" href="{h}">{t}</a>' for h, t in items)
-    return TOPNAV_TMPL.format(brand_href=brand, links=links,
+def topnav(active=""):
+    # every section is now its own page, so the menu is the same everywhere
+    items = [("morning.html", "Morning Prayers"), ("table.html", "Prayers at Table"),
+             ("hours.html", "Prayers for the Hours"), ("sleep.html", "Prayers Before Sleep"),
+             ("resources.html", "Resources")]
+    links = "\n    ".join(
+        f'<a class="drawer-link{" active" if h == active else ""}" href="{h}">{t}</a>'
+        for h, t in items)
+    return TOPNAV_TMPL.format(brand_href="index.html", links=links,
                               BURGER=BURGER, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
 
 
@@ -454,39 +450,44 @@ TOPICS = [
 ]
 
 
-def resources_html():
-    o = ['<section class="resources" id="papers">']
-    o.append('<div class="divider"><span class="cross">✠</span><h1>Resources</h1></div>')
-    # ---- in-page contents (jump links) ----
-    o.append('<nav class="res-toc" aria-label="On this page">'
-             '<a href="#topic-thetheotokos">The Theotokos</a>'
-             '<a href="#topic-thepriesthood">The Priesthood</a>'
-             '<a href="#fathers">Church Fathers</a>'
-             '<a href="#creeds">Creeds</a>'
-             '<a href="#councils">Councils</a>'
-             '<a href="#catechisms">Catechisms</a>'
-             '<a href="#books">Reading</a>'
-             '</nav>')
-    # ---- in-depth topics ----
-    o.append('<h2 class="res-sub" id="topics">Topics to Explore</h2>')
-    o.append('<p class="res-intro">Short introductions to central parts of the faith, with '
-             'early-Church writings and trusted explanations.</p>')
-    for t in TOPICS:
-        o.append('<div class="cf-era topic" id="topic-' +
-                 re.sub(r'[^a-z]', '', t["name"].lower()) + '">')
-        o.append(f'<h3>{t["name"]}</h3>')
-        o.append(f'<p class="topic-intro">{t["intro"]}</p>')
-        o.append('<ul class="ref-list">')
-        for title, url, desc, free in t["items"]:
-            badge = ' <span class="ref-free">free</span>' if free else ''
-            o.append(f'<li class="ref-item"><a class="ref-title" href="{url}" target="_blank" '
-                     f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
-        o.append('</ul></div>')
-    # ---- the reading checklist ----
-    o.append('<h2 class="res-sub" id="fathers">Papers from the Early Church Fathers</h2>')
+def _divider(title):
+    return f'<section class="divider"><span class="cross">✠</span><h1>{title}</h1></section>'
+
+
+def _links_ul(items):
+    out = ['<ul class="ref-list">']
+    for it in items:
+        title, url, desc = it[0], it[1], it[2]
+        free = len(it) > 3 and it[3]
+        badge = ' <span class="ref-free">free</span>' if free else ''
+        out.append(f'<li class="ref-item"><a class="ref-title" href="{url}" target="_blank" '
+                   f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
+    out.append('</ul>')
+    return "\n".join(out)
+
+
+BACK = '<a class="res-back" href="resources.html">&larr; All resources</a>'
+
+
+def topic_page(topic):
+    return "\n".join(['<section class="resources">', BACK, _divider(topic["name"]),
+                      f'<p class="topic-intro">{topic["intro"]}</p>',
+                      _links_ul(topic["items"]), '</section>'])
+
+
+def ref_page(ref):
+    o = ['<section class="resources">', BACK, _divider(ref["name"])]
+    if ref.get("blurb"):
+        o.append(f'<p class="topic-intro">{ref["blurb"]}</p>')
+    o.append(_links_ul(ref["items"]))
+    o.append('</section>')
+    return "\n".join(o)
+
+
+def fathers_page():
+    o = ['<section class="resources" id="papers">', BACK, _divider("The Early Church Fathers")]
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
-             'to see how her structure, worship, and belief took shape. Tick each work as you '
-             'read or listen; your progress is saved on this device.</p>')
+             'tick each work as you read or listen; your progress is saved on this device.</p>')
     hubs = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in AUDIO_HUBS)
     o.append(f'<p class="cf-audiohubs">Listen free: {hubs}</p>')
     o.append('<p class="cf-progress-wrap"><span id="cf-progress">0 read</span>'
@@ -513,25 +514,32 @@ def resources_html():
                      f'<div class="cf-meta"><span class="cf-by">{by}</span>{links}</div>'
                      f'<div class="cf-note">{note}</div></li>')
         o.append('</ul></div>')
-    # reference sections (creeds, councils, catechisms, books)
-    ref_ids = {"The Creeds": "creeds", "The Ecumenical Councils": "councils",
-               "Catechisms": "catechisms", "Recommended Reading": "books"}
-    for ref in REF_SECTIONS:
-        o.append(f'<div class="cf-era ref-era" id="{ref_ids.get(ref["name"], "")}">')
-        o.append(f'<h3>{ref["name"]}</h3>')
-        o.append(f'<p class="cf-blurb">{ref["blurb"]}</p>')
-        o.append('<ul class="ref-list">')
-        for item in ref["items"]:
-            title, url, desc = item[0], item[1], item[2]
-            free = len(item) > 3 and item[3]
-            badge = ' <span class="ref-free">free</span>' if free else ''
-            o.append(f'<li class="ref-item"><a class="ref-title" href="{url}" target="_blank" '
-                     f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
-        o.append('</ul></div>')
     o.append('<p class="res-foot">Text links point to free public-domain libraries — New Advent, '
              'CCEL, Wikisource and Early Christian Writings — and audio to LibriVox and other free '
-             'sources. A few modern books link to the publisher. Tell me any link to refine.</p>')
+             'sources. A few modern books link to the publisher.</p>')
     o.append('</section>')
+    return "\n".join(o)
+
+
+# Resources hub: a card per topic/section (links to its own page)
+RES_CARDS = [
+    ("The Theotokos", "theotokos.html", "Who the Church confesses Mary to be — and why."),
+    ("The Priesthood", "priesthood.html", "The threefold ministry, and what the Church asks of a priest."),
+    ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio."),
+    ("The Creeds", "creeds.html", "The Church's confessions of faith, in a few lines."),
+    ("The Ecumenical Councils", "councils.html", "The canons and definitions of the councils."),
+    ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith."),
+    ("Recommended Reading", "reading.html", "A few books to go deeper."),
+]
+
+
+def hub_page():
+    o = ['<section class="resources" id="top">', _divider("Resources"),
+         '<p class="res-intro">Explore the faith — choose a topic.</p>', '<div class="res-hub">']
+    for name, href, blurb in RES_CARDS:
+        o.append(f'<a class="res-card" href="{href}"><span class="res-card-t">{name}</span>'
+                 f'<span class="res-card-d">{blurb}</span></a>')
+    o.append('</div></section>')
     return "\n".join(o)
 
 
@@ -629,20 +637,53 @@ HEAD_TMPL = '''<!doctype html>
 '''
 
 
-def page(path, title, desc, body, which, scripts=""):
-    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=topnav(which),
+def page(path, title, desc, body, active="", scripts=""):
+    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=topnav(active),
                             control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
     open(path, "w").write(html)
     print("wrote", path, len(html), "bytes")
 
 
+# split the prayer content into one page per prayer time, at the section dividers
+_marks = list(re.finditer(r'<section class="divider[^"]*" id="(morning|table|hours|sleep)">', content))
+PRAYERS = {}
+for _i, _m in enumerate(_marks):
+    _end = _marks[_i + 1].start() if _i + 1 < len(_marks) else len(content)
+    PRAYERS[_m.group(1)] = content[_m.start():_end]
+
+PLAYER = '<script src="player.js?v=5" defer></script>'
+
+# home / cover
 page("index.html", "Prayers for Morning, Day &amp; Night",
      "Orthodox prayers for morning, the table, the hours of the day and night, and before "
      "sleep — a web edition of the booklet published by St. Tikhon's Monastery Press / OCA.",
-     COVER + "\n" + content, "index",
-     scripts='<script src="player.js?v=5" defer></script>')
+     COVER, active="index.html")
 
+# one page per prayer time (read-aloud player on each)
+PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
+                ("hours", "Prayers for the Hours of the Day & Night"), ("sleep", "Prayers Before Sleep")]
+for slug, title in PRAYER_PAGES:
+    page(f"{slug}.html", f"{title} — Daily Prayers",
+         f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
+         PRAYERS[slug], active=f"{slug}.html", scripts=PLAYER)
+
+# resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
-     "A reading checklist of the early Church Fathers, with free text and audio links, for "
-     "understanding the formation of the Church's structure and belief.",
-     resources_html(), "resources")
+     "Topics, early-Church writings, creeds, councils, catechisms and recommended reading.",
+     hub_page(), active="resources.html")
+
+TOPIC_SLUGS = {"The Theotokos": "theotokos", "The Priesthood": "priesthood"}
+for t in TOPICS:
+    page(f'{TOPIC_SLUGS[t["name"]]}.html', f'{t["name"]} — Daily Prayers',
+         f'{t["name"]} in the Orthodox Church, with early-Church writings and trusted explanations.',
+         topic_page(t), active="resources.html")
+
+page("fathers.html", "The Early Church Fathers — Daily Prayers",
+     "A reading checklist of the early Church Fathers, with free text and audio links.",
+     fathers_page(), active="resources.html")
+
+REF_SLUGS = {"The Creeds": "creeds", "The Ecumenical Councils": "councils",
+             "Catechisms": "catechisms", "Recommended Reading": "reading"}
+for ref in REF_SECTIONS:
+    page(f'{REF_SLUGS[ref["name"]]}.html', f'{ref["name"]} — Daily Prayers',
+         ref.get("blurb", "") or ref["name"], ref_page(ref), active="resources.html")
