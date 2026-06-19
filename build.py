@@ -387,9 +387,92 @@ REF_SECTIONS = [
 ]
 
 
+# in-depth topics: an original summary of the Orthodox understanding + curated
+# early-Church writings and trusted explanations (free links verified by search)
+TOPICS = [
+ {"name": "The Theotokos",
+  "intro": "Theotokos (“God-bearer”) is the Church’s oldest title for the Virgin Mary, and "
+           "first of all a confession about Christ: because the one she bore is truly God made "
+           "man, she is rightly called the Mother of God. The Third Ecumenical Council (Ephesus, "
+           "431) affirmed this title to guard the unity of Christ’s divine and human natures in "
+           "one Person. The Church honors her as Ever-Virgin and as the “new Eve,” whose "
+           "obedience undid the disobedience of the first — venerated above all the saints, yet "
+           "her glory is always referred to her Son, for God alone is worshipped.",
+  "items": [
+    ("Council of Ephesus (AD 431)", "https://www.newadvent.org/fathers/3810.htm",
+     "Proclaimed Mary as Theotokos, safeguarding the unity of Christ.", True),
+    ("Cyril of Alexandria — Third Letter to Nestorius (with the Twelve Anathemas)",
+     "https://www.ccel.org/ccel/schaff/npnf214.x.viii.html",
+     "The letter that framed the Council’s decision on the Theotokos.", True),
+    ("Justin Martyr — Dialogue with Trypho (ch. 100: Mary, the new Eve)",
+     "https://www.newadvent.org/fathers/0128.htm", "One of the earliest Eve–Mary parallels.", True),
+    ("Irenaeus — Against Heresies (the obedience of the Virgin)",
+     "https://www.newadvent.org/fathers/0103.htm", "Develops Mary as the new Eve.", True),
+    ("St John of Damascus — An Exact Exposition of the Orthodox Faith",
+     "https://www.newadvent.org/fathers/3304.htm",
+     "The classic synthesis, including the Ever-Virgin and the Dormition.", True),
+    ("“Beneath Thy Protection” (Sub Tuum Praesidium)", "https://en.wikipedia.org/wiki/Sub_tuum_praesidium",
+     "The oldest known prayer to the Theotokos — a 3rd-century papyrus already calling her by that name.", True),
+    ("The Veneration of the Virgin Mary — Abp Dmitri (Royster)", "https://orthochristian.com/58526.html",
+     "An Orthodox explanation of how and why she is honored.", True),
+    ("The Ever-Virginity of the Mother of God (GOARCH)",
+     "https://www.goarch.org/-/the-ever-virginity-of-the-mother-of-god",
+     "On the Church’s teaching of her perpetual virginity.", True),
+    ("The Theotokos and the Church (OCA)", "https://www.oca.org/reflections/berzonsky/the-theotokos-and-the-church",
+     "A short reflection on her place in the life of the Church.", True),
+  ]},
+ {"name": "The Priesthood",
+  "intro": "From the beginning the Church has been ordered around a threefold ministry — bishop, "
+           "presbyter (priest), and deacon — received from the Apostles by the laying on of hands "
+           "and handed down in unbroken succession. The bishop is the icon of Christ and the "
+           "center of the local Church; the priest shepherds the parish and celebrates the "
+           "Mysteries (sacraments); the deacon serves. Ordination is not a career but a calling "
+           "and a gift of the Holy Spirit, and the Church has always set high requirements — in "
+           "faith, character, and life (cf. 1 Timothy 3; Titus 1) — for those who serve at the "
+           "altar. Alongside this ordained priesthood, all the baptized share in the royal "
+           "priesthood of Christ.",
+  "items": [
+    ("St John Chrysostom — On the Priesthood (Six Books)", "https://www.newadvent.org/fathers/1922.htm",
+     "The classic treatise on the dignity and burden of the priestly office.", True),
+    ("St Gregory the Theologian — Oration 2 (In Defense of His Flight)",
+     "https://www.newadvent.org/fathers/310202.htm",
+     "The great patristic exposition of the character of the priesthood.", True),
+    ("St Ignatius of Antioch — The Seven Epistles", "https://www.newadvent.org/fathers/0104.htm",
+     "Earliest witness to the bishop, presbyter, and deacon, and the unity of the Church around the bishop.", True),
+    ("St Clement of Rome — First Epistle (order & succession)", "https://www.newadvent.org/fathers/1010.htm",
+     "On the apostolic ordering of ministry and succession.", True),
+    ("Hippolytus — The Apostolic Tradition (the ordination prayers)",
+     "https://www.gutenberg.org/files/61614/61614-h/61614-h.htm",
+     "The earliest surviving rite of ordination.", True),
+    ("The Orthodox Faith — Holy Orders (OCA)",
+     "https://www.oca.org/orthodoxy/the-orthodox-faith/worship/the-sacraments/holy-orders",
+     "The Orthodox understanding of ordination and the clergy.", True),
+    ("The Orthodox Faith — Priesthood (OCA)",
+     "https://www.oca.org/orthodoxy/the-orthodox-faith/doctrine-scripture/salvation-history/priesthood",
+     "Christ’s priesthood and the ministry of the Church.", True),
+  ]},
+]
+
+
 def resources_html():
     o = ['<section class="resources" id="papers">']
     o.append('<div class="divider"><span class="cross">✠</span><h1>Resources</h1></div>')
+    # ---- in-depth topics ----
+    o.append('<h2 class="res-sub">Topics to Explore</h2>')
+    o.append('<p class="res-intro">Short introductions to central parts of the faith, with '
+             'early-Church writings and trusted explanations.</p>')
+    for t in TOPICS:
+        o.append('<div class="cf-era topic" id="topic-' +
+                 re.sub(r'[^a-z]', '', t["name"].lower()) + '">')
+        o.append(f'<h3>{t["name"]}</h3>')
+        o.append(f'<p class="topic-intro">{t["intro"]}</p>')
+        o.append('<ul class="ref-list">')
+        for title, url, desc, free in t["items"]:
+            badge = ' <span class="ref-free">free</span>' if free else ''
+            o.append(f'<li class="ref-item"><a class="ref-title" href="{url}" target="_blank" '
+                     f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
+        o.append('</ul></div>')
+    # ---- the reading checklist ----
     o.append('<h2 class="res-sub">Papers from the Early Church Fathers</h2>')
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
              'to see how her structure, worship, and belief took shape. Tick each work as you '
