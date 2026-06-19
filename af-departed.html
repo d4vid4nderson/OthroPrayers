@@ -14,21 +14,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" id="tc" content="#ffffff">
+<meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2c2c30":"#ffffff");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2b2722":"#faf6ee");})();
 </script>
 </head>
 <body>
 <div class="scroll">
 <main class="book">
-<section class="divider afpb" id="af-departed"><span class="cross">✠</span><h1>Prayers for the Departed</h1></section>
+<section class="divider afpb" id="af-departed"><span class="cross">✠</span><h1>Prayers for the Departed</h1><figure class="art art-rule" role="img" aria-label="Ornamental rule"><svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><g stroke="currentColor" stroke-width="2" fill="currentColor"><line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/><circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/><circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/><polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg></figure></section>
 <p class="afpb-credit"><span class="pill pill-ancient">Ancient Faith Prayer Book</span></p><nav class="page-toc" aria-label="On this page"><a href="#j1">A PRAYER FOR NON-ORTHODOX DEPARTED</a><a href="#j2">A PRAYER FOR THE BEREAVED</a></nav>
-<p><span class="dropcap">W</span><span class="sc">ith the spirits</span> of the righteous made perfect, give rest, O Savior, to the souls of Your servants, keeping them in a blessed life with You, O Lover of mankind.</p>
+<p><span class="dropcap gilt">W</span><span class="sc">ith the spirits</span> of the righteous made perfect, give rest, O Savior, to the souls of Your servants, keeping them in a blessed life with You, O Lover of mankind.</p>
 <p>In blessed repose where all Your saints find peace, give rest, O Lord, to the souls of Your servants, for You alone are immortal.</p>
 <p>Glory to the Father and to the Son and to the Holy Spirit.</p>
 <p>You are our God, who descended into hell and released the bonds of those held fast in anguish. Give rest, O Savior, to the souls of Your servants.</p>
@@ -149,7 +149,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#2c2c30":"#ffffff"); }
+    if(tc) tc.setAttribute("content", dark?"#2b2722":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 

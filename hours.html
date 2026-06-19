@@ -14,22 +14,22 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" id="tc" content="#ffffff">
+<meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2c2c30":"#ffffff");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2b2722":"#faf6ee");})();
 </script>
 </head>
 <body>
 <div class="scroll">
 <main class="book">
-<section class="divider hours" id="hours"><h1>PRAYERS <span class="i">for the</span> HOURS <br><span class="i">of the</span> DAY &amp; NIGHT</h1></section>
+<section class="divider hours" id="hours"><h1>PRAYERS <span class="i">for the</span> HOURS <br><span class="i">of the</span> DAY &amp; NIGHT</h1><figure class="art art-rule" role="img" aria-label="Ornamental rule"><svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><g stroke="currentColor" stroke-width="2" fill="currentColor"><line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/><circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/><circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/><polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg></figure></section>
 <nav class="page-toc" aria-label="On this page"><a href="#j1">Two Songs at Midnight Tone Eight</a><a href="#j2">Morning Prayer of the Last Elders of Optina</a><a href="#j3">Morning Prayer of Saint Philaret of Moscow</a><a href="#j4">Two Prayers for the morning</a><a href="#j5">A Prayer for Mid-Morning</a><a href="#j6">A Prayer for Midday</a><a href="#j7">A Prayer for Mid-afternoon</a><a href="#j8">A Prayer for early evening</a><a href="#j9">A Prayer for the night seasons</a><a href="#j10">A Prayer for any hour</a></nav>
 <p class="rubric" id="j1"><span class="r">Two Songs at Midnight</span><br><span class="r i">Tone Eight</span></p>
-<p><span class="dropcap">B</span><span class="sc">ehold,</span> the Bridegroom comes at midnight, and blessed is the servant whom he shall find watching. Again, unworthy is the servant whom he shall find heedless. Beware, therefore, O my soul, do not be weighed down with sleep, lest thou be given over to death, and be shut out of the kingdom. But rouse thyself, crying: Holy, Holy, Holy art thou, O God: through the Theotokos have mercy on us.</p>
+<p><span class="dropcap gilt">B</span><span class="sc">ehold,</span> the Bridegroom comes at midnight, and blessed is the servant whom he shall find watching. Again, unworthy is the servant whom he shall find heedless. Beware, therefore, O my soul, do not be weighed down with sleep, lest thou be given over to death, and be shut out of the kingdom. But rouse thyself, crying: Holy, Holy, Holy art thou, O God: through the Theotokos have mercy on us.</p>
 <p><span class="dropcap">A</span><span class="sc">s</span> thou dost think on that dread day, keep watch, O my soul. Light thy lamp and keep it filled with oil. Thou knowest not when thou shalt suddenly hear that voice crying out to thee: ‘Behold, the Bridegroom!’ Beware, therefore, O my soul, lest thou sleep, and find thyself knocking outside like the five virgins. Rather, keep a steadfast watch, that thou mayest greet Christ with fresh oil, and that he may grant thee the divine chamber of his glory.</p>
 <p class="rubric" id="j2"><span class="r">Morning Prayer  </span><br><span class="r i">of the Last Elders of Optina</span></p>
 <p><span class="dropcap">O</span> <span class="sc">Lord,</span> grant that I may meet all that this coming day brings to me with spiritual tranquility. Grant that I may fully surrender myself to thy holy will. At every hour of this day, direct and support me in all things. Whatever news may reach me in the course of the day, teach me to accept it with a calm soul and the firm conviction that all is subject to thy holy will. Guide my thoughts and feelings in all my words and actions. In all unexpected occurrences, let me not forget that all is sent down from thee. Grant me to deal in a straightforward and wise manner with every member of my family, neither embarrassing nor saddening anyone. O Lord, grant me power to endure the fatigue of the coming day and all the events that will take place during it. Guide my will and teach me to pray, to believe, to hope, to be patient, to forgive, and to love. Amen.</p>
@@ -154,7 +154,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#2c2c30":"#ffffff"); }
+    if(tc) tc.setAttribute("content", dark?"#2b2722":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 

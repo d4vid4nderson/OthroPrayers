@@ -14,26 +14,26 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" id="tc" content="#ffffff">
+<meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2c2c30":"#ffffff");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2b2722":"#faf6ee");})();
 </script>
 </head>
 <body>
 <div class="scroll">
 <main class="book">
-<section class="divider afpb" id="af-thanksgiving"><span class="cross">✠</span><h1>Thanksgiving After Communion</h1></section>
+<section class="divider afpb" id="af-thanksgiving"><span class="cross">✠</span><h1>Thanksgiving After Communion</h1><figure class="art art-rule" role="img" aria-label="Ornamental rule"><svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><g stroke="currentColor" stroke-width="2" fill="currentColor"><line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/><circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/><circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/><polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg></figure></section>
 <p class="afpb-credit"><span class="pill pill-ancient">Ancient Faith Prayer Book</span></p><nav class="page-toc" aria-label="On this page"><a href="#j1">VERSE OF INSTRUCTION</a><a href="#j2">A PRAYER TO THE MOTHER OF GOD</a><a href="#j3">THE PRAYER OF THE RIGHTEOUS SIMEON</a><a href="#j4">THE TRISAGION PRAYERS</a><a href="#j5">TO THE MOTHER OF GOD</a></nav>
 <h2 class="subhead" id="j1">VERSE OF INSTRUCTION</span></h2>
 <p>When you have received the life-giving and mystical Gifts, at once give praise and thanks, and from the bottom of your heart say to God:</p>
 <p>Glory to You, O God. Glory to You, O God. Glory to You, O God.</p>
 <p class="rubric">Then we may say one or all of the following prayers:</p>
 <h3 class="subhead minor">FIRST PRAYER</h3>
-<p><span class="dropcap">I</span><span class="sc">thank You,</span> O Lord my God, that You have not rejected me, a sinner, but have made me worthy to partake of Your holy Mysteries.</p>
+<p><span class="dropcap gilt">I</span><span class="sc">thank You,</span> O Lord my God, that You have not rejected me, a sinner, but have made me worthy to partake of Your holy Mysteries.</p>
 <p>I thank You that You have permitted me, unworthy though I am, to partake of Your most-pure and heavenly Gifts.</p>
 <p>O Master, Lover of mankind, who died and rose for our sake, and granted to us these awesome and life-giving Mysteries for the well-being and sanctification of our souls and bodies, let these Gifts be for the healing of both soul and body, for the averting of every evil, for the enlightenment of the eyes of my heart, for the peace of the powers of my soul, for faith unashamed, for love unfeigned, for the fullness of wisdom, for the observing of Your commandments, for an increase of Your divine grace, and for the attainment of Your kingdom.</p>
 <p>Preserved by them in Your holiness, may I always remember Your grace and no longer live for myself, but for You, our Master and Benefactor.</p>
@@ -201,7 +201,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#2c2c30":"#ffffff"); }
+    if(tc) tc.setAttribute("content", dark?"#2b2722":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 
