@@ -422,7 +422,35 @@ html[data-theme="dark"] .switch{ background:#4a4a51; }
   text-indent:0; text-align:center; max-width:34ch;
   margin:0 auto 1.6em; font-style:italic;
 }
+/* in-page contents (jump chips) */
+.res-toc{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; margin:0 0 2.4em; }
+.res-toc a{
+  display:inline-block; padding:.35rem .85rem;
+  border:1px solid var(--rubric); border-radius:999px;
+  color:var(--rubric); text-decoration:none;
+  font-size:.95rem; font-variant-caps:small-caps; letter-spacing:.03em;
+}
+.res-toc a:hover{ background:var(--rubric); color:#fff; }
+/* land jump targets a little below the top edge */
+.res-sub, .cf-era, .ref-era{ scroll-margin-top:1rem; }
+
 .topic-intro{ text-indent:0; margin:0 0 .9em; }
+
+/* resources hub (cards) + sub-page back link */
+.res-back{ display:inline-block; color:var(--link); text-decoration:none; font-size:1rem; margin:.1rem 0 .3rem; }
+.res-back:hover{ text-decoration:underline; }
+.res-hub{ display:grid; grid-template-columns:1fr; gap:.7rem; margin:1.2em 0 0; }
+@media (min-width:34rem){ .res-hub{ grid-template-columns:1fr 1fr; } }
+.res-card{
+  display:block; padding:1rem 1.1rem; text-decoration:none; color:var(--ink);
+  border:1px solid #e7e0d4; border-radius:12px;
+}
+html[data-theme="dark"] .res-card{ border-color:#43434a; }
+.res-card:hover{ border-color:var(--rubric); }
+.res-card-t{ display:block; color:var(--rubric); font-size:1.3rem; line-height:1.2; }
+.res-card-d{ display:block; margin-top:.25rem; font-size:.95rem; opacity:.85; }
+/* highlight the current page in the menu */
+.drawer-link.active{ color:var(--rubric); }
 .cf-progress-wrap{ text-indent:0; text-align:center; margin:0 0 2.2em; }
 #cf-progress{
   font-variant-caps:small-caps; letter-spacing:.06em;
