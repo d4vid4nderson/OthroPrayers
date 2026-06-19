@@ -422,6 +422,22 @@ html[data-theme="dark"] .switch{ background:#4a4a51; }
   text-indent:0; text-align:center; max-width:34ch;
   margin:0 auto 1.6em; font-style:italic;
 }
+/* per-page "jump to" chip bar (scrolls sideways if there are many) */
+.page-toc{
+  display:flex; gap:.4rem; overflow-x:auto; white-space:nowrap;
+  margin:0 0 1.6em; padding:.1rem 0 .5rem;
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+.page-toc::-webkit-scrollbar{ display:none; }
+.page-toc a{
+  flex:0 0 auto; padding:.32rem .8rem;
+  border:1px solid var(--rubric); border-radius:999px;
+  color:var(--rubric); text-decoration:none;
+  font-size:.92rem; font-variant-caps:small-caps; letter-spacing:.02em;
+}
+.page-toc a:hover{ background:var(--rubric); color:#fff; }
+h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
+
 /* in-page contents (jump chips) */
 .res-toc{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; margin:0 0 2.4em; }
 .res-toc a{
