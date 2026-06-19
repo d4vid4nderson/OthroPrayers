@@ -19,6 +19,7 @@ LANDING = '''<section class="cover landing" id="top">
   <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
 
   <div class="landing-body">
+    {cross}
     <h2 class="landing-h">Coming Home to the Ancient Church</h2>
     <p>Many who find their way to the Orthodox Church begin somewhere else — most often in the
        Western Protestant traditions: evangelical, Reformed, Baptist, Methodist, Anglican, or
@@ -80,6 +81,66 @@ MOON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
         'stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>')
 CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
          'aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>')
+
+# ---- decorative artwork: original red line ornaments in the booklet's style ---
+# (the source PDF holds only three woodcuts; these hand-drawn SVGs add more art
+#  in the same red-ink idiom — the page tints them with the rubric red)
+ORTHODOX_CROSS = (
+    '<svg viewBox="0 0 120 200" fill="currentColor" aria-hidden="true">'
+    '<rect x="54" y="14" width="12" height="172"/>'
+    '<rect x="42" y="40" width="36" height="9"/>'
+    '<rect x="22" y="80" width="76" height="12"/>'
+    '<polygon points="30,150 90,132 90,143 30,161"/></svg>')
+
+ICXC_ROUNDEL = (
+    '<svg viewBox="0 0 140 140" aria-hidden="true" style="font-family:inherit">'
+    '<circle cx="70" cy="70" r="64" fill="none" stroke="currentColor" stroke-width="4"/>'
+    '<rect x="66" y="8" width="8" height="124" fill="currentColor"/>'
+    '<rect x="8" y="66" width="124" height="8" fill="currentColor"/>'
+    '<g fill="currentColor" font-size="20" text-anchor="middle" font-weight="600">'
+    '<text x="37" y="46">IC</text><text x="103" y="46">XC</text>'
+    '<text x="37" y="110">NI</text><text x="103" y="110">KA</text></g>'
+    '<g stroke="currentColor" stroke-width="2">'
+    '<line x1="28" y1="28" x2="46" y2="28"/><line x1="94" y1="28" x2="112" y2="28"/></g></svg>')
+
+THEOTOKOS_MONO = (
+    '<svg viewBox="0 0 210 80" aria-hidden="true" style="font-family:inherit">'
+    '<g fill="currentColor" font-size="44" text-anchor="middle" font-weight="600">'
+    '<text x="50" y="62">ΜΡ</text><text x="160" y="62">ΘΥ</text></g>'
+    '<g stroke="currentColor" stroke-width="3">'
+    '<line x1="22" y1="18" x2="78" y2="18"/><line x1="132" y1="18" x2="188" y2="18"/></g>'
+    '<g fill="currentColor"><rect x="103" y="30" width="4" height="22"/>'
+    '<rect x="96" y="37" width="18" height="4"/></g></svg>')
+
+CHI_RHO = (
+    '<svg viewBox="0 0 140 170" aria-hidden="true" style="font-family:inherit">'
+    '<line x1="70" y1="18" x2="70" y2="155" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>'
+    '<path d="M70 22 C100 22 100 70 70 70" fill="none" stroke="currentColor" stroke-width="9"/>'
+    '<g stroke="currentColor" stroke-width="9" stroke-linecap="round">'
+    '<line x1="44" y1="86" x2="96" y2="150"/><line x1="96" y1="86" x2="44" y2="150"/></g>'
+    '<g fill="currentColor" font-size="26" text-anchor="middle">'
+    '<text x="24" y="138">Α</text><text x="118" y="138">Ω</text></g></svg>')
+
+RULE = (
+    '<svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet">'
+    '<g stroke="currentColor" stroke-width="2" fill="currentColor">'
+    '<line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/>'
+    '<circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/>'
+    '<circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/>'
+    '<polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg>')
+
+ORN = {
+    "cross":   (ORTHODOX_CROSS, "Orthodox cross", "art-cross"),
+    "roundel": (ICXC_ROUNDEL, "IC XC NIKA — the Cross of Christ Conquers", "art-roundel"),
+    "mono":    (THEOTOKOS_MONO, "Mother of God (ΜΡ ΘΥ)", "art-mono"),
+    "chirho":  (CHI_RHO, "Chi-Rho — the monogram of Christ, with Alpha and Omega", "art-chirho"),
+    "rule":    (RULE, "Ornamental rule", "art-rule"),
+}
+
+
+def art(kind):
+    svg, label, cls = ORN[kind]
+    return f'<figure class="art {cls}" role="img" aria-label="{label}">{svg}</figure>'
 
 # bottom tab bar (dedicated mobile nav): Home + Prayers/Resources pop-up
 # sub-menus + the slide-up Settings sheet
@@ -537,14 +598,17 @@ def _links_ul(items):
 BACK = '<a class="res-back" href="resources.html">&larr; All resources</a>'
 
 
-def topic_page(topic):
+def topic_page(topic, ornament=""):
     return "\n".join(['<section class="resources">', BACK, _divider(topic["name"]),
+                      (art(ornament) if ornament else ""),
                       f'<p class="topic-intro">{topic["intro"]}</p>',
                       _links_ul(topic["items"]), '</section>'])
 
 
-def ref_page(ref):
+def ref_page(ref, ornament=""):
     o = ['<section class="resources">', BACK, _divider(ref["name"])]
+    if ornament:
+        o.append(art(ornament))
     if ref.get("blurb"):
         o.append(f'<p class="topic-intro">{ref["blurb"]}</p>')
     o.append(_links_ul(ref["items"]))
@@ -552,8 +616,10 @@ def ref_page(ref):
     return "\n".join(o)
 
 
-def fathers_page():
+def fathers_page(ornament=""):
     o = ['<section class="resources" id="papers">', BACK, _divider("The Early Church Fathers")]
+    if ornament:
+        o.append(art(ornament))
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
              'tick each work as you read or listen; your progress is saved on this device.</p>')
     hubs = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in AUDIO_HUBS)
@@ -602,7 +668,7 @@ RES_CARDS = [
 
 
 def hub_page():
-    o = ['<section class="resources" id="top">', _divider("Resources"),
+    o = ['<section class="resources" id="top">', _divider("Resources"), art("roundel"),
          '<p class="res-intro">Explore the faith — choose a topic.</p>', '<div class="res-hub">']
     for name, href, blurb in RES_CARDS:
         o.append(f'<a class="res-card" href="{href}"><span class="res-card-t">{name}</span>'
@@ -795,7 +861,10 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "An Orthodox prayer book and companion for the journey — daily prayers for morning, the "
      "table, the hours of the day and night, and before sleep, with resources for inquirers "
      "coming from Western Protestant Christianity to Orthodoxy.",
-     LANDING, active="home")
+     LANDING.format(cross=art("cross")), active="home")
+
+# a closing woodcut-style cross to end each prayer page
+CLOSING = '<figure class="art art-cross art-foot" role="img" aria-label="Orthodox cross">' + ORTHODOX_CROSS + '</figure>'
 
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
@@ -803,7 +872,7 @@ PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
 for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
-         with_jump_nav(PRAYERS[slug]), active="prayers", scripts=PLAYER)
+         with_jump_nav(PRAYERS[slug]) + CLOSING, active="prayers", scripts=PLAYER)
 
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
@@ -811,17 +880,20 @@ page("resources.html", "Resources — Daily Prayers",
      hub_page(), active="resources")
 
 TOPIC_SLUGS = {"The Theotokos": "theotokos", "The Priesthood": "priesthood"}
+TOPIC_ORN = {"The Theotokos": "mono", "The Priesthood": "cross"}
 for t in TOPICS:
     page(f'{TOPIC_SLUGS[t["name"]]}.html', f'{t["name"]} — Daily Prayers',
          f'{t["name"]} in the Orthodox Church, with early-Church writings and trusted explanations.',
-         topic_page(t), active="resources")
+         topic_page(t, TOPIC_ORN[t["name"]]), active="resources")
 
 page("fathers.html", "The Early Church Fathers — Daily Prayers",
      "A reading checklist of the early Church Fathers, with free text and audio links.",
-     fathers_page(), active="resources")
+     fathers_page("chirho"), active="resources")
 
 REF_SLUGS = {"The Creeds": "creeds", "The Ecumenical Councils": "councils",
              "Catechisms": "catechisms", "Recommended Reading": "reading"}
+REF_ORN = {"The Creeds": "chirho", "The Ecumenical Councils": "cross",
+           "Catechisms": "roundel", "Recommended Reading": "rule"}
 for ref in REF_SECTIONS:
     page(f'{REF_SLUGS[ref["name"]]}.html', f'{ref["name"]} — Daily Prayers',
-         ref.get("blurb", "") or ref["name"], ref_page(ref), active="resources")
+         ref.get("blurb", "") or ref["name"], ref_page(ref, REF_ORN[ref["name"]]), active="resources")

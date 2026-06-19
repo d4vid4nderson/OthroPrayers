@@ -257,6 +257,24 @@ figure img{ max-width:100%; height:auto; }
 figure.icon img{ width:min(74%, 19rem); }
 figure.banner img{ width:min(100%, 30rem); }
 
+/* ---- decorative red line ornaments (original SVG, house style) ------- */
+figure.art{ margin:1.7em auto; text-align:center; color:var(--rubric); line-height:0; }
+figure.art svg{ display:inline-block; height:auto; }
+.art-cross svg{ width:2.7rem; }
+.art-roundel svg{ width:7rem; }
+.art-mono svg{ width:9.5rem; }
+.art-chirho svg{ width:5rem; }
+.art-rule svg{ width:min(72%, 16rem); }
+.art-lead{ margin:.2em auto 1.1em; }        /* the small cross atop the landing text */
+.art-foot{ margin:2.4em auto 1em; opacity:.92; }  /* closing cross on prayer pages */
+/* present the icon-like ornaments on a white plaque in dark mode, like the
+   booklet woodcuts, and keep the same red ink */
+html[data-theme="dark"] .art-roundel svg,
+html[data-theme="dark"] .art-mono svg,
+html[data-theme="dark"] .art-chirho svg{
+  background:#fbf7ef; padding:.75rem; border-radius:6px; color:#d8455a;
+}
+
 /* ---- cover ----------------------------------------------------------- */
 .cover{ text-align:center; padding-top:.5rem; }
 .cover .coverimg{ width:min(62%, 16rem); margin:0 auto .2rem; }
