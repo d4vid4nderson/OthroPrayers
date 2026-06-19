@@ -704,9 +704,11 @@ HEAD_TMPL = '''<!doctype html>
 {early}
 </head>
 <body>
+<div class="scroll">
 <main class="book">
 {body}
 </main>
+</div>
 {topnav}
 {control}
 {scripts}
