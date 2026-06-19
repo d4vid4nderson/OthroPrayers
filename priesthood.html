@@ -14,13 +14,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" id="tc" content="#ffffff">
+<meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2c2c30":"#ffffff");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2b2722":"#faf6ee");})();
 </script>
 </head>
 <body>
@@ -28,7 +28,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 <main class="book">
 <section class="resources">
 <a class="res-back" href="resources.html">&larr; All resources</a>
-<section class="divider"><span class="cross">✠</span><h1>The Priesthood</h1></section>
+<section class="divider"><span class="cross">✠</span><h1>The Priesthood</h1><figure class="art art-rule" role="img" aria-label="Ornamental rule"><svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><g stroke="currentColor" stroke-width="2" fill="currentColor"><line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/><circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/><circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/><polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg></figure></section>
 <p class="topic-intro">From the beginning the Church has been ordered around a threefold ministry — bishop, presbyter (priest), and deacon — received from the Apostles by the laying on of hands and handed down in unbroken succession. The bishop is the icon of Christ and the center of the local Church; the priest shepherds the parish and celebrates the Mysteries (sacraments); the deacon serves. Ordination is not a career but a calling and a gift of the Holy Spirit, and the Church has always set high requirements — in faith, character, and life (cf. 1 Timothy 3; Titus 1) — for those who serve at the altar. Alongside this ordained priesthood, all the baptized share in the royal priesthood of Christ.</p>
 <ul class="ref-list">
 <li class="ref-item"><a class="ref-title" href="https://www.newadvent.org/fathers/1922.htm" target="_blank" rel="noopener">St John Chrysostom — On the Priesthood (Six Books)</a> <span class="ref-free">free</span><div class="cf-note">The classic treatise on the dignity and burden of the priestly office.</div></li>
@@ -144,7 +144,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#2c2c30":"#ffffff"); }
+    if(tc) tc.setAttribute("content", dark?"#2b2722":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 

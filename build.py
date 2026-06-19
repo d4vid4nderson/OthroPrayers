@@ -10,9 +10,12 @@ from urllib.parse import quote
 content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
-# the Crucifixion banner now lives at the top of the Settings menu, not at the
-# foot of the Prayers-at-Table page
+# the Crucifixion banner is no longer displayed in the booklet pages
 content = re.sub(r'<figure class="banner">.*?</figure>\s*', "", content, flags=re.S)
+# mount the woodcut icon as a framed plate with a small-caps caption (from its alt)
+content = re.sub(
+    r'(<figure class="icon"><img[^>]*alt="(?:Icon of )?([^"]*)"[^>]*>)(\s*</figure>)',
+    r'\1<figcaption>\2</figcaption>\3', content)
 
 LANDING = '''<section class="cover landing" id="top">
   <figure class="coverimg">
@@ -21,6 +24,7 @@ LANDING = '''<section class="cover landing" id="top">
   </figure>
   <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>
   <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
+  {rule}
 
   <div class="landing-body">
     <h2 class="landing-h">Coming Home to the Ancient Church</h2>
@@ -41,8 +45,9 @@ LANDING = '''<section class="cover landing" id="top">
        faith: the early Church Fathers, the Creeds and the Councils, and the questions that most
        often draw seekers eastward. Whether you are simply curious or already on the road, you
        are welcome here.</p>
-    <p class="landing-come">&ldquo;Come and see.&rdquo;<span class="landing-ref">John 1:46</span></p>
   </div>
+
+  <p class="landing-come">&ldquo;Come and see.&rdquo;<span class="landing-ref">John 1:46</span></p>
 
   <nav class="landing-cta" aria-label="Begin">
     <a class="cta" href="morning.html">Begin with Morning Prayers</a>
@@ -151,6 +156,17 @@ def art(kind, foot=False):
 
 # a closing cross to end a page (placed at the foot so it never pushes content down)
 CLOSING = art("cross", foot=True)
+
+# the gilt headpiece rule that crowns a section title
+RULE_FIG = ('<figure class="art art-rule" role="img" aria-label="Ornamental rule">'
+            + RULE + '</figure>')
+
+
+def _headpiece(html):
+    """Insert the gilt rule inside every section divider, just after its title,
+    turning a bare title into an illuminated headpiece (cross -> TITLE -> rule)."""
+    return re.sub(r'(<section class="divider[^"]*"[^>]*>.*?</h1>)(\s*</section>)',
+                  r'\1' + RULE_FIG + r'\2', html, flags=re.S)
 
 # bottom tab bar (dedicated mobile nav): Home + Prayers/Resources pop-up
 # sub-menus + the slide-up Settings sheet
@@ -594,7 +610,8 @@ TOPICS = [
 
 
 def _divider(title):
-    return f'<section class="divider"><span class="cross">✠</span><h1>{title}</h1></section>'
+    return (f'<section class="divider"><span class="cross">✠</span><h1>{title}</h1>'
+            + RULE_FIG + '</section>')
 
 
 def _links_ul(items):
@@ -742,7 +759,7 @@ EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2c2c30":"#ffffff");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#2b2722":"#faf6ee");})();
 </script>'''
 
 CONTROL_JS = '''<script>
@@ -784,7 +801,7 @@ CONTROL_JS = '''<script>
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#2c2c30":"#ffffff"); }
+    if(tc) tc.setAttribute("content", dark?"#2b2722":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 
@@ -825,7 +842,7 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" id="tc" content="#ffffff">
+<meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
 {early}
 </head>
@@ -844,6 +861,8 @@ HEAD_TMPL = '''<!doctype html>
 
 
 def page(path, title, desc, body, active="", scripts=""):
+    # gild the single page-opening drop-cap (the grandest initial)
+    body = body.replace('<span class="dropcap">', '<span class="dropcap gilt">', 1)
     html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=tabbar(active, path),
                             control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
     open(path, "w").write(html)
@@ -921,7 +940,7 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "An Orthodox prayer book and companion for the journey — daily prayers for morning, the "
      "table, the hours of the day and night, and before sleep, with resources for inquirers "
      "coming from Western Protestant Christianity to Orthodoxy.",
-     LANDING.format(cross=CLOSING), active="home")
+     LANDING.format(cross=CLOSING, rule=RULE_FIG), active="home")
 
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
@@ -929,7 +948,7 @@ PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
 for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
-         with_jump_nav(PRAYERS[slug]) + CLOSING, active="prayers", scripts=PLAYER)
+         with_jump_nav(_headpiece(PRAYERS[slug])) + CLOSING, active="prayers", scripts=PLAYER)
 
 # The Ancient Faith Prayer Book: a hub + one page per office (read-aloud on each)
 if ANCIENT:
@@ -941,7 +960,7 @@ if ANCIENT:
     for slug, title, blurb in AFPB:
         if slug not in ANCIENT:
             continue
-        body = with_jump_nav(ANCIENT[slug]).replace('</section>\n', '</section>\n' + _credit, 1)
+        body = with_jump_nav(_headpiece(ANCIENT[slug])).replace('</section>\n', '</section>\n' + _credit, 1)
         page(f"{slug}.html", f"{title} — The Ancient Faith Prayer Book",
              f"{title}, from The Ancient Faith Prayer Book (Ancient Faith Publishing).",
              body + CLOSING, active="prayers", scripts=PLAYER)

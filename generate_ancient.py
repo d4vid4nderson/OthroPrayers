@@ -92,7 +92,7 @@ def convert(raw):
         elif "rubric" in cls or "red" in cls:
             out.append(f'<p class="rubric">{_inline(inner)}</p>')
         elif "psalm" in cls:
-            out.append(f'<p class="verse">{_inline(inner)}</p>')
+            out.append(f'<p class="psalm">{_inline(inner)}</p>')
         elif cls.strip() == "amen" or txt.upper().rstrip(".") == "AMEN":
             out.append('<p class="amen">Amen.</p>')
         else:
