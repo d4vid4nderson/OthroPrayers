@@ -48,6 +48,7 @@
   --ink:    #231f20;
   --rubric: #e54e62;
   --link:   #1e5e9e;
+  --gold:   #9a7b1e;   /* Byzantine gold — marks the Ancient Faith prayers */
   --paper:  #ffffff;   /* the booklet is printed on white; matches the icon art */
   --desk:   #ddd7ca;
   --serif:  "Arno Pro", "EB Garamond", Garamond, "Hoefler Text", "Times New Roman", serif;
@@ -58,6 +59,7 @@ html[data-theme="dark"]{
   --ink:    #e8e6e2;   /* light text */
   --rubric: #f26d77;   /* red text, legible on gray */
   --link:   #88b6ea;
+  --gold:   #d9b85e;   /* lighter gold for the dark page */
   --paper:  #2c2c30;   /* dark-gray page */
   --desk:   #1d1d20;   /* slightly darker behind the page */
 }
@@ -197,6 +199,41 @@ h2.subhead{
   text-transform:lowercase;     /* feed small-caps clean lowercase */
   margin:1.8em 0 .8em;
 }
+/* minor sub-heads (individual prayer titles in the Ancient Faith offices) */
+h3.subhead{
+  color:var(--rubric);
+  text-align:center;
+  font-weight:500;
+  font-size:1.02rem;
+  font-variant-caps:small-caps;
+  letter-spacing:.12em;
+  text-transform:lowercase;
+  margin:1.3em 0 .55em;
+}
+/* the "Amen." that closes a prayer */
+p.amen{
+  text-align:center;
+  text-indent:0;
+  color:var(--rubric);
+  font-variant-caps:small-caps;
+  text-transform:lowercase;
+  letter-spacing:.14em;
+  margin:.35em 0 1em;
+}
+
+/* ---- "Ancient Faith Prayer Book" gold pill / badge ------------------- */
+.pill{
+  display:inline-block; vertical-align:middle;
+  font-size:.62rem; letter-spacing:.09em; text-transform:uppercase;
+  padding:.28em .65em; border-radius:999px; line-height:1.35;
+  white-space:nowrap;
+}
+.pill-ancient{ background:var(--gold); color:#fff; }
+html[data-theme="dark"] .pill-ancient{ color:#241f10; }
+.pill-sm{ font-size:.52rem; padding:.2em .5em; margin-left:.4em; }
+.afpb-credit{ text-align:center; text-indent:0; margin:.3em 0 1.3em; }
+/* gold edge on the Ancient Faith hub cards, to set them apart from Resources */
+.afpb-card{ border-left:3px solid var(--gold); }
 
 /* ---- the priest / layman hanging table ------------------------------- */
 .hang{
