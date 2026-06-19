@@ -12,10 +12,9 @@ content = open("prayers.content.html").read()
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
 # the Crucifixion banner is no longer displayed in the booklet pages
 content = re.sub(r'<figure class="banner">.*?</figure>\s*', "", content, flags=re.S)
-# mount the woodcut icon as a framed plate with a small-caps caption (from its alt)
-content = re.sub(
-    r'(<figure class="icon"><img[^>]*alt="(?:Icon of )?([^"]*)"[^>]*>)(\s*</figure>)',
-    r'\1<figcaption>\2</figcaption>\3', content)
+# the Christ-the-Teacher icon moves from the foot of Morning Prayers to the top
+# of the Ancient Faith Prayer Book hub (added there as CHRIST_FIG)
+content = re.sub(r'<figure class="icon">.*?</figure>\s*', "", content, flags=re.S)
 
 LANDING = '''<section class="cover landing" id="top">
   <figure class="coverimg">
@@ -65,16 +64,21 @@ LANDING = '''<section class="cover landing" id="top">
     these prayers in their homes.</p>
 </section>'''
 
-# inline SVG icons (stroke uses currentColor; no emoji)
+# inline SVG icons (stroke uses currentColor; no emoji). Orthodox-themed,
+# hand-drawn — HOME = a domed church, BOOK = the Gospel (cross on the cover),
+# COMPASS = an open book/manuscript (Resources).
 HOME = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
-        'stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/>'
-        '<path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9.5 20v-5h5v5"/></svg>')
+        'stroke-linejoin="round" aria-hidden="true"><path d="M12 2v2.4"/><path d="M10.7 3.2h2.6"/>'
+        '<path d="M12 4.8c1.4 0 2.3 1.1 2.3 2.4 0 1.5-2.3 3.2-2.3 3.2S9.7 8.7 9.7 7.2C9.7 5.9 10.6 4.8 12 4.8z"/>'
+        '<path d="M6 21v-8.6l6-2.4 6 2.4V21"/><path d="M4 21h16"/>'
+        '<path d="M10.3 21v-3.1a1.7 1.7 0 0 1 3.4 0V21"/></svg>')
 BOOK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
-        'stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"/>'
-        '<path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>')
+        'stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1.6"/>'
+        '<path d="M12 7.4v6"/><path d="M9.4 9.6h5.2"/></svg>')
 COMPASS = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
-           'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/>'
-           '<polygon points="16.2 7.8 13.4 13.4 7.8 16.2 10.6 10.6"/></svg>')
+           'stroke-linejoin="round" aria-hidden="true"><path d="M12 6.4v13.2"/>'
+           '<path d="M12 6.4C9.8 5 6.6 5 4 6v12.6c2.6-1 5.8-1 8 .4"/>'
+           '<path d="M12 6.4c2.2-1.4 5.4-1.4 8-.4v12.6c-2.6-1-5.8-1-8 .4"/></svg>')
 GEAR = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/>'
         '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 '
@@ -168,6 +172,16 @@ def _headpiece(html):
     return re.sub(r'(<section class="divider[^"]*"[^>]*>.*?</h1>)(\s*</section>)',
                   r'\1' + RULE_FIG + r'\2', html, flags=re.S)
 
+
+# the gilt cross drawn (not a font glyph) that crowns each headpiece
+def _drawn_crosses(html):
+    return html.replace('<span class="cross">✠</span>',
+                        '<span class="cross">' + ORTHODOX_CROSS + '</span>')
+
+
+# apply the drawn headpiece cross to the prayer-booklet content
+content = _drawn_crosses(content)
+
 # bottom tab bar (dedicated mobile nav): Home + Prayers/Resources pop-up
 # sub-menus + the slide-up Settings sheet
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
@@ -242,7 +256,7 @@ def tabbar(active="", current=""):
                     ("hours.html", "Prayers for the Hours of the Day &amp; Night"),
                     ("sleep.html", "Prayers Before Sleep"),
                     ("ancient.html", "The Ancient Faith Prayer Book", "ancient")]
-    res_pairs = [(href, name) for name, href, _ in RES_CARDS]
+    res_pairs = [(c[1], c[0]) for c in RES_CARDS]
     return TABBAR_TMPL.format(
         h_act=" active" if active == "home" else "",
         p_act=" active" if active == "prayers" else "",
@@ -610,7 +624,7 @@ TOPICS = [
 
 
 def _divider(title):
-    return (f'<section class="divider"><span class="cross">✠</span><h1>{title}</h1>'
+    return (f'<section class="divider"><span class="cross">{ORTHODOX_CROSS}</span><h1>{title}</h1>'
             + RULE_FIG + '</section>')
 
 
@@ -686,23 +700,29 @@ def fathers_page(ornament=""):
     return "\n".join(o)
 
 
-# Resources hub: a card per topic/section (links to its own page)
+# Resources hub: a card per topic/section (links to its own page), each with a
+# small gilt emblem in the house style
 RES_CARDS = [
-    ("The Theotokos", "theotokos.html", "Who the Church confesses Mary to be — and why."),
-    ("The Priesthood", "priesthood.html", "The threefold ministry, and what the Church asks of a priest."),
-    ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio."),
-    ("The Creeds", "creeds.html", "The Church's confessions of faith, in a few lines."),
-    ("The Ecumenical Councils", "councils.html", "The canons and definitions of the councils."),
-    ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith."),
-    ("Recommended Reading", "reading.html", "A few books to go deeper."),
+    ("The Theotokos", "theotokos.html", "Who the Church confesses Mary to be — and why.", "mono"),
+    ("The Priesthood", "priesthood.html", "The threefold ministry, and what the Church asks of a priest.", "cross"),
+    ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio.", "chirho"),
+    ("The Creeds", "creeds.html", "The Church's confessions of faith, in a few lines.", "roundel"),
+    ("The Ecumenical Councils", "councils.html", "The canons and definitions of the councils.", "cross"),
+    ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith.", "chirho"),
+    ("Recommended Reading", "reading.html", "A few books to go deeper.", "rule"),
 ]
+
+
+def _emblem(kind):
+    return f'<span class="res-card-emblem" aria-hidden="true">{ORN[kind][0]}</span>'
 
 
 def hub_page():
     o = ['<section class="resources" id="top">', _divider("Resources"),
          '<p class="res-intro">Explore the faith — choose a topic.</p>', '<div class="res-hub">']
-    for name, href, blurb in RES_CARDS:
-        o.append(f'<a class="res-card" href="{href}"><span class="res-card-t">{name}</span>'
+    for name, href, blurb, emb in RES_CARDS:
+        o.append(f'<a class="res-card" href="{href}">{_emblem(emb)}'
+                 f'<span class="res-card-t">{name}</span>'
                  f'<span class="res-card-d">{blurb}</span></a>')
     o.append('</div>')
     o.append(art("roundel", foot=True))
@@ -730,7 +750,12 @@ AFPB_TITLES = {slug: title for slug, title, _ in AFPB}
 
 PILL = '<span class="pill pill-ancient">Ancient Faith Prayer Book</span>'
 
+# the Christ-the-Teacher icon, moved here from the foot of Morning Prayers
+CHRIST_FIG = ('<figure class="icon"><img src="assets/img/icon_p15.png" width="500" height="598" '
+              'alt="Icon of Christ the Teacher"><figcaption>Christ the Teacher</figcaption></figure>')
+
 _ancient_src = open("ancient.content.html").read() if os.path.exists("ancient.content.html") else ""
+_ancient_src = _drawn_crosses(_ancient_src)
 _amarks = list(re.finditer(r'<section class="divider afpb" id="(af-[a-z]+)">', _ancient_src))
 ANCIENT = {}
 for _ai, _am in enumerate(_amarks):
@@ -741,6 +766,7 @@ for _ai, _am in enumerate(_amarks):
 def afpb_hub():
     o = ['<section class="resources afpb-hub" id="top">',
          _divider("The Ancient Faith Prayer Book"),
+         CHRIST_FIG,
          '<p class="res-intro">Prayers from <em>The Ancient Faith Prayer Book</em> '
          '(Ancient Faith Publishing). ' + PILL + '</p>',
          '<div class="res-hub">']
