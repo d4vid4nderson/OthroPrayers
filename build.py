@@ -20,7 +20,6 @@ LANDING = '''<section class="cover landing" id="top">
   <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
 
   <div class="landing-body">
-    {cross}
     <h2 class="landing-h">Coming Home to the Ancient Church</h2>
     <p>Many who find their way to the Orthodox Church begin somewhere else — most often in the
        Western Protestant traditions: evangelical, Reformed, Baptist, Methodist, Anglican, or
@@ -46,6 +45,8 @@ LANDING = '''<section class="cover landing" id="top">
     <a class="cta" href="morning.html">Begin with Morning Prayers</a>
     <a class="cta cta-ghost" href="resources.html">Explore the faith</a>
   </nav>
+
+  {cross}
 
   <p class="colophon">These prayers are excerpted from <cite>Orthodox Christian
     Prayers</cite>, edited by Priest John Mikitish &amp; Hieromonk Herman
@@ -139,9 +140,14 @@ ORN = {
 }
 
 
-def art(kind):
+def art(kind, foot=False):
     svg, label, cls = ORN[kind]
-    return f'<figure class="art {cls}" role="img" aria-label="{label}">{svg}</figure>'
+    extra = " art-foot" if foot else ""
+    return f'<figure class="art {cls}{extra}" role="img" aria-label="{label}">{svg}</figure>'
+
+
+# a closing cross to end a page (placed at the foot so it never pushes content down)
+CLOSING = art("cross", foot=True)
 
 # bottom tab bar (dedicated mobile nav): Home + Prayers/Resources pop-up
 # sub-menus + the slide-up Settings sheet
@@ -605,26 +611,24 @@ BACK = '<a class="res-back" href="resources.html">&larr; All resources</a>'
 
 def topic_page(topic, ornament=""):
     return "\n".join(['<section class="resources">', BACK, _divider(topic["name"]),
-                      (art(ornament) if ornament else ""),
                       f'<p class="topic-intro">{topic["intro"]}</p>',
-                      _links_ul(topic["items"]), '</section>'])
+                      _links_ul(topic["items"]),
+                      (art(ornament, foot=True) if ornament else ""), '</section>'])
 
 
 def ref_page(ref, ornament=""):
     o = ['<section class="resources">', BACK, _divider(ref["name"])]
-    if ornament:
-        o.append(art(ornament))
     if ref.get("blurb"):
         o.append(f'<p class="topic-intro">{ref["blurb"]}</p>')
     o.append(_links_ul(ref["items"]))
+    if ornament:
+        o.append(art(ornament, foot=True))
     o.append('</section>')
     return "\n".join(o)
 
 
 def fathers_page(ornament=""):
     o = ['<section class="resources" id="papers">', BACK, _divider("The Early Church Fathers")]
-    if ornament:
-        o.append(art(ornament))
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
              'tick each work as you read or listen; your progress is saved on this device.</p>')
     hubs = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in AUDIO_HUBS)
@@ -656,6 +660,8 @@ def fathers_page(ornament=""):
     o.append('<p class="res-foot">Text links point to free public-domain libraries — New Advent, '
              'CCEL, Wikisource and Early Christian Writings — and audio to LibriVox and other free '
              'sources. A few modern books link to the publisher.</p>')
+    if ornament:
+        o.append(art(ornament, foot=True))
     o.append('</section>')
     return "\n".join(o)
 
@@ -673,12 +679,14 @@ RES_CARDS = [
 
 
 def hub_page():
-    o = ['<section class="resources" id="top">', _divider("Resources"), art("roundel"),
+    o = ['<section class="resources" id="top">', _divider("Resources"),
          '<p class="res-intro">Explore the faith — choose a topic.</p>', '<div class="res-hub">']
     for name, href, blurb in RES_CARDS:
         o.append(f'<a class="res-card" href="{href}"><span class="res-card-t">{name}</span>'
                  f'<span class="res-card-d">{blurb}</span></a>')
-    o.append('</div></section>')
+    o.append('</div>')
+    o.append(art("roundel", foot=True))
+    o.append('</section>')
     return "\n".join(o)
 
 
@@ -910,10 +918,7 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "An Orthodox prayer book and companion for the journey — daily prayers for morning, the "
      "table, the hours of the day and night, and before sleep, with resources for inquirers "
      "coming from Western Protestant Christianity to Orthodoxy.",
-     LANDING.format(cross=art("cross")), active="home")
-
-# a closing woodcut-style cross to end each prayer page
-CLOSING = '<figure class="art art-cross art-foot" role="img" aria-label="Orthodox cross">' + ORTHODOX_CROSS + '</figure>'
+     LANDING.format(cross=CLOSING), active="home")
 
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
