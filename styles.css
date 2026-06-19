@@ -69,7 +69,6 @@ html[data-theme="dark"] figure img{
   border-radius:4px;
 }
 html[data-theme="dark"] .colophon{ color:#aaa7a0; border-top-color:#43434a; }
-html[data-theme="dark"] .topnav{ background:rgba(44,44,48,.94); border-bottom-color:#43434a; }
 
 /* ---- text-size steps (set on <html> by the control; rem scales all type) */
 html{ font-size:100%; }
@@ -103,7 +102,7 @@ body{
   font-family:var(--serif);
   font-feature-settings:"liga" 1, "onum" 1, "kern" 1;
   line-height:1.46;
-  padding-bottom:calc(4rem + env(safe-area-inset-bottom));   /* clear bottom bar */
+  padding-bottom:calc(4.8rem + env(safe-area-inset-bottom));   /* clear tab bar */
 }
 
 /* ---- the "booklet" page ---------------------------------------------- */
@@ -283,41 +282,34 @@ figure.banner img{ width:min(100%, 30rem); }
 }
 .colophon cite{ font-style:italic; }
 
-/* ---- bottom bar: brand on the left, burger menu on the right -------- */
-.topnav{
+/* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
+.tabbar{
   position:fixed; left:0; right:0; bottom:0; z-index:30;
+  display:flex; align-items:stretch;
   background:rgba(255,253,248,.97);
   backdrop-filter:saturate(1.2) blur(3px);
   border-top:1px solid #e7e0d4;
-  display:flex; align-items:center; justify-content:space-between;
-  min-height:3rem;
-  /* lift the bar's contents above the iOS home indicator. max() guarantees a
-     floor even when env(safe-area-inset-bottom) reports 0 (e.g. some installed
-     web-app contexts); constant() is the legacy iOS 11 spelling. */
-  padding-bottom:calc(constant(safe-area-inset-bottom) + .4rem);
-  padding-bottom:max(.6rem, calc(env(safe-area-inset-bottom) + .4rem));
+  /* lift the tabs above the iOS home indicator (max() floors it even when the
+     safe-area inset reports 0 in some installed web-app contexts) */
+  padding-bottom:max(.25rem, env(safe-area-inset-bottom));
 }
-/* installed web-app (no browser chrome): guarantee generous home-indicator room */
+html[data-theme="dark"] .tabbar{ border-top-color:#43434a; background:rgba(28,28,32,.96); }
+.tab{
+  flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.18rem; padding:.55rem .25rem .4rem; min-height:3.35rem;
+  background:none; border:0; cursor:pointer; text-decoration:none;
+  color:var(--ink); font-family:inherit; opacity:.55;
+}
+.tab:hover{ opacity:.85; }
+.tab.active{ opacity:1; color:var(--rubric); }
+.tab-i{ display:flex; }
+.tab-i svg{ width:1.55rem; height:1.55rem; }
+.tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.05em; }
+/* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
-  .topnav{ padding-bottom:max(2.6rem, calc(env(safe-area-inset-bottom) + .9rem)); }
-  body{ padding-bottom:max(5.6rem, calc(4.4rem + env(safe-area-inset-bottom))); }
+  .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
+  body{ padding-bottom:max(6rem, calc(5rem + env(safe-area-inset-bottom))); }
 }
-html[data-theme="dark"] .topnav{ border-top-color:#43434a; }
-.brand{
-  display:flex; align-items:center; gap:.4rem;
-  color:var(--ink); text-decoration:none;
-  padding:.55rem .9rem;
-  font-variant-caps:small-caps; letter-spacing:.06em; font-size:1.08rem;
-}
-.brand .cross{ color:var(--rubric); }
-
-.iconbtn{
-  display:flex; align-items:center; justify-content:center;
-  width:3rem; height:3rem; padding:0; margin-right:.25rem;
-  background:none; border:0; cursor:pointer; color:var(--ink);
-}
-.iconbtn svg{ width:1.5rem; height:1.5rem; }
-.iconbtn:hover{ color:var(--rubric); }
 
 /* dimming backdrop behind the open sheet */
 .backdrop{
@@ -575,5 +567,5 @@ html[data-theme="dark"] .tts-player.open{ border-color:#43434a; box-shadow:0 8px
 @media print{
   body{ background:#fff; padding-bottom:0; }
   .book{ box-shadow:none; max-width:none; }
-  .topnav, .backdrop, .drawer, .tts-player{ display:none; }
+  .tabbar, .backdrop, .drawer, .tts-player{ display:none; }
 }

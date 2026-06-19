@@ -33,9 +33,21 @@ COVER = '''<section class="cover" id="top">
 </section>'''
 
 # inline SVG icons (stroke uses currentColor; no emoji)
-BURGER = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
-          'stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/>'
-          '<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>')
+BOOK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+        'stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"/>'
+        '<path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>')
+COMPASS = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+           'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/>'
+           '<polygon points="16.2 7.8 13.4 13.4 7.8 16.2 10.6 10.6"/></svg>')
+GEAR = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+        'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/>'
+        '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 '
+        '1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 '
+        '0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 '
+        '0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 '
+        '1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 '
+        '2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 '
+        '0-1.51 1z"/></svg>')
 SUN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
        'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2M12 20.5v2'
        'M3.9 3.9l1.4 1.4M18.7 18.7l1.4 1.4M1.5 12h2M20.5 12h2M3.9 20.1l1.4-1.4M18.7 5.3l1.4-1.4"/></svg>')
@@ -44,53 +56,47 @@ MOON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
 CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
          'aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>')
 
-TOPNAV_TMPL = '''<nav class="topnav" aria-label="Header">
-  <a class="brand" href="{brand_href}"><span class="cross">&#10016;</span> Daily Prayers</a>
-  <button id="burger" class="iconbtn" type="button" aria-haspopup="true" aria-expanded="false"
-          aria-controls="menu" title="Menu" aria-label="Open menu">{BURGER}</button>
-  <div id="menu-backdrop" class="backdrop"></div>
-  <div id="menu" class="drawer" role="dialog" aria-modal="true" aria-label="Menu">
-    <div class="drawer-head">
-      <span class="grab" aria-hidden="true"></span>
-      <button id="menu-close" class="drawer-close" type="button" aria-label="Close menu">{CLOSE}</button>
-    </div>
-    {links}
-    <div class="drawer-settings">
-      <div class="drawer-heading">Settings</div>
-      <div class="menu-row">
-        <span class="menu-label">Text size</span>
-        <span class="seg" role="group" aria-label="Text size">
-          <button id="size-dn" type="button" title="Smaller text" aria-label="Smaller text">A&minus;</button>
-          <button id="size-up" type="button" title="Larger text" aria-label="Larger text">A+</button>
-        </span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-label">Theme</span>
-        <span class="seg" role="group" aria-label="Theme">
-          <button id="theme-light" type="button" title="Light" aria-label="Light mode" aria-pressed="false">{SUN}</button>
-          <button id="theme-dark" type="button" title="Dark" aria-label="Dark mode" aria-pressed="false">{MOON}</button>
-        </span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-label">Dyslexia-friendly</span>
-        <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
-                aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
-      </div>
-    </div>
+# bottom tab bar (dedicated mobile nav) + slide-up Settings sheet
+TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
+  <a class="tab{p_act}" href="index.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
+  <a class="tab{r_act}" href="resources.html" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></a>
+  <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
+          aria-controls="menu" aria-label="Settings"><span class="tab-i">{GEAR}</span><span class="tab-l">Settings</span></button>
+</nav>
+<div id="menu-backdrop" class="backdrop"></div>
+<div id="menu" class="drawer" role="dialog" aria-modal="true" aria-label="Settings">
+  <div class="drawer-head">
+    <span class="grab" aria-hidden="true"></span>
+    <button id="menu-close" class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
   </div>
-</nav>'''
+  <div class="drawer-heading">Settings</div>
+  <div class="menu-row">
+    <span class="menu-label">Text size</span>
+    <span class="seg" role="group" aria-label="Text size">
+      <button id="size-dn" type="button" title="Smaller text" aria-label="Smaller text">A&minus;</button>
+      <button id="size-up" type="button" title="Larger text" aria-label="Larger text">A+</button>
+    </span>
+  </div>
+  <div class="menu-row">
+    <span class="menu-label">Theme</span>
+    <span class="seg" role="group" aria-label="Theme">
+      <button id="theme-light" type="button" title="Light" aria-label="Light mode" aria-pressed="false">{SUN}</button>
+      <button id="theme-dark" type="button" title="Dark" aria-label="Dark mode" aria-pressed="false">{MOON}</button>
+    </span>
+  </div>
+  <div class="menu-row">
+    <span class="menu-label">Dyslexia-friendly</span>
+    <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
+            aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
+  </div>
+</div>'''
 
 
-def topnav(active=""):
-    # every section is now its own page, so the menu is the same everywhere
-    items = [("morning.html", "Morning Prayers"), ("table.html", "Prayers at Table"),
-             ("hours.html", "Prayers for the Hours"), ("sleep.html", "Prayers Before Sleep"),
-             ("resources.html", "Resources")]
-    links = "\n    ".join(
-        f'<a class="drawer-link{" active" if h == active else ""}" href="{h}">{t}</a>'
-        for h, t in items)
-    return TOPNAV_TMPL.format(brand_href="index.html", links=links,
-                              BURGER=BURGER, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
+def tabbar(active=""):
+    return TABBAR_TMPL.format(
+        p_act=" active" if active == "prayers" else "",
+        r_act=" active" if active == "resources" else "",
+        BOOK=BOOK, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
 
 
 # ---- Early Church Fathers reading checklist --------------------------------
@@ -554,11 +560,11 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 CONTROL_JS = '''<script>
 (function(){
   var r=document.documentElement, d=document, L=localStorage;
-  var menu=d.getElementById("menu"), burger=d.getElementById("burger"),
+  var menu=d.getElementById("menu"), trigger=d.getElementById("settings-btn"),
       backdrop=d.getElementById("menu-backdrop"), closeBtn=d.getElementById("menu-close");
   function open(o){ menu.classList.toggle("open",o); backdrop.classList.toggle("open",o);
-    r.classList.toggle("menu-open",o); burger.setAttribute("aria-expanded", o?"true":"false"); }
-  burger.addEventListener("click", function(e){ e.stopPropagation(); open(!menu.classList.contains("open")); });
+    r.classList.toggle("menu-open",o); trigger.setAttribute("aria-expanded", o?"true":"false"); }
+  trigger.addEventListener("click", function(e){ e.stopPropagation(); open(!menu.classList.contains("open")); });
   backdrop.addEventListener("click", function(){ open(false); });
   closeBtn.addEventListener("click", function(){ open(false); });
   d.addEventListener("keydown", function(e){ if(e.key==="Escape") open(false); });
@@ -638,7 +644,7 @@ HEAD_TMPL = '''<!doctype html>
 
 
 def page(path, title, desc, body, active="", scripts=""):
-    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=topnav(active),
+    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=tabbar(active),
                             control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
     open(path, "w").write(html)
     print("wrote", path, len(html), "bytes")
@@ -714,7 +720,7 @@ PLAYER = '<script src="player.js?v=5" defer></script>'
 page("index.html", "Prayers for Morning, Day &amp; Night",
      "Orthodox prayers for morning, the table, the hours of the day and night, and before "
      "sleep — a web edition of the booklet published by St. Tikhon's Monastery Press / OCA.",
-     COVER, active="index.html")
+     COVER, active="prayers")
 
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
@@ -722,25 +728,25 @@ PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
 for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
-         with_jump_nav(PRAYERS[slug]), active=f"{slug}.html", scripts=PLAYER)
+         with_jump_nav(PRAYERS[slug]), active="prayers", scripts=PLAYER)
 
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
      "Topics, early-Church writings, creeds, councils, catechisms and recommended reading.",
-     hub_page(), active="resources.html")
+     hub_page(), active="resources")
 
 TOPIC_SLUGS = {"The Theotokos": "theotokos", "The Priesthood": "priesthood"}
 for t in TOPICS:
     page(f'{TOPIC_SLUGS[t["name"]]}.html', f'{t["name"]} — Daily Prayers',
          f'{t["name"]} in the Orthodox Church, with early-Church writings and trusted explanations.',
-         topic_page(t), active="resources.html")
+         topic_page(t), active="resources")
 
 page("fathers.html", "The Early Church Fathers — Daily Prayers",
      "A reading checklist of the early Church Fathers, with free text and audio links.",
-     fathers_page(), active="resources.html")
+     fathers_page(), active="resources")
 
 REF_SLUGS = {"The Creeds": "creeds", "The Ecumenical Councils": "councils",
              "Catechisms": "catechisms", "Recommended Reading": "reading"}
 for ref in REF_SECTIONS:
     page(f'{REF_SLUGS[ref["name"]]}.html', f'{ref["name"]} — Daily Prayers',
-         ref.get("blurb", "") or ref["name"], ref_page(ref), active="resources.html")
+         ref.get("blurb", "") or ref["name"], ref_page(ref), active="resources")
