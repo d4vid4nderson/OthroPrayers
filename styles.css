@@ -257,17 +257,6 @@ figure.banner img{ width:min(100%, 30rem); }
   margin:.6em 0 1.4em;
 }
 .cover h1 .i{ letter-spacing:0; }
-.cover nav{ margin:1.4rem auto 2rem; width:fit-content; max-width:100%; text-align:left; }
-.cover nav a{
-  display:block;
-  color:var(--link);
-  text-decoration:none;
-  font-size:1.3rem;
-  margin:.42em 0;
-  border-bottom:1px solid transparent;
-  overflow-wrap:break-word;   /* long entries wrap instead of overflowing */
-}
-.cover nav a:hover{ border-bottom-color:var(--link); }
 .colophon{
   overflow-wrap:break-word;
   font-size:.92rem;
@@ -306,20 +295,18 @@ figure.banner img{ width:min(100%, 30rem); }
 }
 .landing-cta{
   display:flex; flex-direction:column; gap:.7rem;
-  max-width:24rem; margin:1.8rem auto .4rem;
+  width:100%; max-width:24rem; margin:1.8rem auto .4rem;
 }
-.cta{
-  display:block; text-align:center; text-decoration:none;
-  padding:.85rem 1rem; border-radius:10px;
+.landing-cta .cta{
+  display:block; width:100%; text-align:center; text-decoration:none;
+  padding:.85rem 1rem; border-radius:10px; border:1px solid var(--rubric);
   background:var(--rubric); color:#fff;
-  font-size:1.08rem; letter-spacing:.01em;
+  font-size:1.08rem; letter-spacing:.01em; line-height:1.25; margin:0;
 }
-.cta:hover{ filter:brightness(1.07); }
-.cta-ghost{
-  background:none; color:var(--link);
-  border:1px solid var(--rubric);
-}
-html[data-theme="dark"] .cta-ghost{ color:var(--ink); }
+.landing-cta .cta:hover{ filter:brightness(1.07); }
+.landing-cta .cta-ghost{ background:none; color:var(--link); }
+html[data-theme="dark"] .landing-cta .cta{ color:#fff; }
+html[data-theme="dark"] .landing-cta .cta-ghost{ color:var(--ink); }
 
 /* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
 .tabbar{
