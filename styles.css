@@ -282,6 +282,45 @@ figure.banner img{ width:min(100%, 30rem); }
 }
 .colophon cite{ font-style:italic; }
 
+/* ---- landing / home page -------------------------------------------- */
+.landing .coverimg{ width:min(54%, 13rem); }
+.landing h1{ margin:.55em 0 .35em; }
+.landing-sub{
+  text-align:center; font-style:italic; color:var(--rubric);
+  font-size:1.02rem; margin:0 0 1.6rem;
+}
+.landing-body{ text-align:left; max-width:34rem; margin:0 auto; }
+.landing-body p{ margin:0 0 1rem; line-height:1.6; }
+.landing-h{
+  text-align:center; font-weight:400; color:var(--rubric);
+  font-size:clamp(1.25rem, 5vw, 1.6rem); letter-spacing:.02em;
+  margin:.2rem 0 1.1rem;
+}
+.landing-come{
+  text-align:center; font-size:1.2rem; font-style:italic;
+  margin:1.4rem 0 .4rem;
+}
+.landing-come .landing-ref{
+  display:block; font-size:.8rem; font-style:normal;
+  letter-spacing:.08em; text-transform:uppercase; opacity:.55; margin-top:.3rem;
+}
+.landing-cta{
+  display:flex; flex-direction:column; gap:.7rem;
+  max-width:24rem; margin:1.8rem auto .4rem;
+}
+.cta{
+  display:block; text-align:center; text-decoration:none;
+  padding:.85rem 1rem; border-radius:10px;
+  background:var(--rubric); color:#fff;
+  font-size:1.08rem; letter-spacing:.01em;
+}
+.cta:hover{ filter:brightness(1.07); }
+.cta-ghost{
+  background:none; color:var(--link);
+  border:1px solid var(--rubric);
+}
+html[data-theme="dark"] .cta-ghost{ color:var(--ink); }
+
 /* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
 .tabbar{
   position:fixed; left:0; right:0; bottom:0; z-index:30;
@@ -304,7 +343,7 @@ html[data-theme="dark"] .tabbar{ border-top-color:#43434a; background:rgba(28,28
 .tab.active{ opacity:1; color:var(--rubric); }
 .tab-i{ display:flex; }
 .tab-i svg{ width:1.55rem; height:1.55rem; }
-.tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.05em; }
+.tab-l{ font-size:.7rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap; }
 /* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
   .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
@@ -358,6 +397,9 @@ html.menu-open{ overflow:hidden; }
 }
 .drawer-link:hover{ background:rgba(0,0,0,.05); color:var(--rubric); }
 html[data-theme="dark"] .drawer-link:hover{ background:rgba(255,255,255,.07); }
+.drawer-link.active{ color:var(--rubric); font-weight:600; }
+.drawer-link.active::before{ content:"› "; }
+.drawer-nav{ padding-bottom:.2rem; }
 .drawer-settings{ margin-top:.35rem; padding-top:.2rem; border-top:1px solid #efe8db; }
 html[data-theme="dark"] .drawer-settings{ border-top-color:#37373c; }
 .drawer-heading{

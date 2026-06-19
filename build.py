@@ -10,19 +10,41 @@ content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
 
-COVER = '''<section class="cover" id="top">
+LANDING = '''<section class="cover landing" id="top">
   <figure class="coverimg">
     <img src="assets/img/icon_p1.png" width="742" height="787"
          alt="Icon of the Mother of God “of the Sign” (Znamenie)">
   </figure>
   <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>
-  <nav aria-label="Contents">
-    <a href="morning.html">Morning Prayers</a>
-    <a href="table.html">Prayers at Table</a>
-    <a href="hours.html">Prayers for the Hours of the Day and Night</a>
-    <a href="sleep.html">Prayers Before Sleep</a>
-    <a href="resources.html">Resources</a>
+  <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
+
+  <div class="landing-body">
+    <h2 class="landing-h">Coming Home to the Ancient Church</h2>
+    <p>Many who find their way to the Orthodox Church begin somewhere else — most often in the
+       Western Protestant traditions: evangelical, Reformed, Baptist, Methodist, Anglican, or
+       non-denominational. The path eastward is rarely a rejection of the love of Christ first
+       learned there. It is a search for its <em>fullness</em> — for the Church of the Apostles,
+       the worship of the early centuries, and the unbroken life of prayer that has carried the
+       faith from the upper room to this very morning.</p>
+    <p>For the Protestant inquirer, Orthodoxy can feel at once ancient and entirely new: the
+       same Scriptures, the same Lord, yet received within a Church that never set aside the
+       sacraments, the Creed of the Councils, the communion of the saints, or the honor due the
+       Theotokos, the Mother of God. It is less a set of new ideas than an older way of being
+       Christian — liturgical, sacramental, and rooted in the witness of the Fathers, who
+       learned the faith from those who walked with Christ.</p>
+    <p>This little book gathers the daily prayers of that tradition — for the morning, the
+       table, the hours of the day, and the night — alongside resources for exploring the
+       faith: the early Church Fathers, the Creeds and the Councils, and the questions that most
+       often draw seekers eastward. Whether you are simply curious or already on the road, you
+       are welcome here.</p>
+    <p class="landing-come">&ldquo;Come and see.&rdquo;<span class="landing-ref">John 1:46</span></p>
+  </div>
+
+  <nav class="landing-cta" aria-label="Begin">
+    <a class="cta" href="morning.html">Begin with Morning Prayers</a>
+    <a class="cta cta-ghost" href="resources.html">Explore the faith</a>
   </nav>
+
   <p class="colophon">These prayers are excerpted from <cite>Orthodox Christian
     Prayers</cite>, edited by Priest John Mikitish &amp; Hieromonk Herman
     (Majkrzak) (South Canaan, Penn.: St. Tikhon&rsquo;s Monastery Press, 2019).
@@ -33,6 +55,9 @@ COVER = '''<section class="cover" id="top">
 </section>'''
 
 # inline SVG icons (stroke uses currentColor; no emoji)
+HOME = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+        'stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/>'
+        '<path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9.5 20v-5h5v5"/></svg>')
 BOOK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"/>'
         '<path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>')
@@ -56,18 +81,38 @@ MOON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
 CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
          'aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>')
 
-# bottom tab bar (dedicated mobile nav) + slide-up Settings sheet
+# bottom tab bar (dedicated mobile nav): Home + Prayers/Resources pop-up
+# sub-menus + the slide-up Settings sheet
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
-  <a class="tab{p_act}" href="index.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
-  <a class="tab{r_act}" href="resources.html" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></a>
+  <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
+  <button class="tab{p_act}" id="prayers-btn" type="button" aria-haspopup="true" aria-expanded="false"
+          aria-controls="prayers-menu" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></button>
+  <button class="tab{r_act}" id="resources-btn" type="button" aria-haspopup="true" aria-expanded="false"
+          aria-controls="resources-menu" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></button>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" aria-label="Settings"><span class="tab-i">{GEAR}</span><span class="tab-l">Settings</span></button>
 </nav>
 <div id="menu-backdrop" class="backdrop"></div>
+<div id="prayers-menu" class="drawer" role="dialog" aria-modal="true" aria-label="Prayers">
+  <div class="drawer-head">
+    <span class="grab" aria-hidden="true"></span>
+    <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
+  </div>
+  <div class="drawer-heading">Prayers</div>
+  <nav class="drawer-nav" aria-label="Prayers">{prayer_links}</nav>
+</div>
+<div id="resources-menu" class="drawer" role="dialog" aria-modal="true" aria-label="Resources">
+  <div class="drawer-head">
+    <span class="grab" aria-hidden="true"></span>
+    <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
+  </div>
+  <div class="drawer-heading">Resources</div>
+  <nav class="drawer-nav" aria-label="Resources">{res_links}</nav>
+</div>
 <div id="menu" class="drawer" role="dialog" aria-modal="true" aria-label="Settings">
   <div class="drawer-head">
     <span class="grab" aria-hidden="true"></span>
-    <button id="menu-close" class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
+    <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
   </div>
   <div class="drawer-heading">Settings</div>
   <div class="menu-row">
@@ -92,11 +137,28 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
 </div>'''
 
 
-def tabbar(active=""):
+def _drawer_links(pairs, current):
+    out = []
+    for href, label in pairs:
+        here = href == current
+        cls = " active" if here else ""
+        cur = ' aria-current="page"' if here else ""
+        out.append(f'<a class="drawer-link{cls}"{cur} href="{href}">{label}</a>')
+    return "\n".join(out)
+
+
+def tabbar(active="", current=""):
+    prayer_pairs = [("morning.html", "Morning Prayers"), ("table.html", "Prayers at Table"),
+                    ("hours.html", "Prayers for the Hours of the Day &amp; Night"),
+                    ("sleep.html", "Prayers Before Sleep")]
+    res_pairs = [(href, name) for name, href, _ in RES_CARDS]
     return TABBAR_TMPL.format(
+        h_act=" active" if active == "home" else "",
         p_act=" active" if active == "prayers" else "",
         r_act=" active" if active == "resources" else "",
-        BOOK=BOOK, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
+        prayer_links=_drawer_links(prayer_pairs, current),
+        res_links=_drawer_links(res_pairs, current),
+        HOME=HOME, BOOK=BOOK, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
 
 
 # ---- Early Church Fathers reading checklist --------------------------------
@@ -560,20 +622,30 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
 CONTROL_JS = '''<script>
 (function(){
   var r=document.documentElement, d=document, L=localStorage;
-  var menu=d.getElementById("menu"), trigger=d.getElementById("settings-btn"),
-      backdrop=d.getElementById("menu-backdrop"), closeBtn=d.getElementById("menu-close");
-  function open(o){ menu.classList.toggle("open",o); backdrop.classList.toggle("open",o);
-    r.classList.toggle("menu-open",o); trigger.setAttribute("aria-expanded", o?"true":"false"); }
-  trigger.addEventListener("click", function(e){ e.stopPropagation(); open(!menu.classList.contains("open")); });
-  backdrop.addEventListener("click", function(){ open(false); });
-  closeBtn.addEventListener("click", function(){ open(false); });
-  d.addEventListener("keydown", function(e){ if(e.key==="Escape") open(false); });
-  Array.prototype.forEach.call(menu.querySelectorAll(".drawer-link"), function(a){
-    a.addEventListener("click", function(){ open(false); }); });
-  var sy=null, dy=0;
-  menu.addEventListener("touchstart", function(e){ sy=e.touches[0].clientY; dy=0; menu.style.transition="none"; }, {passive:true});
-  menu.addEventListener("touchmove", function(e){ if(sy===null) return; dy=e.touches[0].clientY-sy; if(dy>0) menu.style.transform="translateY("+dy+"px)"; }, {passive:true});
-  menu.addEventListener("touchend", function(){ menu.style.transition=""; menu.style.transform=""; if(dy>70) open(false); sy=null; });
+  var backdrop=d.getElementById("menu-backdrop");
+  // each pop-up sheet, paired with the tab button that opens it
+  var sheets=[["prayers-btn","prayers-menu"],["resources-btn","resources-menu"],["settings-btn","menu"]]
+    .map(function(p){ return {btn:d.getElementById(p[0]), el:d.getElementById(p[1])}; })
+    .filter(function(s){ return s.btn && s.el; });
+  function setOpen(s,o){ s.el.classList.toggle("open",o); s.btn.setAttribute("aria-expanded", o?"true":"false"); }
+  function hideAll(){ sheets.forEach(function(s){ setOpen(s,false); });
+    backdrop.classList.remove("open"); r.classList.remove("menu-open"); }
+  function show(s){ sheets.forEach(function(x){ if(x!==s) setOpen(x,false); });
+    setOpen(s,true); backdrop.classList.add("open"); r.classList.add("menu-open"); }
+  sheets.forEach(function(s){
+    s.btn.addEventListener("click", function(e){ e.stopPropagation();
+      if(s.el.classList.contains("open")) hideAll(); else show(s); });
+    var cb=s.el.querySelector(".drawer-close");
+    if(cb) cb.addEventListener("click", hideAll);
+    Array.prototype.forEach.call(s.el.querySelectorAll(".drawer-link"), function(a){
+      a.addEventListener("click", hideAll); });
+    var sy=null, dy=0;
+    s.el.addEventListener("touchstart", function(e){ sy=e.touches[0].clientY; dy=0; s.el.style.transition="none"; }, {passive:true});
+    s.el.addEventListener("touchmove", function(e){ if(sy===null) return; dy=e.touches[0].clientY-sy; if(dy>0) s.el.style.transform="translateY("+dy+"px)"; }, {passive:true});
+    s.el.addEventListener("touchend", function(){ s.el.style.transition=""; s.el.style.transform=""; if(dy>70) hideAll(); sy=null; });
+  });
+  backdrop.addEventListener("click", hideAll);
+  d.addEventListener("keydown", function(e){ if(e.key==="Escape") hideAll(); });
 
   var sizes=["","l","xl"];
   function cur(){ return Math.max(0, sizes.indexOf(r.dataset.size||"")); }
@@ -644,7 +716,7 @@ HEAD_TMPL = '''<!doctype html>
 
 
 def page(path, title, desc, body, active="", scripts=""):
-    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=tabbar(active),
+    html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=tabbar(active, path),
                             control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
     open(path, "w").write(html)
     print("wrote", path, len(html), "bytes")
@@ -716,11 +788,12 @@ def with_jump_nav(seg):
 
 PLAYER = '<script src="player.js?v=5" defer></script>'
 
-# home / cover
+# home / landing page
 page("index.html", "Prayers for Morning, Day &amp; Night",
-     "Orthodox prayers for morning, the table, the hours of the day and night, and before "
-     "sleep — a web edition of the booklet published by St. Tikhon's Monastery Press / OCA.",
-     COVER, active="prayers")
+     "An Orthodox prayer book and companion for the journey — daily prayers for morning, the "
+     "table, the hours of the day and night, and before sleep, with resources for inquirers "
+     "coming from Western Protestant Christianity to Orthodoxy.",
+     LANDING, active="home")
 
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
