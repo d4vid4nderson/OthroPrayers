@@ -454,6 +454,11 @@ html[data-theme="dark"] .drawer-link:hover{ background:rgba(255,255,255,.07); }
 .drawer-nav{ padding-bottom:.2rem; }
 .drawer-settings{ margin-top:.35rem; padding-top:.2rem; border-top:1px solid #efe8db; }
 html[data-theme="dark"] .drawer-settings{ border-top-color:#37373c; }
+/* decorative image at the top of the Settings sheet */
+.menu-art{ margin:.1rem auto .55rem; text-align:center; }
+.menu-art img{ width:min(72%, 17rem); height:auto; }
+.menu-sep{ height:1px; background:#e7e0d4; margin:0 .5rem .35rem; }
+html[data-theme="dark"] .menu-sep{ background:#43434a; }
 .drawer-heading{
   padding:.5rem .7rem .25rem;
   font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; opacity:.6;

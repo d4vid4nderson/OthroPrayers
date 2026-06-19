@@ -10,6 +10,9 @@ from urllib.parse import quote
 content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
+# the Crucifixion banner now lives at the top of the Settings menu, not at the
+# foot of the Prayers-at-Table page
+content = re.sub(r'<figure class="banner">.*?</figure>\s*', "", content, flags=re.S)
 
 LANDING = '''<section class="cover landing" id="top">
   <figure class="coverimg">
@@ -182,6 +185,9 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     <span class="grab" aria-hidden="true"></span>
     <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
   </div>
+  <figure class="menu-art"><img src="assets/img/icon_p21.png" width="600" height="191"
+       alt="Crucifixion — IC XC NIKA"></figure>
+  <div class="menu-sep" aria-hidden="true"></div>
   <div class="drawer-heading">Settings</div>
   <div class="menu-row">
     <span class="menu-label">Text size</span>
