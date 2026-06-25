@@ -589,6 +589,9 @@ html[data-theme="dark"] .switch{ background:#4a4a51; }
   box-shadow:0 1px 3px rgba(0,0,0,.3);
 }
 .switch[aria-checked="true"]{ background:var(--rubric); }
+/* dark mode: this must out-rank `html[data-theme="dark"] .switch` so the ON
+   state shows the app's red, not the neutral grey */
+html[data-theme="dark"] .switch[aria-checked="true"]{ background:var(--rubric); }
 .switch[aria-checked="true"] .knob{ left:calc(var(--w) - var(--h) + 2px); }
 
 /* ---- Resources page / reading checklist ------------------------------ */
