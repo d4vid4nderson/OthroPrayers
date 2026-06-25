@@ -3,9 +3,12 @@
 area, incl. the Early Church Fathers reading checklist) from a shared shell.
 Run `python3 generate.py` first to (re)produce prayers.content.html."""
 
+import json
 import os
 import re
 from urllib.parse import quote
+
+import generate_calendars as gc
 
 content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
@@ -24,6 +27,8 @@ LANDING = '''<section class="cover landing" id="top">
   <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>
   <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
   {rule}
+
+  <section class="this-week" id="this-week" hidden></section>
 
   <div class="landing-body">
     <h2 class="landing-h">Coming Home to the Ancient Church</h2>
@@ -243,6 +248,22 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
+  <div class="drawer-heading">Church calendar</div>
+  <div class="menu-row">
+    <span class="menu-label">Follow the calendar</span>
+    <span class="seg" role="group" aria-label="Follow the Church calendar">
+      <button id="cal-off" type="button" aria-pressed="true">Off</button>
+      <button id="cal-new" type="button" aria-pressed="false" title="Revised Julian (New)">New</button>
+      <button id="cal-old" type="button" aria-pressed="false" title="Julian (Old)">Old</button>
+    </span>
+  </div>
+  <div class="menu-row">
+    <span class="menu-label">Fast-day reminders</span>
+    <button id="fastnotify" class="switch" type="button" role="switch" aria-checked="false"
+            aria-label="Fast-day reminders"><span class="knob"></span></button>
+  </div>
+  <p class="menu-note">Reminders appear when you open the app. For alerts even when it&rsquo;s
+     closed, <a href="calendar.html">subscribe to the calendar</a>.</p>
 </div>'''
 
 
@@ -923,7 +944,25 @@ CONTROL_JS = '''<script>
     cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
   progress();
 
-  paintTheme(); paintDys();
+  // follow the Church calendar (off / new / old)
+  var calMap=[["off","cal-off"],["new","cal-new"],["old","cal-old"]];
+  function paintCal(){ var v=L.getItem("cal")||"off";
+    calMap.forEach(function(p){ var b=d.getElementById(p[1]); if(b) b.setAttribute("aria-pressed", p[0]===v?"true":"false"); }); }
+  function setCal(v){ if(v==="off") L.removeItem("cal"); else L.setItem("cal",v); paintCal(); if(window.OCsync) window.OCsync(); }
+  calMap.forEach(function(p){ var b=d.getElementById(p[1]); if(b) b.onclick=function(){ setCal(p[0]); }; });
+
+  // fast-day reminders (in-app; fires when the app is opened on a fast day)
+  var fn=d.getElementById("fastnotify");
+  function paintFn(){ if(fn) fn.setAttribute("aria-checked", L.getItem("fastnotify")==="1"?"true":"false"); }
+  if(fn) fn.onclick=function(){
+    if(L.getItem("fastnotify")==="1"){ L.setItem("fastnotify","0"); paintFn(); return; }
+    if(window.Notification && Notification.requestPermission){
+      Notification.requestPermission().then(function(perm){
+        L.setItem("fastnotify", perm==="granted"?"1":"0"); paintFn(); if(window.OCsync) window.OCsync(); });
+    } else { L.setItem("fastnotify","0"); paintFn(); }
+  };
+
+  paintTheme(); paintDys(); paintCal(); paintFn();
 })();
 </script>'''
 
@@ -955,6 +994,8 @@ HEAD_TMPL = '''<!doctype html>
 </div>
 {topnav}
 {control}
+<script src="calendar-data.js?v=1" defer></script>
+<script src="calendar.js?v=1" defer></script>
 {scripts}
 </body>
 </html>
@@ -1094,3 +1135,13 @@ REF_ORN = {"The Creeds": "chirho", "The Ecumenical Councils": "cross",
 for ref in REF_SECTIONS:
     page(f'{REF_SLUGS[ref["name"]]}.html', f'{ref["name"]} — Daily Prayers',
          ref.get("blurb", "") or ref["name"], ref_page(ref, REF_ORN[ref["name"]]), active="resources")
+
+# feast data for the client-side "This Week" panel + fast reminder (single source
+# of truth: the lists in generate_calendars.py)
+_caldata = {
+    "fixed": [[m, dd, name, great] for (m, dd, name, great) in gc.FIXED],
+    "moveable": [[off, name, great] for (off, name, great) in gc.MOVEABLE],
+    "offset": gc.JULIAN_OFFSET,
+}
+open("calendar-data.js", "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
+print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "moveable")

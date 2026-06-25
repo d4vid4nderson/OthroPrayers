@@ -431,6 +431,12 @@ DESCRIPTION:The customary weekly fast: abstain from meat\, fish\, dairy an
   weeks marked on the calendar.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Tomorrow is a fast day (Wednesday) — no meat\, fish\, dairy 
+ or eggs.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-fri@othroprayers
@@ -444,6 +450,12 @@ DESCRIPTION:The customary weekly fast: abstain from meat\, fish\, dairy an
   weeks marked on the calendar.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Tomorrow is a fast day (Friday) — no meat\, fish\, dairy or 
+ eggs.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-annunciation-fish-wine-oil-permitted@othroprayers
@@ -732,6 +744,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2025@othroprayers
@@ -743,6 +761,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2025@othroprayers
@@ -754,6 +777,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2025@othroprayers
@@ -765,6 +793,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2025@othroprayers
@@ -1058,6 +1091,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2026@othroprayers
@@ -1069,6 +1108,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2026@othroprayers
@@ -1080,6 +1124,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2026@othroprayers
@@ -1091,6 +1140,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2026@othroprayers
@@ -1384,6 +1438,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2027@othroprayers
@@ -1395,6 +1455,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2027@othroprayers
@@ -1406,6 +1471,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2027@othroprayers
@@ -1417,6 +1487,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2027@othroprayers
@@ -1710,6 +1785,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2028@othroprayers
@@ -1721,6 +1802,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2028@othroprayers
@@ -1732,6 +1818,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2028@othroprayers
@@ -1743,6 +1834,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2028@othroprayers
@@ -2036,6 +2132,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2029@othroprayers
@@ -2047,6 +2149,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2029@othroprayers
@@ -2058,6 +2165,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2029@othroprayers
@@ -2069,6 +2181,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2029@othroprayers
@@ -2362,6 +2479,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2030@othroprayers
@@ -2373,6 +2496,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2030@othroprayers
@@ -2384,6 +2512,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2030@othroprayers
@@ -2395,6 +2528,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2030@othroprayers
@@ -2688,6 +2826,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2031@othroprayers
@@ -2699,6 +2843,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2031@othroprayers
@@ -2710,6 +2859,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2031@othroprayers
@@ -2721,6 +2875,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2031@othroprayers
@@ -3014,6 +3173,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2032@othroprayers
@@ -3025,6 +3190,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2032@othroprayers
@@ -3036,6 +3206,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2032@othroprayers
@@ -3047,6 +3222,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2032@othroprayers
@@ -3340,6 +3520,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2033@othroprayers
@@ -3351,6 +3537,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2033@othroprayers
@@ -3362,6 +3553,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2033@othroprayers
@@ -3373,6 +3569,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2033@othroprayers
@@ -3666,6 +3867,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2034@othroprayers
@@ -3677,6 +3884,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2034@othroprayers
@@ -3688,6 +3900,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2034@othroprayers
@@ -3699,6 +3916,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2034@othroprayers
@@ -3992,6 +4214,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2035@othroprayers
@@ -4003,6 +4231,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2035@othroprayers
@@ -4014,6 +4247,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2035@othroprayers
@@ -4025,6 +4263,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2035@othroprayers
@@ -4318,6 +4561,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2036@othroprayers
@@ -4329,6 +4578,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2036@othroprayers
@@ -4340,6 +4594,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2036@othroprayers
@@ -4351,6 +4610,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2036@othroprayers
@@ -4644,6 +4908,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2037@othroprayers
@@ -4655,6 +4925,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2037@othroprayers
@@ -4666,6 +4941,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2037@othroprayers
@@ -4677,6 +4957,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2037@othroprayers
@@ -4970,6 +5255,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2038@othroprayers
@@ -4981,6 +5272,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2038@othroprayers
@@ -4992,6 +5288,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2038@othroprayers
@@ -5003,6 +5304,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2038@othroprayers
@@ -5296,6 +5602,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2039@othroprayers
@@ -5307,6 +5619,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2039@othroprayers
@@ -5318,6 +5635,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2039@othroprayers
@@ -5329,6 +5651,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2039@othroprayers
@@ -5622,6 +5949,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2040@othroprayers
@@ -5633,6 +5966,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2040@othroprayers
@@ -5644,6 +5982,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2040@othroprayers
@@ -5655,6 +5998,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2040@othroprayers
@@ -5948,6 +6296,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2041@othroprayers
@@ -5959,6 +6313,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2041@othroprayers
@@ -5970,6 +6329,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2041@othroprayers
@@ -5981,6 +6345,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2041@othroprayers
@@ -6274,6 +6643,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2042@othroprayers
@@ -6285,6 +6660,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2042@othroprayers
@@ -6296,6 +6676,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2042@othroprayers
@@ -6307,6 +6692,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2042@othroprayers
@@ -6600,6 +6990,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2043@othroprayers
@@ -6611,6 +7007,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2043@othroprayers
@@ -6622,6 +7023,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2043@othroprayers
@@ -6633,6 +7039,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2043@othroprayers
@@ -6926,6 +7337,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2044@othroprayers
@@ -6937,6 +7354,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2044@othroprayers
@@ -6948,6 +7370,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2044@othroprayers
@@ -6959,6 +7386,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2044@othroprayers
@@ -7252,6 +7684,12 @@ DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine
  nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Great Lent begins tomorrow — the strict fast of the Forty Da
+ ys.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-apostles-2045@othroprayers
@@ -7263,6 +7701,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Apostles' Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-dormition-2045@othroprayers
@@ -7274,6 +7717,11 @@ DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
  e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Dormition Fast begins tomorrow — a strict fast.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fast-nativity-2045@othroprayers
@@ -7285,6 +7733,11 @@ DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on
  many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Nativity Fast begins tomorrow.
+TRIGGER:-PT3H
+END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:fastday-palm-fish-2045@othroprayers

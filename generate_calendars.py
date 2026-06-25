@@ -156,26 +156,39 @@ def slug(name):
     return "-".join(p for p in s.split("-") if p)[:48]
 
 
-def vspan(uid, d1, d2_excl, summary, desc=None, cat="Fast"):
+def _alarm(text):
+    # a display reminder at 9pm the evening before an all-day event
+    return ["BEGIN:VALARM", "ACTION:DISPLAY", fold("DESCRIPTION:" + esc(text)),
+            "TRIGGER:-PT3H", "END:VALARM"]
+
+
+def vspan(uid, d1, d2_excl, summary, desc=None, cat="Fast", alarm=None):
     """A multi-day all-day event over [d1, d2_excl)."""
     lines = ["BEGIN:VEVENT", f"UID:{uid}@{DOMAIN}", f"DTSTAMP:{DTSTAMP}",
              f"DTSTART;VALUE=DATE:{d1:%Y%m%d}", f"DTEND;VALUE=DATE:{d2_excl:%Y%m%d}",
              fold("SUMMARY:" + esc(summary))]
     if desc:
         lines.append(fold("DESCRIPTION:" + esc(desc)))
-    lines += ["CATEGORIES:" + cat, "TRANSP:TRANSPARENT", "END:VEVENT"]
+    lines += ["CATEGORIES:" + cat, "TRANSP:TRANSPARENT"]
+    if alarm:
+        lines += _alarm(alarm)
+    lines.append("END:VEVENT")
     return "\r\n".join(lines)
 
 
-def vweekly(uid, anchor, byday, summary, desc):
+def vweekly(uid, anchor, byday, summary, desc, alarm=None):
     """A weekly-recurring all-day event on the given weekday."""
-    return "\r\n".join([
+    lines = [
         "BEGIN:VEVENT", f"UID:{uid}@{DOMAIN}", f"DTSTAMP:{DTSTAMP}",
         f"DTSTART;VALUE=DATE:{anchor:%Y%m%d}",
         f"DTEND;VALUE=DATE:{anchor + timedelta(days=1):%Y%m%d}",
         f"RRULE:FREQ=WEEKLY;BYDAY={byday}",
         fold("SUMMARY:" + esc(summary)), fold("DESCRIPTION:" + esc(desc)),
-        "CATEGORIES:Fast", "TRANSP:TRANSPARENT", "END:VEVENT"])
+        "CATEGORIES:Fast", "TRANSP:TRANSPARENT"]
+    if alarm:
+        lines += _alarm(alarm)
+    lines.append("END:VEVENT")
+    return "\r\n".join(lines)
 
 
 def build(old):
@@ -207,9 +220,11 @@ def build(old):
     wf_note = ("The customary weekly fast: abstain from meat, fish, dairy and eggs; wine and oil "
                "are often permitted. Suspended during the fast-free weeks marked on the calendar.")
     body.append(vweekly("fast-wed", date(2025, 1, 1), "WE",
-                        "Wednesday Fast — no meat, fish, dairy or eggs", wf_note))
+                        "Wednesday Fast — no meat, fish, dairy or eggs", wf_note,
+                        alarm="Tomorrow is a fast day (Wednesday) — no meat, fish, dairy or eggs."))
     body.append(vweekly("fast-fri", date(2025, 1, 3), "FR",
-                        "Friday Fast — no meat, fish, dairy or eggs", wf_note))
+                        "Friday Fast — no meat, fish, dairy or eggs", wf_note,
+                        alarm="Tomorrow is a fast day (Friday) — no meat, fish, dairy or eggs."))
     # fixed days whose fasting is relaxed or made strict (shown as their own marker)
     for m, dd, summary in FAST_DAY_FIXED:
         body.append(vevent(f"fastday-{slug(summary)}", date(2025, m, dd) + off, summary, False,
@@ -229,21 +244,25 @@ def build(old):
         body.append(vspan(f"fast-lent-{y}", pascha + timedelta(-48), pascha,
                           "Great Lent & Holy Week — strict fast",
                           "Strict fast on weekdays (no meat, fish, dairy, eggs, wine or oil). Wine "
-                          "& oil on Saturdays and Sundays; fish on the Annunciation and Palm Sunday."))
+                          "& oil on Saturdays and Sundays; fish on the Annunciation and Palm Sunday.",
+                          alarm="Great Lent begins tomorrow — the strict fast of the Forty Days."))
         ap, pp = pascha + timedelta(57), date(y, 6, 29) + off
         if ap < pp:
             body.append(vspan(f"fast-apostles-{y}", ap, pp,
                               "Apostles' Fast — fish, wine & oil on most days",
                               "No meat, dairy or eggs. Fish, wine and oil are permitted on most "
-                              "days (commonly not on Wednesdays and Fridays)."))
+                              "days (commonly not on Wednesdays and Fridays).",
+                              alarm="The Apostles' Fast begins tomorrow."))
         body.append(vspan(f"fast-dormition-{y}", date(y, 8, 1) + off, date(y, 8, 15) + off,
                           "Dormition Fast — strict",
                           "Strict fast; wine & oil on Saturdays and Sundays; fish on the "
-                          "Transfiguration (Aug 6 / 19)."))
+                          "Transfiguration (Aug 6 / 19).",
+                          alarm="The Dormition Fast begins tomorrow — a strict fast."))
         body.append(vspan(f"fast-nativity-{y}", date(y, 11, 15) + off, date(y, 12, 25) + off,
                           "Nativity Fast — fish, wine & oil on many days",
                           "No meat, dairy or eggs. Fish, wine and oil are permitted on many days; "
-                          "the final days before the Nativity are kept more strictly."))
+                          "the final days before the Nativity are kept more strictly.",
+                          alarm="The Nativity Fast begins tomorrow."))
         # the moveable relaxation: fish on Palm Sunday
         body.append(vevent(f"fastday-palm-fish-{y}", pascha + timedelta(-7),
                           "Palm Sunday — fish, wine & oil permitted", False))
