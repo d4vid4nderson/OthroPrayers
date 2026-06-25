@@ -91,7 +91,19 @@ html[data-size="xl"]{ font-size:128%; }
 
 /* ---- dyslexia-friendly reading mode ---------------------------------- */
 html[data-font="dyslexic"]{
+  /* remap BOTH the body serif and the display/title face so headings,
+     the "This Week" panel and titles also use OpenDyslexic */
   --serif:"OpenDyslexic", Verdana, "Trebuchet MS", sans-serif;
+  --display:"OpenDyslexic", Verdana, "Trebuchet MS", sans-serif;
+}
+/* OpenDyslexic has no small-caps; show those runs in normal case so they
+   stay legible (titles/sub-heads/labels) */
+html[data-font="dyslexic"] .divider h1,
+html[data-font="dyslexic"] h2.subhead,
+html[data-font="dyslexic"] h3.subhead,
+html[data-font="dyslexic"] .tw-date,
+html[data-font="dyslexic"] .tw-sub{
+  font-variant-caps:normal; text-transform:none; letter-spacing:0;
 }
 html[data-font="dyslexic"] .book{
   line-height:1.8;
