@@ -3,6 +3,8 @@
 area, incl. the Early Church Fathers reading checklist) from a shared shell.
 Run `python3 generate.py` first to (re)produce prayers.content.html."""
 
+import glob
+import hashlib
 import json
 import os
 import re
@@ -248,6 +250,13 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
+  <div class="menu-row">
+    <span class="menu-label">Available offline</span>
+    <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
+            aria-label="Available offline"><span class="knob"></span></button>
+  </div>
+  <p class="menu-note" id="offline-note">Save every page and your settings on this device, so the
+     app works with no connection. External links still need internet.</p>
   <div class="drawer-heading">Church calendar</div>
   <div class="menu-row">
     <span class="menu-label">Follow the calendar</span>
@@ -962,9 +971,64 @@ CONTROL_JS = '''<script>
     } else { L.setItem("fastnotify","0"); paintFn(); }
   };
 
-  paintTheme(); paintDys(); paintCal(); paintFn();
+  // available offline (registers a service worker that caches the whole app)
+  var swOk=("serviceWorker" in navigator);
+  var offBtn=d.getElementById("offline"), offNote=d.getElementById("offline-note");
+  function paintOff(){ if(offBtn) offBtn.setAttribute("aria-checked", L.getItem("offline")==="1"?"true":"false"); }
+  function clearCaches(){ if(window.caches) caches.keys().then(function(ks){
+    ks.forEach(function(k){ if(k.indexOf("ortho-")===0) caches.delete(k); }); }); }
+  if(offBtn){
+    if(!swOk){ offBtn.setAttribute("disabled","true"); if(offNote) offNote.textContent="Offline use isn’t supported by this browser."; }
+    offBtn.onclick=function(){
+      if(!swOk) return;
+      if(L.getItem("offline")==="1"){
+        L.setItem("offline","0"); paintOff();
+        navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); });
+        clearCaches();
+      } else {
+        L.setItem("offline","1"); paintOff();
+        navigator.serviceWorker.register("sw.js");
+      }
+    };
+  }
+  if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
+
+  paintTheme(); paintDys(); paintCal(); paintFn(); paintOff();
 })();
 </script>'''
+
+# service worker: precache the whole app for offline use (opt-in via Settings).
+# __VERSION__ / __ASSETS__ are filled at build time. Cross-origin (external
+# links) are left to the network; same-origin is cache-first.
+SW_TMPL = '''const CACHE="ortho-__VERSION__";
+const ASSETS=__ASSETS__;
+self.addEventListener("install", function(e){
+  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(ASSETS); })
+    .then(function(){ return self.skipWaiting(); }));
+});
+self.addEventListener("activate", function(e){
+  e.waitUntil(caches.keys().then(function(keys){
+    return Promise.all(keys.map(function(k){ if(k!==CACHE && k.indexOf("ortho-")===0) return caches.delete(k); }));
+  }).then(function(){ return self.clients.claim(); }));
+});
+self.addEventListener("fetch", function(e){
+  var req=e.request;
+  if(req.method!=="GET") return;
+  if(new URL(req.url).origin!==location.origin) return;   // external links use the network
+  e.respondWith(caches.match(req, {ignoreSearch:true}).then(function(hit){
+    if(hit) return hit;
+    return fetch(req).then(function(res){
+      if(res && res.status===200 && res.type==="basic"){
+        var copy=res.clone(); caches.open(CACHE).then(function(c){ c.put(req, copy); });
+      }
+      return res;
+    }).catch(function(){
+      if(req.mode==="navigate") return caches.match("index.html");
+      return Response.error();
+    });
+  }));
+});
+'''
 
 HEAD_TMPL = '''<!doctype html>
 <html lang="en">
@@ -1145,3 +1209,30 @@ _caldata = {
 }
 open("calendar-data.js", "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
 print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "moveable")
+
+# ---- service worker: precache the whole app for offline use ----------------
+# build inputs that are NOT deployed (see .vercelignore) — must never be listed,
+# or cache.addAll() would 404 and the whole offline install would fail
+_NODEPLOY = {"prayers.content.html", "ancient.content.html", "assets/icons/app-icon.png"}
+_assets = {"./"}
+_assets.update(glob.glob("*.html"))
+for _p in ["styles.css", "player.js", "calendar.js", "calendar-data.js",
+           "site.webmanifest", "favicon.ico"]:
+    if os.path.exists(_p):
+        _assets.add(_p)
+for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*", "calendars/*.ics"]:
+    _assets.update(glob.glob(_pat))
+_assets = sorted(a for a in _assets if a not in _NODEPLOY)
+# cache version = hash of the cached files' contents, so a new deploy busts it
+_h = hashlib.sha1()
+for _p in _assets:
+    if _p == "./":
+        continue
+    try:
+        _h.update(open(_p, "rb").read())
+    except OSError:
+        pass
+_sw = SW_TMPL.replace("__VERSION__", _h.hexdigest()[:10]) \
+             .replace("__ASSETS__", json.dumps(_assets))
+open("sw.js", "w").write(_sw)
+print("wrote sw.js", len(_assets), "assets, cache", _h.hexdigest()[:10])
