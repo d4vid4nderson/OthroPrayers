@@ -425,10 +425,10 @@ DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250101
 DTEND;VALUE=DATE:20250102
 RRULE:FREQ=WEEKLY;BYDAY=WE
-SUMMARY:Fast day (Wednesday)
-DESCRIPTION:Wednesdays and Fridays are fast days through the year\, except
-  during the fast-free weeks (Bright Week\, the week after Pentecost\, and
-  the others marked).
+SUMMARY:Wednesday Fast — no meat\, fish\, dairy or eggs
+DESCRIPTION:The customary weekly fast: abstain from meat\, fish\, dairy an
+ d eggs\; wine and oil are often permitted. Suspended during the fast-free
+  weeks marked on the calendar.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -438,11 +438,51 @@ DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250103
 DTEND;VALUE=DATE:20250104
 RRULE:FREQ=WEEKLY;BYDAY=FR
-SUMMARY:Fast day (Friday)
-DESCRIPTION:Wednesdays and Fridays are fast days through the year\, except
-  during the fast-free weeks (Bright Week\, the week after Pentecost\, and
-  the others marked).
+SUMMARY:Friday Fast — no meat\, fish\, dairy or eggs
+DESCRIPTION:The customary weekly fast: abstain from meat\, fish\, dairy an
+ d eggs\; wine and oil are often permitted. Suspended during the fast-free
+  weeks marked on the calendar.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-annunciation-fish-wine-oil-permitted@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20250407
+DTEND;VALUE=DATE:20250408
+RRULE:FREQ=YEARLY
+SUMMARY:Annunciation — fish\, wine & oil permitted
+CATEGORIES:Feast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-transfiguration-fish-wine-oil-permitted@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20250819
+DTEND;VALUE=DATE:20250820
+RRULE:FREQ=YEARLY
+SUMMARY:Transfiguration — fish\, wine & oil permitted
+CATEGORIES:Feast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-exaltation-of-the-cross-strict-fast@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20250927
+DTEND;VALUE=DATE:20250928
+RRULE:FREQ=YEARLY
+SUMMARY:Exaltation of the Cross — strict fast
+CATEGORIES:Feast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-beheading-of-st-john-strict-fast@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20250911
+DTEND;VALUE=DATE:20250912
+RRULE:FREQ=YEARLY
+SUMMARY:Beheading of St John — strict fast
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -671,12 +711,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2025@othroprayers
+UID:cheesefare-2025@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20250616
-DTEND;VALUE=DATE:20250617
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20250224
+DTEND;VALUE=DATE:20250303
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -684,9 +726,10 @@ UID:fast-lent-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250303
 DTEND;VALUE=DATE:20250420
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -695,9 +738,9 @@ UID:fast-apostles-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250616
 DTEND;VALUE=DATE:20250712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -706,8 +749,9 @@ UID:fast-dormition-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250814
 DTEND;VALUE=DATE:20250828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -716,9 +760,19 @@ UID:fast-nativity-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20251128
 DTEND;VALUE=DATE:20260107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2025@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20250413
+DTEND;VALUE=DATE:20250414
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -726,7 +780,7 @@ UID:ff-bright-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250420
 DTEND;VALUE=DATE:20250427
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -735,7 +789,7 @@ UID:ff-trinity-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250608
 DTEND;VALUE=DATE:20250615
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -744,7 +798,7 @@ UID:ff-publican-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20250209
 DTEND;VALUE=DATE:20250216
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -753,7 +807,7 @@ UID:ff-svyatki-2025@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260107
 DTEND;VALUE=DATE:20260118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -983,12 +1037,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2026@othroprayers
+UID:cheesefare-2026@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20260608
-DTEND;VALUE=DATE:20260609
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260223
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -996,9 +1052,10 @@ UID:fast-lent-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260223
 DTEND;VALUE=DATE:20260412
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1007,9 +1064,9 @@ UID:fast-apostles-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260608
 DTEND;VALUE=DATE:20260712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1018,8 +1075,9 @@ UID:fast-dormition-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260814
 DTEND;VALUE=DATE:20260828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1028,9 +1086,19 @@ UID:fast-nativity-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20261128
 DTEND;VALUE=DATE:20270107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2026@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20260405
+DTEND;VALUE=DATE:20260406
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1038,7 +1106,7 @@ UID:ff-bright-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260412
 DTEND;VALUE=DATE:20260419
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1047,7 +1115,7 @@ UID:ff-trinity-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260531
 DTEND;VALUE=DATE:20260607
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1056,7 +1124,7 @@ UID:ff-publican-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20260201
 DTEND;VALUE=DATE:20260208
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1065,7 +1133,7 @@ UID:ff-svyatki-2026@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270107
 DTEND;VALUE=DATE:20270118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1295,12 +1363,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2027@othroprayers
+UID:cheesefare-2027@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20270628
-DTEND;VALUE=DATE:20270629
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20270308
+DTEND;VALUE=DATE:20270315
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1308,9 +1378,10 @@ UID:fast-lent-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270315
 DTEND;VALUE=DATE:20270502
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1319,9 +1390,9 @@ UID:fast-apostles-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270628
 DTEND;VALUE=DATE:20270712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1330,8 +1401,9 @@ UID:fast-dormition-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270814
 DTEND;VALUE=DATE:20270828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1340,9 +1412,19 @@ UID:fast-nativity-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20271128
 DTEND;VALUE=DATE:20280107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2027@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20270425
+DTEND;VALUE=DATE:20270426
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1350,7 +1432,7 @@ UID:ff-bright-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270502
 DTEND;VALUE=DATE:20270509
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1359,7 +1441,7 @@ UID:ff-trinity-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270620
 DTEND;VALUE=DATE:20270627
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1368,7 +1450,7 @@ UID:ff-publican-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20270221
 DTEND;VALUE=DATE:20270228
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1377,7 +1459,7 @@ UID:ff-svyatki-2027@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280107
 DTEND;VALUE=DATE:20280118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1607,12 +1689,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2028@othroprayers
+UID:cheesefare-2028@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20280612
-DTEND;VALUE=DATE:20280613
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20280221
+DTEND;VALUE=DATE:20280228
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1620,9 +1704,10 @@ UID:fast-lent-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280228
 DTEND;VALUE=DATE:20280416
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1631,9 +1716,9 @@ UID:fast-apostles-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280612
 DTEND;VALUE=DATE:20280712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1642,8 +1727,9 @@ UID:fast-dormition-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280814
 DTEND;VALUE=DATE:20280828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1652,9 +1738,19 @@ UID:fast-nativity-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20281128
 DTEND;VALUE=DATE:20290107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2028@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20280409
+DTEND;VALUE=DATE:20280410
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1662,7 +1758,7 @@ UID:ff-bright-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280416
 DTEND;VALUE=DATE:20280423
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1671,7 +1767,7 @@ UID:ff-trinity-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280604
 DTEND;VALUE=DATE:20280611
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1680,7 +1776,7 @@ UID:ff-publican-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20280206
 DTEND;VALUE=DATE:20280213
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1689,7 +1785,7 @@ UID:ff-svyatki-2028@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290107
 DTEND;VALUE=DATE:20290118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1919,12 +2015,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2029@othroprayers
+UID:cheesefare-2029@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20290604
-DTEND;VALUE=DATE:20290605
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20290212
+DTEND;VALUE=DATE:20290219
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1932,9 +2030,10 @@ UID:fast-lent-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290219
 DTEND;VALUE=DATE:20290408
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1943,9 +2042,9 @@ UID:fast-apostles-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290604
 DTEND;VALUE=DATE:20290712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1954,8 +2053,9 @@ UID:fast-dormition-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290814
 DTEND;VALUE=DATE:20290828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1964,9 +2064,19 @@ UID:fast-nativity-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20291128
 DTEND;VALUE=DATE:20300107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2029@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20290401
+DTEND;VALUE=DATE:20290402
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -1974,7 +2084,7 @@ UID:ff-bright-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290408
 DTEND;VALUE=DATE:20290415
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1983,7 +2093,7 @@ UID:ff-trinity-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290527
 DTEND;VALUE=DATE:20290603
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -1992,7 +2102,7 @@ UID:ff-publican-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20290128
 DTEND;VALUE=DATE:20290204
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2001,7 +2111,7 @@ UID:ff-svyatki-2029@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300107
 DTEND;VALUE=DATE:20300118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2231,12 +2341,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2030@othroprayers
+UID:cheesefare-2030@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20300624
-DTEND;VALUE=DATE:20300625
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20300304
+DTEND;VALUE=DATE:20300311
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -2244,9 +2356,10 @@ UID:fast-lent-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300311
 DTEND;VALUE=DATE:20300428
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2255,9 +2368,9 @@ UID:fast-apostles-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300624
 DTEND;VALUE=DATE:20300712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2266,8 +2379,9 @@ UID:fast-dormition-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300814
 DTEND;VALUE=DATE:20300828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2276,9 +2390,19 @@ UID:fast-nativity-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20301128
 DTEND;VALUE=DATE:20310107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2030@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20300421
+DTEND;VALUE=DATE:20300422
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -2286,7 +2410,7 @@ UID:ff-bright-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300428
 DTEND;VALUE=DATE:20300505
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2295,7 +2419,7 @@ UID:ff-trinity-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300616
 DTEND;VALUE=DATE:20300623
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2304,7 +2428,7 @@ UID:ff-publican-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20300217
 DTEND;VALUE=DATE:20300224
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2313,7 +2437,7 @@ UID:ff-svyatki-2030@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310107
 DTEND;VALUE=DATE:20310118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2543,12 +2667,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2031@othroprayers
+UID:cheesefare-2031@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20310609
-DTEND;VALUE=DATE:20310610
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20310217
+DTEND;VALUE=DATE:20310224
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -2556,9 +2682,10 @@ UID:fast-lent-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310224
 DTEND;VALUE=DATE:20310413
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2567,9 +2694,9 @@ UID:fast-apostles-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310609
 DTEND;VALUE=DATE:20310712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2578,8 +2705,9 @@ UID:fast-dormition-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310814
 DTEND;VALUE=DATE:20310828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2588,9 +2716,19 @@ UID:fast-nativity-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20311128
 DTEND;VALUE=DATE:20320107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2031@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20310406
+DTEND;VALUE=DATE:20310407
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -2598,7 +2736,7 @@ UID:ff-bright-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310413
 DTEND;VALUE=DATE:20310420
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2607,7 +2745,7 @@ UID:ff-trinity-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310601
 DTEND;VALUE=DATE:20310608
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2616,7 +2754,7 @@ UID:ff-publican-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20310202
 DTEND;VALUE=DATE:20310209
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2625,7 +2763,7 @@ UID:ff-svyatki-2031@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320107
 DTEND;VALUE=DATE:20320118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2855,12 +2993,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2032@othroprayers
+UID:cheesefare-2032@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20320628
-DTEND;VALUE=DATE:20320629
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20320308
+DTEND;VALUE=DATE:20320315
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -2868,9 +3008,10 @@ UID:fast-lent-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320315
 DTEND;VALUE=DATE:20320502
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2879,9 +3020,9 @@ UID:fast-apostles-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320628
 DTEND;VALUE=DATE:20320712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2890,8 +3031,9 @@ UID:fast-dormition-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320814
 DTEND;VALUE=DATE:20320828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2900,9 +3042,19 @@ UID:fast-nativity-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20321128
 DTEND;VALUE=DATE:20330107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2032@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20320425
+DTEND;VALUE=DATE:20320426
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -2910,7 +3062,7 @@ UID:ff-bright-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320502
 DTEND;VALUE=DATE:20320509
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2919,7 +3071,7 @@ UID:ff-trinity-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320620
 DTEND;VALUE=DATE:20320627
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2928,7 +3080,7 @@ UID:ff-publican-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20320222
 DTEND;VALUE=DATE:20320229
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -2937,7 +3089,7 @@ UID:ff-svyatki-2032@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330107
 DTEND;VALUE=DATE:20330118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3167,12 +3319,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2033@othroprayers
+UID:cheesefare-2033@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20330620
-DTEND;VALUE=DATE:20330621
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20330228
+DTEND;VALUE=DATE:20330307
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -3180,9 +3334,10 @@ UID:fast-lent-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330307
 DTEND;VALUE=DATE:20330424
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3191,9 +3346,9 @@ UID:fast-apostles-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330620
 DTEND;VALUE=DATE:20330712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3202,8 +3357,9 @@ UID:fast-dormition-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330814
 DTEND;VALUE=DATE:20330828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3212,9 +3368,19 @@ UID:fast-nativity-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20331128
 DTEND;VALUE=DATE:20340107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2033@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20330417
+DTEND;VALUE=DATE:20330418
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -3222,7 +3388,7 @@ UID:ff-bright-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330424
 DTEND;VALUE=DATE:20330501
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3231,7 +3397,7 @@ UID:ff-trinity-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330612
 DTEND;VALUE=DATE:20330619
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3240,7 +3406,7 @@ UID:ff-publican-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20330213
 DTEND;VALUE=DATE:20330220
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3249,7 +3415,7 @@ UID:ff-svyatki-2033@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340107
 DTEND;VALUE=DATE:20340118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3479,12 +3645,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2034@othroprayers
+UID:cheesefare-2034@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20340605
-DTEND;VALUE=DATE:20340606
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20340213
+DTEND;VALUE=DATE:20340220
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -3492,9 +3660,10 @@ UID:fast-lent-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340220
 DTEND;VALUE=DATE:20340409
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3503,9 +3672,9 @@ UID:fast-apostles-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340605
 DTEND;VALUE=DATE:20340712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3514,8 +3683,9 @@ UID:fast-dormition-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340814
 DTEND;VALUE=DATE:20340828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3524,9 +3694,19 @@ UID:fast-nativity-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20341128
 DTEND;VALUE=DATE:20350107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2034@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20340402
+DTEND;VALUE=DATE:20340403
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -3534,7 +3714,7 @@ UID:ff-bright-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340409
 DTEND;VALUE=DATE:20340416
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3543,7 +3723,7 @@ UID:ff-trinity-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340528
 DTEND;VALUE=DATE:20340604
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3552,7 +3732,7 @@ UID:ff-publican-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20340129
 DTEND;VALUE=DATE:20340205
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3561,7 +3741,7 @@ UID:ff-svyatki-2034@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350107
 DTEND;VALUE=DATE:20350118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3791,12 +3971,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2035@othroprayers
+UID:cheesefare-2035@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20350625
-DTEND;VALUE=DATE:20350626
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20350305
+DTEND;VALUE=DATE:20350312
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -3804,9 +3986,10 @@ UID:fast-lent-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350312
 DTEND;VALUE=DATE:20350429
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3815,9 +3998,9 @@ UID:fast-apostles-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350625
 DTEND;VALUE=DATE:20350712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3826,8 +4009,9 @@ UID:fast-dormition-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350814
 DTEND;VALUE=DATE:20350828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3836,9 +4020,19 @@ UID:fast-nativity-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20351128
 DTEND;VALUE=DATE:20360107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2035@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20350422
+DTEND;VALUE=DATE:20350423
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -3846,7 +4040,7 @@ UID:ff-bright-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350429
 DTEND;VALUE=DATE:20350506
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3855,7 +4049,7 @@ UID:ff-trinity-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350617
 DTEND;VALUE=DATE:20350624
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3864,7 +4058,7 @@ UID:ff-publican-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20350218
 DTEND;VALUE=DATE:20350225
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -3873,7 +4067,7 @@ UID:ff-svyatki-2035@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360107
 DTEND;VALUE=DATE:20360118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4103,12 +4297,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2036@othroprayers
+UID:cheesefare-2036@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20360616
-DTEND;VALUE=DATE:20360617
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20360225
+DTEND;VALUE=DATE:20360303
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -4116,9 +4312,10 @@ UID:fast-lent-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360303
 DTEND;VALUE=DATE:20360420
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4127,9 +4324,9 @@ UID:fast-apostles-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360616
 DTEND;VALUE=DATE:20360712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4138,8 +4335,9 @@ UID:fast-dormition-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360814
 DTEND;VALUE=DATE:20360828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4148,9 +4346,19 @@ UID:fast-nativity-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20361128
 DTEND;VALUE=DATE:20370107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2036@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20360413
+DTEND;VALUE=DATE:20360414
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -4158,7 +4366,7 @@ UID:ff-bright-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360420
 DTEND;VALUE=DATE:20360427
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4167,7 +4375,7 @@ UID:ff-trinity-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360608
 DTEND;VALUE=DATE:20360615
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4176,7 +4384,7 @@ UID:ff-publican-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20360210
 DTEND;VALUE=DATE:20360217
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4185,7 +4393,7 @@ UID:ff-svyatki-2036@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370107
 DTEND;VALUE=DATE:20370118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4415,12 +4623,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2037@othroprayers
+UID:cheesefare-2037@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20370601
-DTEND;VALUE=DATE:20370602
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20370209
+DTEND;VALUE=DATE:20370216
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -4428,9 +4638,10 @@ UID:fast-lent-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370216
 DTEND;VALUE=DATE:20370405
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4439,9 +4650,9 @@ UID:fast-apostles-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370601
 DTEND;VALUE=DATE:20370712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4450,8 +4661,9 @@ UID:fast-dormition-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370814
 DTEND;VALUE=DATE:20370828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4460,9 +4672,19 @@ UID:fast-nativity-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20371128
 DTEND;VALUE=DATE:20380107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2037@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20370329
+DTEND;VALUE=DATE:20370330
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -4470,7 +4692,7 @@ UID:ff-bright-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370405
 DTEND;VALUE=DATE:20370412
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4479,7 +4701,7 @@ UID:ff-trinity-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370524
 DTEND;VALUE=DATE:20370531
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4488,7 +4710,7 @@ UID:ff-publican-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20370125
 DTEND;VALUE=DATE:20370201
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4497,7 +4719,7 @@ UID:ff-svyatki-2037@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380107
 DTEND;VALUE=DATE:20380118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4727,12 +4949,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2038@othroprayers
+UID:cheesefare-2038@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20380621
-DTEND;VALUE=DATE:20380622
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20380301
+DTEND;VALUE=DATE:20380308
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -4740,9 +4964,10 @@ UID:fast-lent-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380308
 DTEND;VALUE=DATE:20380425
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4751,9 +4976,9 @@ UID:fast-apostles-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380621
 DTEND;VALUE=DATE:20380712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4762,8 +4987,9 @@ UID:fast-dormition-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380814
 DTEND;VALUE=DATE:20380828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4772,9 +4998,19 @@ UID:fast-nativity-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20381128
 DTEND;VALUE=DATE:20390107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2038@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20380418
+DTEND;VALUE=DATE:20380419
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -4782,7 +5018,7 @@ UID:ff-bright-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380425
 DTEND;VALUE=DATE:20380502
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4791,7 +5027,7 @@ UID:ff-trinity-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380613
 DTEND;VALUE=DATE:20380620
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4800,7 +5036,7 @@ UID:ff-publican-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20380214
 DTEND;VALUE=DATE:20380221
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -4809,7 +5045,7 @@ UID:ff-svyatki-2038@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390107
 DTEND;VALUE=DATE:20390118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5039,12 +5275,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2039@othroprayers
+UID:cheesefare-2039@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20390613
-DTEND;VALUE=DATE:20390614
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20390221
+DTEND;VALUE=DATE:20390228
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5052,9 +5290,10 @@ UID:fast-lent-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390228
 DTEND;VALUE=DATE:20390417
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5063,9 +5302,9 @@ UID:fast-apostles-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390613
 DTEND;VALUE=DATE:20390712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5074,8 +5313,9 @@ UID:fast-dormition-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390814
 DTEND;VALUE=DATE:20390828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5084,9 +5324,19 @@ UID:fast-nativity-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20391128
 DTEND;VALUE=DATE:20400107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2039@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20390410
+DTEND;VALUE=DATE:20390411
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5094,7 +5344,7 @@ UID:ff-bright-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390417
 DTEND;VALUE=DATE:20390424
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5103,7 +5353,7 @@ UID:ff-trinity-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390605
 DTEND;VALUE=DATE:20390612
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5112,7 +5362,7 @@ UID:ff-publican-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20390206
 DTEND;VALUE=DATE:20390213
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5121,7 +5371,7 @@ UID:ff-svyatki-2039@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400107
 DTEND;VALUE=DATE:20400118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5351,12 +5601,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2040@othroprayers
+UID:cheesefare-2040@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20400702
-DTEND;VALUE=DATE:20400703
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20400312
+DTEND;VALUE=DATE:20400319
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5364,9 +5616,10 @@ UID:fast-lent-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400319
 DTEND;VALUE=DATE:20400506
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5375,9 +5628,9 @@ UID:fast-apostles-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400702
 DTEND;VALUE=DATE:20400712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5386,8 +5639,9 @@ UID:fast-dormition-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400814
 DTEND;VALUE=DATE:20400828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5396,9 +5650,19 @@ UID:fast-nativity-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20401128
 DTEND;VALUE=DATE:20410107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2040@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20400429
+DTEND;VALUE=DATE:20400430
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5406,7 +5670,7 @@ UID:ff-bright-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400506
 DTEND;VALUE=DATE:20400513
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5415,7 +5679,7 @@ UID:ff-trinity-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400624
 DTEND;VALUE=DATE:20400701
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5424,7 +5688,7 @@ UID:ff-publican-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20400226
 DTEND;VALUE=DATE:20400304
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5433,7 +5697,7 @@ UID:ff-svyatki-2040@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410107
 DTEND;VALUE=DATE:20410118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5663,12 +5927,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2041@othroprayers
+UID:cheesefare-2041@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20410617
-DTEND;VALUE=DATE:20410618
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20410225
+DTEND;VALUE=DATE:20410304
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5676,9 +5942,10 @@ UID:fast-lent-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410304
 DTEND;VALUE=DATE:20410421
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5687,9 +5954,9 @@ UID:fast-apostles-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410617
 DTEND;VALUE=DATE:20410712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5698,8 +5965,9 @@ UID:fast-dormition-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410814
 DTEND;VALUE=DATE:20410828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5708,9 +5976,19 @@ UID:fast-nativity-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20411128
 DTEND;VALUE=DATE:20420107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2041@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20410414
+DTEND;VALUE=DATE:20410415
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5718,7 +5996,7 @@ UID:ff-bright-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410421
 DTEND;VALUE=DATE:20410428
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5727,7 +6005,7 @@ UID:ff-trinity-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410609
 DTEND;VALUE=DATE:20410616
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5736,7 +6014,7 @@ UID:ff-publican-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20410210
 DTEND;VALUE=DATE:20410217
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5745,7 +6023,7 @@ UID:ff-svyatki-2041@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420107
 DTEND;VALUE=DATE:20420118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5975,12 +6253,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2042@othroprayers
+UID:cheesefare-2042@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20420609
-DTEND;VALUE=DATE:20420610
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20420217
+DTEND;VALUE=DATE:20420224
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -5988,9 +6268,10 @@ UID:fast-lent-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420224
 DTEND;VALUE=DATE:20420413
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -5999,9 +6280,9 @@ UID:fast-apostles-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420609
 DTEND;VALUE=DATE:20420712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6010,8 +6291,9 @@ UID:fast-dormition-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420814
 DTEND;VALUE=DATE:20420828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6020,9 +6302,19 @@ UID:fast-nativity-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20421128
 DTEND;VALUE=DATE:20430107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2042@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20420406
+DTEND;VALUE=DATE:20420407
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6030,7 +6322,7 @@ UID:ff-bright-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420413
 DTEND;VALUE=DATE:20420420
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6039,7 +6331,7 @@ UID:ff-trinity-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420601
 DTEND;VALUE=DATE:20420608
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6048,7 +6340,7 @@ UID:ff-publican-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20420202
 DTEND;VALUE=DATE:20420209
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6057,7 +6349,7 @@ UID:ff-svyatki-2042@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430107
 DTEND;VALUE=DATE:20430118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6287,12 +6579,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2043@othroprayers
+UID:cheesefare-2043@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20430629
-DTEND;VALUE=DATE:20430630
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20430309
+DTEND;VALUE=DATE:20430316
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6300,9 +6594,10 @@ UID:fast-lent-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430316
 DTEND;VALUE=DATE:20430503
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6311,9 +6606,9 @@ UID:fast-apostles-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430629
 DTEND;VALUE=DATE:20430712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6322,8 +6617,9 @@ UID:fast-dormition-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430814
 DTEND;VALUE=DATE:20430828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6332,9 +6628,19 @@ UID:fast-nativity-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20431128
 DTEND;VALUE=DATE:20440107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2043@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20430426
+DTEND;VALUE=DATE:20430427
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6342,7 +6648,7 @@ UID:ff-bright-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430503
 DTEND;VALUE=DATE:20430510
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6351,7 +6657,7 @@ UID:ff-trinity-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430621
 DTEND;VALUE=DATE:20430628
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6360,7 +6666,7 @@ UID:ff-publican-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20430222
 DTEND;VALUE=DATE:20430301
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6369,7 +6675,7 @@ UID:ff-svyatki-2043@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440107
 DTEND;VALUE=DATE:20440118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6599,12 +6905,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2044@othroprayers
+UID:cheesefare-2044@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20440620
-DTEND;VALUE=DATE:20440621
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20440229
+DTEND;VALUE=DATE:20440307
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6612,9 +6920,10 @@ UID:fast-lent-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440307
 DTEND;VALUE=DATE:20440424
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6623,9 +6932,9 @@ UID:fast-apostles-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440620
 DTEND;VALUE=DATE:20440712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6634,8 +6943,9 @@ UID:fast-dormition-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440814
 DTEND;VALUE=DATE:20440828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6644,9 +6954,19 @@ UID:fast-nativity-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20441128
 DTEND;VALUE=DATE:20450107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2044@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20440417
+DTEND;VALUE=DATE:20440418
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6654,7 +6974,7 @@ UID:ff-bright-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440424
 DTEND;VALUE=DATE:20440501
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6663,7 +6983,7 @@ UID:ff-trinity-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440612
 DTEND;VALUE=DATE:20440619
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6672,7 +6992,7 @@ UID:ff-publican-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20440214
 DTEND;VALUE=DATE:20440221
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6681,7 +7001,7 @@ UID:ff-svyatki-2044@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450107
 DTEND;VALUE=DATE:20450118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6911,12 +7231,14 @@ CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:mov-apostles-fast-begins-2045@othroprayers
+UID:cheesefare-2045@othroprayers
 DTSTAMP:20240101T000000Z
-DTSTART;VALUE=DATE:20450605
-DTEND;VALUE=DATE:20450606
-SUMMARY:Apostles' Fast begins
-CATEGORIES:Feast
+DTSTART;VALUE=DATE:20450213
+DTEND;VALUE=DATE:20450220
+SUMMARY:Cheesefare Week — no meat\; dairy\, eggs & fish permitted
+DESCRIPTION:The last week before Great Lent: meat is set aside\, but dairy
+ \, eggs and fish are eaten all week\, including Wednesday and Friday.
+CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6924,9 +7246,10 @@ UID:fast-lent-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450220
 DTEND;VALUE=DATE:20450409
-SUMMARY:Great Lent & Holy Week
-DESCRIPTION:The Great Fast of the Forty Days\, continuing through Holy Wee
- k to Pascha.
+SUMMARY:Great Lent & Holy Week — strict fast
+DESCRIPTION:Strict fast on weekdays (no meat\, fish\, dairy\, eggs\, wine 
+ or oil). Wine & oil on Saturdays and Sundays\; fish on the Annunciation a
+ nd Palm Sunday.
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6935,9 +7258,9 @@ UID:fast-apostles-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450605
 DTEND;VALUE=DATE:20450712
-SUMMARY:Apostles' Fast (Ss Peter & Paul)
-DESCRIPTION:From the Monday after All Saints until the eve of Ss Peter & P
- aul.
+SUMMARY:Apostles' Fast — fish\, wine & oil on most days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ most days (commonly not on Wednesdays and Fridays).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6946,8 +7269,9 @@ UID:fast-dormition-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450814
 DTEND;VALUE=DATE:20450828
-SUMMARY:Dormition Fast
-DESCRIPTION:The fast before the Dormition of the Theotokos.
+SUMMARY:Dormition Fast — strict
+DESCRIPTION:Strict fast\; wine & oil on Saturdays and Sundays\; fish on th
+ e Transfiguration (Aug 6 / 19).
 CATEGORIES:Fast
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6956,9 +7280,19 @@ UID:fast-nativity-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20451128
 DTEND;VALUE=DATE:20460107
-SUMMARY:Nativity Fast
-DESCRIPTION:The forty-day fast before the Nativity of Christ.
+SUMMARY:Nativity Fast — fish\, wine & oil on many days
+DESCRIPTION:No meat\, dairy or eggs. Fish\, wine and oil are permitted on 
+ many days\; the final days before the Nativity are kept more strictly.
 CATEGORIES:Fast
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:fastday-palm-fish-2045@othroprayers
+DTSTAMP:20240101T000000Z
+DTSTART;VALUE=DATE:20450402
+DTEND;VALUE=DATE:20450403
+SUMMARY:Palm Sunday — fish\, wine & oil permitted
+CATEGORIES:Feast
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
@@ -6966,7 +7300,7 @@ UID:ff-bright-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450409
 DTEND;VALUE=DATE:20450416
-SUMMARY:Fast-free (Bright Week)
+SUMMARY:Fast-free (Bright Week) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6975,7 +7309,7 @@ UID:ff-trinity-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450528
 DTEND;VALUE=DATE:20450604
-SUMMARY:Fast-free (week after Pentecost)
+SUMMARY:Fast-free (week after Pentecost) — all foods permitted
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6984,7 +7318,7 @@ UID:ff-publican-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20450129
 DTEND;VALUE=DATE:20450205
-SUMMARY:Fast-free (week after the Publican & Pharisee)
+SUMMARY:Fast-free (after the Publican & Pharisee) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
@@ -6993,7 +7327,7 @@ UID:ff-svyatki-2045@othroprayers
 DTSTAMP:20240101T000000Z
 DTSTART;VALUE=DATE:20460107
 DTEND;VALUE=DATE:20460118
-SUMMARY:Fast-free (Nativity to Theophany)
+SUMMARY:Fast-free (Nativity to Theophany) — all foods
 CATEGORIES:Fast-free
 TRANSP:TRANSPARENT
 END:VEVENT
