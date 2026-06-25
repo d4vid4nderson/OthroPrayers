@@ -813,6 +813,10 @@ def calendar_page():
              'reckoned the same way by all — and differ only in the fixed feasts: the Old (Julian) '
              'calendar observes them thirteen days after the New (Revised Julian) calendar. Choose '
              'the one your parish follows.</p>')
+    o.append('<p class="topic-intro">Each fasting day is labelled with the <em>kind</em> of fast — '
+             'strict, wine &amp; oil, fish, or fast-free — so you can see at a glance what is kept. '
+             'These are the customary guidelines; the exact discipline varies by jurisdiction, so '
+             'follow your parish and your spiritual father.</p>')
     o.append('<div class="cal-set">')
     for title, fn, blurb in CAL_FILES:
         o.append('<div class="cal-card">'
