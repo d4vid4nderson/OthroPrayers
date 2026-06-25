@@ -643,6 +643,25 @@ html[data-theme="dark"] .res-card{ border-color:#43434a; }
 .res-card-emblem svg{ height:1.6rem; width:auto; max-width:3.4rem; display:inline-block; }
 .res-card-t{ display:block; font-family:var(--display); font-weight:600; color:var(--rubric); font-size:1.42rem; line-height:1.15; }
 .res-card-d{ display:block; margin-top:.25rem; font-size:.95rem; opacity:.85; }
+
+/* ---- the downloadable Church Calendar page --------------------------- */
+.art-cal svg{ width:2.1rem; }
+.cal-set{ display:flex; flex-direction:column; gap:1.1rem; margin:1.5rem 0; }
+.cal-card{ border:1px solid #e7e0d4; border-radius:12px; padding:1.1rem 1.2rem; }
+html[data-theme="dark"] .cal-card{ border-color:#43434a; }
+.cal-card h3{ font-family:var(--display); font-weight:600; color:var(--rubric);
+  font-size:1.4rem; margin:0 0 .25rem; }
+.cal-card > p{ text-indent:0; text-align:left; font-size:1rem; line-height:1.5; margin:0 0 .9rem; }
+.cal-actions{ display:flex; flex-wrap:wrap; gap:.6rem; }
+.cal-btn{ display:inline-block; text-decoration:none; padding:.6rem 1.05rem; border-radius:9px;
+  font-size:1rem; border:1px solid var(--rubric); background:var(--rubric); color:#fff; }
+.cal-btn.sub{ background:none; color:var(--link); }
+html[data-theme="dark"] .cal-btn.sub{ color:var(--ink); }
+.cal-how{ margin:1.8rem 0 .5rem; }
+.cal-how ul{ list-style:none; padding:0; margin:.4rem 0 0; }
+.cal-how li{ text-indent:0; font-size:1rem; line-height:1.5; margin:.45rem 0;
+  padding-left:1.1em; position:relative; }
+.cal-how li::before{ content:"✦"; position:absolute; left:0; color:var(--gold); font-size:.8em; top:.15em; }
 /* highlight the current page in the menu */
 .drawer-link.active{ color:var(--rubric); }
 .cf-progress-wrap{ text-indent:0; text-align:center; margin:0 0 2.2em; }
