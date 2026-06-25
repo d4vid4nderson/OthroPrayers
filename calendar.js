@@ -73,6 +73,23 @@
     return mkUTC(n.getFullYear(), n.getMonth() + 1, n.getDate());
   }
 
+  // short pill label per fast kind (the full guidance lives in the detail)
+  var SHORT = { strict: "Strict", oil: "Wine & oil", fish: "Fish", dairy: "Dairy day",
+                fast: "Fast day", free: "Fast-free", none: "" };
+  // how to keep each kind of day (a customary guide; my own wording)
+  var FAST_INFO = {
+    strict: { title: "Strict fast", how: "No meat, fish, dairy, eggs, wine or oil; shellfish is usually allowed. This is the strictest level (xerophagy)." },
+    oil:    { title: "Wine & oil", how: "Wine and oil are allowed today — but still no meat, fish, dairy or eggs." },
+    fish:   { title: "Fish, wine & oil", how: "Fish, wine and oil are allowed today; no meat, dairy or eggs." },
+    dairy:  { title: "Dairy permitted", how: "No meat, but dairy, eggs and fish are allowed all week — even on Wednesday and Friday." },
+    fast:   { title: "Fast day", how: "A weekly fast day. Abstain from meat, fish, dairy and eggs; wine and oil are often kept too. Shellfish is usually allowed." },
+    free:   { title: "Fast-free", how: "No fasting today — all foods are allowed, even on Wednesday and Friday." },
+    none:   { title: "Not a fast day", how: "No fast is appointed for today." }
+  };
+  var NOTE = "Fasting goes hand in hand with prayer and almsgiving — it is not a diet. " +
+             "Children, the sick, expectant mothers and travellers are given leniency; keep the " +
+             "fast as your parish priest or spiritual father advises.";
+
   function renderWeek(cal) {
     var box = document.getElementById("this-week");
     if (!box) return;
@@ -80,20 +97,35 @@
     var today = todayUTC();
     var h = '<h2 class="tw-h">This Week</h2>'
           + '<div class="tw-sub">' + (cal === "old" ? "Old (Julian)" : "New (Revised Julian)") + ' calendar</div>'
-          + '<ul class="tw-list">';
+          + '<div class="tw-list">';
     for (var i = 0; i < 7; i++) {
-      var dt = addDays(today, i), inf = dayInfo(dt, cal);
+      var dt = addDays(today, i), inf = dayInfo(dt, cal), k = inf.fast.kind, isToday = i === 0;
       var feast = inf.feasts.map(function (f) { return (f.great ? "✦ " : "") + f.name; }).join(" · ");
-      var fast = inf.fast.kind !== "none"
-        ? '<span class="tw-fast tw-' + inf.fast.kind + '">' + inf.fast.label + '</span>' : "";
-      h += '<li class="tw-day' + (i === 0 ? " tw-today" : "") + '">'
-        + '<span class="tw-date">' + WD[dt.getUTCDay()] + " " + MO[dt.getUTCMonth()] + " " + dt.getUTCDate() + '</span>'
-        + '<span class="tw-body">' + (feast ? '<span class="tw-feast">' + feast + '</span>' : "") + fast + '</span>'
-        + '</li>';
+      var fi = FAST_INFO[k] || FAST_INFO.none;
+      var pill = k !== "none" ? '<span class="tw-fast tw-' + k + '">' + SHORT[k] + '</span>' : "";
+      h += '<div class="tw-row">'
+        + '<button class="tw-day' + (isToday ? " tw-today" : "") + '" type="button" aria-expanded="' + (isToday ? "true" : "false") + '">'
+        + '<span class="tw-date">' + WD[dt.getUTCDay()] + " &middot; " + MO[dt.getUTCMonth()] + " " + dt.getUTCDate() + '</span>'
+        + (feast ? '<span class="tw-feast">' + feast + '</span>' : "")
+        + pill + '<span class="tw-chev" aria-hidden="true"></span>'
+        + '</button>'
+        + '<div class="tw-detail"' + (isToday ? "" : " hidden") + '>'
+        + (feast ? '<p class="tw-d-feast">' + feast + '</p>' : "")
+        + '<p class="tw-d-fast"><strong>' + fi.title + '.</strong> ' + fi.how + '</p>'
+        + '<p class="tw-d-note">' + NOTE + '</p>'
+        + '</div></div>';
     }
-    h += '</ul><a class="tw-more" href="calendar.html">Add to your phone &rsaquo;</a>';
+    h += '</div><a class="tw-more" href="calendar.html">Add to your phone &rsaquo;</a>';
     box.innerHTML = h;
     box.hidden = false;
+    Array.prototype.forEach.call(box.querySelectorAll(".tw-day"), function (btn) {
+      btn.addEventListener("click", function () {
+        var open = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", open ? "false" : "true");
+        var det = btn.nextElementSibling;
+        if (det) det.hidden = open;
+      });
+    });
   }
 
   function maybeNotify(cal) {

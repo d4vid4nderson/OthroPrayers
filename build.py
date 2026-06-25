@@ -995,7 +995,7 @@ HEAD_TMPL = '''<!doctype html>
 {topnav}
 {control}
 <script src="calendar-data.js?v=1" defer></script>
-<script src="calendar.js?v=1" defer></script>
+<script src="calendar.js?v=2" defer></script>
 {scripts}
 </body>
 </html>

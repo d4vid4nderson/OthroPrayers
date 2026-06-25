@@ -671,32 +671,42 @@ html[data-theme="dark"] .cal-btn.sub{ color:var(--ink); }
 /* ---- the home "This Week" panel (shown when following the calendar) -- */
 .this-week{
   text-align:left; max-width:34rem; margin:0 auto 2rem;
-  border:1px solid #e7e0d4; border-radius:12px; padding:1rem 1.1rem;
+  border:1px solid #e7e0d4; border-radius:12px; padding:.8rem 1rem 1rem;
 }
 html[data-theme="dark"] .this-week{ border-color:#43434a; }
 .tw-h{ font-family:var(--display); font-weight:600; color:var(--rubric);
   font-size:1.5rem; text-align:center; margin:0; }
 .tw-sub{ text-align:center; font-variant-caps:small-caps; letter-spacing:.08em;
-  font-size:.82rem; opacity:.7; margin:.1rem 0 .7rem; }
-.tw-list{ list-style:none; margin:0; padding:0; }
-.tw-day{ display:flex; flex-wrap:wrap; gap:.2rem .7rem; align-items:baseline;
-  padding:.45rem 0; border-top:1px solid #efe8db; }
-html[data-theme="dark"] .tw-day{ border-top-color:#37373c; }
-.tw-day:first-child{ border-top:0; }
-.tw-today{ background:rgba(154,123,30,.08); border-radius:7px; padding-left:.5rem;
-  padding-right:.5rem; box-shadow:inset 3px 0 0 var(--gold); }
-.tw-date{ flex:0 0 5.2rem; font-variant-caps:small-caps; letter-spacing:.03em;
-  font-size:.95rem; opacity:.85; }
-.tw-body{ flex:1 1 9rem; }
-.tw-feast{ display:block; color:var(--rubric); line-height:1.3; }
-.tw-fast{ display:inline-block; margin-top:.1rem; font-size:.82rem;
-  font-variant-caps:small-caps; letter-spacing:.04em; padding:.05rem .5rem;
-  border-radius:999px; border:1px solid currentColor; }
-.tw-strict{ color:#9e2b22; }            /* strictest */
-.tw-fast{ color:var(--rubric); }
+  font-size:.82rem; opacity:.7; margin:.1rem 0 .5rem; }
+.tw-row{ border-top:1px solid #efe8db; }
+html[data-theme="dark"] .tw-row{ border-top-color:#37373c; }
+.tw-row:first-child{ border-top:0; }
+/* each day is a tappable button that opens its fasting detail */
+.tw-day{
+  display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .55rem;
+  width:100%; text-align:left; padding:.6rem .35rem;
+  background:none; border:0; color:inherit; font-family:inherit; cursor:pointer;
+}
+.tw-today{ background:rgba(154,123,30,.1); border-radius:8px; box-shadow:inset 3px 0 0 var(--gold); }
+.tw-date{ font-variant-caps:small-caps; letter-spacing:.03em; font-size:1rem; }
+.tw-feast{ flex:1 1 100%; color:var(--rubric); line-height:1.3; }   /* feast on its own line */
+.tw-fast{ font-size:.8rem; font-variant-caps:small-caps; letter-spacing:.04em;
+  padding:.05rem .6rem; border-radius:999px; border:1px solid currentColor; white-space:nowrap; }
+.tw-chev{ margin-left:auto; width:.5rem; height:.5rem; flex:0 0 auto;
+  border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+  transform:rotate(45deg); opacity:.45; transition:transform .2s; }
+.tw-day[aria-expanded="true"] .tw-chev{ transform:rotate(-135deg); }
+/* fast-kind colours */
+.tw-fast{ color:var(--rubric); }                 /* weekly Wed/Fri fast */
+.tw-strict{ color:#9e2b22; }
 .tw-oil, .tw-fish, .tw-dairy{ color:var(--gold); }
 .tw-free{ color:var(--link); }
 html[data-theme="dark"] .tw-strict{ color:var(--rubric); }
+/* the expanded "how to fast" detail */
+.tw-detail{ padding:0 .4rem .7rem; }
+.tw-detail p{ text-indent:0; text-align:left; margin:.25rem 0; font-size:.95rem; line-height:1.45; }
+.tw-d-feast{ color:var(--rubric); }
+.tw-d-note{ opacity:.7; font-size:.88rem; }
 .tw-more{ display:inline-block; margin-top:.7rem; color:var(--link); text-decoration:none;
   font-variant-caps:small-caps; letter-spacing:.04em; }
 /* highlight the current page in the menu */
