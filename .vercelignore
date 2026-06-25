@@ -2,6 +2,7 @@
 source.pdf
 generate.py
 generate_ancient.py
+generate_calendars.py
 build.py
 prayers.content.html
 ancient.content.html
