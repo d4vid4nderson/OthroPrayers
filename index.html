@@ -139,6 +139,13 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
+  <div class="menu-row">
+    <span class="menu-label">Available offline</span>
+    <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
+            aria-label="Available offline"><span class="knob"></span></button>
+  </div>
+  <p class="menu-note" id="offline-note">Save every page and your settings on this device, so the
+     app works with no connection. External links still need internet.</p>
   <div class="drawer-heading">Church calendar</div>
   <div class="menu-row">
     <span class="menu-label">Follow the calendar</span>
@@ -234,7 +241,29 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
     } else { L.setItem("fastnotify","0"); paintFn(); }
   };
 
-  paintTheme(); paintDys(); paintCal(); paintFn();
+  // available offline (registers a service worker that caches the whole app)
+  var swOk=("serviceWorker" in navigator);
+  var offBtn=d.getElementById("offline"), offNote=d.getElementById("offline-note");
+  function paintOff(){ if(offBtn) offBtn.setAttribute("aria-checked", L.getItem("offline")==="1"?"true":"false"); }
+  function clearCaches(){ if(window.caches) caches.keys().then(function(ks){
+    ks.forEach(function(k){ if(k.indexOf("ortho-")===0) caches.delete(k); }); }); }
+  if(offBtn){
+    if(!swOk){ offBtn.setAttribute("disabled","true"); if(offNote) offNote.textContent="Offline use isn’t supported by this browser."; }
+    offBtn.onclick=function(){
+      if(!swOk) return;
+      if(L.getItem("offline")==="1"){
+        L.setItem("offline","0"); paintOff();
+        navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); });
+        clearCaches();
+      } else {
+        L.setItem("offline","1"); paintOff();
+        navigator.serviceWorker.register("sw.js");
+      }
+    };
+  }
+  if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
+
+  paintTheme(); paintDys(); paintCal(); paintFn(); paintOff();
 })();
 </script>
 <script src="calendar-data.js?v=1" defer></script>
