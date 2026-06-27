@@ -95,6 +95,10 @@ GEAR = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
         '1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 '
         '2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 '
         '0-1.51 1z"/></svg>')
+CAMERA = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+          'stroke-linejoin="round" aria-hidden="true">'
+          '<path d="M4 8h3l1.4-2h7.2L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>'
+          '<circle cx="12" cy="13" r="3.2"/></svg>')
 SUN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
        'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2M12 20.5v2'
        'M3.9 3.9l1.4 1.4M18.7 18.7l1.4 1.4M1.5 12h2M20.5 12h2M3.9 20.1l1.4-1.4M18.7 5.3l1.4-1.4"/></svg>')
@@ -210,6 +214,7 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <button class="tab{p_act}" id="prayers-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="prayers-menu" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></button>
+  <a class="tab tab-fab" href="greek.html" aria-label="Greek photo translator"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></a>
   <button class="tab{r_act}" id="resources-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="resources-menu" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></button>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
@@ -308,7 +313,7 @@ def tabbar(active="", current=""):
         r_act=" active" if active == "resources" else "",
         prayer_links=_drawer_links(prayer_pairs, current),
         res_links=_drawer_links(res_pairs, current),
-        HOME=HOME, BOOK=BOOK, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
+        HOME=HOME, BOOK=BOOK, CAMERA=CAMERA, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
 
 
 # ---- Early Church Fathers reading checklist --------------------------------

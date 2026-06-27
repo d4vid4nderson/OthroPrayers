@@ -497,6 +497,18 @@ html[data-theme="dark"] .tabbar{ border-top-color:#43434a; background:rgba(30,30
 .tab-i{ display:flex; }
 .tab-i svg{ width:1.55rem; height:1.55rem; }
 .tab-l{ font-size:.7rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap; }
+/* raised centre button (the Greek photo translator) */
+.tab-fab{ flex:0 0 auto; opacity:1; justify-content:flex-end; padding-inline:.6rem; }
+.tab-fab:hover{ opacity:1; }
+.tab-fab .tab-i{
+  width:3.5rem; height:3.5rem; margin-top:-1.7rem; margin-bottom:.1rem;
+  align-items:center; justify-content:center;
+  background:var(--rubric); color:#fff; border-radius:50%;
+  box-shadow:0 5px 14px rgba(124,43,34,.4); border:3px solid var(--paper);
+}
+.tab-fab .tab-i svg{ width:1.7rem; height:1.7rem; }
+.tab-fab .tab-l{ color:var(--rubric); opacity:.95; }
+.tab-fab.active::before, .tab-fab::before{ content:none; }
 /* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
   .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
