@@ -214,7 +214,8 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <button class="tab{p_act}" id="prayers-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="prayers-menu" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></button>
-  <a class="tab tab-fab" href="greek.html" aria-label="Greek photo translator"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></a>
+  <button class="tab tab-fab" id="cam-btn" type="button" aria-label="Open the camera to read Greek"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></button>
+  <input id="cam-input" type="file" accept="image/*" capture="environment" hidden>
   <button class="tab{r_act}" id="resources-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="resources-menu" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></button>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
@@ -1000,7 +1001,7 @@ document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
-GREEK_JS = '<script src="greek-tool.js?v=1" defer></script>'
+GREEK_JS = '<script src="greek-tool.js?v=2" defer></script>'
 
 
 def greek_page():
@@ -1136,6 +1137,26 @@ CONTROL_JS = '''<script>
     };
   }
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
+
+  // centre camera button: open the camera, downscale the photo, then hand it
+  // to the Greek translator page (auto-processed there)
+  var camBtn=d.getElementById("cam-btn"), cam=d.getElementById("cam-input");
+  if(camBtn && cam){
+    camBtn.onclick=function(){ cam.value=""; cam.click(); };
+    cam.addEventListener("change", function(){
+      var f=cam.files && cam.files[0]; if(!f) return;
+      var im=new Image(), u=URL.createObjectURL(f);
+      im.onload=function(){
+        var mx=1600, s=Math.min(1, mx/Math.max(im.width, im.height));
+        var c=d.createElement("canvas"); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s);
+        c.getContext("2d").drawImage(im,0,0,c.width,c.height); URL.revokeObjectURL(u);
+        try{ sessionStorage.setItem("gk-photo", c.toDataURL("image/jpeg",0.8)); }catch(e){}
+        location.href="greek.html";
+      };
+      im.onerror=function(){ URL.revokeObjectURL(u); location.href="greek.html"; };
+      im.src=u;
+    });
+  }
 
   paintTheme(); paintDys(); paintCal(); paintFn(); paintOff();
 })();
