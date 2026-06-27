@@ -157,6 +157,12 @@ CAL = (
     '<path d="M40 16v18M80 16v18"/><path d="M58 68h30M34 88h54"/>'
     '<circle cx="40" cy="68" r="4.5" fill="currentColor" stroke="none"/></svg>')
 
+GOSPEL_ORN = (
+    '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="6" '
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    '<rect x="26" y="14" width="68" height="92" rx="8"/>'
+    '<path d="M60 34v40"/><path d="M44 50h32"/></svg>')
+
 ORN = {
     "cross":   (ORTHODOX_CROSS, "Orthodox cross", "art-cross"),
     "roundel": (ICXC_ROUNDEL, "IC XC NIKA — the Cross of Christ Conquers", "art-roundel"),
@@ -164,6 +170,7 @@ ORN = {
     "chirho":  (CHI_RHO, "Chi-Rho — the monogram of Christ, with Alpha and Omega", "art-chirho"),
     "rule":    (RULE, "Ornamental rule", "art-rule"),
     "cal":     (CAL, "Liturgical calendar", "art-cal"),
+    "gospel":  (GOSPEL_ORN, "The Holy Scriptures", "art-gospel"),
 }
 
 
@@ -543,19 +550,6 @@ REF_SECTIONS = [
     ("The Chalcedonian Definition (451)", "https://www.newadvent.org/fathers/3811.htm",
      "Christ in two natures, “without confusion or division.”"),
   ]},
- {"name": "The Ecumenical Councils", "blurb": "The canons and definitions of the Church gathered as one.",
-  "items": [
-    ("The Seven Ecumenical Councils (canons & decrees)", "https://ccel.org/ccel/schaff/npnf214.html",
-     "Schaff's NPNF Vol. 14 — full canons and dogmatic decrees, with commentary."),
-    ("Nicaea I (325)", "https://www.newadvent.org/fathers/3801.htm",
-     "Against Arianism; the original Nicene Creed and twenty canons."),
-    ("Constantinople I (381)", "https://www.newadvent.org/fathers/3808.htm",
-     "Completes the Creed; the divinity of the Holy Spirit."),
-    ("Ephesus (431)", "https://www.newadvent.org/fathers/3810.htm",
-     "Mary as Theotokos; the unity of Christ."),
-    ("Chalcedon (451)", "https://www.newadvent.org/fathers/3811.htm",
-     "The Definition of the two natures of Christ, and thirty canons."),
-  ]},
  {"name": "Catechisms", "blurb": "Ordered introductions to the whole of the faith.",
   "items": [
     ("The Orthodox Faith — Fr. Thomas Hopko", "https://www.oca.org/orthodoxy/the-orthodox-faith",
@@ -699,6 +693,121 @@ def ref_page(ref, ornament=""):
     return "\n".join(o)
 
 
+# long-form in-depth articles (lead paragraph + sub-sections + sources)
+ARTICLES = [
+ {"name": "The Ecumenical Councils", "slug": "councils", "ornament": "cross",
+  "lead": "An Ecumenical Council is a gathering of the bishops of the whole Church to confess "
+          "the one faith and to settle the disputes that threaten her unity. The Orthodox Church "
+          "receives <strong>seven</strong> such councils as ecumenical; together they gave us the "
+          "Creed and the boundaries within which the Church speaks of the Holy Trinity and of the "
+          "Person of Christ. A council&rsquo;s authority rests not in the assembly itself but in "
+          "its reception by the whole Body of the Church.",
+  "sections": [
+    ("First Council of Nicaea — 325",
+     ["Summoned by St Constantine against the teaching of Arius, who held the Son to be a creature. "
+      "The Council confessed the Son to be <em>of one essence</em> (homoousios) with the Father, gave "
+      "the first part of the Creed, set a common reckoning of Pascha, and issued twenty canons."]),
+    ("First Council of Constantinople — 381",
+     ["Completed the Creed we still recite (the Nicene&ndash;Constantinopolitan Creed) and affirmed the "
+      "divinity of the Holy Spirit against those who denied it, condemning also the teaching of "
+      "Apollinaris that Christ lacked a human mind."]),
+    ("Council of Ephesus — 431",
+     ["Affirmed that the Virgin Mary is truly <em>Theotokos</em>, the Mother of God, and that the one "
+      "born of her is the one divine Person of the Word made flesh &mdash; against Nestorius, who divided "
+      "Christ into two."]),
+    ("Council of Chalcedon — 451",
+     ["Defined that the one Christ is made known in <em>two natures</em>, divine and human, &ldquo;without "
+      "confusion, change, division, or separation,&rdquo; united in one Person &mdash; against Eutyches, "
+      "who taught that Christ&rsquo;s humanity was swallowed up in his divinity."]),
+    ("Second Council of Constantinople — 553",
+     ["Reaffirmed Chalcedon and Cyril of Alexandria, clarifying that there is one Person (hypostasis) of "
+      "Christ in two natures, and condemned writings that still leaned toward Nestorianism."]),
+    ("Third Council of Constantinople — 680&ndash;681",
+     ["Confessed <em>two wills and two energies</em> in Christ, divine and human, his human will freely "
+      "obeying the divine &mdash; against Monothelitism, which allowed him only one will."]),
+    ("Second Council of Nicaea — 787",
+     ["Restored the veneration of the holy icons against Iconoclasm, teaching that the honour given to an "
+      "icon passes to the one it depicts, and carefully distinguishing veneration (proskynesis) from the "
+      "worship (latreia) due to God alone."]),
+    ("Councils after the Seven",
+     ["The Church&rsquo;s conciliar life did not end in 787. The Orthodox hold in high regard later "
+      "councils such as that of Constantinople in 879&ndash;880 under St Photios, the Hesychast councils "
+      "of 1341&ndash;1351 that affirmed St Gregory Palamas&rsquo; distinction between God&rsquo;s "
+      "unknowable essence and his uncreated energies, and the Synod of Jerusalem (1672). Some are "
+      "regarded by many Orthodox as carrying ecumenical authority."]),
+  ],
+  "items": [
+    ("The Seven Ecumenical Councils — canons &amp; definitions (NPNF II.14)",
+     "https://ccel.org/ccel/schaff/npnf214", "Schaff&rsquo;s full canons and dogmatic decrees.", True),
+    ("Nicaea I (325)", "https://www.newadvent.org/fathers/3801.htm", "The Creed and twenty canons.", True),
+    ("Constantinople I (381)", "https://www.newadvent.org/fathers/3808.htm", "Completes the Creed.", True),
+    ("Ephesus (431)", "https://www.newadvent.org/fathers/3810.htm", "Mary as Theotokos.", True),
+    ("Chalcedon (451)", "https://www.newadvent.org/fathers/3811.htm", "The Definition of the two natures.", True),
+    ("The first seven councils — overview", "https://en.wikipedia.org/wiki/First_seven_ecumenical_councils",
+     "A concise survey with dates, places and decisions.", True),
+  ]},
+ {"name": "The Bible &amp; Its Canon", "slug": "bible", "ornament": "gospel",
+  "lead": "The Orthodox Church did not so much <em>choose</em> the books of the Bible as <em>recognize</em> "
+          "the books she had always read and prayed. Scripture is the Church&rsquo;s own book, received "
+          "and interpreted within Holy Tradition; the canon &mdash; the list of books &mdash; took settled "
+          "shape gradually, confirmed by the Fathers and the councils as the Church discerned which "
+          "writings the Holy Spirit had given her.",
+  "sections": [
+    ("The Old Testament — the Septuagint",
+     ["The Orthodox read the Greek <em>Septuagint</em> (LXX), the translation used by the Apostles and "
+      "quoted throughout the New Testament. Its Old Testament is broader than the later Hebrew (and "
+      "Protestant) canon, and it is the text from which the Church&rsquo;s services are drawn."]),
+    ("The Anagignoskomena — &ldquo;the books that are read&rdquo;",
+     ["Beyond the books shared with the Hebrew canon, the Church receives a number of others read in "
+      "worship: Tobit, Judith, the Wisdom of Solomon, the Wisdom of Sirach, Baruch and the Letter of "
+      "Jeremiah, 1&ndash;3 Maccabees, 1 Esdras, additions to Daniel and Esther, Psalm 151 and the Prayer "
+      "of Manasseh. Orthodox tradition calls these the <em>anagignoskomena</em> &mdash; profitable and "
+      "Scripture, though some Fathers rank them a step below the rest."]),
+    ("The New Testament",
+     ["The twenty-seven books of the New Testament are the same as those held across the Christian world. "
+      "They were not imposed from above but proved themselves through use &mdash; read in the Liturgy, "
+      "received from the Apostles, and recognized in the same faith everywhere."]),
+    ("How the canon was received",
+     ["The list was confirmed over time rather than at a single moment. St Athanasius&rsquo; 39th Festal "
+      "Letter (367) gives the earliest list of the twenty-seven New Testament books; regional councils at "
+      "Laodicea (c. 363) and Carthage (397) set out the canon; the Council in Trullo (692) ratified these "
+      "earlier canons for the whole Church; and the Synod of Jerusalem (1672) reaffirmed the Orthodox "
+      "Scriptures against later Western disputes. Throughout, the canon is read <em>within</em> the "
+      "Church, not apart from her."]),
+  ],
+  "items": [
+    ("St Athanasius — Letters (incl. the 39th Festal Letter, 367)", "https://ccel.org/ccel/schaff/npnf204",
+     "The earliest list of the twenty-seven New Testament books.", True),
+    ("The Synod of Jerusalem (1672) &amp; the Confession of Dositheus", "https://ccel.org/ccel/schaff/creeds2",
+     "The Orthodox reaffirmation of the Scriptures and the faith.", True),
+    ("The Septuagint (LXX)", "https://en.wikipedia.org/wiki/Septuagint",
+     "The Greek Old Testament of the early Church.", True),
+    ("The Anagignoskomena / deuterocanon", "https://en.wikipedia.org/wiki/Deuterocanonical_books",
+     "The books read in the Church beyond the Hebrew canon.", True),
+    ("How the biblical canon developed", "https://en.wikipedia.org/wiki/Development_of_the_Christian_biblical_canon",
+     "A historical overview of the canon&rsquo;s formation.", True),
+    ("The Orthodox Faith — Scripture &amp; Tradition (OCA)", "https://www.oca.org/orthodoxy/the-orthodox-faith",
+     "Fr Thomas Hopko&rsquo;s free introduction, including the Bible.", True),
+  ]},
+]
+ARTICLE_BY_SLUG = {a["slug"]: a for a in ARTICLES}
+
+
+def article_page(a):
+    o = ['<section class="resources">', BACK, _divider(a["name"])]
+    if a.get("lead"):
+        o.append(f'<p class="topic-intro">{a["lead"]}</p>')
+    for sub, paras in a["sections"]:
+        o.append(f'<h2 class="subhead">{sub}</h2>')
+        for p in paras:
+            o.append(f'<p class="topic-intro">{p}</p>')
+    o.append(_links_ul(a["items"]))
+    if a.get("ornament"):
+        o.append(art(a["ornament"], foot=True))
+    o.append('</section>')
+    return "\n".join(o)
+
+
 def fathers_page(ornament=""):
     o = ['<section class="resources" id="papers">', BACK, _divider("The Early Church Fathers")]
     o.append('<p class="res-intro">A reading path through the first centuries of the Church — '
@@ -751,7 +860,8 @@ RES_CARDS = [
     ("The Priesthood", "priesthood.html", "The threefold ministry, and what the Church asks of a priest.", "cross"),
     ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio.", "chirho"),
     ("The Creeds", "creeds.html", "The Church's confessions of faith, in a few lines.", "roundel"),
-    ("The Ecumenical Councils", "councils.html", "The canons and definitions of the councils.", "cross"),
+    ("The Ecumenical Councils", "councils.html", "The seven councils that shaped the faith, and those after.", "cross"),
+    ("The Bible & Its Canon", "bible.html", "How the Church received the Scriptures — canon, Septuagint, the books.", "gospel"),
     ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith.", "chirho"),
     ("The Church Calendar", "calendar.html", "Feast days for your phone — old- and new-calendar downloads.", "cal"),
     ("Recommended Reading", "reading.html", "A few books to go deeper.", "rule"),
@@ -1192,9 +1302,14 @@ page("calendar.html", "The Church Calendar — Daily Prayers",
      "Calendar, Outlook and Apple Calendar — feasts, fasts and the Paschal cycle.",
      calendar_page(), active="resources", scripts=CAL_JS)
 
-REF_SLUGS = {"The Creeds": "creeds", "The Ecumenical Councils": "councils",
+# in-depth articles (Councils, the Bible & its canon)
+for _a in ARTICLES:
+    page(f'{_a["slug"]}.html', f'{_a["name"]} — Daily Prayers',
+         re.sub(r"<[^>]+>", "", _a["lead"])[:155], article_page(_a), active="resources")
+
+REF_SLUGS = {"The Creeds": "creeds",
              "Catechisms": "catechisms", "Recommended Reading": "reading"}
-REF_ORN = {"The Creeds": "chirho", "The Ecumenical Councils": "cross",
+REF_ORN = {"The Creeds": "chirho",
            "Catechisms": "roundel", "Recommended Reading": "rule"}
 for ref in REF_SECTIONS:
     page(f'{REF_SLUGS[ref["name"]]}.html', f'{ref["name"]} — Daily Prayers',
