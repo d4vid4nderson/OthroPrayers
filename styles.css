@@ -722,6 +722,24 @@ html[data-theme="dark"] .tw-strict{ color:var(--rubric); }
 .tw-d-note{ opacity:.7; font-size:.88rem; }
 .tw-more{ display:inline-block; margin-top:.7rem; color:var(--link); text-decoration:none;
   font-variant-caps:small-caps; letter-spacing:.04em; }
+
+/* ---- Greek photo translator tool ------------------------------------- */
+.gk{ margin:1.2rem 0; }
+.gk-pick{ display:inline-block; cursor:pointer; padding:.75rem 1.1rem; border-radius:10px;
+  background:var(--rubric); color:#fff; font-size:1.05rem; }
+.gk-img{ display:block; max-width:100%; max-height:48vh; margin:1rem auto; border-radius:8px;
+  border:1px solid var(--gold); }
+.gk-status{ text-indent:0; color:var(--rubric); min-height:1.2em; margin:.5rem 0; }
+.gk-lbl{ display:block; text-indent:0; margin:.9rem 0 .25rem; font-variant-caps:small-caps;
+  letter-spacing:.06em; opacity:.7; font-size:.85rem; }
+.gk-hint{ text-transform:none; opacity:.8; }
+.gk-greek{ width:100%; box-sizing:border-box; font-family:var(--serif); font-size:1.15rem;
+  line-height:1.5; padding:.6rem; border-radius:8px; border:1px solid #d9d2c4;
+  background:var(--paper); color:var(--ink); }
+html[data-theme="dark"] .gk-greek{ border-color:#4a4a51; }
+.gk-translit{ text-indent:0; font-style:italic; opacity:.85; }
+.gk-en{ text-indent:0; font-size:1.15rem; line-height:1.5; }
+.gk .cta{ margin-top:.7rem; max-width:none; }
 /* highlight the current page in the menu */
 .drawer-link.active{ color:var(--rubric); }
 .cf-progress-wrap{ text-indent:0; text-align:center; margin:0 0 2.2em; }

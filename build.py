@@ -864,6 +864,7 @@ RES_CARDS = [
     ("The Bible & Its Canon", "bible.html", "How the Church received the Scriptures — canon, Septuagint, the books.", "gospel"),
     ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith.", "chirho"),
     ("The Church Calendar", "calendar.html", "Feast days for your phone — old- and new-calendar downloads.", "cal"),
+    ("Greek Photo Translator", "greek.html", "Photograph Greek text — an icon, a sign, a service book — and read it in English.", "chirho"),
     ("Recommended Reading", "reading.html", "A few books to go deeper.", "rule"),
 ]
 
@@ -993,6 +994,34 @@ CAL_JS = '''<script>
 document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
+
+GREEK_JS = '<script src="greek-tool.js?v=1" defer></script>'
+
+
+def greek_page():
+    return "\n".join([
+        '<section class="resources" id="top">', BACK, _divider("Greek Photo Translator"),
+        '<p class="topic-intro">Take or choose a photo of Greek text — an icon inscription, a '
+        'service book, a sign — and this will read it and translate it to English. It works best '
+        'on clear, printed Greek and <strong>needs an internet connection</strong>. Reading and '
+        'translation are approximate; use it as a help, not a final authority.</p>',
+        '<div class="gk">',
+        '<label class="gk-pick" for="gk-file">Take or choose a photo</label>',
+        '<input id="gk-file" type="file" accept="image/*" capture="environment" hidden>',
+        '<img id="gk-img" class="gk-img" alt="Your photo" hidden>',
+        '<p id="gk-status" class="gk-status" aria-live="polite"></p>',
+        '<p class="gk-lbl">Greek <span class="gk-hint">(you can correct it)</span></p>',
+        '<textarea id="gk-greek" class="gk-greek" rows="3" dir="auto"></textarea>',
+        '<button id="gk-go" class="cta" type="button">Translate</button>',
+        '<p class="gk-lbl">Transliteration</p><p id="gk-translit" class="gk-translit"></p>',
+        '<p class="gk-lbl">English</p><p id="gk-en" class="gk-en"></p>',
+        '<a id="gk-gt" class="tw-more" target="_blank" rel="noopener" hidden>Open in Google Translate &rsaquo;</a>',
+        '</div>',
+        '<p class="res-foot">Text recognition runs in your browser with an open-source engine; '
+        'translation uses a free public service. Neither is perfect — for careful study, compare '
+        'with a printed translation. This tool is the one part of the app that reaches the internet.</p>',
+        art("gospel", foot=True),
+        '</section>'])
 
 
 # ---- scripts ---------------------------------------------------------------
@@ -1302,6 +1331,11 @@ page("calendar.html", "The Church Calendar — Daily Prayers",
      "Calendar, Outlook and Apple Calendar — feasts, fasts and the Paschal cycle.",
      calendar_page(), active="resources", scripts=CAL_JS)
 
+page("greek.html", "Greek Photo Translator — Daily Prayers",
+     "Photograph Greek text and read it in English — on-device recognition with transliteration "
+     "and translation. Online tool; results are approximate.",
+     greek_page(), active="resources", scripts=GREEK_JS)
+
 # in-depth articles (Councils, the Bible & its canon)
 for _a in ARTICLES:
     page(f'{_a["slug"]}.html', f'{_a["name"]} — Daily Prayers',
@@ -1331,7 +1365,7 @@ print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "mov
 _NODEPLOY = {"prayers.content.html", "ancient.content.html", "assets/icons/app-icon.png"}
 _assets = {"./"}
 _assets.update(glob.glob("*.html"))
-for _p in ["styles.css", "player.js", "calendar.js", "calendar-data.js",
+for _p in ["styles.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
            "site.webmanifest", "favicon.ico"]:
     if os.path.exists(_p):
         _assets.add(_p)
