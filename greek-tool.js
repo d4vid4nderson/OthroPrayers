@@ -36,11 +36,16 @@
     var f = fileIn.files && fileIn.files[0];
     if (!f) return;
     img.src = URL.createObjectURL(f); img.hidden = false;
+    process(f);
+  }
+
+  // src may be a File/Blob or a data-URL string — Tesseract accepts both
+  function process(src) {
     gEl.value = ""; tEl.textContent = ""; enEl.textContent = ""; gt.hidden = true;
     setStatus("Loading the reader…");
     loadTesseract().then(function () {
       setStatus("Reading the Greek…");
-      return Tesseract.recognize(f, "ell+grc", {
+      return Tesseract.recognize(src, "ell+grc", {
         logger: function (m) {
           if (m.status === "recognizing text") setStatus("Reading the Greek… " + Math.round(m.progress * 100) + "%");
         }
@@ -79,6 +84,13 @@
     if (!fileIn) return;
     fileIn.addEventListener("change", onFile);
     if (go) go.onclick = function () { var t = gEl.value.trim(); if (t) translate(t); };
+    // a photo handed off from the centre camera button — process it at once
+    var handed = sessionStorage.getItem("gk-photo");
+    if (handed) {
+      sessionStorage.removeItem("gk-photo");
+      img.src = handed; img.hidden = false;
+      process(handed);
+    }
   }
 
   if (document.readyState !== "loading") ready();
