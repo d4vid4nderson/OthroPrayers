@@ -312,19 +312,36 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     var book=d.querySelector("main.book");
     if(!thumb||!active||tabs.length<2) return;
     var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function cx(t){ return t.offsetLeft + t.offsetWidth/2; }
-    function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px";
-      thumb.style.top=active.offsetTop+"px"; thumb.style.height=active.offsetHeight+"px"; }
+    var ai=tabs.indexOf(active), labIndex=ai, rects=[];
+    // which tab wears the labelled pill; the highlight + that tab's icon/label
+    // morph together (same spring), so the label travels WITH the highlight
+    function setLab(i){ for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle("lab", j===i); }
+    function placeThumb(i){ var r=rects[i]; if(!r) return;
+      thumb.style.left=r.l+"px"; thumb.style.width=r.w+"px"; thumb.style.top=r.t+"px"; thumb.style.height=r.h+"px"; }
+    // pre-measure each tab's box for the layout where IT is the labelled one, with
+    // transitions off, so the highlight can target the right size while the label animates
+    function measure(){
+      bar.classList.add("tb-measure");
+      for(var i=0;i<tabs.length;i++){ setLab(i);
+        rects[i]={l:tabs[i].offsetLeft, w:tabs[i].offsetWidth, t:tabs[i].offsetTop, h:tabs[i].offsetHeight}; }
+      setLab(labIndex);
+      void bar.offsetWidth; bar.classList.remove("tb-measure");
+    }
+    function snap(i, animate){
+      if(!animate) bar.classList.add("tb-measure");
+      labIndex=i; setLab(i); placeThumb(i);
+      if(!animate){ void bar.offsetWidth; bar.classList.remove("tb-measure"); }
+    }
+    function placeIdle(){ measure(); snap(ai, false); }
     placeIdle();
     window.addEventListener("load", placeIdle);
     window.addEventListener("resize", placeIdle);
     window.addEventListener("pageshow", placeIdle);
     if(d.fonts&&d.fonts.ready) d.fonts.ready.then(placeIdle);
 
-    var down=false, drag=false, sx=0, w=0, cand=active, didDrag=false;
-    function nearest(x){ var best=tabs[0],bd=1e9; for(var i=0;i<tabs.length;i++){var dd=Math.abs(cx(tabs[i])-x); if(dd<bd){bd=dd;best=tabs[i];}} return best; }
-    function setCand(t){ cand=t; for(var i=0;i<tabs.length;i++) tabs[i].classList.toggle("cand", tabs[i]===t && t!==active); }
-    function bookPeel(px){ if(!book||RM) return; book.style.transition="none"; book.style.transform="translateY("+px+"px)"; book.style.opacity=String(Math.max(.4, 1-px/180)); }
+    var down=false, drag=false, sx=0, didDrag=false;
+    function indexAt(x){ var n=tabs.length, i=Math.floor(x/(bar.clientWidth/n)); return Math.max(0, Math.min(n-1, i)); }
+    function bookPeel(px){ if(!book||RM) return; book.style.transition="none"; book.style.transform="translateY("+px+"px)"; book.style.opacity=String(Math.max(.45, 1-px/200)); }
     function bookReset(){ if(!book||RM) return; book.style.transition="transform .34s cubic-bezier(.34,1.42,.5,1), opacity .3s ease"; book.style.transform=""; book.style.opacity=""; }
     function leave(href){
       try{ sessionStorage.setItem("px-enter","1"); }catch(e){}
@@ -334,12 +351,12 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     }
     function onMove(e){
       if(!down) return;
-      if(!drag){ if(Math.abs(e.clientX-sx)<8) return; drag=true; didDrag=true; bar.classList.add("tb-drag"); thumb.style.width=w+"px"; }
+      if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; bar.classList.add("tb-drag"); }
       if(e.cancelable) e.preventDefault();
       var x=e.clientX - bar.getBoundingClientRect().left;
-      thumb.style.left=Math.max(0, Math.min(bar.clientWidth-w, x-w/2))+"px";
-      setCand(nearest(x));
-      bookPeel(Math.min(34, Math.abs(x-cx(active))*0.16));
+      var ci=indexAt(x);
+      if(ci!==labIndex) snap(ci, true);          // highlight + label morph to this tab
+      bookPeel(Math.min(34, Math.abs(ci-ai)*18));  // content peels as you move off the page's own tab
     }
     function end(){
       if(!down) return; down=false;
@@ -348,20 +365,15 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
       window.removeEventListener("pointercancel", end);
       if(!drag) return;
       drag=false; bar.classList.remove("tb-drag");
-      for(var i=0;i<tabs.length;i++) tabs[i].classList.remove("cand");
-      thumb.style.transition="";
+      var cand=tabs[labIndex];
       var href=cand&&cand.getAttribute&&cand.getAttribute("href");
-      if(cand && cand!==active && href){
-        thumb.style.left=cand.offsetLeft+"px"; thumb.style.width=cand.offsetWidth+"px";
-        leave(href);
-      } else if(cand && cand!==active && cand.id==="settings-btn"){
-        placeIdle(); bookReset(); cand.click();
-      } else { placeIdle(); bookReset(); }
+      if(labIndex!==ai && href){ leave(href); }
+      else if(labIndex!==ai && cand && cand.id==="settings-btn"){ snap(ai, true); bookReset(); cand.click(); }
+      else { if(labIndex!==ai) snap(ai, true); bookReset(); }
       setTimeout(function(){ didDrag=false; }, 60);
     }
     // listen on window during the gesture (more robust than pointer capture)
-    bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false;
-      sx=e.clientX; w=Math.max(46, Math.round(parseFloat(getComputedStyle(r).fontSize||16)*3.2));
+    bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false; sx=e.clientX;
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", end);
       window.addEventListener("pointercancel", end); });
