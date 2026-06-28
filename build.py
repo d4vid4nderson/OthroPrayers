@@ -214,8 +214,8 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <button class="tab{p_act}" id="prayers-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="prayers-menu" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></button>
-  <button class="tab tab-fab" id="cam-btn" type="button" aria-label="Open the camera to read Greek"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></button>
-  <input id="cam-input" type="file" accept="image/*" capture="environment" hidden>
+  <button class="tab tab-fab" id="cam-btn" type="button" aria-label="Read Greek — take or choose a photo"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></button>
+  <input id="cam-input" type="file" accept="image/*" hidden>
   <button class="tab{r_act}" id="resources-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="resources-menu" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></button>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
@@ -1013,7 +1013,7 @@ def greek_page():
         'translation are approximate; use it as a help, not a final authority.</p>',
         '<div class="gk">',
         '<label class="gk-pick" for="gk-file">Take or choose a photo</label>',
-        '<input id="gk-file" type="file" accept="image/*" capture="environment" hidden>',
+        '<input id="gk-file" type="file" accept="image/*" hidden>',
         '<img id="gk-img" class="gk-img" alt="Your photo" hidden>',
         '<p id="gk-status" class="gk-status" aria-live="polite"></p>',
         '<p class="gk-lbl">Greek <span class="gk-hint">(you can correct it)</span></p>',
