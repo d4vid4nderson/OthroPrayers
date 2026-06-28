@@ -194,9 +194,12 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     Array.prototype.forEach.call(s.el.querySelectorAll(".drawer-link"), function(a){
       a.addEventListener("click", hideAll); });
     var sy=null, dy=0;
-    s.el.addEventListener("touchstart", function(e){ sy=e.touches[0].clientY; dy=0; s.el.style.transition="none"; }, {passive:true});
-    s.el.addEventListener("touchmove", function(e){ if(sy===null) return; dy=e.touches[0].clientY-sy; if(dy>0) s.el.style.transform="translateY("+dy+"px)"; }, {passive:true});
-    s.el.addEventListener("touchend", function(){ s.el.style.transition=""; s.el.style.transform=""; if(dy>70) hideAll(); sy=null; });
+    var atTop=true;
+    s.el.addEventListener("touchstart", function(e){ sy=e.touches[0].clientY; dy=0; atTop=s.el.scrollTop<=0; s.el.style.transition="none"; }, {passive:true});
+    // only drag-to-dismiss when the sheet is scrolled to the top, so swiping
+    // down to scroll the content doesn't drag the whole sheet
+    s.el.addEventListener("touchmove", function(e){ if(sy===null) return; dy=e.touches[0].clientY-sy; if(atTop && dy>0) s.el.style.transform="translateY("+dy+"px)"; }, {passive:true});
+    s.el.addEventListener("touchend", function(){ s.el.style.transition=""; s.el.style.transform=""; if(atTop && dy>70) hideAll(); sy=null; });
   });
   backdrop.addEventListener("click", hideAll);
   d.addEventListener("keydown", function(e){ if(e.key==="Escape") hideAll(); });
