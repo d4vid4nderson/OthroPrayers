@@ -660,7 +660,10 @@ def _links_ul(items):
     return "\n".join(out)
 
 
-BACK = '<a class="res-back" href="resources.html">&larr; All resources</a>'
+_BACK_ARROW = ('<svg class="res-back__i" viewBox="0 0 24 24" width="16" height="16" fill="none" '
+               'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+               'aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>')
+BACK = f'<a class="res-back" href="resources.html">{_BACK_ARROW}<span>All resources</span></a>'
 
 
 def topic_page(topic, ornament=""):
