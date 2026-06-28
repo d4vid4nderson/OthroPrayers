@@ -329,9 +329,10 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 
   paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
 
-  // ---- draggable highlight + spring page transition --------------------
-  // Pull the active pill onto another tab; the current content peels down and
-  // the next page's content springs up. Tapping a tab still navigates normally.
+  // ---- tab bar: sliding highlight + spring page transition --------------
+  // Every tab navigation (tap OR drag-release) plays the same transition: the
+  // current page content springs DOWN, then the next page's content springs UP.
+  // Dragging slides a single highlight smoothly; tapping is instant-to-trigger.
   (function(){
     var bar=d.querySelector(".tabbar"); if(!bar) return;
     var thumb=bar.querySelector(".tab-thumb");
@@ -340,60 +341,46 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     var book=d.querySelector("main.book");
     if(!thumb||!active||tabs.length<2) return;
     var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var ai=tabs.indexOf(active), labIndex=ai, rects=[];
-    // which tab wears the labelled pill; the highlight + that tab's icon/label
-    // morph together (same spring), so the label travels WITH the highlight
-    function setLab(i){ for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle("lab", j===i); }
-    function placeThumb(i){ var r=rects[i]; if(!r) return;
-      thumb.style.left=r.l+"px"; thumb.style.width=r.w+"px"; thumb.style.top=r.t+"px"; thumb.style.height=r.h+"px"; }
-    // pre-measure each tab's box for the layout where IT is the labelled one, with
-    // transitions off, so the highlight can target the right size while the label animates
-    function measure(){
-      bar.classList.add("tb-measure");
-      for(var i=0;i<tabs.length;i++){ setLab(i);
-        rects[i]={l:tabs[i].offsetLeft, w:tabs[i].offsetWidth, t:tabs[i].offsetTop, h:tabs[i].offsetHeight}; }
-      setLab(labIndex);
-      void bar.offsetWidth; bar.classList.remove("tb-measure");
-    }
-    function snap(i, animate){
-      if(!animate) bar.classList.add("tb-measure");
-      labIndex=i; setLab(i); placeThumb(i);
-      if(!animate){ void bar.offsetWidth; bar.classList.remove("tb-measure"); }
-    }
-    function placeIdle(){ measure(); snap(ai, false); }
+    var ai=tabs.indexOf(active);
+    function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px";
+      thumb.style.top=active.offsetTop+"px"; thumb.style.height=active.offsetHeight+"px"; }
     placeIdle();
     window.addEventListener("load", placeIdle);
     window.addEventListener("resize", placeIdle);
     window.addEventListener("pageshow", placeIdle);
     if(d.fonts&&d.fonts.ready) d.fonts.ready.then(placeIdle);
 
-    var down=false, drag=false, sx=0, didDrag=false;
+    var down=false, drag=false, didDrag=false, sx=0, w=0, cand=ai;
     function indexAt(x){ var n=tabs.length, i=Math.floor(x/(bar.clientWidth/n)); return Math.max(0, Math.min(n-1, i)); }
-    // the content is coupled to the drag: as the highlight is pulled away from
-    // the page's own tab, the content follows DOWN in real time (so it feels
-    // attached); it springs back UP if you return home, and the next page
-    // springs up on enter.
+    function setCand(i){ cand=i; for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle("cand", j===i && j!==ai); }
     function bookFollow(f){ if(!book||RM) return;
-      book.style.transition="transform .13s cubic-bezier(.2,.7,.3,1), opacity .13s ease";
-      book.style.transform="translateY("+(f*62)+"px)"; book.style.opacity=String(1-Math.min(.82, f*0.9)); }
+      book.style.transition="transform .12s cubic-bezier(.2,.7,.3,1), opacity .12s ease";
+      book.style.transform="translateY("+(f*58)+"px)"; book.style.opacity=String(1-Math.min(.8, f*0.9)); }
     function bookUp(){ if(!book||RM) return;
-      book.style.transition="transform .46s cubic-bezier(.34,1.5,.5,1), opacity .34s ease";
+      book.style.transition="transform .42s cubic-bezier(.34,1.3,.5,1), opacity .32s ease";
       book.style.transform=""; book.style.opacity=""; }
-    function leave(href){
+    // the shared transition: spring the content down, flag the next page to
+    // spring up (EARLY_JS reads px-enter and runs the px-in keyframe)
+    function navTo(href){
       try{ sessionStorage.setItem("px-enter","1"); }catch(e){}
-      if(book && !RM){ book.style.transition="transform .2s cubic-bezier(.4,0,.7,1), opacity .2s ease"; book.style.transform="translateY(86px)"; book.style.opacity="0";
-        setTimeout(function(){ location.href=href; }, 190); }
+      if(book && !RM){ book.style.transition="transform .22s cubic-bezier(.4,0,.7,1), opacity .22s ease"; book.style.transform="translateY(80px)"; book.style.opacity="0";
+        setTimeout(function(){ location.href=href; }, 200); }
       else location.href=href;
     }
+    // tap to navigate, with the same spring transition (skip if a drag just ran)
+    tabs.forEach(function(t){ var href=t.getAttribute&&t.getAttribute("href"); if(!href) return;
+      t.addEventListener("click", function(e){ if(didDrag) return; e.preventDefault(); navTo(href); }); });
+
     function onMove(e){
       if(!down) return;
-      if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; bar.classList.add("tb-drag"); }
+      if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; bar.classList.add("tb-drag");
+        w=Math.max(46, Math.round((parseFloat(getComputedStyle(r).fontSize)||16)*3)); thumb.style.width=w+"px"; }
       if(e.cancelable) e.preventDefault();
       var x=e.clientX - bar.getBoundingClientRect().left;
-      var ci=indexAt(x);
-      if(ci!==labIndex) snap(ci, true);    // highlight + label morph to this tab
-      // couple the content to how far the highlight has been pulled from home
-      var hc=rects[ai] ? rects[ai].l + rects[ai].w/2 : x;
+      thumb.style.left=Math.max(0, Math.min(bar.clientWidth-w, x-w/2))+"px";   // 1:1 with the finger
+      setCand(indexAt(x));
+      // content follows the drag continuously: distance of the finger from the page's own tab
+      var hc=(ai + 0.5) * (bar.clientWidth/tabs.length);
       bookFollow(Math.min(1, Math.abs(x-hc)/(bar.clientWidth*0.55)));
     }
     function end(){
@@ -403,20 +390,17 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
       window.removeEventListener("pointercancel", end);
       if(!drag) return;
       drag=false; bar.classList.remove("tb-drag");
-      var cand=tabs[labIndex];
-      var href=cand&&cand.getAttribute&&cand.getAttribute("href");
-      if(labIndex!==ai && href){ leave(href); }
-      else if(labIndex!==ai && cand && cand.id==="settings-btn"){ snap(ai, true); bookUp(); cand.click(); }
-      else { if(labIndex!==ai) snap(ai, true); bookUp(); }
+      for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("cand");
+      var t=tabs[cand], href=t&&t.getAttribute&&t.getAttribute("href");
+      if(cand!==ai && href){ navTo(href); }
+      else if(cand!==ai && t && t.id==="settings-btn"){ placeIdle(); bookUp(); t.click(); }
+      else { placeIdle(); bookUp(); }
       setTimeout(function(){ didDrag=false; }, 60);
     }
-    // listen on window during the gesture (more robust than pointer capture)
     bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false; sx=e.clientX;
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", end);
       window.addEventListener("pointercancel", end); });
-    // swallow the click that follows a drag so the link under the finger doesn't also fire
-    bar.addEventListener("click", function(e){ if(didDrag){ e.preventDefault(); e.stopPropagation(); } }, true);
   })();
 })();
 </script>
