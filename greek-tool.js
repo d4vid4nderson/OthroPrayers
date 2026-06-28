@@ -1,11 +1,11 @@
-/* Greek photo translator (Resources tool). Photo -> on-device OCR (Tesseract.js,
- * loaded from CDN on first use) -> transliteration + English (free MyMemory API).
- * Online-only and approximate; isolated to this page. No backend or keys. */
+/* Greek photo translator (Resources tool). Photo -> light image clean-up ->
+ * on-device OCR (Tesseract.js, modern Greek) -> transliteration + a rough
+ * inline translation, with a one-tap hand-off to Google Translate (much better
+ * quality). Online-only and approximate; best on clear, printed Greek. */
 (function () {
   var fileIn, img, status, gEl, tEl, enEl, gt, go;
   function $(id) { return document.getElementById(id); }
 
-  // strip Greek diacritics, then map letters to Latin
   var MAP = { "α": "a", "β": "v", "γ": "g", "δ": "d", "ε": "e", "ζ": "z", "η": "i",
     "θ": "th", "ι": "i", "κ": "k", "λ": "l", "μ": "m", "ν": "n", "ξ": "x", "ο": "o",
     "π": "p", "ρ": "r", "σ": "s", "ς": "s", "τ": "t", "υ": "y", "φ": "f", "χ": "ch",
@@ -32,27 +32,49 @@
     });
   }
 
-  function onFile() {
-    var f = fileIn.files && fileIn.files[0];
-    if (!f) return;
-    img.src = URL.createObjectURL(f); img.hidden = false;
-    process(f);
+  // grayscale + contrast + sensible scale — OCR is far better on a clean,
+  // high-contrast image at a workable size
+  function prep(src) {
+    return new Promise(function (res) {
+      var im = new Image();
+      im.onload = function () {
+        var w = im.width, h = im.height, mx = 1800, mn = 1100, s = 1;
+        if (Math.max(w, h) > mx) s = mx / Math.max(w, h);
+        else if (Math.max(w, h) < mn) s = mn / Math.max(w, h);
+        var c = document.createElement("canvas");
+        c.width = Math.round(w * s); c.height = Math.round(h * s);
+        var x = c.getContext("2d");
+        x.drawImage(im, 0, 0, c.width, c.height);
+        try {
+          var d = x.getImageData(0, 0, c.width, c.height), a = d.data, i, g;
+          for (i = 0; i < a.length; i += 4) {
+            g = 0.299 * a[i] + 0.587 * a[i + 1] + 0.114 * a[i + 2];
+            g = (g - 128) * 1.6 + 128;            // boost contrast
+            g = g < 0 ? 0 : g > 255 ? 255 : g;
+            a[i] = a[i + 1] = a[i + 2] = g;
+          }
+          x.putImageData(d, 0, 0);
+        } catch (e) { /* tainted canvas etc. — fall back to the raw draw */ }
+        res(c);
+      };
+      im.onerror = function () { res(null); };
+      im.src = (typeof src === "string") ? src : URL.createObjectURL(src);
+    });
   }
 
-  // src may be a File/Blob or a data-URL string — Tesseract accepts both
   function process(src) {
     gEl.value = ""; tEl.textContent = ""; enEl.textContent = ""; gt.hidden = true;
     setStatus("Loading the reader…");
-    loadTesseract().then(function () {
+    loadTesseract().then(function () { return prep(src); }).then(function (canvas) {
       setStatus("Reading the Greek…");
-      return Tesseract.recognize(src, "ell+grc", {
+      return Tesseract.recognize(canvas || src, "ell", {
         logger: function (m) {
           if (m.status === "recognizing text") setStatus("Reading the Greek… " + Math.round(m.progress * 100) + "%");
         }
       });
     }).then(function (r) {
-      var text = ((r && r.data && r.data.text) || "").trim();
-      if (!text) { setStatus("No Greek text found — try a clearer, closer photo."); return; }
+      var text = ((r && r.data && r.data.text) || "").replace(/[ \t]+\n/g, "\n").trim();
+      if (!text) { setStatus("No Greek text found — try a clearer, straight-on, well-lit photo."); return; }
       gEl.value = text; tEl.textContent = translit(text);
       translate(text);
     }).catch(function () {
@@ -69,11 +91,16 @@
       .then(function (r) { return r.json(); })
       .then(function (j) {
         var en = j && j.responseData && j.responseData.translatedText;
-        enEl.textContent = en || "(no translation)";
-        setStatus(clean.length > 480 ? "Translated the first part — open in Google Translate for the rest." : "");
+        var bad = !en || (j.responseStatus && j.responseStatus !== 200) ||
+                  /MYMEMORY WARNING|INVALID|PLEASE SELECT|^[\s?]*$/i.test(en);
+        enEl.textContent = bad
+          ? "A reliable translation isn’t available here — tap “Open in Google Translate” below for a much better result."
+          : en + (clean.length > 480 ? " …" : "");
+        setStatus("");
       })
       .catch(function () {
-        setStatus("Translation needs internet — you can still copy the Greek, or open Google Translate.");
+        enEl.textContent = "";
+        setStatus("Couldn’t translate here — open in Google Translate, or check your connection.");
       });
   }
 
@@ -84,13 +111,19 @@
     if (!fileIn) return;
     fileIn.addEventListener("change", onFile);
     if (go) go.onclick = function () { var t = gEl.value.trim(); if (t) translate(t); };
-    // a photo handed off from the centre camera button — process it at once
     var handed = sessionStorage.getItem("gk-photo");
     if (handed) {
       sessionStorage.removeItem("gk-photo");
       img.src = handed; img.hidden = false;
       process(handed);
     }
+  }
+
+  function onFile() {
+    var f = fileIn.files && fileIn.files[0];
+    if (!f) return;
+    img.src = URL.createObjectURL(f); img.hidden = false;
+    process(f);
   }
 
   if (document.readyState !== "loading") ready();
