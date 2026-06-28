@@ -749,8 +749,12 @@ html[data-theme="dark"] .tw-strict{ color:var(--rubric); }
   line-height:1.5; padding:.6rem; border-radius:8px; border:1px solid #d9d2c4;
   background:var(--paper); color:var(--ink); }
 html[data-theme="dark"] .gk-greek{ border-color:#4a4a51; }
-.gk-translit{ text-indent:0; font-style:italic; opacity:.85; }
-.gk-en{ text-indent:0; font-size:1.15rem; line-height:1.5; }
+.gk-translit{ text-indent:0; text-align:left; font-style:italic; opacity:.85;
+  line-height:1.5; white-space:pre-wrap; }
+.gk-en{ text-indent:0; text-align:left; font-size:1.15rem; line-height:1.6;
+  white-space:pre-wrap; background:rgba(0,0,0,.035); border-radius:8px; padding:.7rem .85rem; margin:.2rem 0; }
+html[data-theme="dark"] .gk-en{ background:rgba(255,255,255,.05); }
+.gk-en:empty{ display:none; }
 .gk .cta{ margin-top:.7rem; max-width:none; }
 /* highlight the current page in the menu */
 .drawer-link.active{ color:var(--rubric); }

@@ -114,7 +114,9 @@
   }
 
   function translate(text) {
-    var clean = text.replace(/\s+/g, " ").trim();
+    // keep line breaks (collapse only runs of spaces/tabs) so lists/verses stay
+    // legible line-by-line instead of one justified blob
+    var clean = text.replace(/[ \t]+/g, " ").replace(/[ \t]*\n[ \t]*/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
     gt.href = "https://translate.google.com/?sl=el&tl=en&op=translate&text=" + encodeURIComponent(clean);
     gt.hidden = false;
     setStatus("Translating…");
