@@ -313,10 +313,16 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     function rem(){ return parseFloat(getComputedStyle(r).fontSize)||16; }
     function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px";
       thumb.style.top=active.offsetTop+"px"; thumb.style.height=active.offsetHeight+"px"; }
-    placeIdle();
+    // full reset — clears any half-finished drag/transition (e.g. a bfcache
+    // restore that froze the page mid-exit with faded content)
+    function reset(){ if(raf){ cancelAnimationFrame(raf); raf=0; } bar.classList.remove("tb-drag");
+      for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("cand");
+      if(book){ book.style.transition=""; book.style.transform=""; book.style.opacity=""; } placeIdle(); }
+    reset();
     window.addEventListener("load", placeIdle);
     window.addEventListener("resize", placeIdle);
-    window.addEventListener("pageshow", placeIdle);
+    window.addEventListener("pageshow", reset);          // bfcache restore -> clean state
+    window.addEventListener("pagehide", function(){ if(book){ book.style.transition=""; book.style.transform=""; book.style.opacity=""; } });
     if(d.fonts&&d.fonts.ready) d.fonts.ready.then(placeIdle);
 
     function slotW(){ return bar.clientWidth/N; }
@@ -344,7 +350,6 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     }
     function startLiquid(fromC){ baseW=Math.round(rem()*3); baseH=active.offsetHeight||Math.round(rem()*2.7);
       bar.classList.add("tb-drag"); hx=fromC; tx=fromC; vel=0; if(!raf) raf=requestAnimationFrame(tick); }
-    function settleTo(toC, cb){ tx=toC; onSettle=cb; if(!raf) raf=requestAnimationFrame(tick); }
 
     function bookFollow(f){ if(!book||RM) return;
       book.style.transition="transform .12s cubic-bezier(.2,.7,.3,1), opacity .12s ease";
@@ -359,20 +364,19 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
       setTimeout(function(){ location.href=href; }, RM?0:230);
     }
 
-    // tap: the blob flows to the tapped tab while the content springs down
-    tabs.forEach(function(t, idx){ var href=t.getAttribute&&t.getAttribute("href"); if(!href) return;
-      t.addEventListener("click", function(e){ if(didDrag) return; e.preventDefault();
-        if(!RM){ startLiquid(slotCenter(ai)); setCand(idx); tx=slotCenter(idx); if(!raf) raf=requestAnimationFrame(tick); }
-        navTo(href); }); });
+    // tap: just the content spring transition (no drag machinery, always reliable)
+    tabs.forEach(function(t){ var href=t.getAttribute&&t.getAttribute("href"); if(!href) return;
+      t.addEventListener("click", function(e){ if(didDrag) return; e.preventDefault(); navTo(href); }); });
 
-    var down=false, drag=false, didDrag=false, sx=0;
+    var down=false, drag=false, didDrag=false, sx=0, candi=ai;
     function onMove(e){
       if(!down) return;
       if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; startLiquid(slotCenter(ai)); }
       if(e.cancelable) e.preventDefault();
       var x=e.clientX - bar.getBoundingClientRect().left;
       tx=Math.max(baseW/2, Math.min(bar.clientWidth-baseW/2, x));      // blob target follows the finger
-      setCand(indexAt(x));
+      if(!raf) raf=requestAnimationFrame(tick);                        // restart if the spring had settled
+      candi=indexAt(x); setCand(candi);                                // candidate from the finger, not the lagging blob
       bookFollow(Math.min(1, Math.abs(x-slotCenter(ai))/(bar.clientWidth*0.55)));
     }
     function end(){
@@ -381,10 +385,11 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
       window.removeEventListener("pointerup", end);
       window.removeEventListener("pointercancel", end);
       if(!drag) return; drag=false;
-      var ci=indexAt(hx), t=tabs[ci], href=t&&t.getAttribute&&t.getAttribute("href");
-      if(ci!==ai && href){ tx=slotCenter(ci); if(!raf) raf=requestAnimationFrame(tick); navTo(href); }
-      else if(ci!==ai && t && t.id==="settings-btn"){ settleTo(slotCenter(ai), function(){ bar.classList.remove("tb-drag"); clearCand(); placeIdle(); }); bookUp(); t.click(); }
-      else { settleTo(slotCenter(ai), function(){ bar.classList.remove("tb-drag"); clearCand(); placeIdle(); }); bookUp(); }
+      if(raf){ cancelAnimationFrame(raf); raf=0; }     // stop the liquid; cleanup immediately (no rAF dependency)
+      var ci=candi, t=tabs[ci], href=t&&t.getAttribute&&t.getAttribute("href");
+      if(ci!==ai && href){ navTo(href); }              // navigate (the reload clears the drag state)
+      else { bar.classList.remove("tb-drag"); for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("cand");
+        placeIdle(); bookUp(); if(ci!==ai && t && t.id==="settings-btn") t.click(); }
       setTimeout(function(){ didDrag=false; }, 60);
     }
     bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false; sx=e.clientX;
