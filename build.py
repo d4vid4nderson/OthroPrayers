@@ -1187,7 +1187,7 @@ document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
-GREEK_JS = '<script src="greek-tool.js?v=6" defer></script>'
+GREEK_JS = '<script src="greek-tool.js?v=7" defer></script>'
 
 
 def greek_page():
