@@ -15,9 +15,30 @@
 // on-device reader.
 module.exports = async (req, res) => {
   const key = process.env.GOOGLE_API_KEY;
-  // health check: visit /api/greek in a browser to confirm the function is
-  // deployed and whether the key is wired (the key itself is never returned)
-  if (req.method === "GET") { res.status(200).json({ ok: true, configured: !!key }); return; }
+  // health check: visit /api/greek to confirm the function is deployed and
+  // whether the key is wired. Visit /api/greek?test=1 to actually exercise the
+  // Cloud Translation API and see whether it (not just Vision) works — the key
+  // itself is never returned.
+  if (req.method === "GET") {
+    if (key && /[?&]test=1\b/.test(req.url || "")) {
+      try {
+        const tr = await fetch("https://translation.googleapis.com/language/translate/v2?key=" + key, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ q: "καλημέρα", source: "el", target: "en", format: "text" })
+        });
+        const tj = await tr.json();
+        const t0 = tj && tj.data && tj.data.translations && tj.data.translations[0];
+        res.status(200).json({
+          ok: true, configured: true, translateStatus: tr.status,
+          translateOk: !!(t0 && t0.translatedText),
+          sample: (t0 && t0.translatedText) || null,
+          error: (tj && tj.error && tj.error.message) || null
+        });
+      } catch (e) { res.status(200).json({ ok: true, configured: true, translateOk: false, error: String(e) }); }
+      return;
+    }
+    res.status(200).json({ ok: true, configured: !!key }); return;
+  }
   if (req.method !== "POST") { res.status(405).json({ error: "POST only" }); return; }
   if (!key) { res.status(503).json({ error: "not_configured" }); return; }
   try {
@@ -42,7 +63,7 @@ module.exports = async (req, res) => {
     const greek = ((r0 && r0.fullTextAnnotation && r0.fullTextAnnotation.text) || "").trim();
     if (!greek) { res.status(200).json({ greek: "", english: "" }); return; }
 
-    let english = "";
+    let english = "", tnote = null;
     const tr = await fetch("https://translation.googleapis.com/language/translate/v2?key=" + key, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ q: greek, source: "el", target: "en", format: "text" })
@@ -50,8 +71,11 @@ module.exports = async (req, res) => {
     const tj = await tr.json();
     const t0 = tj && tj.data && tj.data.translations && tj.data.translations[0];
     if (t0 && t0.translatedText) english = t0.translatedText;
+    // when translation fails (e.g. the Cloud Translation API isn't enabled, or
+    // the key is restricted to Vision only), pass the reason back for debugging
+    else tnote = (tj && tj.error && tj.error.message) || ("translate http " + tr.status);
 
-    res.status(200).json({ greek, english });
+    res.status(200).json({ greek, english, tnote });
   } catch (e) {
     res.status(500).json({ error: "failed" });
   }

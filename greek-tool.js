@@ -89,9 +89,12 @@
       return (durl ? tryBackend(durl) : Promise.resolve(null)).then(function (best) {
         if (best && best.greek) {                 // server read it
           gEl.value = best.greek; tEl.textContent = translit(best.greek);
-          enEl.textContent = best.english || "";
-          gt.href = googleUrl(best.greek); gt.hidden = false;
-          setStatus("");
+          gt.href = googleUrl(best.greek);
+          if (best.english) {                      // server also translated it
+            enEl.textContent = best.english; gt.hidden = false; setStatus("");
+          } else {                                 // OCR worked but translation didn't —
+            translate(best.greek);                 // fall back to the free translator + button
+          }
           return;
         }
         return ocrFallback(canvas || src);         // on-device reader
