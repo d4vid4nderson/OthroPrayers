@@ -110,7 +110,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     </span>
   </div>
   <div class="menu-col">
-    <span class="menu-label">Primary colour</span>
+    <span class="menu-label">Primary colour <span class="menu-pick" id="primary-pick">Default</span></span>
     <div class="swatches" role="group" aria-label="primary colour">
 <button class="swatch swatch-default" type="button" data-k="primary" data-c="" style="--sw:#b3322a" title="Default" aria-label="Default" aria-pressed="true"></button>
 <button class="swatch" type="button" data-k="primary" data-c="red" style="--sw:#ef4444" title="Red" aria-label="red" aria-pressed="false"></button>
@@ -134,7 +134,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 </div>
   </div>
   <div class="menu-col">
-    <span class="menu-label">Secondary colour</span>
+    <span class="menu-label">Secondary colour <span class="menu-pick" id="secondary-pick">Default</span></span>
     <div class="swatches" role="group" aria-label="secondary colour">
 <button class="swatch swatch-default" type="button" data-k="secondary" data-c="" style="--sw:#9a7b1e" title="Default" aria-label="Default" aria-pressed="true"></button>
 <button class="swatch" type="button" data-k="secondary" data-c="red" style="--sw:#ef4444" title="Red" aria-label="red" aria-pressed="false"></button>
@@ -156,6 +156,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 <button class="swatch" type="button" data-k="secondary" data-c="rose" style="--sw:#f43f5e" title="Rose" aria-label="rose" aria-pressed="false"></button>
 <button class="swatch" type="button" data-k="secondary" data-c="slate" style="--sw:#64748b" title="Slate" aria-label="slate" aria-pressed="false"></button>
 </div>
+    <button class="menu-reset" id="appearance-reset" type="button">Reset to default</button>
   </div>
   <div class="menu-row">
     <span class="menu-label">Dyslexia-friendly</span>
@@ -242,13 +243,24 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 
   // primary / secondary colour swatches (Tailwind families; "" = brand default)
   var swatches=d.querySelectorAll(".swatch");
-  function paintSwatches(){ Array.prototype.forEach.call(swatches,function(b){
-    var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||""; var cur=L.getItem(k)||"";
-    b.setAttribute("aria-pressed", c===cur?"true":"false"); }); }
+  function pickName(k){ var c=L.getItem(k)||""; return c?c.charAt(0).toUpperCase()+c.slice(1):"Default"; }
+  function paintSwatches(){
+    Array.prototype.forEach.call(swatches,function(b){
+      var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||""; var cur=L.getItem(k)||"";
+      b.setAttribute("aria-pressed", c===cur?"true":"false"); });
+    var pp=d.getElementById("primary-pick"), sp=d.getElementById("secondary-pick");
+    if(pp) pp.textContent=pickName("primary"); if(sp) sp.textContent=pickName("secondary"); }
   Array.prototype.forEach.call(swatches,function(b){ b.onclick=function(){
     var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||"";
     if(c){ r.dataset[k]=c; L.setItem(k,c); } else { delete r.dataset[k]; L.removeItem(k); }
     paintSwatches(); }; });
+  // reset all appearance choices back to the brand default
+  var rst=d.getElementById("appearance-reset");
+  if(rst) rst.onclick=function(){
+    delete r.dataset.primary; L.removeItem("primary");
+    delete r.dataset.secondary; L.removeItem("secondary");
+    delete r.dataset.temp; L.setItem("temp","warm");
+    paintSwatches(); paintTemp(); };
 
   var dys=d.getElementById("dys");
   function paintDys(){ dys.setAttribute("aria-checked", r.dataset.font==="dyslexic"?"true":"false"); }

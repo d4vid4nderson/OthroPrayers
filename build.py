@@ -23,8 +23,9 @@ content = re.sub(r'<figure class="icon">.*?</figure>\s*', "", content, flags=re.
 
 LANDING = '''<section class="cover landing" id="top">
   <figure class="coverimg">
-    <img src="assets/img/icon_p1.png" width="742" height="787"
-         alt="Icon of the Mother of God “of the Sign” (Znamenie)">
+    <span class="reframe"><span class="reicon" role="img"
+      aria-label="Icon of the Mother of God &ldquo;of the Sign&rdquo; (Znamenie)"
+      style="--m:url(assets/img/icon_p1-mask.png); aspect-ratio:760/806"></span></span>
   </figure>
   <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>
   <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
@@ -271,12 +272,13 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     </span>
   </div>
   <div class="menu-col">
-    <span class="menu-label">Primary colour</span>
+    <span class="menu-label">Primary colour <span class="menu-pick" id="primary-pick">Default</span></span>
     {primary_sw}
   </div>
   <div class="menu-col">
-    <span class="menu-label">Secondary colour</span>
+    <span class="menu-label">Secondary colour <span class="menu-pick" id="secondary-pick">Default</span></span>
     {secondary_sw}
+    <button class="menu-reset" id="appearance-reset" type="button">Reset to default</button>
   </div>
   <div class="menu-row">
     <span class="menu-label">Dyslexia-friendly</span>
@@ -971,6 +973,40 @@ def _emblem(kind):
     return f'<span class="res-card-emblem" aria-hidden="true">{ORN[kind][0]}</span>'
 
 
+# the red woodcut icons recoloured to follow the chosen primary colour: the ink
+# becomes a CSS mask filled with --rubric, so it tracks the theme (the hatching
+# is preserved as the mask's alpha). Mounted on a paper plate like a panel icon.
+ICON_MASKS = [
+    ("assets/img/icon_p1.png", "assets/img/icon_p1-mask.png", 760, 806),
+    ("assets/img/icon_p15.png", "assets/img/icon_p15-mask.png", 820, 981),
+]
+
+
+def reicon(mask, w, h, alt):
+    return (f'<span class="reframe"><span class="reicon" role="img" aria-label="{alt}" '
+            f'style="--m:url({mask}); aspect-ratio:{w}/{h}"></span></span>')
+
+
+def gen_icon_masks():
+    """Turn the opaque red-on-white woodcuts into alpha masks (ink → alpha) so
+    CSS can fill them with the live accent colour. Needs Pillow at build time;
+    if absent, the committed masks are reused."""
+    try:
+        from PIL import Image, ImageChops, ImageOps
+    except ImportError:
+        print("Pillow not available — keeping existing icon masks"); return
+    for src, dst, _w, _h in ICON_MASKS:
+        if not os.path.exists(src):
+            continue
+        im = Image.open(src).convert("RGB")
+        r, g, b = im.split()
+        mn = ImageChops.darker(ImageChops.darker(r, g), b)   # per-pixel min channel
+        alpha = ImageOps.autocontrast(ImageChops.invert(mn))  # 255-min, stretched
+        out = Image.new("RGBA", im.size, (0, 0, 0, 0)); out.putalpha(alpha)
+        out.save(dst)
+    print("wrote icon masks", len(ICON_MASKS))
+
+
 def hub_page():
     o = ['<section class="resources resources-hub" id="top">', _divider("Resources"),
          '<p class="res-intro">Explore the faith — by topic.</p>']
@@ -1035,8 +1071,9 @@ AFPB_TITLES = {slug: title for slug, title, _ in AFPB}
 PILL = '<span class="pill pill-ancient">Ancient Faith Prayer Book</span>'
 
 # the Christ-the-Teacher icon, moved here from the foot of Morning Prayers
-CHRIST_FIG = ('<figure class="icon"><img src="assets/img/icon_p15.png" width="500" height="598" '
-              'alt="Icon of Christ the Teacher"><figcaption>Christ the Teacher</figcaption></figure>')
+CHRIST_FIG = ('<figure class="icon">'
+              + reicon("assets/img/icon_p15-mask.png", 820, 981, "Icon of Christ the Teacher")
+              + '<figcaption>Christ the Teacher</figcaption></figure>')
 
 _ancient_src = open("ancient.content.html").read() if os.path.exists("ancient.content.html") else ""
 _ancient_src = _drawn_crosses(_ancient_src)
@@ -1260,13 +1297,24 @@ CONTROL_JS = '''<script>
 
   // primary / secondary colour swatches (Tailwind families; "" = brand default)
   var swatches=d.querySelectorAll(".swatch");
-  function paintSwatches(){ Array.prototype.forEach.call(swatches,function(b){
-    var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||""; var cur=L.getItem(k)||"";
-    b.setAttribute("aria-pressed", c===cur?"true":"false"); }); }
+  function pickName(k){ var c=L.getItem(k)||""; return c?c.charAt(0).toUpperCase()+c.slice(1):"Default"; }
+  function paintSwatches(){
+    Array.prototype.forEach.call(swatches,function(b){
+      var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||""; var cur=L.getItem(k)||"";
+      b.setAttribute("aria-pressed", c===cur?"true":"false"); });
+    var pp=d.getElementById("primary-pick"), sp=d.getElementById("secondary-pick");
+    if(pp) pp.textContent=pickName("primary"); if(sp) sp.textContent=pickName("secondary"); }
   Array.prototype.forEach.call(swatches,function(b){ b.onclick=function(){
     var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||"";
     if(c){ r.dataset[k]=c; L.setItem(k,c); } else { delete r.dataset[k]; L.removeItem(k); }
     paintSwatches(); }; });
+  // reset all appearance choices back to the brand default
+  var rst=d.getElementById("appearance-reset");
+  if(rst) rst.onclick=function(){
+    delete r.dataset.primary; L.removeItem("primary");
+    delete r.dataset.secondary; L.removeItem("secondary");
+    delete r.dataset.temp; L.setItem("temp","warm");
+    paintSwatches(); paintTemp(); };
 
   var dys=d.getElementById("dys");
   function paintDys(){ dys.setAttribute("aria-checked", r.dataset.font==="dyslexic"?"true":"false"); }
@@ -1412,6 +1460,18 @@ BRAND_PRIMARY = "#b3322a"   # cinnabar
 BRAND_SECONDARY = "#9a7b1e" # gold
 
 
+def _lum(hx):
+    """WCAG relative luminance of a #rrggbb colour (0–1)."""
+    h = hx.lstrip("#"); ch = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    ch = [(c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4) for c in ch]
+    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]
+
+
+def _on(hx):
+    """Readable text colour to place on a fill of hx (the contrast guard)."""
+    return "#1b1b1b" if _lum(hx) > 0.45 else "#ffffff"
+
+
 def themes_css():
     """Generated stylesheet: background temperature + Tailwind primary/secondary."""
     o = ["/* generated by build.py — user theming (do not edit by hand) */",
@@ -1423,13 +1483,17 @@ def themes_css():
          "/* primary colour (accent: titles, active state, buttons, FAB) */"]
     for fam in TW_ORDER:
         c = TW[fam]
-        o.append(f'html[data-primary="{fam}"]{{ --rubric:{c["700"]}; --rubric-deep:{c["800"]}; }}')
-        o.append(f'html[data-theme="dark"][data-primary="{fam}"]{{ --rubric:{c["400"]}; --rubric-deep:{c["500"]}; }}')
+        # --on-rubric: text colour for fills of --rubric (contrast guard — light
+        # hues like yellow/lime need dark text instead of white)
+        o.append(f'html[data-primary="{fam}"]{{ --rubric:{c["700"]}; --rubric-deep:{c["800"]}; --on-rubric:{_on(c["700"])}; }}')
+        o.append(f'html[data-theme="dark"][data-primary="{fam}"]{{ --rubric:{c["400"]}; --rubric-deep:{c["500"]}; --on-rubric:{_on(c["400"])}; }}')
     o.append("/* secondary colour (gilding accent) */")
     for fam in TW_ORDER:
         c = TW[fam]
-        o.append(f'html[data-secondary="{fam}"]{{ --gold:{c["600"]}; }}')
-        o.append(f'html[data-theme="dark"][data-secondary="{fam}"]{{ --gold:{c["400"]}; }}')
+        # --on-gold: readable text/mark colour on a --gold fill (the Ancient pill,
+        # the lit office node) — dark secondaries need light text and vice-versa
+        o.append(f'html[data-secondary="{fam}"]{{ --gold:{c["600"]}; --on-gold:{_on(c["600"])}; }}')
+        o.append(f'html[data-theme="dark"][data-secondary="{fam}"]{{ --gold:{c["400"]}; --on-gold:{_on(c["400"])}; }}')
     return "\n".join(o) + "\n"
 
 
@@ -1647,6 +1711,9 @@ print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "mov
 # generated theming stylesheet (background temperature + Tailwind primary/secondary)
 open("themes.css", "w").write(themes_css())
 print("wrote themes.css", len(TW_ORDER), "colour families")
+
+# recolourable masks for the red woodcut icons (so they follow the primary colour)
+gen_icon_masks()
 
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
