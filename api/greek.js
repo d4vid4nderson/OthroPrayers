@@ -14,8 +14,11 @@
 // browser. Until it is set, this returns 503 and the client falls back to the
 // on-device reader.
 module.exports = async (req, res) => {
-  if (req.method !== "POST") { res.status(405).json({ error: "POST only" }); return; }
   const key = process.env.GOOGLE_API_KEY;
+  // health check: visit /api/greek in a browser to confirm the function is
+  // deployed and whether the key is wired (the key itself is never returned)
+  if (req.method === "GET") { res.status(200).json({ ok: true, configured: !!key }); return; }
+  if (req.method !== "POST") { res.status(405).json({ error: "POST only" }); return; }
   if (!key) { res.status(503).json({ error: "not_configured" }); return; }
   try {
     let body = req.body;
