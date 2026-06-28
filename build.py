@@ -870,7 +870,6 @@ RES_CARDS = [
     ("The Bible & Its Canon", "bible.html", "How the Church received the Scriptures — canon, Septuagint, the books.", "gospel"),
     ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith.", "chirho"),
     ("The Church Calendar", "calendar.html", "Feast days for your phone — old- and new-calendar downloads.", "cal"),
-    ("Greek Photo Translator", "greek.html", "Photograph Greek text — an icon, a sign, a service book — and read it in English.", "chirho"),
     ("Recommended Reading", "reading.html", "A few books to go deeper.", "rule"),
 ]
 
