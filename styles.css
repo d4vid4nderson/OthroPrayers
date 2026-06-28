@@ -564,13 +564,9 @@ html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%,
 .tab-i{ display:flex; align-items:center; justify-content:center; }
 .tab-i svg{ width:1.5rem; height:1.5rem; }
 .tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap; }
-/* the active page's tab: a solid filled rounded pill wrapping the icon AND its
-   label, hugging their size and centred in the bar (icon/label recoloured) */
-.tab.active{ flex:0 1 auto; align-self:center; min-height:0; opacity:1;
-  background:var(--rubric); color:var(--on-rubric);
-  border-radius:var(--r-lg); padding:.42rem .95rem;
-  box-shadow:0 0 12px color-mix(in srgb, var(--rubric) 38%, transparent); }
-html[data-theme="dark"] .tab.active{ box-shadow:0 0 16px color-mix(in srgb, var(--rubric) 52%, transparent); }
+/* the active page's tab: simply tinted in the accent colour — no filled block,
+   no glow. Clean and calm. */
+.tab.active{ opacity:1; color:var(--rubric); }
 /* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
   .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
