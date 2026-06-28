@@ -80,8 +80,8 @@ LANDING = '''<section class="cover landing" id="top">
   </details>
 
   <nav class="landing-cta" aria-label="Explore">
-    <a class="cta cta-ghost" href="resources.html">Explore the faith</a>
-    <a class="cta cta-ghost cta-icon" href="greek.html"><span class="cta-i" aria-hidden="true">{camera}</span>Greek photo translator</a>
+    <a class="cta" href="resources.html">Explore the faith</a>
+    <a class="cta cta-icon" href="greek.html"><span class="cta-i" aria-hidden="true">{camera}</span>Greek photo translator</a>
   </nav>
 
   {cross}
