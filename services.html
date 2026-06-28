@@ -387,12 +387,20 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 
     var down=false, drag=false, sx=0, didDrag=false;
     function indexAt(x){ var n=tabs.length, i=Math.floor(x/(bar.clientWidth/n)); return Math.max(0, Math.min(n-1, i)); }
-    function bookPeel(px){ if(!book||RM) return; book.style.transition="none"; book.style.transform="translateY("+px+"px)"; book.style.opacity=String(Math.max(.45, 1-px/200)); }
-    function bookReset(){ if(!book||RM) return; book.style.transition="transform .34s cubic-bezier(.34,1.42,.5,1), opacity .3s ease"; book.style.transform=""; book.style.opacity=""; }
+    // the content is coupled to the drag: as the highlight is pulled away from
+    // the page's own tab, the content follows DOWN in real time (so it feels
+    // attached); it springs back UP if you return home, and the next page
+    // springs up on enter.
+    function bookFollow(f){ if(!book||RM) return;
+      book.style.transition="transform .13s cubic-bezier(.2,.7,.3,1), opacity .13s ease";
+      book.style.transform="translateY("+(f*62)+"px)"; book.style.opacity=String(1-Math.min(.82, f*0.9)); }
+    function bookUp(){ if(!book||RM) return;
+      book.style.transition="transform .46s cubic-bezier(.34,1.5,.5,1), opacity .34s ease";
+      book.style.transform=""; book.style.opacity=""; }
     function leave(href){
       try{ sessionStorage.setItem("px-enter","1"); }catch(e){}
-      if(book && !RM){ book.style.transition="transform .24s cubic-bezier(.4,0,.7,1), opacity .24s ease"; book.style.transform="translateY(70px)"; book.style.opacity="0";
-        setTimeout(function(){ location.href=href; }, 210); }
+      if(book && !RM){ book.style.transition="transform .2s cubic-bezier(.4,0,.7,1), opacity .2s ease"; book.style.transform="translateY(86px)"; book.style.opacity="0";
+        setTimeout(function(){ location.href=href; }, 190); }
       else location.href=href;
     }
     function onMove(e){
@@ -401,8 +409,10 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
       if(e.cancelable) e.preventDefault();
       var x=e.clientX - bar.getBoundingClientRect().left;
       var ci=indexAt(x);
-      if(ci!==labIndex) snap(ci, true);          // highlight + label morph to this tab
-      bookPeel(Math.min(34, Math.abs(ci-ai)*18));  // content peels as you move off the page's own tab
+      if(ci!==labIndex) snap(ci, true);    // highlight + label morph to this tab
+      // couple the content to how far the highlight has been pulled from home
+      var hc=rects[ai] ? rects[ai].l + rects[ai].w/2 : x;
+      bookFollow(Math.min(1, Math.abs(x-hc)/(bar.clientWidth*0.55)));
     }
     function end(){
       if(!down) return; down=false;
@@ -414,8 +424,8 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
       var cand=tabs[labIndex];
       var href=cand&&cand.getAttribute&&cand.getAttribute("href");
       if(labIndex!==ai && href){ leave(href); }
-      else if(labIndex!==ai && cand && cand.id==="settings-btn"){ snap(ai, true); bookReset(); cand.click(); }
-      else { if(labIndex!==ai) snap(ai, true); bookReset(); }
+      else if(labIndex!==ai && cand && cand.id==="settings-btn"){ snap(ai, true); bookUp(); cand.click(); }
+      else { if(labIndex!==ai) snap(ai, true); bookUp(); }
       setTimeout(function(){ didDrag=false; }, 60);
     }
     // listen on window during the gesture (more robust than pointer capture)
