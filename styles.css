@@ -76,24 +76,27 @@
   --elev-3:0 12px 32px rgba(60,40,20,.16);
 }
 
-/* ---- dark theme: candlelit near-black, warm (gilt on dark leather) ----- */
+/* ---- dark theme: night obsidian + warm glow (candlelit, never brown) --- */
 html[data-theme="dark"]{
-  --ink:        #ece6da;   /* warm parchment-white text */
-  --rubric:     #d8483a;   /* cinnabar lifted to glow on the dark page */
-  --rubric-deep:#b3322a;   /* the gilt-plaque red + initials */
-  --lapis:      #8fb0ea;   /* lapis lifted for contrast on dark */
-  --lapis-soft: rgba(143,176,234,.12);
-  --link:       #8fb0ea;
-  --gold:       #d9b85e;   /* gilding, glowing on the warm dark */
-  --paper:      #1b1612;   /* candlelit near-black, warm espresso undertone */
-  --surface:    #241d17;   /* raised surfaces — distinctly warmer/lighter than the page */
-  --surface-sunk:#15110d;  /* wells */
-  --desk:       #100c09;   /* darker still behind the page */
-  --hairline:   #3a2f24;   /* warm borders */
-  --hairline-strong:#4a3c2d; /* tab bar / section rules */
-  --elev-1:0 1px 2px rgba(0,0,0,.4);
-  --elev-2:0 4px 12px rgba(0,0,0,.5);
-  --elev-3:0 12px 34px rgba(0,0,0,.62);
+  --ink:        #ece7e0;   /* warm parchment-white — carries the warmth */
+  --rubric:     #e2513d;   /* luminous cinnabar that glows on the dark */
+  --rubric-deep:#c2392b;   /* gilt-plaque red + initials */
+  --lapis:      #93b4ee;   /* lapis lifted for contrast on dark */
+  --lapis-soft: rgba(147,180,238,.13);
+  --link:       #93b4ee;
+  --gold:       #e6c36b;   /* luminous gilding — glows by candlelight */
+  --paper:      #161518;   /* deep night obsidian, low chroma — not brown */
+  --surface:    #201f24;   /* raised surfaces, clearly lifted */
+  --surface-sunk:#121113;  /* wells */
+  --desk:       #0d0c0e;   /* darker still behind the page */
+  --hairline:   #34333c;   /* near-neutral borders */
+  --hairline-strong:#454450; /* tab bar / section rules */
+  /* warm light glows so interactive elements read as lit, not flat */
+  --glow-red:  0 0 16px rgba(226,81,61,.5);
+  --glow-gold: 0 0 14px rgba(230,195,107,.45);
+  --elev-1:0 1px 3px rgba(0,0,0,.5);
+  --elev-2:0 6px 18px rgba(0,0,0,.55);
+  --elev-3:0 16px 40px rgba(0,0,0,.66);
 }
 html[data-theme="dark"] figure img{
   /* the red icons sit on white in the source art; present them as plaques so
@@ -491,6 +494,7 @@ html[data-theme="dark"] .landing-cta .cta-ghost{ color:var(--ink); }
   transition:filter .15s ease, transform .1s ease; }
 @media (hover:hover){ .pn-primary:hover{ filter:brightness(1.06); } }
 .pn-primary:active{ transform:scale(.99); }
+html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); }
 .pn-body{ flex:1 1 auto; min-width:0; }
 .pn-when{ display:block; font-variant-caps:small-caps; letter-spacing:.06em;
   font-size:.85rem; opacity:.82; }
@@ -550,6 +554,8 @@ html[data-theme="dark"] .tabbar{ background:rgba(30,30,34,.82); }
   content:""; position:absolute; top:0; left:28%; right:28%; height:2.5px;
   background:var(--gold); border-radius:var(--r-pill);
 }
+html[data-theme="dark"] .tab.active::before{ box-shadow:var(--glow-gold); }
+html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 8px rgba(226,81,61,.45)); }
 .tab-i{ display:flex; }
 .tab-i svg{ width:1.5rem; height:1.5rem; }
 .tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.04em; white-space:nowrap; }
@@ -563,6 +569,11 @@ html[data-theme="dark"] .tabbar{ background:rgba(30,30,34,.82); }
   box-shadow:0 6px 16px rgba(124,43,34,.38), 0 2px 4px rgba(124,43,34,.3),
              0 0 0 3px var(--paper), 0 0 0 4px rgba(154,123,30,.6);
   transition:transform .12s ease, box-shadow .2s ease;
+}
+html[data-theme="dark"] .tab-fab .tab-i{
+  background:radial-gradient(circle at 35% 30%, #ef6a57, var(--rubric));
+  box-shadow:0 6px 18px rgba(226,81,61,.5), 0 0 22px rgba(226,81,61,.45),
+             0 0 0 3px var(--paper), 0 0 0 4px rgba(230,195,107,.7);
 }
 .tab-fab:active .tab-i{ transform:scale(.94); }
 .tab-fab .tab-i svg{ width:1.7rem; height:1.7rem; }
@@ -652,6 +663,7 @@ html[data-theme="dark"] .seg{ border-color:var(--hairline-strong); }
 html[data-theme="dark"] .seg button + button{ border-left-color:var(--hairline-strong); }
 .seg button svg{ width:1.05rem; height:1.05rem; }
 .seg button[aria-pressed="true"]{ background:var(--rubric); color:#fff; }
+html[data-theme="dark"] .seg button[aria-pressed="true"]{ box-shadow:var(--glow-red); }
 .seg button:not([aria-pressed="true"]):hover{ background:rgba(0,0,0,.05); }
 html[data-theme="dark"] .seg button:not([aria-pressed="true"]):hover{ background:rgba(255,255,255,.07); }
 #size-dn{ font-size:.85rem; }
@@ -674,7 +686,7 @@ html[data-theme="dark"] .switch{ background:var(--hairline-strong); }
 .switch[aria-checked="true"]{ background:var(--rubric); }
 /* dark mode: this must out-rank `html[data-theme="dark"] .switch` so the ON
    state shows the app's red, not the neutral grey */
-html[data-theme="dark"] .switch[aria-checked="true"]{ background:var(--rubric); }
+html[data-theme="dark"] .switch[aria-checked="true"]{ background:var(--rubric); box-shadow:var(--glow-red); }
 .switch[aria-checked="true"] .knob{ left:calc(var(--w) - var(--h) + 2px); }
 
 /* ---- Resources page / reading checklist ------------------------------ */
@@ -768,6 +780,9 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
 .office-node svg{ width:1.4rem; height:1.4rem; }
 .office--now .office-node{ background:radial-gradient(circle at 35% 30%, #c9a93f, var(--gold));
   border-color:var(--gold); color:#fff; box-shadow:0 0 0 4px var(--lapis-soft); }
+html[data-theme="dark"] .office--now .office-node{
+  background:radial-gradient(circle at 35% 30%, #f0d27e, var(--gold)); color:#2a2310;
+  box-shadow:0 0 0 4px var(--lapis-soft), var(--glow-gold); }
 .office-body{ grid-column:2; min-width:0; }
 .office-when{ display:block; font-variant-caps:small-caps; letter-spacing:.05em;
   font-size:.78rem; color:var(--gold); }
@@ -1104,6 +1119,17 @@ html[data-theme="dark"] .tts-player.open{ border-color:var(--hairline-strong); b
   width:auto; min-width:2.9rem; padding:0 .55rem;
   font-family:var(--serif); font-size:1rem; font-variant-numeric:tabular-nums;
 }
+
+/* ---- dark theme: warm glow on the lights (gilt ornaments + red buttons) */
+html[data-theme="dark"] .divider .cross,
+html[data-theme="dark"] .divider .art-rule,
+html[data-theme="dark"] .landing > .art-rule{ filter:drop-shadow(0 0 7px rgba(230,195,107,.3)); }
+html[data-theme="dark"] :where(.landing-cta .cta:not(.cta-ghost), .cal-btn:not(.sub),
+  .gk-cta, .tw-prompt-btn, .gk-pick){ box-shadow:var(--glow-red); }
+html[data-theme="dark"] .cf-fill{ box-shadow:0 0 10px rgba(230,195,107,.5); }
+/* the read-aloud play button glows like the FAB */
+html[data-theme="dark"] .tts-player:not(.open){ box-shadow:0 6px 18px rgba(226,81,61,.5),
+  0 0 22px rgba(226,81,61,.4); }
 
 @media print{
   html, body{ height:auto; }
