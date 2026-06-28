@@ -60,9 +60,18 @@
   --link:       #1e5e9e;
   --gold:       #9a7b1e;   /* Byzantine gold — gilt accents + Ancient Faith pill */
   --paper:      #faf6ee;   /* warm ivory stock, not clinical pure white */
+  --surface:    #fffdf8;   /* raised surfaces (cards, list panels, sheets) */
+  --surface-sunk:#f3ecdd;  /* wells (inputs, tracks, highlights) */
   --desk:       #e7dfcd;   /* the warm "desk" behind the page */
+  --hairline:   #e7ddc8;   /* borders, dividers */
+  --hairline-strong:#d9cdb0; /* tab bar / section rules */
   --serif:      "Arno Pro", "EB Garamond", Garamond, "Hoefler Text", "Times New Roman", serif;
   --display:    "Cormorant", "EB Garamond", Garamond, "Times New Roman", serif;
+  /* radius + elevation scale (premium depth; warm-tinted shadows) */
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+  --elev-1:0 1px 2px rgba(60,40,20,.06), 0 1px 3px rgba(60,40,20,.08);
+  --elev-2:0 4px 10px rgba(60,40,20,.10), 0 2px 4px rgba(60,40,20,.07);
+  --elev-3:0 12px 32px rgba(60,40,20,.16);
 }
 
 /* ---- dark theme: dark-gray paper, light + red text -------------------- */
@@ -73,7 +82,14 @@ html[data-theme="dark"]{
   --link:       #88b6ea;
   --gold:       #d9b85e;   /* lighter gold for the dark page */
   --paper:      #232327;   /* neutral dark gray page (no brown) */
+  --surface:    #27272c;   /* raised surfaces */
+  --surface-sunk:#1d1d21;  /* wells */
   --desk:       #161619;   /* darker neutral behind the page */
+  --hairline:   #3a3a40;
+  --hairline-strong:#43434a;
+  --elev-1:0 1px 2px rgba(0,0,0,.3);
+  --elev-2:0 4px 12px rgba(0,0,0,.4);
+  --elev-3:0 12px 32px rgba(0,0,0,.55);
 }
 html[data-theme="dark"] figure img{
   /* the red icons sit on white in the source art; present them as plaques so
@@ -789,17 +805,30 @@ html[data-theme="dark"] .cf-item{ border-top-color:#3a3a40; }
 .cf-audiohubs a:hover{ text-decoration:underline; }
 
 /* reference sections (creeds, councils, catechisms, books) */
-.ref-list{ list-style:none; margin:0; padding:0; }
-.ref-item{ padding:.6em 0; border-top:1px solid #ece5d8; }
-html[data-theme="dark"] .ref-item{ border-top-color:#3a3a40; }
-.ref-title{ color:var(--link); text-decoration:none; font-size:1.12rem; }
-.ref-title:hover{ text-decoration:underline; }
-.ref-free{
-  display:inline-block; margin-left:.5em; padding:0 .45em;
-  font-size:.7rem; font-variant-caps:small-caps; letter-spacing:.06em;
-  color:#fff; background:var(--rubric); border-radius:4px; vertical-align:.12em;
+/* ---- crafted destination list (premium link rows) ------------------- */
+.link-list{ list-style:none; margin:1.3em 0; padding:0;
+  background:var(--surface); border:1px solid var(--hairline);
+  border-radius:var(--r-md); box-shadow:var(--elev-1); overflow:hidden; }
+.link-list li + li .link-row{ border-top:1px solid var(--hairline); }
+.link-row{ display:flex; gap:.85rem; align-items:flex-start;
+  padding:.85rem 1rem; text-decoration:none; color:var(--ink);
+  transition:background .15s ease; }
+.link-row__body{ flex:1 1 auto; min-width:0; }
+.link-row__title{ display:block; font-family:var(--serif); font-weight:600;
+  font-size:1.1rem; line-height:1.3; color:var(--ink); }
+.link-row__desc{ display:block; font-size:.92rem; line-height:1.45; opacity:.72; margin-top:.15rem; }
+.link-row__host{ display:inline-block; font-size:.74rem; font-variant-caps:small-caps;
+  letter-spacing:.05em; opacity:.55; margin-top:.35rem; }
+.link-row__ext{ flex:0 0 auto; margin-top:.2rem; opacity:.4; transition:opacity .15s ease, color .15s ease; }
+@media (hover:hover){
+  .link-row:hover{ background:rgba(154,123,30,.06); }
+  .link-row:hover .link-row__ext{ opacity:.85; color:var(--gold); }
 }
-.ref-item .cf-note{ margin-left:0; }
+.link-row:active{ background:rgba(154,123,30,.1); }
+.badge--free{ display:inline-block; margin-left:.45em; padding:.02em .5em;
+  font-size:.62rem; font-variant-caps:small-caps; letter-spacing:.08em;
+  color:var(--gold); border:1px solid var(--gold); border-radius:var(--r-pill);
+  vertical-align:.14em; }
 .res-foot{
   text-indent:0; font-size:.86rem; font-style:italic; opacity:.8;
   border-top:1px solid #ece5d8; margin-top:2.4em; padding-top:1.1em;

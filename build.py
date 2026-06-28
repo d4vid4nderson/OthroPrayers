@@ -8,7 +8,7 @@ import hashlib
 import json
 import os
 import re
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 import generate_calendars as gc
 
@@ -628,14 +628,34 @@ def _divider(title):
             + RULE_FIG + '</section>')
 
 
+# small up-right arrow marking an external destination
+_EXT = ('<svg class="link-row__ext" viewBox="0 0 24 24" width="16" height="16" fill="none" '
+        'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+        'aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>')
+
+
+def _host(url):
+    try:
+        h = urlparse(url).netloc.lower()
+        return h[4:] if h.startswith("www.") else h
+    except Exception:
+        return ""
+
+
 def _links_ul(items):
-    out = ['<ul class="ref-list">']
+    """A crafted list of destination rows (premium replacement for bare link lists)."""
+    out = ['<ul class="link-list">']
     for it in items:
         title, url, desc = it[0], it[1], it[2]
         free = len(it) > 3 and it[3]
-        badge = ' <span class="ref-free">free</span>' if free else ''
-        out.append(f'<li class="ref-item"><a class="ref-title" href="{url}" target="_blank" '
-                   f'rel="noopener">{title}</a>{badge}<div class="cf-note">{desc}</div></li>')
+        badge = ' <span class="badge--free">free</span>' if free else ''
+        host = _host(url)
+        hostline = f'<span class="link-row__host">{host}</span>' if host else ''
+        out.append(
+            f'<li><a class="link-row" href="{url}" target="_blank" rel="noopener">'
+            f'<span class="link-row__body">'
+            f'<span class="link-row__title">{title}{badge}</span>'
+            f'<span class="link-row__desc">{desc}</span>{hostline}</span>{_EXT}</a></li>')
     out.append('</ul>')
     return "\n".join(out)
 
