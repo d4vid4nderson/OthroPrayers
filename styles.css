@@ -203,19 +203,9 @@ p:has(> .dropcap:first-child){ text-indent:0; }
   font-feature-settings:"lnum" 1;
   text-shadow:0 1px 0 rgba(124,43,34,.14);   /* a hint of ink weight */
 }
-/* the single grandest initial that opens a prayer page is gilded */
-.dropcap.gilt{
-  color:var(--gold);   /* fallback for browsers without background-clip:text */
-  background:linear-gradient(135deg,#caa64a 0%, #9a7b1e 55%, #d9b85e 100%);
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-shadow:none;
-}
-html[data-theme="dark"] .dropcap.gilt{
-  background:linear-gradient(135deg,#e7c873 0%, #c2a043 55%, #f0d488 100%);
-  -webkit-background-clip:text; background-clip:text;
-}
+/* the single grandest initial that opens a prayer page is gilded (solid gold —
+   no gradient-clip text) */
+.dropcap.gilt{ color:var(--gold); text-shadow:none; }
 
 /* ---- rubrics (red instructions) -------------------------------------- */
 p.rubric{
@@ -294,7 +284,7 @@ html[data-theme="dark"] .pill-ancient{ color:#241f10; }
 .pill-sm{ font-size:.52rem; padding:.2em .5em; margin-left:.4em; }
 .afpb-credit{ text-align:center; text-indent:0; margin:.3em 0 1.3em; }
 /* gold edge on the Ancient Faith hub cards, to set them apart from Resources */
-.afpb-card{ border-left:3px solid var(--gold); }
+/* (Ancient Faith cards use the standard card style; the gold pill carries the context) */
 
 /* ---- the priest / layman hanging table ------------------------------- */
 .hang{
@@ -712,7 +702,7 @@ html[data-theme="dark"] .tw-row{ border-top-color:#37373c; }
   width:100%; text-align:left; padding:.6rem .35rem;
   background:none; border:0; color:inherit; font-family:inherit; cursor:pointer;
 }
-.tw-today{ background:rgba(154,123,30,.1); border-radius:8px; box-shadow:inset 3px 0 0 var(--gold); }
+.tw-today{ background:rgba(154,123,30,.1); border:1px solid rgba(154,123,30,.32); border-radius:8px; }
 .tw-date{ font-variant-caps:small-caps; letter-spacing:.03em; font-size:1rem; }
 .tw-feast{ flex:1 1 100%; color:var(--rubric); line-height:1.3; }   /* feast on its own line */
 .tw-fast{ font-size:.8rem; font-variant-caps:small-caps; letter-spacing:.04em;
@@ -821,19 +811,22 @@ html[data-theme="dark"] .res-foot{ border-top-color:#3a3a40; }
 /* the currently-spoken prayer is marked with a gilt reader's rule, like a
    ribbon/finger following the text, rather than a flat highlight box */
 .sayable.speaking{
-  box-shadow:inset 3px 0 0 var(--gold);
-  background:rgba(154,123,30,.07);
-  border-radius:0 6px 6px 0;
+  background:rgba(154,123,30,.12);
+  border-radius:6px;
 }
-html[data-theme="dark"] .sayable.speaking{ background:rgba(217,184,94,.1); }
+html[data-theme="dark"] .sayable.speaking{ background:rgba(217,184,94,.14); }
 /* while reading, tapping a prayer skips the audio to it */
 html.tts-on .sayable{ cursor:pointer; }
 html.tts-on .sayable:hover{ background:rgba(154,123,30,.06); border-radius:6px; }
 
-/* a one-time, gentle "turning to the page" fade as content arrives */
-@media (prefers-reduced-motion: no-preference){
-  .scroll > .book{ animation:page-in .5s ease both; }
-  @keyframes page-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+/* visible keyboard-focus ring on every interactive element (a11y) */
+:where(a, button, input, textarea, select, [role="button"], [role="switch"], .tab, label.gk-pick):focus-visible{
+  outline:none;
+  box-shadow:0 0 0 2px var(--paper), 0 0 0 4px rgba(179,50,42,.55);
+  border-radius:6px;
+}
+html[data-theme="dark"] :where(a, button, input, textarea, select, [role="button"], [role="switch"], .tab, label.gk-pick):focus-visible{
+  box-shadow:0 0 0 2px var(--paper), 0 0 0 4px rgba(200,62,47,.65);
 }
 
 /* morphing audio control: a play circle (idle) that expands into the controls.
