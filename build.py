@@ -1053,6 +1053,13 @@ def prayers_hub():
                  '<span class="hub-feature-d">A fuller cycle of daily offices — with prayers for '
                  'Communion, confession, the departed and many occasions.</span></span>'
                  f'{_CHEV_R}</a>')
+    o.append('<a class="hub-feature" href="services.html">'
+             f'{_emblem("chirho")}'
+             '<span class="hub-feature-body">'
+             '<span class="hub-feature-t">The People&rsquo;s Responses</span>'
+             '<span class="hub-feature-d">What the faithful say and sing at Vespers and the '
+             'Divine Liturgy — the laity&rsquo;s parts, to follow along.</span></span>'
+             f'{_CHEV_R}</a>')
     o.append(art("cross", foot=True))
     o.append(NOW_JS)
     o.append('</section>')
@@ -1199,6 +1206,111 @@ a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 GREEK_JS = '<script src="greek-tool.js?v=7" defer></script>'
 BIBLE_JS = ('<script src="bible-index.js?v=1" defer></script>\n'
             '<script src="bible.js?v=1" defer></script>')
+
+
+# ---- the People's Responses at the services (laity's parts) ----------------
+# Each item is (cue, response): the priest's/deacon's prompt (shown as a rubric)
+# and the words the people say or sing in answer. Traditional English; jurisdictions
+# vary slightly ("thy/your spirit", "intercessions/prayers of the Theotokos"), and
+# the choir often chants these on the people's behalf.
+SERVICES = [
+    {"name": "At Vespers", "blurb": "The evening service that opens the liturgical day.",
+     "sections": [
+        ("The opening", [
+            ("Priest: Blessed is our God, always, now and ever, and unto the ages of ages.", "Amen."),
+        ]),
+        ("The litanies", [
+            ("Deacon: In peace let us pray to the Lord. <span class=\"svc-note\">(and to each petition that follows)</span>", "Lord, have mercy."),
+            ("Deacon: Let us complete our evening prayer unto the Lord. <span class=\"svc-note\">(to each petition of the supplication)</span>", "Grant this, O Lord."),
+            ("Deacon: Commemorating our most holy, most pure&hellip; let us commend ourselves and one another and all our life unto Christ our God.", "To thee, O Lord."),
+            ("Priest: For thine is the dominion&hellip; <span class=\"svc-note\">(and at every blessing)</span>", "Amen."),
+        ]),
+        ("O Gladsome Light", [
+            (None, "O Gladsome Light of the holy glory of the immortal Father, heavenly, holy, blessed Jesus Christ: Now that we have come to the setting of the sun and behold the light of evening, we praise God: Father, Son, and Holy Spirit. For meet it is at all times to worship thee with voices of praise, O Son of God and Giver of life; therefore all the world doth glorify thee."),
+        ]),
+        ("The evening prayer", [
+            (None, "Vouchsafe, O Lord, to keep us this evening without sin. Blessed art thou, O Lord, the God of our fathers, and praised and glorified is thy name unto the ages. Amen."),
+        ]),
+        ("The song of Simeon", [
+            (None, "Lord, now lettest thou thy servant depart in peace, according to thy word; for mine eyes have seen thy salvation, which thou hast prepared before the face of all people: a light to lighten the Gentiles, and the glory of thy people Israel."),
+        ]),
+        ("Trisagion &amp; the Lord&rsquo;s Prayer", [
+            (None, "Holy God, Holy Mighty, Holy Immortal, have mercy on us. <span class=\"svc-note\">(thrice)</span>"),
+            (None, "Our Father, who art in heaven, hallowed be thy name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from the evil one."),
+        ]),
+     ]},
+    {"name": "At the Divine Liturgy", "blurb": "The Liturgy of St. John Chrysostom &mdash; the most frequently served.",
+     "sections": [
+        ("The blessing &amp; the litanies", [
+            ("Priest: Blessed is the kingdom of the Father, and of the Son, and of the Holy Spirit, now and ever, and unto the ages of ages.", "Amen."),
+            ("Deacon: In peace let us pray to the Lord. <span class=\"svc-note\">(to each petition)</span>", "Lord, have mercy."),
+            ("Deacon: &hellip;let us commend ourselves and one another and all our life unto Christ our God.", "To thee, O Lord."),
+        ]),
+        ("The antiphons", [
+            (None, "Through the intercessions of the Theotokos, O Saviour, save us. <span class=\"svc-note\">(first antiphon)</span>"),
+            (None, "Save us, O Son of God, who art risen from the dead <span class=\"svc-note\">(on Sundays; or: wondrous in thy saints)</span>, who sing to thee: Alleluia. <span class=\"svc-note\">(second antiphon)</span>"),
+            (None, "Only-begotten Son and Word of God, who art immortal, yet didst deign for our salvation to be incarnate of the holy Theotokos and ever-virgin Mary&hellip; O Christ our God, who wast crucified and didst trample down death by death, being one of the Holy Trinity, glorified together with the Father and the Holy Spirit: save us."),
+        ]),
+        ("The Trisagion", [
+            (None, "Holy God, Holy Mighty, Holy Immortal, have mercy on us. <span class=\"svc-note\">(thrice, with Glory&hellip; Both now&hellip;)</span>"),
+        ]),
+        ("The Gospel", [
+            ("Deacon: Wisdom. Let us attend.", "Glory to thee, O Lord, glory to thee. <span class=\"svc-note\">(before and after the Gospel)</span>"),
+        ]),
+        ("The Cherubic Hymn", [
+            (None, "Let us who mystically represent the Cherubim, and who sing the thrice-holy hymn to the life-creating Trinity, now lay aside all earthly cares. That we may receive the King of all, who cometh invisibly upborne by the angelic hosts. Alleluia, alleluia, alleluia."),
+        ]),
+        ("The kiss of peace &amp; the Creed", [
+            ("Deacon: Let us love one another, that with one mind we may confess:", "Father, Son, and Holy Spirit: the Trinity, one in essence and undivided."),
+            (None, "I believe in one God, the Father Almighty, Maker of heaven and earth, and of all things visible and invisible&hellip; <span class=\"svc-note\">(the whole Nicene Creed, said by all)</span>"),
+        ]),
+        ("The Anaphora", [
+            ("Priest: Let us stand aright; let us stand with fear; let us attend, that we may offer the holy oblation in peace.", "A mercy of peace, a sacrifice of praise."),
+            ("Priest: The grace of our Lord Jesus Christ, and the love of God the Father, and the communion of the Holy Spirit, be with you all.", "And with thy spirit."),
+            ("Priest: Let us lift up our hearts.", "We lift them up unto the Lord."),
+            ("Priest: Let us give thanks unto the Lord.", "It is meet and right to worship the Father, and the Son, and the Holy Spirit: the Trinity, one in essence and undivided."),
+            (None, "Holy, holy, holy, Lord of Sabaoth; heaven and earth are full of thy glory. Hosanna in the highest. Blessed is he that cometh in the name of the Lord. Hosanna in the highest."),
+            ("Priest: Take, eat&hellip; / Drink ye all of this&hellip;", "Amen. Amen."),
+            ("Priest: Thine own of thine own we offer unto thee, on behalf of all and for all.", "We praise thee, we bless thee, we give thanks unto thee, O Lord, and we pray unto thee, O our God."),
+            (None, "It is truly meet to bless thee, the Theotokos, ever-blessed and most blameless, and the Mother of our God. More honourable than the Cherubim, and more glorious beyond compare than the Seraphim; who without corruption gavest birth to God the Word: the very Theotokos, thee do we magnify."),
+        ]),
+        ("The Lord&rsquo;s Prayer &amp; Communion", [
+            ("Priest: And count us worthy, O Master&hellip; to call upon thee&hellip; and to say:", "Our Father, who art in heaven, hallowed be thy name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from the evil one."),
+            ("Priest: The holy things are for the holy.", "One is holy, one is the Lord, Jesus Christ, to the glory of God the Father. Amen."),
+            (None, "I believe, O Lord, and I confess that thou art truly the Christ, the Son of the living God&hellip; Of thy mystical supper, O Son of God, accept me today as a communicant; for I will not speak of thy mystery to thine enemies, neither will I give thee a kiss as did Judas&hellip; <span class=\"svc-note\">(said by those approaching the chalice)</span>"),
+        ]),
+        ("Thanksgiving &amp; dismissal", [
+            (None, "We have seen the true light; we have received the heavenly Spirit; we have found the true faith, worshipping the undivided Trinity: for he hath saved us."),
+            ("Priest: Glory be to thee, O Christ our God&hellip;", "Blessed be the name of the Lord, henceforth and forevermore. <span class=\"svc-note\">(thrice)</span>"),
+            ("Priest: &hellip;have mercy on us and save us.", "Amen."),
+        ]),
+     ]},
+]
+
+
+def _svc_item(cue, say):
+    c = f'<p class="svc-cue">{cue}</p>' if cue else ""
+    return f'<div class="svc-r">{c}<p class="svc-say">{say}</p></div>'
+
+
+def services_page():
+    o = ['<section class="resources services" id="top">',
+         back_link("prayers.html", "All prayers"), _divider("The People&rsquo;s Responses")]
+    o.append('<p class="res-intro">The words the faithful say and sing in answer at the Divine '
+             'Services. Traditional English; wording varies a little by jurisdiction, and the '
+             'choir often chants these on the people&rsquo;s behalf.</p>')
+    for svc in SERVICES:
+        o.append(f'<h2 class="svc-svc">{svc["name"]}</h2>')
+        o.append(f'<p class="svc-blurb">{svc["blurb"]}</p>')
+        for title, items in svc["sections"]:
+            o.append(f'<h3 class="svc-sec">{title}</h3>')
+            for cue, say in items:
+                o.append(_svc_item(cue, say))
+    o.append('<p class="res-foot">A guide to the people&rsquo;s parts, not a complete service book. '
+             'For the full order of each service, follow your parish&rsquo;s books and your priest.</p>')
+    o.append(art("chirho", foot=True))
+    o.append('</section>')
+    return "\n".join(o)
 
 
 def bible_page():
@@ -1708,6 +1820,12 @@ page("greek.html", "Greek Photo Translator — Daily Prayers",
      "Photograph Greek text and read it in English — on-device recognition with transliteration "
      "and translation. Online tool; results are approximate.",
      greek_page(), active="resources", scripts=GREEK_JS)
+
+# the People's Responses at the Divine Services (linked from the Prayers hub)
+page("services.html", "The People's Responses — Daily Prayers",
+     "The words the faithful say and sing at Vespers and the Divine Liturgy — the laity's "
+     "responses, to follow along at the services.",
+     services_page(), active="prayers")
 
 # the in-app Bible reader (Brenton LXX OT + WEB NT; data in bible/*.json).
 # NB: the canon *article* owns bible.html; the reader is scripture.html
