@@ -62,12 +62,43 @@
     });
   }
 
+  function googleUrl(text) {
+    return "https://translate.google.com/?sl=el&tl=en&op=translate&text=" + encodeURIComponent(text.replace(/\s+/g, " ").trim());
+  }
+
+  // high-accuracy path: send the photo to the server (Google Vision + Translate);
+  // returns {greek, english} or null if the backend isn't configured / fails
+  function tryBackend(dataURL) {
+    return fetch("api/greek", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: dataURL })
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return (j && typeof j.greek === "string") ? j : null; })
+      .catch(function () { return null; });
+  }
+
   function process(src) {
     gEl.value = ""; tEl.textContent = ""; enEl.textContent = ""; gt.hidden = true;
-    setStatus("Loading the reader…");
-    loadTesseract().then(function () { return prep(src); }).then(function (canvas) {
-      setStatus("Reading the Greek…");
-      return Tesseract.recognize(canvas || src, "ell", {
+    setStatus("Reading the Greek…");
+    prep(src).then(function (canvas) {
+      var durl = canvas ? canvas.toDataURL("image/jpeg", 0.85) : null;
+      return (durl ? tryBackend(durl) : Promise.resolve(null)).then(function (best) {
+        if (best && best.greek) {                 // server read it
+          gEl.value = best.greek; tEl.textContent = translit(best.greek);
+          enEl.textContent = best.english || "";
+          gt.href = googleUrl(best.greek); gt.hidden = false;
+          setStatus("");
+          return;
+        }
+        return ocrFallback(canvas || src);         // on-device reader
+      });
+    }).catch(function () { setStatus("Couldn’t read the image. Check your connection."); });
+  }
+
+  function ocrFallback(imgSrc) {
+    setStatus("Reading the Greek…");
+    return loadTesseract().then(function () {
+      return Tesseract.recognize(imgSrc, "ell", {
         logger: function (m) {
           if (m.status === "recognizing text") setStatus("Reading the Greek… " + Math.round(m.progress * 100) + "%");
         }
