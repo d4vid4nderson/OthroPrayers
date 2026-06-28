@@ -57,6 +57,17 @@ generic warm/cool.
 | `--hairline` | `#3a2f24` | warm borders |
 | `--hairline-strong` | `#4a3c2d` | tab bar / section rules |
 
+### User theming (Settings → Appearance)
+Three user-controlled axes layer on top of light/dark, all persisted and applied
+before paint (no flash), and precached for offline:
+- **Background temperature** — `html[data-temp="cool"]` retints `--paper`/`--surface`/
+  `--hairline` cooler (warm is the default). Affects both light and dark.
+- **Primary colour** (`data-primary`) → `--rubric`/`--rubric-deep`; **Secondary colour**
+  (`data-secondary`) → `--gold`. Chosen from the **Tailwind** palette; the "Default"
+  swatch is the brand cinnabar / gold. Rules are generated into `themes.css` by `build.py`.
+- The glows and the FAB derive from the live accents via `color-mix`, so the whole
+  accent system follows the user's choice. Defaults preserve the brand identity.
+
 **Rules.** The illuminated triad is **gold + vermilion (rubric) + lapis** — the
 palette of a real manuscript. Accent (rubric) = rubrics, titles, current selection,
 state — never decoration. Gold = gilding accents only, kept rare. Lapis = the third
