@@ -1525,7 +1525,8 @@ CONTROL_JS = '''<script>
     if(!thumb||!active||tabs.length<2) return;
     var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
     function cx(t){ return t.offsetLeft + t.offsetWidth/2; }
-    function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px"; }
+    function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px";
+      thumb.style.top=active.offsetTop+"px"; thumb.style.height=active.offsetHeight+"px"; }
     placeIdle();
     window.addEventListener("load", placeIdle);
     window.addEventListener("resize", placeIdle);

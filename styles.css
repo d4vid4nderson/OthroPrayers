@@ -557,8 +557,10 @@ html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%,
 /* the draggable highlight that sits behind the active tab; JS positions it and
    lets you pull it onto another tab to change pages (jelly spring on settle) */
 .tab-thumb{
-  position:absolute; top:50%; left:0; width:0; height:2.7rem;
-  transform:translateY(-50%); border-radius:var(--r-pill); z-index:0; pointer-events:none;
+  /* top + height are set by JS to overlay the active tab's box exactly (the
+     bar's bottom safe-area padding makes a top:50% centre sit too low) */
+  position:absolute; top:0; left:0; width:0; height:2.7rem;
+  border-radius:var(--r-pill); z-index:0; pointer-events:none;
   background:color-mix(in srgb, var(--rubric) 14%, transparent);
   transition:left .34s cubic-bezier(.34,1.42,.5,1), width .34s cubic-bezier(.34,1.42,.5,1);
 }
