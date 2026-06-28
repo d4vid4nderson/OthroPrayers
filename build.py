@@ -81,6 +81,7 @@ LANDING = '''<section class="cover landing" id="top">
 
   <nav class="landing-cta" aria-label="Explore">
     <a class="cta cta-ghost" href="resources.html">Explore the faith</a>
+    <a class="cta cta-ghost cta-icon" href="greek.html"><span class="cta-i" aria-hidden="true">{camera}</span>Greek photo translator</a>
   </nav>
 
   {cross}
@@ -234,11 +235,17 @@ content = _drawn_crosses(content)
 
 # bottom tab bar (dedicated mobile nav): Home + Prayers/Resources pop-up
 # sub-menus + the slide-up Settings sheet
+# open-book glyph for the centre Read (Bible) button
+READ = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+        'stroke-linejoin="round" aria-hidden="true">'
+        '<path d="M12 6.6C10.3 5.4 7.6 4.9 4 5.4v12.4c3.6-.5 6.3 0 8 1.2"/>'
+        '<path d="M12 6.6C13.7 5.4 16.4 4.9 20 5.4v12.4c-3.6-.5-6.3 0-8 1.2"/>'
+        '<path d="M12 6.6V19.2"/></svg>')
+
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <a class="tab{p_act}" href="prayers.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
-  <button class="tab tab-fab" id="cam-btn" type="button" aria-label="Read Greek — take or choose a photo"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></button>
-  <input id="cam-input" type="file" accept="image/*" hidden>
+  <a class="tab tab-fab{b_act}" href="scripture.html" aria-label="Read the Bible"><span class="tab-i">{READ}</span><span class="tab-l">Read</span></a>
   <a class="tab{r_act}" href="resources.html" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></a>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" aria-label="Settings"><span class="tab-i">{GEAR}</span><span class="tab-l">Settings</span></button>
@@ -315,8 +322,9 @@ def tabbar(active="", current=""):
     return TABBAR_TMPL.format(
         h_act=" active" if active == "home" else "",
         p_act=" active" if active == "prayers" else "",
+        b_act=" active" if active == "read" else "",
         r_act=" active" if active == "resources" else "",
-        HOME=HOME, BOOK=BOOK, CAMERA=CAMERA, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE,
+        HOME=HOME, BOOK=BOOK, READ=READ, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE,
         primary_sw=_swatches("primary", BRAND_PRIMARY), secondary_sw=_swatches("secondary", BRAND_SECONDARY))
 
 
@@ -965,6 +973,7 @@ RES_GROUPS = [
     ]),
     ("For Your Phone", [
         ("The Church Calendar", "calendar.html", "Feast days for your phone — old- and new-calendar downloads.", "cal"),
+        ("Greek Photo Translator", "greek.html", "Photograph Greek text — read and translate it.", "gospel"),
     ]),
 ]
 
@@ -1188,6 +1197,18 @@ a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
 GREEK_JS = '<script src="greek-tool.js?v=7" defer></script>'
+BIBLE_JS = ('<script src="bible-index.js?v=1" defer></script>\n'
+            '<script src="bible.js?v=1" defer></script>')
+
+
+def bible_page():
+    return "\n".join([
+        '<section class="resources bible-page" id="top">',
+        _divider("Holy Scripture"),
+        '<p class="res-intro">The Old Testament in Brenton&rsquo;s Septuagint (1851), with the '
+        'deuterocanon, and the New Testament in the World English Bible &mdash; public domain.</p>',
+        '<div id="bible" class="bible"><p class="bible-loading">Opening the Scriptures&hellip;</p></div>',
+        '</section>'])
 
 
 def greek_page():
@@ -1630,7 +1651,7 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "An Orthodox prayer book and companion for the journey — daily prayers for morning, the "
      "table, the hours of the day and night, and before sleep, with resources for inquirers "
      "coming from Western Protestant Christianity to Orthodoxy.",
-     LANDING.format(cross=CLOSING, rule=RULE_FIG, pray_js=HOME_JS), active="home")
+     LANDING.format(cross=CLOSING, rule=RULE_FIG, pray_js=HOME_JS, camera=CAMERA), active="home")
 
 # Prayers index (card hub; replaces the old slide-up Prayers menu)
 page("prayers.html", "Prayers — Daily Prayers",
@@ -1688,6 +1709,13 @@ page("greek.html", "Greek Photo Translator — Daily Prayers",
      "and translation. Online tool; results are approximate.",
      greek_page(), active="resources", scripts=GREEK_JS)
 
+# the in-app Bible reader (Brenton LXX OT + WEB NT; data in bible/*.json).
+# NB: the canon *article* owns bible.html; the reader is scripture.html
+page("scripture.html", "Holy Scripture — Daily Prayers",
+     "Read the Bible: the Old Testament in Brenton's Septuagint (with the deuterocanon) and the "
+     "New Testament in the World English Bible — public domain, available offline.",
+     bible_page(), active="read", scripts=BIBLE_JS)
+
 # in-depth articles (Councils, the Bible & its canon)
 for _a in ARTICLES:
     page(f'{_a["slug"]}.html', f'{_a["name"]} — Daily Prayers',
@@ -1724,8 +1752,10 @@ gen_icon_masks()
 _NODEPLOY = {"prayers.content.html", "ancient.content.html", "assets/icons/app-icon.png"}
 _assets = {"./"}
 _assets.update(glob.glob("*.html"))
+# note: the per-book bible/*.json (~5MB) are intentionally NOT precached — they
+# are cached at runtime as chapters are read, to keep the offline install lean
 for _p in ["styles.css", "themes.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
-           "site.webmanifest", "favicon.ico"]:
+           "bible-index.js", "bible.js", "site.webmanifest", "favicon.ico"]:
     if os.path.exists(_p):
         _assets.add(_p)
 for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*", "calendars/*.ics"]:

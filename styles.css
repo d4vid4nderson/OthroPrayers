@@ -55,6 +55,7 @@
 
 :root{
   --ink:        #231f20;
+  --ink-soft:   rgba(35,31,32,.72);  /* secondary text / descriptions */
   --rubric:     #b3322a;   /* cinnabar / vermilion — true rubric ink, not pink */
   --rubric-deep:#7c2b22;   /* oxblood — secondary rubrication (inline directions) */
   --on-rubric:  #fff;      /* text/icon colour placed on a --rubric fill (contrast guard) */
@@ -81,6 +82,7 @@
 /* ---- dark theme: night obsidian + warm glow (candlelit, never brown) --- */
 html[data-theme="dark"]{
   --ink:        #ece7e0;   /* warm parchment-white — carries the warmth */
+  --ink-soft:   rgba(236,231,224,.72);
   --rubric:     #e2513d;   /* luminous cinnabar that glows on the dark */
   --rubric-deep:#c2392b;   /* gilt-plaque red + initials */
   --lapis:      #93b4ee;   /* lapis lifted for contrast on dark */
@@ -1161,6 +1163,60 @@ html[data-theme="dark"] .tts-player.open{ border-color:var(--hairline-strong); b
   width:auto; min-width:2.9rem; padding:0 .55rem;
   font-family:var(--serif); font-size:1rem; font-variant-numeric:tabular-nums;
 }
+
+/* ---- home: the Greek photo-translator button (icon + label) ---------- */
+.landing-cta .cta-icon{ display:flex; align-items:center; justify-content:center; gap:.5rem; }
+.cta-i{ display:inline-flex; }
+.cta-i svg{ width:1.2rem; height:1.2rem; }
+
+/* ---- in-app Bible reader --------------------------------------------- */
+.bible{ margin:1.1rem 0 0; }
+.bible-loading{ text-indent:0; text-align:center; opacity:.7; padding:2rem 0; }
+/* library: continue + grouped book grid */
+.bib-continue{ display:flex; flex-direction:column; gap:.1rem; width:100%; text-align:left;
+  margin:0 0 1.4rem; padding:.75rem 1.1rem; cursor:pointer; color:var(--on-rubric);
+  background:var(--rubric); border:0; border-radius:var(--r-md); box-shadow:var(--elev-2);
+  transition:filter .15s ease, transform .1s ease; }
+@media (hover:hover){ .bib-continue:hover{ filter:brightness(1.06); } }
+.bib-continue:active{ transform:scale(.99); }
+html[data-theme="dark"] .bib-continue{ box-shadow:var(--elev-2), var(--glow-red); }
+.bib-continue-l{ font-variant-caps:small-caps; letter-spacing:.06em; font-size:.8rem; opacity:.85; }
+.bib-continue-b{ font-family:var(--display); font-weight:600; font-size:1.4rem; line-height:1.1; }
+.bib-group{ font-family:var(--serif); font-weight:600; font-variant-caps:small-caps; letter-spacing:.08em;
+  font-size:.96rem; color:var(--gold); text-align:left; margin:1.5em 0 .55em; }
+.bib-books{ display:grid; grid-template-columns:repeat(auto-fill, minmax(8.5rem,1fr)); gap:.5rem; }
+.bib-book{ text-align:left; padding:.6rem .8rem; cursor:pointer; color:var(--ink);
+  background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-sm);
+  font-family:var(--serif); font-size:1.02rem; line-height:1.2;
+  transition:border-color .15s ease, background .15s ease, transform .1s ease; }
+@media (hover:hover){ .bib-book:hover{ border-color:var(--gold); background:var(--lapis-soft); } }
+.bib-book:active{ transform:scale(.98); }
+.bib-dc{ font-style:italic; color:var(--ink-soft); }   /* deuterocanon, gently set apart */
+/* reader: sticky bar + verses + chapter nav */
+.bib-bar{ display:flex; align-items:center; gap:.7rem; flex-wrap:wrap;
+  position:sticky; top:0; z-index:3; padding:.45rem 0 .55rem; margin-bottom:.5rem;
+  background:var(--paper); border-bottom:1px solid var(--hairline); }
+.bib-lib{ display:inline-flex; align-items:center; gap:.35rem; cursor:pointer;
+  padding:.35rem .7rem; border:1px solid var(--hairline-strong); border-radius:var(--r-pill);
+  background:none; color:var(--ink); font-family:var(--serif); font-variant-caps:small-caps;
+  letter-spacing:.03em; font-size:.9rem; }
+@media (hover:hover){ .bib-lib:hover{ border-color:var(--gold); color:var(--rubric); } }
+.bib-lib:active{ transform:scale(.97); }
+.bib-title{ font-family:var(--display); font-weight:600; color:var(--rubric);
+  font-size:1.45rem; display:inline-flex; align-items:center; gap:.45rem; }
+.bib-chap-sel{ font-family:var(--serif); font-size:1.05rem; padding:.15rem .4rem; border-radius:var(--r-sm);
+  border:1px solid var(--hairline); background:var(--surface-sunk); color:var(--ink); cursor:pointer; }
+.bib-verses{ margin:.3rem 0 0; }
+.bib-v{ text-indent:0; margin:0 0 .5em; line-height:1.62; font-size:1.12rem; }
+.bib-n{ display:inline-block; min-width:1.3em; margin-right:.15em; vertical-align:.4em;
+  font-size:.6em; font-weight:600; color:var(--gold); font-variant-numeric:lining-nums; }
+.bib-chapnav{ display:flex; justify-content:space-between; align-items:center; gap:.6rem; margin:1.5em 0 .5em; }
+.bib-pn{ display:inline-flex; align-items:center; gap:.25rem; cursor:pointer; white-space:nowrap;
+  padding:.5rem .9rem; border:1px solid var(--rubric); border-radius:var(--r-pill);
+  background:none; color:var(--rubric); font-family:var(--serif); font-variant-caps:small-caps;
+  letter-spacing:.03em; font-size:.95rem; }
+@media (hover:hover){ .bib-pn:hover{ background:var(--rubric); color:var(--on-rubric); } }
+.bib-pn:active{ transform:scale(.98); }
 
 /* ---- dark theme: warm glow on the lights (gilt ornaments + red buttons) */
 html[data-theme="dark"] .divider .cross,
