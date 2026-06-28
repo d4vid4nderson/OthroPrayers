@@ -541,69 +541,36 @@ html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); 
 
 /* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
 .tabbar{
-  position:relative;   /* positioning context for the draggable thumb */
   flex:0 0 auto; z-index:30;
-  display:flex; align-items:center;
+  display:flex; align-items:stretch;
   background:color-mix(in srgb, var(--paper) 86%, transparent);
   backdrop-filter:saturate(1.3) blur(12px);
   -webkit-backdrop-filter:saturate(1.3) blur(12px);
   border-top:1px solid var(--hairline-strong);   /* gilt-tinged hairline */
-  touch-action:none;   /* the bar drives its own horizontal drag gesture */
   /* lift the tabs above the iOS home indicator (max() floors it even when the
      safe-area inset reports 0 in some installed web-app contexts) */
   padding-bottom:max(.25rem, env(safe-area-inset-bottom));
 }
 html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%, transparent); }
-/* the highlight behind the active tab. JS positions it; you can also drag it
-   onto another tab to change pages. A single sliding element — smooth, no
-   per-tab reflow. */
-.tab-thumb{
-  position:absolute; top:0; left:0; width:0; height:2.7rem;
-  border-radius:var(--r-pill); z-index:0; pointer-events:none;
-  background:color-mix(in srgb, var(--rubric) 14%, transparent);
-  transition:left .26s cubic-bezier(.3,.7,.25,1), width .26s cubic-bezier(.3,.7,.25,1),
-             top .26s ease, height .26s ease;
-}
-html[data-theme="dark"] .tab-thumb{ background:color-mix(in srgb, var(--rubric) 22%, transparent); }
-.tabbar.tb-drag .tab-thumb{ transition:none; }   /* follow the finger 1:1 while dragging */
 .tab{
-  position:relative; z-index:1;
-  flex:1 1 0; display:flex; align-items:center; justify-content:center;
-  gap:.4rem; padding:.5rem .25rem; min-height:3.4rem;
+  flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.2rem; padding:.45rem .25rem; min-height:3.4rem;
   background:none; border:0; cursor:pointer; text-decoration:none;
-  color:var(--ink); font-family:inherit; opacity:.5;
-  transition:opacity .2s ease, color .2s ease, padding .26s cubic-bezier(.3,.7,.25,1),
-             margin .26s cubic-bezier(.3,.7,.25,1);
+  color:var(--ink); font-family:inherit; opacity:.55;
+  transition:opacity .2s ease, color .2s ease;
 }
-@media (hover:hover){ .tab:hover{ opacity:.8; } }
+@media (hover:hover){ .tab:hover{ opacity:.85; } }
 .tab:active{ opacity:1; }
-.tab-i{ display:flex; flex:0 0 auto; }
+.tab-i{ display:flex; align-items:center; justify-content:center; }
 .tab-i svg{ width:1.5rem; height:1.5rem; }
-.tab-l{ font-size:.86rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap;
-  max-width:0; overflow:hidden; opacity:0;
-  transition:max-width .26s cubic-bezier(.3,.7,.25,1), opacity .2s ease; }
-/* the active page's tab is a labelled pill */
-.tab.active{ flex:0 1 auto; opacity:1; color:var(--rubric); padding:.45rem .9rem; margin:.4rem .15rem; }
-.tab.active .tab-l{ max-width:8rem; opacity:1; }
-.tab.cand{ color:var(--rubric); opacity:1; }   /* the tab the highlight is over while dragging */
-html[data-theme="dark"] .tab.active .tab-i,
-html[data-theme="dark"] .tab.cand .tab-i{ filter:drop-shadow(0 0 7px color-mix(in srgb, var(--rubric) 45%, transparent)); }
-/* during a drag, all tabs are equal icon-only and the thumb slides freely
-   (one reflow in, one out — no per-move jiggle) */
-.tabbar.tb-drag .tab{ flex:1 1 0; padding:.5rem .25rem; margin:0; }
-.tabbar.tb-drag .tab-l{ max-width:0; opacity:0; }
-
-/* ---- page transition: content springs up on enter, peels down on leave --- */
-.book{ will-change:auto; }
-@keyframes px-in{
-  0%{ transform:translateY(48px); opacity:0; }
-  60%{ opacity:1; }
-  100%{ transform:translateY(0); opacity:1; }
-}
-html.px-enter .book{ animation:px-in .44s cubic-bezier(.34,1.34,.5,1) both; }
-@media (prefers-reduced-motion: reduce){
-  html.px-enter .book{ animation:none; }
-}
+.tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap; }
+/* the active page's tab: a solid filled rounded pill wrapping the icon AND its
+   label, hugging their size and centred in the bar (icon/label recoloured) */
+.tab.active{ flex:0 1 auto; align-self:center; min-height:0; opacity:1;
+  background:var(--rubric); color:var(--on-rubric);
+  border-radius:var(--r-lg); padding:.42rem .95rem;
+  box-shadow:0 0 12px color-mix(in srgb, var(--rubric) 38%, transparent); }
+html[data-theme="dark"] .tab.active{ box-shadow:0 0 16px color-mix(in srgb, var(--rubric) 52%, transparent); }
 /* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
   .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
