@@ -1218,6 +1218,20 @@ html[data-theme="dark"] .bib-continue{ box-shadow:var(--elev-2), var(--glow-red)
 @media (hover:hover){ .bib-pn:hover{ background:var(--rubric); color:var(--on-rubric); } }
 .bib-pn:active{ transform:scale(.98); }
 
+/* ---- the People's Responses at the services -------------------------- */
+.svc-svc{ text-align:center; font-family:var(--display); font-weight:600; color:var(--rubric);
+  font-size:1.7rem; line-height:1.15; margin:1.7em 0 .1em; }
+.svc-blurb{ text-align:center; text-indent:0; font-style:italic; opacity:.75; margin:0 0 1em; }
+.svc-sec{ font-family:var(--serif); font-weight:600; font-variant-caps:small-caps; letter-spacing:.06em;
+  color:var(--gold); text-align:left; font-size:1.02rem; margin:1.4em 0 .55em; }
+.svc-r{ margin:0 0 1.05em; }
+/* the celebrant's prompt, set like a rubric direction; the people's words in ink */
+.svc-cue{ text-indent:0; color:var(--rubric-deep); font-style:italic; font-size:.96rem;
+  line-height:1.45; opacity:.92; margin:0 0 .2em; }
+html[data-theme="dark"] .svc-cue{ color:var(--rubric); opacity:.85; }
+.svc-say{ text-indent:0; font-size:1.14rem; line-height:1.55; margin:0; }
+.svc-note{ font-style:italic; opacity:.55; font-size:.85em; }
+
 /* ---- dark theme: warm glow on the lights (gilt ornaments + red buttons) */
 html[data-theme="dark"] .divider .cross,
 html[data-theme="dark"] .divider .art-rule,
