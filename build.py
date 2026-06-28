@@ -212,32 +212,14 @@ content = _drawn_crosses(content)
 # sub-menus + the slide-up Settings sheet
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
-  <button class="tab{p_act}" id="prayers-btn" type="button" aria-haspopup="true" aria-expanded="false"
-          aria-controls="prayers-menu" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></button>
+  <a class="tab{p_act}" href="prayers.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
   <button class="tab tab-fab" id="cam-btn" type="button" aria-label="Read Greek — take or choose a photo"><span class="tab-i">{CAMERA}</span><span class="tab-l">Greek</span></button>
   <input id="cam-input" type="file" accept="image/*" hidden>
-  <button class="tab{r_act}" id="resources-btn" type="button" aria-haspopup="true" aria-expanded="false"
-          aria-controls="resources-menu" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></button>
+  <a class="tab{r_act}" href="resources.html" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></a>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" aria-label="Settings"><span class="tab-i">{GEAR}</span><span class="tab-l">Settings</span></button>
 </nav>
 <div id="menu-backdrop" class="backdrop"></div>
-<div id="prayers-menu" class="drawer" role="dialog" aria-modal="true" aria-label="Prayers">
-  <div class="drawer-head">
-    <span class="grab" aria-hidden="true"></span>
-    <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
-  </div>
-  <div class="drawer-heading">Prayers</div>
-  <nav class="drawer-nav" aria-label="Prayers">{prayer_links}</nav>
-</div>
-<div id="resources-menu" class="drawer" role="dialog" aria-modal="true" aria-label="Resources">
-  <div class="drawer-head">
-    <span class="grab" aria-hidden="true"></span>
-    <button class="drawer-close" type="button" aria-label="Close">{CLOSE}</button>
-  </div>
-  <div class="drawer-heading">Resources</div>
-  <nav class="drawer-nav" aria-label="Resources">{res_links}</nav>
-</div>
 <div id="menu" class="drawer" role="dialog" aria-modal="true" aria-label="Settings">
   <div class="drawer-head">
     <span class="grab" aria-hidden="true"></span>
@@ -289,31 +271,11 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
 </div>'''
 
 
-def _drawer_links(pairs, current):
-    out = []
-    for p in pairs:
-        href, label = p[0], p[1]
-        pill = p[2] if len(p) > 2 else ""
-        here = href == current or (pill == "ancient" and current.startswith("af-"))
-        cls = " active" if here else ""
-        cur = ' aria-current="page"' if here else ""
-        tag = ' <span class="pill pill-ancient pill-sm">Ancient</span>' if pill == "ancient" else ""
-        out.append(f'<a class="drawer-link{cls}"{cur} href="{href}">{label}{tag}</a>')
-    return "\n".join(out)
-
-
 def tabbar(active="", current=""):
-    prayer_pairs = [("morning.html", "Morning Prayers"), ("table.html", "Prayers at Table"),
-                    ("hours.html", "Prayers for the Hours of the Day &amp; Night"),
-                    ("sleep.html", "Prayers Before Sleep"),
-                    ("ancient.html", "The Ancient Faith Prayer Book", "ancient")]
-    res_pairs = [(c[1], c[0]) for c in RES_CARDS]
     return TABBAR_TMPL.format(
         h_act=" active" if active == "home" else "",
         p_act=" active" if active == "prayers" else "",
         r_act=" active" if active == "resources" else "",
-        prayer_links=_drawer_links(prayer_pairs, current),
-        res_links=_drawer_links(res_pairs, current),
         HOME=HOME, BOOK=BOOK, CAMERA=CAMERA, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
 
 
@@ -891,6 +853,33 @@ def hub_page():
     return "\n".join(o)
 
 
+# Prayers index — a card per set of prayers (replaces the old slide-up menu)
+PRAYER_CARDS = [
+    ("Morning Prayers", "morning.html", "On rising — the morning rule.", "cross"),
+    ("Prayers at Table", "table.html", "Blessings before and after meals.", "gospel"),
+    ("Hours of the Day &amp; Night", "hours.html", "Through the hours, into the night.", "chirho"),
+    ("Before Sleep", "sleep.html", "At the close of the day.", "cross"),
+]
+
+
+def prayers_hub():
+    o = ['<section class="resources" id="top">', _divider("Prayers"),
+         '<p class="res-intro">The daily prayers — choose a time.</p>', '<div class="res-hub">']
+    for name, href, blurb, emb in PRAYER_CARDS:
+        o.append(f'<a class="res-card" href="{href}">{_emblem(emb)}'
+                 f'<span class="res-card-t">{name}</span>'
+                 f'<span class="res-card-d">{blurb}</span></a>')
+    if ANCIENT:
+        o.append(f'<a class="res-card" href="ancient.html">{_emblem("roundel")}'
+                 f'<span class="res-card-t">The Ancient Faith Prayer Book '
+                 f'<span class="pill pill-ancient pill-sm">Ancient</span></span>'
+                 f'<span class="res-card-d">A fuller cycle of daily offices.</span></a>')
+    o.append('</div>')
+    o.append(art("cross", foot=True))
+    o.append('</section>')
+    return "\n".join(o)
+
+
 # ---- The Ancient Faith Prayer Book (converted from the EPUB; opt-in) --------
 # slug, page/menu title, short blurb for the hub cards
 AFPB = [
@@ -1044,7 +1033,7 @@ CONTROL_JS = '''<script>
   var r=document.documentElement, d=document, L=localStorage;
   var backdrop=d.getElementById("menu-backdrop");
   // each pop-up sheet, paired with the tab button that opens it
-  var sheets=[["prayers-btn","prayers-menu"],["resources-btn","resources-menu"],["settings-btn","menu"]]
+  var sheets=[["settings-btn","menu"]]
     .map(function(p){ return {btn:d.getElementById(p[0]), el:d.getElementById(p[1])}; })
     .filter(function(s){ return s.btn && s.el; });
   function setOpen(s,o){ s.el.classList.toggle("open",o); s.btn.setAttribute("aria-expanded", o?"true":"false"); }
@@ -1313,6 +1302,12 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "table, the hours of the day and night, and before sleep, with resources for inquirers "
      "coming from Western Protestant Christianity to Orthodoxy.",
      LANDING.format(cross=CLOSING, rule=RULE_FIG), active="home")
+
+# Prayers index (card hub; replaces the old slide-up Prayers menu)
+page("prayers.html", "Prayers — Daily Prayers",
+     "The daily Orthodox prayers — morning, at the table, the hours of the day and night, before "
+     "sleep, and the Ancient Faith Prayer Book.",
+     prayers_hub(), active="prayers")
 
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
