@@ -1001,31 +1001,33 @@ document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
-GREEK_JS = '<script src="greek-tool.js?v=2" defer></script>'
+GREEK_JS = '<script src="greek-tool.js?v=3" defer></script>'
 
 
 def greek_page():
     return "\n".join([
         '<section class="resources" id="top">', BACK, _divider("Greek Photo Translator"),
-        '<p class="topic-intro">Take or choose a photo of Greek text — an icon inscription, a '
-        'service book, a sign — and this will read it and translate it to English. It works best '
-        'on clear, printed Greek and <strong>needs an internet connection</strong>. Reading and '
-        'translation are approximate; use it as a help, not a final authority.</p>',
+        '<p class="topic-intro">Take or choose a photo of Greek text and this will read it and '
+        'translate it. It <strong>needs an internet connection</strong>, and works best on '
+        '<strong>clear, straight-on, well-lit printed Greek</strong>. Stylised icon lettering, '
+        'calligraphy and heavy accents are often misread — when that happens, correct the text in '
+        'the box and translate again, or open it in Google Translate for the best result.</p>',
         '<div class="gk">',
         '<label class="gk-pick" for="gk-file">Take or choose a photo</label>',
         '<input id="gk-file" type="file" accept="image/*" hidden>',
         '<img id="gk-img" class="gk-img" alt="Your photo" hidden>',
         '<p id="gk-status" class="gk-status" aria-live="polite"></p>',
-        '<p class="gk-lbl">Greek <span class="gk-hint">(you can correct it)</span></p>',
+        '<p class="gk-lbl">Greek <span class="gk-hint">(correct it if the reading is off)</span></p>',
         '<textarea id="gk-greek" class="gk-greek" rows="3" dir="auto"></textarea>',
-        '<button id="gk-go" class="cta" type="button">Translate</button>',
+        '<button id="gk-go" class="cta cta-ghost" type="button">Translate again</button>',
         '<p class="gk-lbl">Transliteration</p><p id="gk-translit" class="gk-translit"></p>',
-        '<p class="gk-lbl">English</p><p id="gk-en" class="gk-en"></p>',
-        '<a id="gk-gt" class="tw-more" target="_blank" rel="noopener" hidden>Open in Google Translate &rsaquo;</a>',
+        '<p class="gk-lbl">English <span class="gk-hint">(rough)</span></p><p id="gk-en" class="gk-en"></p>',
+        '<a id="gk-gt" class="cta" target="_blank" rel="noopener" hidden>Open in Google Translate</a>',
         '</div>',
-        '<p class="res-foot">Text recognition runs in your browser with an open-source engine; '
-        'translation uses a free public service. Neither is perfect — for careful study, compare '
-        'with a printed translation. This tool is the one part of the app that reaches the internet.</p>',
+        '<p class="res-foot">Text recognition runs in your browser (open-source); the rough '
+        'translation uses a free public service, and the button above hands the text to Google '
+        'Translate for a much better rendering. None is perfect — for careful study, compare with a '
+        'printed translation. This is the one part of the app that reaches the internet.</p>',
         art("gospel", foot=True),
         '</section>'])
 
