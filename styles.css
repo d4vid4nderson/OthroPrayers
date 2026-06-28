@@ -678,8 +678,18 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
   margin:.06em .1em 0 0; }
 
 /* resources hub (cards) + sub-page back link */
-.res-back{ display:inline-block; color:var(--link); text-decoration:none; font-size:1rem; margin:.1rem 0 .3rem; }
-.res-back:hover{ text-decoration:underline; }
+.res-back{ display:inline-flex; align-items:center; gap:.4rem;
+  padding:.42rem .9rem .42rem .7rem; margin:.1rem 0 .9rem;
+  background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-pill);
+  color:var(--ink); text-decoration:none; font-size:.92rem;
+  font-variant-caps:small-caps; letter-spacing:.04em; box-shadow:var(--elev-1);
+  transition:border-color .15s ease, color .15s ease, transform .1s ease; }
+.res-back__i{ flex:0 0 auto; transition:transform .15s ease; }
+@media (hover:hover){
+  .res-back:hover{ border-color:var(--gold); color:var(--rubric); }
+  .res-back:hover .res-back__i{ transform:translateX(-2px); }
+}
+.res-back:active{ transform:scale(.97); }
 .res-hub{ display:grid; grid-template-columns:1fr; gap:.7rem; margin:1.2em 0 0; }
 @media (min-width:34rem){ .res-hub{ grid-template-columns:1fr 1fr; } }
 .res-card{
