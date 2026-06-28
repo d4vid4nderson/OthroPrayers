@@ -729,6 +729,8 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
   color:var(--ink); text-decoration:none; font-size:.92rem;
   font-variant-caps:small-caps; letter-spacing:.04em; box-shadow:var(--elev-1);
   transition:border-color .15s ease, color .15s ease, transform .1s ease; }
+/* back-to-hub pill at the top of a reading page (prayers, AFPB offices) */
+.page-back{ text-align:left; }
 .res-back__i{ flex:0 0 auto; transition:transform .15s ease; }
 @media (hover:hover){
   .res-back:hover{ border-color:var(--gold); color:var(--rubric); }
