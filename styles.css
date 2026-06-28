@@ -571,7 +571,7 @@ html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 8px color-mix
 .tab-fab{ flex:0 0 auto; opacity:1; justify-content:flex-end; padding-inline:.6rem; }
 .tab-fab:hover{ opacity:1; }
 .tab-fab .tab-i{
-  width:3.5rem; height:3.5rem; margin-top:-1.7rem; margin-bottom:.1rem;
+  width:2.9rem; height:2.9rem; margin-top:-1.1rem; margin-bottom:.1rem;
   align-items:center; justify-content:center; color:var(--on-rubric); border-radius:50%;
   background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--rubric) 80%, #fff), var(--rubric));
   box-shadow:0 6px 16px color-mix(in srgb, var(--rubric) 40%, transparent),
@@ -586,7 +586,7 @@ html[data-theme="dark"] .tab-fab .tab-i{
              0 0 0 3px var(--paper), 0 0 0 4px color-mix(in srgb, var(--gold) 70%, transparent);
 }
 .tab-fab:active .tab-i{ transform:scale(.94); }
-.tab-fab .tab-i svg{ width:1.7rem; height:1.7rem; }
+.tab-fab .tab-i svg{ width:1.4rem; height:1.4rem; }
 .tab-fab .tab-l{ color:var(--rubric); opacity:.95; }
 .tab-fab.active::before, .tab-fab::before{ content:none; }
 /* installed web-app: a touch more room above the home indicator */
