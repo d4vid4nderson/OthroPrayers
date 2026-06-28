@@ -243,6 +243,7 @@ READ = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
         '<path d="M12 6.6V19.2"/></svg>')
 
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
+  <span class="tab-thumb" aria-hidden="true"></span>
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <a class="tab{p_act}" href="prayers.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
   <a class="tab{b_act}" href="scripture.html" aria-label="Read the Bible"><span class="tab-i">{READ}</span><span class="tab-l">Read</span></a>
@@ -1370,6 +1371,7 @@ if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
+try{if(sessionStorage.getItem("px-enter")){r.classList.add("px-enter");sessionStorage.removeItem("px-enter");}}catch(e){}
 var dk=r.dataset.theme==="dark";
 var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
 </script>'''
@@ -1510,6 +1512,73 @@ CONTROL_JS = '''<script>
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
 
   paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
+
+  // ---- draggable highlight + spring page transition --------------------
+  // Pull the active pill onto another tab; the current content peels down and
+  // the next page's content springs up. Tapping a tab still navigates normally.
+  (function(){
+    var bar=d.querySelector(".tabbar"); if(!bar) return;
+    var thumb=bar.querySelector(".tab-thumb");
+    var tabs=Array.prototype.slice.call(bar.querySelectorAll(".tab"));
+    var active=bar.querySelector(".tab.active");
+    var book=d.querySelector("main.book");
+    if(!thumb||!active||tabs.length<2) return;
+    var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function cx(t){ return t.offsetLeft + t.offsetWidth/2; }
+    function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px"; }
+    placeIdle();
+    window.addEventListener("load", placeIdle);
+    window.addEventListener("resize", placeIdle);
+    window.addEventListener("pageshow", placeIdle);
+    if(d.fonts&&d.fonts.ready) d.fonts.ready.then(placeIdle);
+
+    var down=false, drag=false, sx=0, w=0, cand=active, didDrag=false;
+    function nearest(x){ var best=tabs[0],bd=1e9; for(var i=0;i<tabs.length;i++){var dd=Math.abs(cx(tabs[i])-x); if(dd<bd){bd=dd;best=tabs[i];}} return best; }
+    function setCand(t){ cand=t; for(var i=0;i<tabs.length;i++) tabs[i].classList.toggle("cand", tabs[i]===t && t!==active); }
+    function bookPeel(px){ if(!book||RM) return; book.style.transition="none"; book.style.transform="translateY("+px+"px)"; book.style.opacity=String(Math.max(.4, 1-px/180)); }
+    function bookReset(){ if(!book||RM) return; book.style.transition="transform .34s cubic-bezier(.34,1.42,.5,1), opacity .3s ease"; book.style.transform=""; book.style.opacity=""; }
+    function leave(href){
+      try{ sessionStorage.setItem("px-enter","1"); }catch(e){}
+      if(book && !RM){ book.style.transition="transform .24s cubic-bezier(.4,0,.7,1), opacity .24s ease"; book.style.transform="translateY(70px)"; book.style.opacity="0";
+        setTimeout(function(){ location.href=href; }, 210); }
+      else location.href=href;
+    }
+    function onMove(e){
+      if(!down) return;
+      if(!drag){ if(Math.abs(e.clientX-sx)<8) return; drag=true; didDrag=true; bar.classList.add("tb-drag"); thumb.style.width=w+"px"; }
+      if(e.cancelable) e.preventDefault();
+      var x=e.clientX - bar.getBoundingClientRect().left;
+      thumb.style.left=Math.max(0, Math.min(bar.clientWidth-w, x-w/2))+"px";
+      setCand(nearest(x));
+      bookPeel(Math.min(34, Math.abs(x-cx(active))*0.16));
+    }
+    function end(){
+      if(!down) return; down=false;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", end);
+      if(!drag) return;
+      drag=false; bar.classList.remove("tb-drag");
+      for(var i=0;i<tabs.length;i++) tabs[i].classList.remove("cand");
+      thumb.style.transition="";
+      var href=cand&&cand.getAttribute&&cand.getAttribute("href");
+      if(cand && cand!==active && href){
+        thumb.style.left=cand.offsetLeft+"px"; thumb.style.width=cand.offsetWidth+"px";
+        leave(href);
+      } else if(cand && cand!==active && cand.id==="settings-btn"){
+        placeIdle(); bookReset(); cand.click();
+      } else { placeIdle(); bookReset(); }
+      setTimeout(function(){ didDrag=false; }, 60);
+    }
+    // listen on window during the gesture (more robust than pointer capture)
+    bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false;
+      sx=e.clientX; w=Math.max(46, Math.round(parseFloat(getComputedStyle(r).fontSize||16)*3.2));
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", end);
+      window.addEventListener("pointercancel", end); });
+    // swallow the click that follows a drag so the link under the finger doesn't also fire
+    bar.addEventListener("click", function(e){ if(didDrag){ e.preventDefault(); e.stopPropagation(); } }, true);
+  })();
 })();
 </script>'''
 
