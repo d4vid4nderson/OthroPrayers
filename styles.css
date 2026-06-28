@@ -542,7 +542,7 @@ html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); 
 /* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
 .tabbar{
   flex:0 0 auto; z-index:30;
-  display:flex; align-items:stretch;
+  display:flex; align-items:center;
   background:color-mix(in srgb, var(--paper) 86%, transparent);
   backdrop-filter:saturate(1.3) blur(12px);
   -webkit-backdrop-filter:saturate(1.3) blur(12px);
@@ -553,47 +553,28 @@ html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); 
 }
 html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%, transparent); }
 .tab{
-  position:relative;
-  flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:.2rem; padding:.6rem .25rem .4rem; min-height:3.6rem;
+  flex:1 1 0; display:flex; align-items:center; justify-content:center;
+  gap:.4rem; padding:.5rem .25rem; min-height:3.4rem;
   background:none; border:0; cursor:pointer; text-decoration:none;
-  color:var(--ink); font-family:inherit; opacity:.55;
-  transition:opacity .15s ease, color .15s ease;
+  color:var(--ink); font-family:inherit; opacity:.5;
+  transition:opacity .15s ease, color .15s ease, background .2s ease, padding .2s ease;
 }
-.tab:hover{ opacity:.85; }
+@media (hover:hover){ .tab:hover{ opacity:.8; } }
 .tab:active{ opacity:1; }
-.tab.active{ opacity:1; color:var(--rubric); }
-.tab.active::before{   /* a small gilt "ribbon" marking the current tab */
-  content:""; position:absolute; top:0; left:28%; right:28%; height:2.5px;
-  background:var(--gold); border-radius:var(--r-pill);
-}
-html[data-theme="dark"] .tab.active::before{ box-shadow:var(--glow-gold); }
-html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 8px color-mix(in srgb, var(--rubric) 45%, transparent)); }
-.tab-i{ display:flex; }
+.tab-i{ display:flex; flex:0 0 auto; }
 .tab-i svg{ width:1.5rem; height:1.5rem; }
-.tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.04em; white-space:nowrap; }
-/* raised centre button (the Greek photo translator) — the brand's hero */
-.tab-fab{ flex:0 0 auto; opacity:1; justify-content:flex-end; padding-inline:.6rem; }
-.tab-fab:hover{ opacity:1; }
-.tab-fab .tab-i{
-  width:2.9rem; height:2.9rem; margin-top:-1.1rem; margin-bottom:.1rem;
-  align-items:center; justify-content:center; color:var(--on-rubric); border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--rubric) 80%, #fff), var(--rubric));
-  box-shadow:0 6px 16px color-mix(in srgb, var(--rubric) 40%, transparent),
-             0 2px 4px color-mix(in srgb, var(--rubric) 32%, transparent),
-             0 0 0 3px var(--paper), 0 0 0 4px color-mix(in srgb, var(--gold) 60%, transparent);
-  transition:transform .12s ease, box-shadow .2s ease;
+/* labels are hidden until a tab is active, when it expands into a pill */
+.tab-l{ font-size:.86rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap;
+  max-width:0; overflow:hidden; opacity:0;
+  transition:max-width .2s ease, opacity .2s ease; }
+.tab.active{
+  flex:0 1 auto; opacity:1; color:var(--rubric);
+  padding:.45rem .9rem; margin:.4rem .15rem; border-radius:var(--r-pill);
+  background:color-mix(in srgb, var(--rubric) 14%, transparent);
 }
-html[data-theme="dark"] .tab-fab .tab-i{
-  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--rubric) 72%, #fff), var(--rubric));
-  box-shadow:0 6px 18px color-mix(in srgb, var(--rubric) 50%, transparent),
-             0 0 22px color-mix(in srgb, var(--rubric) 42%, transparent),
-             0 0 0 3px var(--paper), 0 0 0 4px color-mix(in srgb, var(--gold) 70%, transparent);
-}
-.tab-fab:active .tab-i{ transform:scale(.94); }
-.tab-fab .tab-i svg{ width:1.4rem; height:1.4rem; }
-.tab-fab .tab-l{ color:var(--rubric); opacity:.95; }
-.tab-fab.active::before, .tab-fab::before{ content:none; }
+.tab.active .tab-l{ max-width:8rem; opacity:1; }
+html[data-theme="dark"] .tab.active{ background:color-mix(in srgb, var(--rubric) 22%, transparent); }
+html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 7px color-mix(in srgb, var(--rubric) 45%, transparent)); }
 /* installed web-app: a touch more room above the home indicator */
 @media (display-mode:standalone){
   .tabbar{ padding-bottom:max(1.3rem, calc(env(safe-area-inset-bottom) + .2rem)); }
@@ -1258,6 +1239,6 @@ html[data-theme="dark"] .tts-player:not(.open){ box-shadow:0 6px 18px color-mix(
     transition-duration:.001ms !important; scroll-behavior:auto !important;
   }
   .res-card:active, .cf-chip:active, .gk-mini:active, .gk-cta:active,
-  .cal-btn:active, .landing-cta .cta:active, .tab-fab:active .tab-i,
+  .cal-btn:active, .landing-cta .cta:active,
   .tw-prompt-btn:active, .gk-drop:active{ transform:none; }
 }

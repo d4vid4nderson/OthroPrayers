@@ -107,10 +107,10 @@ HOME = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
 BOOK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1.6"/>'
         '<path d="M12 7.4v6"/><path d="M9.4 9.6h5.2"/></svg>')
+# Resources = a compass ("explore the faith") — distinct from the open-book Read icon
 COMPASS = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
-           'stroke-linejoin="round" aria-hidden="true"><path d="M12 6.4v13.2"/>'
-           '<path d="M12 6.4C9.8 5 6.6 5 4 6v12.6c2.6-1 5.8-1 8 .4"/>'
-           '<path d="M12 6.4c2.2-1.4 5.4-1.4 8-.4v12.6c-2.6-1-5.8-1-8 .4"/></svg>')
+           'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/>'
+           '<polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9"/></svg>')
 GEAR = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
         'stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/>'
         '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 '
@@ -245,7 +245,7 @@ READ = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <a class="tab{p_act}" href="prayers.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
-  <a class="tab tab-fab{b_act}" href="scripture.html" aria-label="Read the Bible"><span class="tab-i">{READ}</span><span class="tab-l">Read</span></a>
+  <a class="tab{b_act}" href="scripture.html" aria-label="Read the Bible"><span class="tab-i">{READ}</span><span class="tab-l">Read</span></a>
   <a class="tab{r_act}" href="resources.html" aria-label="Resources"><span class="tab-i">{COMPASS}</span><span class="tab-l">Resources</span></a>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" aria-label="Settings"><span class="tab-i">{GEAR}</span><span class="tab-l">Settings</span></button>
@@ -1508,26 +1508,6 @@ CONTROL_JS = '''<script>
     };
   }
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
-
-  // centre camera button: open the camera, downscale the photo, then hand it
-  // to the Greek translator page (auto-processed there)
-  var camBtn=d.getElementById("cam-btn"), cam=d.getElementById("cam-input");
-  if(camBtn && cam){
-    camBtn.onclick=function(){ cam.value=""; cam.click(); };
-    cam.addEventListener("change", function(){
-      var f=cam.files && cam.files[0]; if(!f) return;
-      var im=new Image(), u=URL.createObjectURL(f);
-      im.onload=function(){
-        var mx=1600, s=Math.min(1, mx/Math.max(im.width, im.height));
-        var c=d.createElement("canvas"); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s);
-        c.getContext("2d").drawImage(im,0,0,c.width,c.height); URL.revokeObjectURL(u);
-        try{ sessionStorage.setItem("gk-photo", c.toDataURL("image/jpeg",0.8)); }catch(e){}
-        location.href="greek.html";
-      };
-      im.onerror=function(){ URL.revokeObjectURL(u); location.href="greek.html"; };
-      im.src=u;
-    });
-  }
 
   paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
 })();
