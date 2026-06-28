@@ -311,10 +311,12 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 
   paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
 
-  // ---- tab bar: sliding highlight + spring page transition --------------
-  // Every tab navigation (tap OR drag-release) plays the same transition: the
-  // current page content springs DOWN, then the next page's content springs UP.
-  // Dragging slides a single highlight smoothly; tapping is instant-to-trigger.
+  // ---- tab bar: a "liquid" highlight + spring page transition -----------
+  // The highlight behaves like a blob of liquid: as it travels between tabs it
+  // stretches toward the target and squashes back into the pill as it settles
+  // (a spring drives the centre; the width grows with the gap to the target).
+  // Works on drag and tap. Each navigation springs the content down, and the
+  // next page springs it up.
   (function(){
     var bar=d.querySelector(".tabbar"); if(!bar) return;
     var thumb=bar.querySelector(".tab-thumb");
@@ -323,7 +325,8 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     var book=d.querySelector("main.book");
     if(!thumb||!active||tabs.length<2) return;
     var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var ai=tabs.indexOf(active);
+    var ai=tabs.indexOf(active), N=tabs.length;
+    function rem(){ return parseFloat(getComputedStyle(r).fontSize)||16; }
     function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px";
       thumb.style.top=active.offsetTop+"px"; thumb.style.height=active.offsetHeight+"px"; }
     placeIdle();
@@ -332,51 +335,72 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     window.addEventListener("pageshow", placeIdle);
     if(d.fonts&&d.fonts.ready) d.fonts.ready.then(placeIdle);
 
-    var down=false, drag=false, didDrag=false, sx=0, w=0, cand=ai;
-    function indexAt(x){ var n=tabs.length, i=Math.floor(x/(bar.clientWidth/n)); return Math.max(0, Math.min(n-1, i)); }
-    function setCand(i){ cand=i; for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle("cand", j===i && j!==ai); }
+    function slotW(){ return bar.clientWidth/N; }
+    function slotCenter(i){ return (i+0.5)*slotW(); }
+    function indexAt(x){ return Math.max(0, Math.min(N-1, Math.floor(x/slotW()))); }
+    function setCand(i){ for(var j=0;j<N;j++) tabs[j].classList.toggle("cand", j===i && j!==ai); }
+    function clearCand(){ for(var j=0;j<N;j++) tabs[j].classList.remove("cand"); }
+
+    // --- the liquid follower (spring centre + gap-driven stretch) ---
+    var hx=0, tx=0, vel=0, raf=0, baseW=0, baseH=0, onSettle=null;
+    function renderThumb(){
+      var lo=Math.min(hx,tx)-baseW/2, hi=Math.max(hx,tx)+baseW/2;
+      lo=Math.max(2, lo); hi=Math.min(bar.clientWidth-2, hi);
+      var gap=Math.abs(tx-hx);
+      thumb.style.transition="none";
+      thumb.style.left=lo+"px"; thumb.style.width=(hi-lo)+"px";
+      thumb.style.height=(baseH - Math.min(7, gap*0.05))+"px";          // squash while stretched
+      thumb.style.top=(active.offsetTop + Math.min(3.5, gap*0.022))+"px";
+    }
+    function tick(){
+      var dx=tx-hx; vel=vel*0.74 + dx*0.22; hx+=vel;                    // springy, slight overshoot
+      if(Math.abs(dx)<0.4 && Math.abs(vel)<0.4){ hx=tx; vel=0; renderThumb(); raf=0;
+        var cb=onSettle; onSettle=null; if(cb) cb(); return; }
+      renderThumb(); raf=requestAnimationFrame(tick);
+    }
+    function startLiquid(fromC){ baseW=Math.round(rem()*3); baseH=active.offsetHeight||Math.round(rem()*2.7);
+      bar.classList.add("tb-drag"); hx=fromC; tx=fromC; vel=0; if(!raf) raf=requestAnimationFrame(tick); }
+    function settleTo(toC, cb){ tx=toC; onSettle=cb; if(!raf) raf=requestAnimationFrame(tick); }
+
     function bookFollow(f){ if(!book||RM) return;
       book.style.transition="transform .12s cubic-bezier(.2,.7,.3,1), opacity .12s ease";
       book.style.transform="translateY("+(f*58)+"px)"; book.style.opacity=String(1-Math.min(.8, f*0.9)); }
     function bookUp(){ if(!book||RM) return;
       book.style.transition="transform .42s cubic-bezier(.34,1.3,.5,1), opacity .32s ease";
       book.style.transform=""; book.style.opacity=""; }
-    // the shared transition: spring the content down, flag the next page to
-    // spring up (EARLY_JS reads px-enter and runs the px-in keyframe)
+    // springs the content down, flags the next page to spring up (px-in)
     function navTo(href){
       try{ sessionStorage.setItem("px-enter","1"); }catch(e){}
-      if(book && !RM){ book.style.transition="transform .22s cubic-bezier(.4,0,.7,1), opacity .22s ease"; book.style.transform="translateY(80px)"; book.style.opacity="0";
-        setTimeout(function(){ location.href=href; }, 200); }
-      else location.href=href;
+      if(book && !RM){ book.style.transition="transform .24s cubic-bezier(.4,0,.7,1), opacity .24s ease"; book.style.transform="translateY(76px)"; book.style.opacity="0"; }
+      setTimeout(function(){ location.href=href; }, RM?0:230);
     }
-    // tap to navigate, with the same spring transition (skip if a drag just ran)
-    tabs.forEach(function(t){ var href=t.getAttribute&&t.getAttribute("href"); if(!href) return;
-      t.addEventListener("click", function(e){ if(didDrag) return; e.preventDefault(); navTo(href); }); });
 
+    // tap: the blob flows to the tapped tab while the content springs down
+    tabs.forEach(function(t, idx){ var href=t.getAttribute&&t.getAttribute("href"); if(!href) return;
+      t.addEventListener("click", function(e){ if(didDrag) return; e.preventDefault();
+        if(!RM){ startLiquid(slotCenter(ai)); setCand(idx); tx=slotCenter(idx); if(!raf) raf=requestAnimationFrame(tick); }
+        navTo(href); }); });
+
+    var down=false, drag=false, didDrag=false, sx=0;
     function onMove(e){
       if(!down) return;
-      if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; bar.classList.add("tb-drag");
-        w=Math.max(46, Math.round((parseFloat(getComputedStyle(r).fontSize)||16)*3)); thumb.style.width=w+"px"; }
+      if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; startLiquid(slotCenter(ai)); }
       if(e.cancelable) e.preventDefault();
       var x=e.clientX - bar.getBoundingClientRect().left;
-      thumb.style.left=Math.max(0, Math.min(bar.clientWidth-w, x-w/2))+"px";   // 1:1 with the finger
+      tx=Math.max(baseW/2, Math.min(bar.clientWidth-baseW/2, x));      // blob target follows the finger
       setCand(indexAt(x));
-      // content follows the drag continuously: distance of the finger from the page's own tab
-      var hc=(ai + 0.5) * (bar.clientWidth/tabs.length);
-      bookFollow(Math.min(1, Math.abs(x-hc)/(bar.clientWidth*0.55)));
+      bookFollow(Math.min(1, Math.abs(x-slotCenter(ai))/(bar.clientWidth*0.55)));
     }
     function end(){
       if(!down) return; down=false;
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", end);
       window.removeEventListener("pointercancel", end);
-      if(!drag) return;
-      drag=false; bar.classList.remove("tb-drag");
-      for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("cand");
-      var t=tabs[cand], href=t&&t.getAttribute&&t.getAttribute("href");
-      if(cand!==ai && href){ navTo(href); }
-      else if(cand!==ai && t && t.id==="settings-btn"){ placeIdle(); bookUp(); t.click(); }
-      else { placeIdle(); bookUp(); }
+      if(!drag) return; drag=false;
+      var ci=indexAt(hx), t=tabs[ci], href=t&&t.getAttribute&&t.getAttribute("href");
+      if(ci!==ai && href){ tx=slotCenter(ci); if(!raf) raf=requestAnimationFrame(tick); navTo(href); }
+      else if(ci!==ai && t && t.id==="settings-btn"){ settleTo(slotCenter(ai), function(){ bar.classList.remove("tb-drag"); clearCand(); placeIdle(); }); bookUp(); t.click(); }
+      else { settleTo(slotCenter(ai), function(){ bar.classList.remove("tb-drag"); clearCand(); placeIdle(); }); bookUp(); }
       setTimeout(function(){ didDrag=false; }, 60);
     }
     bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false; sx=e.clientX;
