@@ -802,11 +802,20 @@ def fathers_page(ornament=""):
              'tick each work as you read or listen; your progress is saved on this device.</p>')
     hubs = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in AUDIO_HUBS)
     o.append(f'<p class="cf-audiohubs">Listen free: {hubs}</p>')
-    o.append('<p class="cf-progress-wrap"><span id="cf-progress">0 read</span>'
-             '<span class="cf-track"><span id="cf-bar" class="cf-fill"></span></span></p>')
+    o.append('<div class="cf-progress-wrap"><div class="cf-progress-row">'
+             '<span id="cf-progress">0 read</span></div>'
+             '<span class="cf-track"><span id="cf-bar" class="cf-fill"></span></span></div>')
+    # small read/listen glyphs for the action chips
+    _CF_READ_I = ('<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" '
+                  'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                  '<path d="M2 5h8a3 3 0 0 1 3 3v11a2.5 2.5 0 0 0-2.5-2.5H2z"/>'
+                  '<path d="M22 5h-8a3 3 0 0 0-3 3v11a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>')
+    _CF_LISTEN_I = ('<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" '
+                    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                    '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>')
     for era in ERAS:
-        o.append('<div class="cf-era">')
-        o.append(f'<h3>{era["name"]} <span class="cf-dates">{era["dates"]}</span></h3>')
+        o.append('<section class="cf-era">')
+        o.append(f'<h3 class="cf-era-h">{era["name"]} <span class="cf-dates">{era["dates"]}</span></h3>')
         o.append(f'<p class="cf-blurb">{era["blurb"]}</p>')
         src = " · ".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in era["read"])
         if era.get("audio"):
@@ -815,17 +824,18 @@ def fathers_page(ornament=""):
         o.append('<ul class="cf-list">')
         for wid, title, by, read, note in era["works"]:
             url = CF_READ.get(wid) or read
-            rl = (f'<a class="cf-read" href="{url}" target="_blank" rel="noopener">read &rsaquo;</a>'
-                  if url else '')
+            rl = (f'<a class="cf-chip" href="{url}" target="_blank" rel="noopener">'
+                  f'{_CF_READ_I}<span>Read</span></a>' if url else '')
             au = CF_AUDIO.get(wid)
-            al = (f'<a class="cf-listen" href="{au[0]}" target="_blank" rel="noopener">listen &rsaquo;</a>'
-                  if au else '')
-            links = "".join(f'<span class="cf-sep">·</span>{x}' for x in (rl, al) if x)
-            o.append(f'<li class="cf-item"><label><input type="checkbox" data-cf="{wid}">'
+            al = (f'<a class="cf-chip" href="{au[0]}" target="_blank" rel="noopener">'
+                  f'{_CF_LISTEN_I}<span>Listen</span></a>' if au else '')
+            chips = (f'<div class="cf-chips">{rl}{al}</div>' if (rl or al) else '')
+            o.append(f'<li class="cf-item"><label class="cf-check">'
+                     f'<input type="checkbox" data-cf="{wid}">'
                      f'<span class="cf-title">{title}</span></label>'
-                     f'<div class="cf-meta"><span class="cf-by">{by}</span>{links}</div>'
-                     f'<div class="cf-note">{note}</div></li>')
-        o.append('</ul></div>')
+                     f'<div class="cf-meta"><span class="cf-by">{by}</span></div>'
+                     f'<div class="cf-note">{note}</div>{chips}</li>')
+        o.append('</ul></section>')
     o.append('<p class="res-foot">The Fathers and Councils gathered here belong to the '
              '<em>undivided</em> early Church — the common inheritance of the Orthodox and the '
              'wider Christian world, not the property of any one later tradition. The texts are '
