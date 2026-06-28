@@ -20,7 +20,7 @@
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#1b1612":"#faf6ee");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#161518":"#faf6ee");})();
 </script>
 </head>
 <body>
@@ -146,7 +146,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#1b1612":"#faf6ee"); }
+    if(tc) tc.setAttribute("content", dark?"#161518":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 
