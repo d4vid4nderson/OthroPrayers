@@ -734,6 +734,12 @@ _BACK_ARROW = ('<svg class="res-back__i" viewBox="0 0 24 24" width="16" height="
 BACK = f'<a class="res-back" href="resources.html">{_BACK_ARROW}<span>All resources</span></a>'
 
 
+def back_link(href, label):
+    """A back-to-hub pill, left-aligned at the top of a reading page."""
+    return (f'<div class="page-back"><a class="res-back" href="{href}">'
+            f'{_BACK_ARROW}<span>{label}</span></a></div>')
+
+
 def topic_page(topic, ornament=""):
     return "\n".join(['<section class="resources">', BACK, _divider(topic["name"]),
                       f'<p class="topic-intro">{topic["intro"]}</p>',
@@ -1465,7 +1471,8 @@ PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
 for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
-         with_jump_nav(_headpiece(PRAYERS[slug])) + CLOSING, active="prayers", scripts=PLAYER)
+         back_link("prayers.html", "All prayers") + with_jump_nav(_headpiece(PRAYERS[slug])) + CLOSING,
+         active="prayers", scripts=PLAYER)
 
 # The Ancient Faith Prayer Book: a hub + one page per office (read-aloud on each)
 if ANCIENT:
@@ -1480,7 +1487,7 @@ if ANCIENT:
         body = with_jump_nav(_headpiece(ANCIENT[slug])).replace('</section>\n', '</section>\n' + _credit, 1)
         page(f"{slug}.html", f"{title} — The Ancient Faith Prayer Book",
              f"{title}, from The Ancient Faith Prayer Book (Ancient Faith Publishing).",
-             body + CLOSING, active="prayers", scripts=PLAYER)
+             back_link("ancient.html", "Prayer Book") + body + CLOSING, active="prayers", scripts=PLAYER)
 
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
