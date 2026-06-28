@@ -554,27 +554,26 @@ html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); 
   padding-bottom:max(.25rem, env(safe-area-inset-bottom));
 }
 html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%, transparent); }
-/* the draggable highlight that sits behind the active tab; JS positions it and
-   lets you pull it onto another tab to change pages (jelly spring on settle) */
+/* the highlight behind the active tab. JS positions it; you can also drag it
+   onto another tab to change pages. A single sliding element — smooth, no
+   per-tab reflow. */
 .tab-thumb{
-  /* JS sets top/left/width/height to the labelled tab's exact box. The same
-     spring timing as the tab padding + label below, so the highlight and the
-     icon/label travel together as you drag from tab to tab. */
   position:absolute; top:0; left:0; width:0; height:2.7rem;
   border-radius:var(--r-pill); z-index:0; pointer-events:none;
   background:color-mix(in srgb, var(--rubric) 14%, transparent);
-  transition:left .3s cubic-bezier(.34,1.38,.5,1), width .3s cubic-bezier(.34,1.38,.5,1),
-             top .3s ease, height .3s ease;
+  transition:left .26s cubic-bezier(.3,.7,.25,1), width .26s cubic-bezier(.3,.7,.25,1),
+             top .26s ease, height .26s ease;
 }
 html[data-theme="dark"] .tab-thumb{ background:color-mix(in srgb, var(--rubric) 22%, transparent); }
+.tabbar.tb-drag .tab-thumb{ transition:none; }   /* follow the finger 1:1 while dragging */
 .tab{
   position:relative; z-index:1;
   flex:1 1 0; display:flex; align-items:center; justify-content:center;
   gap:.4rem; padding:.5rem .25rem; min-height:3.4rem;
   background:none; border:0; cursor:pointer; text-decoration:none;
   color:var(--ink); font-family:inherit; opacity:.5;
-  transition:opacity .2s ease, color .2s ease, padding .3s cubic-bezier(.34,1.38,.5,1),
-             margin .3s cubic-bezier(.34,1.38,.5,1), flex-grow .3s ease;
+  transition:opacity .2s ease, color .2s ease, padding .26s cubic-bezier(.3,.7,.25,1),
+             margin .26s cubic-bezier(.3,.7,.25,1);
 }
 @media (hover:hover){ .tab:hover{ opacity:.8; } }
 .tab:active{ opacity:1; }
@@ -582,16 +581,17 @@ html[data-theme="dark"] .tab-thumb{ background:color-mix(in srgb, var(--rubric) 
 .tab-i svg{ width:1.5rem; height:1.5rem; }
 .tab-l{ font-size:.86rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap;
   max-width:0; overflow:hidden; opacity:0;
-  transition:max-width .3s cubic-bezier(.34,1.38,.5,1), opacity .22s ease; }
-.tab.active{ opacity:1; color:var(--rubric); }   /* the current page's tab (colour even without JS) */
-/* the labelled pill — JS puts this on whichever tab the highlight is framing */
-.tab.lab{ flex:0 1 auto; opacity:1; color:var(--rubric); padding:.45rem .9rem; margin:.4rem .15rem; }
-.tab.lab .tab-l{ max-width:8rem; opacity:1; }
-html[data-theme="dark"] .tab.lab .tab-i{ filter:drop-shadow(0 0 7px color-mix(in srgb, var(--rubric) 45%, transparent)); }
-/* while dragging, only the framed tab is highlighted (dim the page's own tab) */
-.tabbar.tb-drag .tab:not(.lab){ opacity:.5; color:var(--ink); }
-/* while measuring the labelled-layout boxes, freeze all transitions */
-.tabbar.tb-measure .tab, .tabbar.tb-measure .tab-l, .tabbar.tb-measure .tab-thumb{ transition:none !important; }
+  transition:max-width .26s cubic-bezier(.3,.7,.25,1), opacity .2s ease; }
+/* the active page's tab is a labelled pill */
+.tab.active{ flex:0 1 auto; opacity:1; color:var(--rubric); padding:.45rem .9rem; margin:.4rem .15rem; }
+.tab.active .tab-l{ max-width:8rem; opacity:1; }
+.tab.cand{ color:var(--rubric); opacity:1; }   /* the tab the highlight is over while dragging */
+html[data-theme="dark"] .tab.active .tab-i,
+html[data-theme="dark"] .tab.cand .tab-i{ filter:drop-shadow(0 0 7px color-mix(in srgb, var(--rubric) 45%, transparent)); }
+/* during a drag, all tabs are equal icon-only and the thumb slides freely
+   (one reflow in, one out — no per-move jiggle) */
+.tabbar.tb-drag .tab{ flex:1 1 0; padding:.5rem .25rem; margin:0; }
+.tabbar.tb-drag .tab-l{ max-width:0; opacity:0; }
 
 /* ---- page transition: content springs up on enter, peels down on leave --- */
 .book{ will-change:auto; }
