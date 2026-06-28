@@ -243,7 +243,6 @@ READ = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
         '<path d="M12 6.6V19.2"/></svg>')
 
 TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
-  <span class="tab-thumb" aria-hidden="true"></span>
   <a class="tab{h_act}" href="index.html" aria-label="Home"><span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>
   <a class="tab{p_act}" href="prayers.html" aria-label="Prayers"><span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>
   <a class="tab{b_act}" href="scripture.html" aria-label="Read the Bible"><span class="tab-i">{READ}</span><span class="tab-l">Read</span></a>
@@ -1371,7 +1370,6 @@ if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
-try{if(sessionStorage.getItem("px-enter")){r.classList.add("px-enter");sessionStorage.removeItem("px-enter");}}catch(e){}
 var dk=r.dataset.theme==="dark";
 var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
 </script>'''
@@ -1513,108 +1511,8 @@ CONTROL_JS = '''<script>
 
   paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
 
-  // ---- tab bar: a "liquid" highlight + spring page transition -----------
-  // The highlight behaves like a blob of liquid: as it travels between tabs it
-  // stretches toward the target and squashes back into the pill as it settles
-  // (a spring drives the centre; the width grows with the gap to the target).
-  // Works on drag and tap. Each navigation springs the content down, and the
-  // next page springs it up.
-  (function(){
-    var bar=d.querySelector(".tabbar"); if(!bar) return;
-    var thumb=bar.querySelector(".tab-thumb");
-    var tabs=Array.prototype.slice.call(bar.querySelectorAll(".tab"));
-    var active=bar.querySelector(".tab.active");
-    var book=d.querySelector("main.book");
-    if(!thumb||!active||tabs.length<2) return;
-    var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var ai=tabs.indexOf(active), N=tabs.length;
-    function rem(){ return parseFloat(getComputedStyle(r).fontSize)||16; }
-    function placeIdle(){ thumb.style.transition=""; thumb.style.left=active.offsetLeft+"px"; thumb.style.width=active.offsetWidth+"px";
-      thumb.style.top=active.offsetTop+"px"; thumb.style.height=active.offsetHeight+"px"; }
-    // full reset — clears any half-finished drag/transition (e.g. a bfcache
-    // restore that froze the page mid-exit with faded content)
-    function reset(){ if(raf){ cancelAnimationFrame(raf); raf=0; } bar.classList.remove("tb-drag");
-      for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("cand");
-      if(book){ book.style.transition=""; book.style.transform=""; book.style.opacity=""; } placeIdle(); }
-    reset();
-    window.addEventListener("load", placeIdle);
-    window.addEventListener("resize", placeIdle);
-    window.addEventListener("pageshow", reset);          // bfcache restore -> clean state
-    window.addEventListener("pagehide", function(){ if(book){ book.style.transition=""; book.style.transform=""; book.style.opacity=""; } });
-    if(d.fonts&&d.fonts.ready) d.fonts.ready.then(placeIdle);
-
-    function slotW(){ return bar.clientWidth/N; }
-    function slotCenter(i){ return (i+0.5)*slotW(); }
-    function indexAt(x){ return Math.max(0, Math.min(N-1, Math.floor(x/slotW()))); }
-    function setCand(i){ for(var j=0;j<N;j++) tabs[j].classList.toggle("cand", j===i && j!==ai); }
-    function clearCand(){ for(var j=0;j<N;j++) tabs[j].classList.remove("cand"); }
-
-    // --- the liquid follower (spring centre + gap-driven stretch) ---
-    var hx=0, tx=0, vel=0, raf=0, baseW=0, baseH=0, onSettle=null;
-    function renderThumb(){
-      var lo=Math.min(hx,tx)-baseW/2, hi=Math.max(hx,tx)+baseW/2;
-      lo=Math.max(2, lo); hi=Math.min(bar.clientWidth-2, hi);
-      var gap=Math.abs(tx-hx);
-      thumb.style.transition="none";
-      thumb.style.left=lo+"px"; thumb.style.width=(hi-lo)+"px";
-      thumb.style.height=(baseH - Math.min(7, gap*0.05))+"px";          // squash while stretched
-      thumb.style.top=(active.offsetTop + Math.min(3.5, gap*0.022))+"px";
-    }
-    function tick(){
-      var dx=tx-hx; vel=vel*0.74 + dx*0.22; hx+=vel;                    // springy, slight overshoot
-      if(Math.abs(dx)<0.4 && Math.abs(vel)<0.4){ hx=tx; vel=0; renderThumb(); raf=0;
-        var cb=onSettle; onSettle=null; if(cb) cb(); return; }
-      renderThumb(); raf=requestAnimationFrame(tick);
-    }
-    function startLiquid(fromC){ baseW=Math.round(rem()*3); baseH=active.offsetHeight||Math.round(rem()*2.7);
-      bar.classList.add("tb-drag"); hx=fromC; tx=fromC; vel=0; if(!raf) raf=requestAnimationFrame(tick); }
-
-    function bookFollow(f){ if(!book||RM) return;
-      book.style.transition="transform .12s cubic-bezier(.2,.7,.3,1), opacity .12s ease";
-      book.style.transform="translateY("+(f*58)+"px)"; book.style.opacity=String(1-Math.min(.8, f*0.9)); }
-    function bookUp(){ if(!book||RM) return;
-      book.style.transition="transform .42s cubic-bezier(.34,1.3,.5,1), opacity .32s ease";
-      book.style.transform=""; book.style.opacity=""; }
-    // springs the content down, flags the next page to spring up (px-in)
-    function navTo(href){
-      try{ sessionStorage.setItem("px-enter","1"); }catch(e){}
-      if(book && !RM){ book.style.transition="transform .24s cubic-bezier(.4,0,.7,1), opacity .24s ease"; book.style.transform="translateY(76px)"; book.style.opacity="0"; }
-      setTimeout(function(){ location.href=href; }, RM?0:230);
-    }
-
-    // tap: just the content spring transition (no drag machinery, always reliable)
-    tabs.forEach(function(t){ var href=t.getAttribute&&t.getAttribute("href"); if(!href) return;
-      t.addEventListener("click", function(e){ if(didDrag) return; e.preventDefault(); navTo(href); }); });
-
-    var down=false, drag=false, didDrag=false, sx=0, candi=ai;
-    function onMove(e){
-      if(!down) return;
-      if(!drag){ if(Math.abs(e.clientX-sx)<9) return; drag=true; didDrag=true; startLiquid(slotCenter(ai)); }
-      if(e.cancelable) e.preventDefault();
-      var x=e.clientX - bar.getBoundingClientRect().left;
-      tx=Math.max(baseW/2, Math.min(bar.clientWidth-baseW/2, x));      // blob target follows the finger
-      if(!raf) raf=requestAnimationFrame(tick);                        // restart if the spring had settled
-      candi=indexAt(x); setCand(candi);                                // candidate from the finger, not the lagging blob
-      bookFollow(Math.min(1, Math.abs(x-slotCenter(ai))/(bar.clientWidth*0.55)));
-    }
-    function end(){
-      if(!down) return; down=false;
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", end);
-      window.removeEventListener("pointercancel", end);
-      if(!drag) return; drag=false;
-      if(raf){ cancelAnimationFrame(raf); raf=0; }     // stop the liquid; cleanup immediately (no rAF dependency)
-      var ci=candi, t=tabs[ci], href=t&&t.getAttribute&&t.getAttribute("href");
-      if(ci!==ai && href){ navTo(href); }              // navigate (the reload clears the drag state)
-      else { bar.classList.remove("tb-drag"); for(var j=0;j<tabs.length;j++) tabs[j].classList.remove("cand");
-        placeIdle(); bookUp(); if(ci!==ai && t && t.id==="settings-btn") t.click(); }
-      setTimeout(function(){ didDrag=false; }, 60);
-    }
-    bar.addEventListener("pointerdown", function(e){ if(e.button) return; down=true; drag=false; sx=e.clientX;
-      window.addEventListener("pointermove", onMove);
-      window.addEventListener("pointerup", end);
-      window.addEventListener("pointercancel", end); });
-  })();
+  // The tab bar is plain navigation: each tab is an <a> that loads its page,
+  // and CSS marks the active one (a filled highlight behind the icon). No JS.
 })();
 </script>'''
 
