@@ -145,7 +145,10 @@ html[data-font="dyslexic"] .dropcap{ font-weight:700; }
 
 *{ box-sizing:border-box; }
 
-html{ -webkit-text-size-adjust:100%; height:100%; }
+/* paper background on the root too, so the standalone status-bar / safe-area
+   regions (which sample the document root, not body) match the page and don't
+   show a mismatched dark band at the top */
+html{ -webkit-text-size-adjust:100%; height:100%; background:var(--paper); }
 
 /* app shell: the page content scrolls inside .scroll while the bottom tab bar
    stays a fixed-height flex child — so the bar never drifts with the scroll
