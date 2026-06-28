@@ -57,7 +57,9 @@
   --ink:        #231f20;
   --rubric:     #b3322a;   /* cinnabar / vermilion — true rubric ink, not pink */
   --rubric-deep:#7c2b22;   /* oxblood — secondary rubrication (inline directions) */
-  --link:       #1e5e9e;
+  --lapis:      #21408a;   /* lapis lazuli — the third illuminated colour (gold + vermilion + lapis) */
+  --lapis-soft: rgba(33,64,138,.1);  /* lapis wash for fills/highlights */
+  --link:       #21408a;   /* prose links render in lapis */
   --gold:       #9a7b1e;   /* Byzantine gold — gilt accents + Ancient Faith pill */
   --paper:      #faf6ee;   /* warm ivory stock, not clinical pure white */
   --surface:    #fffdf8;   /* raised surfaces (cards, list panels, sheets) */
@@ -74,22 +76,24 @@
   --elev-3:0 12px 32px rgba(60,40,20,.16);
 }
 
-/* ---- dark theme: dark-gray paper, light + red text -------------------- */
+/* ---- dark theme: candlelit near-black, warm (gilt on dark leather) ----- */
 html[data-theme="dark"]{
-  --ink:        #e8e6e2;   /* neutral light-gray text */
-  --rubric:     #c83e2f;   /* the ivory cinnabar, lifted just enough to read on gray */
-  --rubric-deep:#b3322a;   /* the exact ivory red, for the gilt plaques + initials */
-  --link:       #88b6ea;
-  --gold:       #d9b85e;   /* lighter gold for the dark page */
-  --paper:      #232327;   /* neutral dark gray page (no brown) */
-  --surface:    #27272c;   /* raised surfaces */
-  --surface-sunk:#1d1d21;  /* wells */
-  --desk:       #161619;   /* darker neutral behind the page */
-  --hairline:   #3a3a40;
-  --hairline-strong:#43434a;
-  --elev-1:0 1px 2px rgba(0,0,0,.3);
-  --elev-2:0 4px 12px rgba(0,0,0,.4);
-  --elev-3:0 12px 32px rgba(0,0,0,.55);
+  --ink:        #ece6da;   /* warm parchment-white text */
+  --rubric:     #d8483a;   /* cinnabar lifted to glow on the dark page */
+  --rubric-deep:#b3322a;   /* the gilt-plaque red + initials */
+  --lapis:      #8fb0ea;   /* lapis lifted for contrast on dark */
+  --lapis-soft: rgba(143,176,234,.12);
+  --link:       #8fb0ea;
+  --gold:       #d9b85e;   /* gilding, glowing on the warm dark */
+  --paper:      #1b1612;   /* candlelit near-black, warm espresso undertone */
+  --surface:    #241d17;   /* raised surfaces — distinctly warmer/lighter than the page */
+  --surface-sunk:#15110d;  /* wells */
+  --desk:       #100c09;   /* darker still behind the page */
+  --hairline:   #3a2f24;   /* warm borders */
+  --hairline-strong:#4a3c2d; /* tab bar / section rules */
+  --elev-1:0 1px 2px rgba(0,0,0,.4);
+  --elev-2:0 4px 12px rgba(0,0,0,.5);
+  --elev-3:0 12px 34px rgba(0,0,0,.62);
 }
 html[data-theme="dark"] figure img{
   /* the red icons sit on white in the source art; present them as plaques so
@@ -98,7 +102,7 @@ html[data-theme="dark"] figure img{
   padding:.7rem;
   border-radius:4px;
 }
-html[data-theme="dark"] .colophon{ color:#aaa7a0; border-top-color:#43434a; }
+html[data-theme="dark"] .colophon{ color:rgba(236,230,218,.5); border-top-color:var(--hairline-strong); }
 
 /* ---- text-size steps (set on <html> by the control; rem scales all type) */
 html{ font-size:100%; }
@@ -477,6 +481,47 @@ html[data-theme="dark"] .art-chirho svg{
 html[data-theme="dark"] .landing-cta .cta{ color:#fff; }
 html[data-theme="dark"] .landing-cta .cta-ghost{ color:var(--ink); }
 
+/* ---- home "pray now" hero: the office of the moment ----------------- */
+.pray-now{ width:100%; max-width:30rem; margin:.4rem auto 1.7rem; }
+.pn-eyebrow{ text-align:center; font-variant-caps:small-caps; letter-spacing:.1em;
+  font-size:.92rem; color:var(--gold); margin:0 0 .6rem; }
+.pn-primary{ display:flex; align-items:center; gap:1rem; text-align:left;
+  padding:1.05rem 1.3rem; text-decoration:none; color:#fff;
+  background:var(--rubric); border-radius:var(--r-md); box-shadow:var(--elev-2);
+  transition:filter .15s ease, transform .1s ease; }
+@media (hover:hover){ .pn-primary:hover{ filter:brightness(1.06); } }
+.pn-primary:active{ transform:scale(.99); }
+.pn-body{ flex:1 1 auto; min-width:0; }
+.pn-when{ display:block; font-variant-caps:small-caps; letter-spacing:.06em;
+  font-size:.85rem; opacity:.82; }
+.pn-title{ display:block; font-family:var(--display); font-weight:600;
+  font-size:1.7rem; line-height:1.12; }
+.pn-go{ flex:0 0 auto; display:flex; opacity:.9; }
+.pn-all{ display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin-top:.75rem; }
+.pn-all a{ flex:0 0 auto; padding:.34rem .9rem; text-decoration:none;
+  border:1px solid var(--hairline-strong); border-radius:var(--r-pill); color:var(--ink);
+  font-variant-caps:small-caps; letter-spacing:.03em; font-size:.92rem;
+  transition:border-color .15s ease, color .15s ease; }
+@media (hover:hover){ .pn-all a:hover{ border-color:var(--gold); color:var(--rubric); } }
+.pn-all a:active{ transform:scale(.97); }
+
+/* ---- the demoted "journey" essay (collapsible) ---------------------- */
+.journey{ width:100%; max-width:34rem; margin:1.4rem auto 1rem;
+  border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline); }
+.journey-sum{ display:grid; grid-template-columns:1fr auto; align-items:center;
+  gap:0 .8rem; cursor:pointer; list-style:none; padding:1rem .3rem; }
+.journey-sum::-webkit-details-marker{ display:none; }
+.journey-sum-t{ grid-column:1; font-family:var(--display); font-weight:600;
+  color:var(--rubric); font-size:1.28rem; line-height:1.1; }
+.journey-sum-h{ grid-column:1; font-variant-caps:small-caps; letter-spacing:.06em;
+  font-size:.8rem; opacity:.6; margin-top:.1rem; }
+.journey-sum::after{ content:""; grid-column:2; grid-row:1 / span 2; align-self:center;
+  width:.55rem; height:.55rem; border-right:2px solid var(--gold);
+  border-bottom:2px solid var(--gold); transform:rotate(45deg); transition:transform .2s ease; }
+.journey[open] .journey-sum::after{ transform:rotate(-135deg); }
+.journey .landing-body{ padding:.2rem 0 .6rem; }
+.journey .landing-come{ margin:.6rem 0 1.2rem; font-size:1.4rem; }
+
 /* ---- bottom tab bar (dedicated mobile navigation) ------------------- */
 .tabbar{
   flex:0 0 auto; z-index:30;
@@ -549,7 +594,7 @@ html[data-theme="dark"] .tabbar{ background:rgba(30,30,34,.82); }
   transition:transform .32s cubic-bezier(.22,.61,.36,1);  /* a gentle settle */
 }
 .drawer.open{ transform:translateY(0); visibility:visible; }
-html[data-theme="dark"] .drawer{ border-color:#43434a; box-shadow:0 -14px 36px rgba(0,0,0,.55); }
+html[data-theme="dark"] .drawer{ border-color:var(--hairline-strong); box-shadow:0 -14px 36px rgba(0,0,0,.55); }
 /* sheet header: centred grab-handle + a close button on the right */
 .drawer-head{ position:relative; height:1.7rem; }
 .grab{
@@ -596,7 +641,7 @@ html[data-theme="dark"] .drawer-settings{ border-top-color:#37373c; }
 
 /* segmented icon/text controls inside the menu */
 .seg{ display:inline-flex; border:1px solid #d9d2c4; border-radius:8px; overflow:hidden; }
-html[data-theme="dark"] .seg{ border-color:#4a4a51; }
+html[data-theme="dark"] .seg{ border-color:var(--hairline-strong); }
 .seg button{
   display:flex; align-items:center; justify-content:center;
   min-width:2.2rem; height:2rem; padding:0 .5rem;
@@ -604,7 +649,7 @@ html[data-theme="dark"] .seg{ border-color:#4a4a51; }
   font-family:var(--serif); line-height:1;
 }
 .seg button + button{ border-left:1px solid #d9d2c4; }
-html[data-theme="dark"] .seg button + button{ border-left-color:#4a4a51; }
+html[data-theme="dark"] .seg button + button{ border-left-color:var(--hairline-strong); }
 .seg button svg{ width:1.05rem; height:1.05rem; }
 .seg button[aria-pressed="true"]{ background:var(--rubric); color:#fff; }
 .seg button:not([aria-pressed="true"]):hover{ background:rgba(0,0,0,.05); }
@@ -619,7 +664,7 @@ html[data-theme="dark"] .seg button:not([aria-pressed="true"]):hover{ background
   border:0; border-radius:999px; cursor:pointer; padding:0;
   background:#cfc8ba; transition:background .15s;
 }
-html[data-theme="dark"] .switch{ background:#4a4a51; }
+html[data-theme="dark"] .switch{ background:var(--hairline-strong); }
 .switch .knob{
   position:absolute; top:2px; left:2px;
   width:calc(var(--h) - 4px); height:calc(var(--h) - 4px);
@@ -703,6 +748,69 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
 .res-card-emblem svg{ height:1.6rem; width:auto; max-width:3.4rem; display:inline-block; }
 .res-card-t{ display:block; font-family:var(--display); font-weight:600; color:var(--rubric); font-size:1.42rem; line-height:1.15; }
 .res-card-d{ display:block; margin-top:.25rem; font-size:.95rem; opacity:.85; }
+
+/* ---- Prayers hub: the hours of the day as a connected cycle --------- */
+.cycle{ list-style:none; margin:1.5em 0 .6em; padding:0; position:relative; }
+/* the gilt rail threading the offices together */
+.cycle::before{ content:""; position:absolute; left:1.75rem; top:1.8rem; bottom:1.8rem;
+  width:2px; background:linear-gradient(var(--gold), var(--hairline-strong)); opacity:.55; }
+.office{ position:relative; }
+.office-link{ display:grid; grid-template-columns:3.5rem 1fr auto; align-items:center;
+  gap:.1rem .7rem; padding:.7rem .45rem; text-decoration:none; color:var(--ink);
+  border-radius:var(--r-md); transition:background .15s ease; }
+@media (hover:hover){ .office-link:hover{ background:var(--lapis-soft); } }
+.office-link:active{ background:rgba(154,123,30,.1); }
+.office-node{ grid-column:1; grid-row:1 / span 2; justify-self:center; position:relative; z-index:1;
+  display:flex; align-items:center; justify-content:center; width:2.7rem; height:2.7rem;
+  border-radius:50%; background:var(--surface); border:1px solid var(--hairline-strong); color:var(--gold); }
+.office-node svg{ width:1.4rem; height:1.4rem; }
+.office--now .office-node{ background:radial-gradient(circle at 35% 30%, #c9a93f, var(--gold));
+  border-color:var(--gold); color:#fff; box-shadow:0 0 0 4px var(--lapis-soft); }
+.office-body{ grid-column:2; min-width:0; }
+.office-when{ display:block; font-variant-caps:small-caps; letter-spacing:.05em;
+  font-size:.78rem; color:var(--gold); }
+.office-now{ display:none; margin-left:.5em; padding:.04em .55em; border-radius:var(--r-pill);
+  background:var(--rubric); color:#fff; font-size:.82em; letter-spacing:.05em; vertical-align:.08em; }
+.office--now .office-now{ display:inline-block; }
+.office-t{ display:block; font-family:var(--display); font-weight:600; color:var(--rubric);
+  font-size:1.42rem; line-height:1.15; }
+.office-d{ display:block; font-size:.95rem; opacity:.82; line-height:1.4; margin-top:.05rem; }
+.office-link .row-chev{ grid-column:3; grid-row:1 / span 2; color:var(--gold); opacity:.5; }
+@media (hover:hover){ .office-link:hover .row-chev{ opacity:.9; } }
+
+/* feature row under the cycle (the Ancient Faith Prayer Book) */
+.hub-feature{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.9rem;
+  margin:1.3em 0 .4em; padding:1rem 1.1rem; text-decoration:none; color:var(--ink);
+  background:var(--surface); border:1px solid var(--hairline); border-radius:var(--r-md);
+  box-shadow:var(--elev-1); transition:box-shadow .2s ease, border-color .2s ease, transform .1s ease; }
+@media (hover:hover){ .hub-feature:hover{ box-shadow:var(--elev-2); border-color:var(--gold); } }
+.hub-feature:active{ transform:scale(.99); }
+.hub-feature .res-card-emblem{ margin:0; }
+.hub-feature .res-card-emblem svg{ height:1.7rem; }
+.hub-feature-t{ display:block; font-family:var(--display); font-weight:600; color:var(--rubric);
+  font-size:1.3rem; line-height:1.12; }
+.hub-feature-d{ display:block; font-size:.92rem; opacity:.82; margin-top:.15rem; line-height:1.4; }
+.hub-feature .row-chev{ color:var(--gold); opacity:.6; }
+
+/* ---- Resources hub: grouped browse list (unlike the Prayers cycle) -- */
+.browse-group{ font-family:var(--serif); font-weight:600; font-variant-caps:small-caps;
+  letter-spacing:.08em; font-size:.96rem; color:var(--gold); text-align:left; margin:1.8em 0 .5em; }
+.browse-group:first-of-type{ margin-top:1.3em; }
+.browse-list{ list-style:none; margin:0; padding:0; background:var(--surface);
+  border:1px solid var(--hairline); border-radius:var(--r-md); box-shadow:var(--elev-1); overflow:hidden; }
+.browse-list li + li .browse-row{ border-top:1px solid var(--hairline); }
+.browse-row{ display:grid; grid-template-columns:2.3rem 1fr auto; align-items:center; gap:.9rem;
+  padding:.85rem 1rem; text-decoration:none; color:var(--ink); transition:background .15s ease; }
+@media (hover:hover){ .browse-row:hover{ background:var(--lapis-soft); } }
+.browse-row:active{ background:rgba(154,123,30,.1); }
+.browse-emblem{ color:var(--gold); line-height:0; display:flex; justify-content:center; }
+.browse-emblem svg{ width:1.5rem; height:1.5rem; }
+.browse-body{ min-width:0; }
+.browse-t{ display:block; font-family:var(--serif); font-weight:600; color:var(--ink);
+  font-size:1.12rem; line-height:1.25; }
+.browse-d{ display:block; font-size:.9rem; opacity:.72; line-height:1.4; margin-top:.1rem; }
+.browse-row .row-chev{ color:var(--gold); opacity:.5; }
+@media (hover:hover){ .browse-row:hover .row-chev{ opacity:.9; } }
 
 /* ---- the downloadable Church Calendar page --------------------------- */
 .art-cal svg{ width:2.1rem; }
@@ -931,7 +1039,7 @@ html[data-theme="dark"] .tw-strict{ color:var(--rubric); }
   text-indent:0; font-size:.86rem; font-style:italic; opacity:.8;
   border-top:1px solid var(--hairline); margin-top:2.4em; padding-top:1.1em;
 }
-html[data-theme="dark"] .res-foot{ border-top-color:#3a3a40; }
+html[data-theme="dark"] .res-foot{ border-top-color:var(--hairline); }
 
 /* ---- read-aloud (text-to-speech) ------------------------------------- */
 .sayable{ position:relative; transition:background .2s; }
@@ -967,7 +1075,7 @@ html[data-theme="dark"] :where(a, button, input, textarea, select, [role="button
   transition:background .25s ease, border-color .25s ease;
 }
 .tts-player.open{ background:var(--paper); color:var(--ink); border-color:var(--hairline); }
-html[data-theme="dark"] .tts-player.open{ border-color:#43434a; box-shadow:0 8px 24px rgba(0,0,0,.55); }
+html[data-theme="dark"] .tts-player.open{ border-color:var(--hairline-strong); box-shadow:0 8px 24px rgba(0,0,0,.55); }
 
 .tts-play{
   flex:0 0 auto; width:3.3rem; height:3.3rem; padding:0; border:0; cursor:pointer;

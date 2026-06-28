@@ -38,26 +38,31 @@ generic warm/cool.
 | `--rubric` | `#b3322a` | accent: rubrics, titles, drop-caps, active state |
 | `--rubric-deep` | `#7c2b22` | secondary rubrication / inline directions |
 | `--gold` | `#9a7b1e` | gilding: rules, badges, the camera FAB ring, accents |
-| `--link` | `#1e5e9e` | inline prose links only (not UI chrome) |
+| `--lapis` | `#21408a` | third illuminated colour — calendar/feast accents, hover wash (`--lapis-soft`) |
+| `--link` | `#21408a` | inline prose links (lapis, not UI chrome) |
 | `--hairline` | `#e7ddc8` | borders, dividers |
 | `--hairline-strong` | `#d9cdb0` | tab bar / section rules |
 
-### Dark (warm-neutral charcoal, not brown)
+### Dark (candlelit near-black, warm — gilt on dark leather, NOT charcoal, NOT milky brown)
 | Token | Hex | Role |
 |---|---|---|
-| `--paper` | `#232327` | page background |
-| `--surface` | `#27272c` | raised surfaces |
-| `--surface-sunk` | `#1d1d21` | wells |
-| `--ink` | `#e8e6e2` | primary text |
-| `--rubric` | `#c83e2f` | accent (lifted for contrast on dark) |
+| `--paper` | `#1b1612` | page background (warm espresso near-black) |
+| `--surface` | `#241d17` | raised surfaces (distinctly warmer/lighter than the page) |
+| `--surface-sunk` | `#15110d` | wells |
+| `--ink` | `#ece6da` | primary text (warm parchment-white) |
+| `--rubric` | `#d8483a` | accent, lifted to glow on the dark page |
 | `--rubric-deep` | `#b3322a` | gilt-plaque red |
-| `--gold` | `#d9b85e` | gilding |
-| `--hairline` | `#3a3a40` | borders |
-| `--hairline-strong` | `#43434a` | tab bar / section rules |
+| `--gold` | `#d9b85e` | gilding, glowing on the warm dark |
+| `--lapis` | `#8fb0ea` | lapis lifted for contrast on dark |
+| `--hairline` | `#3a2f24` | warm borders |
+| `--hairline-strong` | `#4a3c2d` | tab bar / section rules |
 
-**Rules.** Accent (rubric) = rubrics, titles, current selection, state — never
-decoration. Gold = gilding accents only, kept rare. Verify contrast: body ≥4.5:1,
-large/UI ≥3:1. Don't use light-gray "elegant" body text on the tint; push toward ink.
+**Rules.** The illuminated triad is **gold + vermilion (rubric) + lapis** — the
+palette of a real manuscript. Accent (rubric) = rubrics, titles, current selection,
+state — never decoration. Gold = gilding accents only, kept rare. Lapis = the third
+accent, used sparingly for prose links, feast/calendar accents and the hover wash
+(`--lapis-soft`). The dark theme is *candlelit*: a warm near-black where gold reads
+as gilding by candle. Verify contrast: body ≥4.5:1, large/UI ≥3:1.
 
 ---
 
@@ -107,7 +112,10 @@ Surfaces: page `--paper` < card `--surface` < (sheet `--surface` + `--elev-3`). 
 Every interactive element ships all states: default, hover, focus-visible, active, disabled, (loading/selected where relevant). Consistent vocabulary across every screen.
 
 - **Buttons / CTAs:** filled = `--rubric` bg, paper text; ghost = `--rubric` text + 1px `--rubric` border. `--r-sm`. `:active{ transform:scale(.985) }`. No border+heavy-shadow.
-- **Cards** (`res-card`, hub destinations): `--surface`, 1px `--hairline`, `--r-md`, `--elev-1` → `--elev-2`+`--hairline:gold` on hover. Title (display 600), description (`--ink-soft`), optional gilt emblem. Used **only** for genuine destinations — cards are the lazy answer; don't card every list.
+- **Cards** (hub destinations): `--surface`, 1px `--hairline`, `--r-md`, `--elev-1` → `--elev-2`+`--hairline:gold` on hover. Title (display 600), description (`--ink-soft`), optional gilt emblem. Used **only** for genuine destinations — cards are the lazy answer; don't card every list.
+- **Daily cycle** (Prayers hub, `cycle`/`office`): the hours of the day rendered as a connected vertical sequence, not a card stack — a gilt rail threading gold-rimmed emblem nodes, each office a station with a small-caps time label, display title and blurb. A small script lights the office whose time-of-day window holds the current hour (`office--now`: filled gold node + a rubric "Now" pill). This is the *primary act*, so it earns the display titles and the prominence.
+- **Browse list** (Resources hub, `browse-group`/`browse-list`/`browse-row`): topics grouped under small-caps gilt section labels, shown as hairline-divided rows (leading emblem, **ink** serif-600 title, `--ink-soft` desc, gilt chevron, lapis hover wash). Deliberately *unlike* the Prayers cycle — this is browsing, not praying, so ink titles, not rubric, and no display face.
+- **Pray-now hero** (Home, `pray-now`): the home leads with the office of the moment — a small-caps greeting, one prominent rubric CTA (time label + display title + arrow) chosen by local hour, and a row of pill links to all offices. The value (pray now) sits above the fold; the journey essay is demoted into a `<details>` below.
 - **List rows** (`link-card`, link lists): full-width row, `--hairline` divider or `--surface` card, title (serif 600 `--ink`) + description (`--ink-soft`) + external "host ↗" affordance + gold-outline "free" badge + chevron. **No blue link color**; ink title with gilt hover.
 - **Tab bar:** fixed-height (~3.6rem) flex; small-caps labels `--t-xs`; active = rubric icon + a centered gilt ribbon (`::before`, `--r-pill`); top hairline `--hairline-strong`; modest blur only.
 - **Camera FAB:** raised rubric circle, paper ring + a 1px gold rim, `--elev-3` (warm), `:active` press. The brand's hero — the one place gold rims red.
