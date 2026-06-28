@@ -30,10 +30,33 @@ LANDING = '''<section class="cover landing" id="top">
   <p class="landing-sub">An Orthodox prayer book &amp; companion for the journey</p>
   {rule}
 
+  <section class="pray-now" aria-label="Begin praying">
+    <p class="pn-eyebrow" id="pn-greet">Welcome</p>
+    <a class="pn-primary" id="pn-primary" href="morning.html">
+      <span class="pn-body">
+        <span class="pn-when" id="pn-when">On rising</span>
+        <span class="pn-title" id="pn-title">Morning Prayers</span>
+      </span>
+      <span class="pn-go" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round"><path d="M5 12h13"/><path d="M12 6l6 6-6 6"/></svg></span>
+    </a>
+    <nav class="pn-all" aria-label="All daily prayers">
+      <a href="morning.html">Morning</a>
+      <a href="table.html">Table</a>
+      <a href="hours.html">Hours</a>
+      <a href="sleep.html">Before Sleep</a>
+    </nav>
+  </section>
+
   <section class="this-week" id="this-week" hidden></section>
 
-  <div class="landing-body">
-    <h2 class="landing-h">Coming Home to the Ancient Church</h2>
+  <details class="journey">
+    <summary class="journey-sum">
+      <span class="journey-sum-t">Coming Home to the Ancient Church</span>
+      <span class="journey-sum-h">the story behind this book</span>
+    </summary>
+    <div class="landing-body">
     <p>Many who find their way to the Orthodox Church begin somewhere else — most often in the
        Western Protestant traditions: evangelical, Reformed, Baptist, Methodist, Anglican, or
        non-denominational. The path eastward is rarely a rejection of the love of Christ first
@@ -51,12 +74,11 @@ LANDING = '''<section class="cover landing" id="top">
        faith: the early Church Fathers, the Creeds and the Councils, and the questions that most
        often draw seekers eastward. Whether you are simply curious or already on the road, you
        are welcome here.</p>
-  </div>
+    </div>
+    <p class="landing-come">&ldquo;Come and see.&rdquo;<span class="landing-ref">John 1:46</span></p>
+  </details>
 
-  <p class="landing-come">&ldquo;Come and see.&rdquo;<span class="landing-ref">John 1:46</span></p>
-
-  <nav class="landing-cta" aria-label="Begin">
-    <a class="cta" href="morning.html">Begin with Morning Prayers</a>
+  <nav class="landing-cta" aria-label="Explore">
     <a class="cta cta-ghost" href="resources.html">Explore the faith</a>
   </nav>
 
@@ -69,6 +91,7 @@ LANDING = '''<section class="cover landing" id="top">
     Permission is granted for this document to be made available on
     <a href="https://www.oca.org">www.oca.org</a>, for those who wish to use
     these prayers in their homes.</p>
+  {pray_js}
 </section>'''
 
 # inline SVG icons (stroke uses currentColor; no emoji). Orthodox-themed,
@@ -633,6 +656,51 @@ _EXT = ('<svg class="link-row__ext" viewBox="0 0 24 24" width="16" height="16" f
         'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
         'aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>')
 
+# right-pointing chevron for internal "go to" rows (hub destinations)
+_CHEV_R = ('<svg class="row-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" '
+           'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+           'aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>')
+
+# lights the office whose time-of-day window contains the current hour (the
+# windows wrap past midnight, e.g. Before Sleep 21–04)
+NOW_JS = ('<script>(function(){var h=new Date().getHours(),'
+          'e=document.querySelectorAll(".office[data-h0]");for(var i=0;i<e.length;i++){'
+          'var a=+e[i].getAttribute("data-h0"),b=+e[i].getAttribute("data-h1");'
+          'if(a<b?(h>=a&&h<b):(h>=a||h<b))e[i].classList.add("office--now");}})();</script>')
+
+# the home "pray now" hero: pick the office of the moment by local hour
+HOME_JS = ('<script>(function(){var h=new Date().getHours();'
+           'var s=[[4,11,"morning.html","On rising","Morning Prayers","Good morning"],'
+           '[11,17,"hours.html","Through the day","Prayers for the Hours","Good afternoon"],'
+           '[17,21,"hours.html","This evening","Prayers for the Hours","Good evening"],'
+           '[21,4,"sleep.html","At nightfall","Prayers Before Sleep","A blessed evening"]];'
+           'var c=s[0];for(var i=0;i<s.length;i++){var a=s[i][0],b=s[i][1];'
+           'if(a<b?(h>=a&&h<b):(h>=a||h<b)){c=s[i];break;}}'
+           'function t(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}'
+           'var p=document.getElementById("pn-primary");if(p)p.setAttribute("href",c[2]);'
+           't("pn-when",c[3]);t("pn-title",c[4]);t("pn-greet",c[5]);})();</script>')
+
+
+def _office_row(title, href, blurb, emb, when, h0, h1):
+    attr = f' data-h0="{h0}" data-h1="{h1}"' if h0 is not None else ''
+    return (f'<li class="office"{attr}><a class="office-link" href="{href}">'
+            f'<span class="office-node" aria-hidden="true">{ORN[emb][0]}</span>'
+            f'<span class="office-body"><span class="office-when">{when}'
+            f'<span class="office-now">Now</span></span>'
+            f'<span class="office-t">{title}</span>'
+            f'<span class="office-d">{blurb}</span></span>{_CHEV_R}</a></li>')
+
+
+def _cycle(items):
+    return '<ol class="cycle">' + "".join(_office_row(*it) for it in items) + '</ol>'
+
+
+def _browse_row(name, href, blurb, emb):
+    return (f'<li><a class="browse-row" href="{href}">'
+            f'<span class="browse-emblem" aria-hidden="true">{ORN[emb][0]}</span>'
+            f'<span class="browse-body"><span class="browse-t">{name}</span>'
+            f'<span class="browse-d">{blurb}</span></span>{_CHEV_R}</a></li>')
+
 
 def _host(url):
     try:
@@ -854,18 +922,26 @@ def fathers_page(ornament=""):
     return "\n".join(o)
 
 
-# Resources hub: a card per topic/section (links to its own page), each with a
-# small gilt emblem in the house style
-RES_CARDS = [
-    ("The Theotokos", "theotokos.html", "Who the Church confesses Mary to be — and why.", "mono"),
-    ("The Priesthood", "priesthood.html", "The threefold ministry, and what the Church asks of a priest.", "cross"),
-    ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio.", "chirho"),
-    ("The Creeds", "creeds.html", "The Church's confessions of faith, in a few lines.", "roundel"),
-    ("The Ecumenical Councils", "councils.html", "The seven councils that shaped the faith, and those after.", "cross"),
-    ("The Bible & Its Canon", "bible.html", "How the Church received the Scriptures — canon, Septuagint, the books.", "gospel"),
-    ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith.", "chirho"),
-    ("The Church Calendar", "calendar.html", "Feast days for your phone — old- and new-calendar downloads.", "cal"),
-    ("Recommended Reading", "reading.html", "A few books to go deeper.", "rule"),
+# Resources hub: topics grouped into sections and shown as a hairline-divided
+# browse list (deliberately unlike the Prayers cycle — browsing, not praying)
+RES_GROUPS = [
+    ("The Faith", [
+        ("The Theotokos", "theotokos.html", "Who the Church confesses Mary to be — and why.", "mono"),
+        ("The Priesthood", "priesthood.html", "The threefold ministry, and what the Church asks of a priest.", "cross"),
+        ("The Creeds", "creeds.html", "The Church's confessions of faith, in a few lines.", "roundel"),
+    ]),
+    ("History &amp; Scripture", [
+        ("The Ecumenical Councils", "councils.html", "The seven councils that shaped the faith, and those after.", "cross"),
+        ("The Bible &amp; Its Canon", "bible.html", "How the Church received the Scriptures — canon, Septuagint, the books.", "gospel"),
+        ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio.", "chirho"),
+    ]),
+    ("Going Deeper", [
+        ("Catechisms", "catechisms.html", "Ordered introductions to the whole faith.", "chirho"),
+        ("Recommended Reading", "reading.html", "A few books to go deeper.", "rule"),
+    ]),
+    ("For Your Phone", [
+        ("The Church Calendar", "calendar.html", "Feast days for your phone — old- and new-calendar downloads.", "cal"),
+    ]),
 ]
 
 
@@ -874,41 +950,44 @@ def _emblem(kind):
 
 
 def hub_page():
-    o = ['<section class="resources" id="top">', _divider("Resources"),
-         '<p class="res-intro">Explore the faith — choose a topic.</p>', '<div class="res-hub">']
-    for name, href, blurb, emb in RES_CARDS:
-        o.append(f'<a class="res-card" href="{href}">{_emblem(emb)}'
-                 f'<span class="res-card-t">{name}</span>'
-                 f'<span class="res-card-d">{blurb}</span></a>')
-    o.append('</div>')
+    o = ['<section class="resources resources-hub" id="top">', _divider("Resources"),
+         '<p class="res-intro">Explore the faith — by topic.</p>']
+    for gname, cards in RES_GROUPS:
+        o.append(f'<h2 class="browse-group">{gname}</h2>')
+        o.append('<ul class="browse-list">')
+        for c in cards:
+            o.append(_browse_row(*c))
+        o.append('</ul>')
     o.append(art("roundel", foot=True))
     o.append('</section>')
     return "\n".join(o)
 
 
-# Prayers index — a card per set of prayers (replaces the old slide-up menu)
-PRAYER_CARDS = [
-    ("Morning Prayers", "morning.html", "On rising — the morning rule.", "cross"),
-    ("Prayers at Table", "table.html", "Blessings before and after meals.", "gospel"),
-    ("Hours of the Day &amp; Night", "hours.html", "Through the hours, into the night.", "chirho"),
-    ("Before Sleep", "sleep.html", "At the close of the day.", "cross"),
+# Prayers index — the hours of the day as a connected cycle (the current office
+# is lit by time of day). title, href, blurb, emblem, time-label, hour-window
+PRAYER_CYCLE = [
+    ("Morning Prayers", "morning.html", "On rising — the morning rule.", "cross", "On rising", 4, 11),
+    ("Prayers at Table", "table.html", "Blessings before and after meals.", "gospel", "At meals", None, None),
+    ("Hours of the Day &amp; Night", "hours.html", "Through the hours of the day.", "chirho", "Through the day", 11, 21),
+    ("Before Sleep", "sleep.html", "At the close of the day.", "roundel", "At nightfall", 21, 4),
 ]
 
 
 def prayers_hub():
-    o = ['<section class="resources" id="top">', _divider("Prayers"),
-         '<p class="res-intro">The daily prayers — choose a time.</p>', '<div class="res-hub">']
-    for name, href, blurb, emb in PRAYER_CARDS:
-        o.append(f'<a class="res-card" href="{href}">{_emblem(emb)}'
-                 f'<span class="res-card-t">{name}</span>'
-                 f'<span class="res-card-d">{blurb}</span></a>')
+    o = ['<section class="resources prayers-hub" id="top">', _divider("Prayers"),
+         '<p class="res-intro">The hours of the day — pray as each calls.</p>',
+         _cycle(PRAYER_CYCLE)]
     if ANCIENT:
-        o.append(f'<a class="res-card" href="ancient.html">{_emblem("roundel")}'
-                 f'<span class="res-card-t">The Ancient Faith Prayer Book '
-                 f'<span class="pill pill-ancient pill-sm">Ancient</span></span>'
-                 f'<span class="res-card-d">A fuller cycle of daily offices.</span></a>')
-    o.append('</div>')
+        o.append('<a class="hub-feature" href="ancient.html">'
+                 f'{_emblem("roundel")}'
+                 '<span class="hub-feature-body">'
+                 '<span class="hub-feature-t">The Ancient Faith Prayer Book '
+                 '<span class="pill pill-ancient pill-sm">Ancient</span></span>'
+                 '<span class="hub-feature-d">A fuller cycle of daily offices — with prayers for '
+                 'Communion, confession, the departed and many occasions.</span></span>'
+                 f'{_CHEV_R}</a>')
     o.append(art("cross", foot=True))
+    o.append(NOW_JS)
     o.append('</section>')
     return "\n".join(o)
 
@@ -946,20 +1025,47 @@ for _ai, _am in enumerate(_amarks):
     ANCIENT[_am.group(1)] = _ancient_src[_am.start():_aend]
 
 
+# the five offices of the AFPB daily cycle, with time-of-day windows; emblem
+AFPB_CYCLE = {
+    "af-morning": ("On rising", 4, 11, "cross"),
+    "af-midday":  ("Midday", 11, 16, "chirho"),
+    "af-meals":   ("At meals", None, None, "gospel"),
+    "af-evening": ("Evening", 16, 21, "cross"),
+    "af-night":   ("At nightfall", 21, 4, "roundel"),
+}
+# emblems for the remaining (sacraments & occasions) browse rows
+AFPB_REST_EMB = {
+    "af-precommunion": "chirho", "af-communion": "gospel", "af-thanksgiving": "chirho",
+    "af-confession": "cross", "af-departed": "roundel", "af-occasions": "rule", "af-saints": "mono",
+}
+
+
 def afpb_hub():
-    o = ['<section class="resources afpb-hub" id="top">',
+    o = ['<section class="resources afpb-hub prayers-hub" id="top">',
          _divider("The Ancient Faith Prayer Book"),
          CHRIST_FIG,
          '<p class="res-intro">Prayers from <em>The Ancient Faith Prayer Book</em> '
-         '(Ancient Faith Publishing). ' + PILL + '</p>',
-         '<div class="res-hub">']
+         '(Ancient Faith Publishing). ' + PILL + '</p>']
+    # the daily cycle (those offices that map to a time of day)
+    cyc = []
     for slug, title, blurb in AFPB:
-        if slug not in ANCIENT:
-            continue
-        o.append(f'<a class="res-card afpb-card" href="{slug}.html">'
-                 f'<span class="res-card-t">{title}</span>'
-                 f'<span class="res-card-d">{blurb}</span></a>')
-    o.append('</div></section>')
+        if slug in AFPB_CYCLE and slug in ANCIENT:
+            when, h0, h1, emb = AFPB_CYCLE[slug]
+            cyc.append((title, f"{slug}.html", blurb, emb, when, h0, h1))
+    if cyc:
+        o.append('<h2 class="browse-group">The daily cycle</h2>')
+        o.append(_cycle(cyc))
+    # everything else — sacraments & occasions — as a browse list
+    rest = [(t, f"{s}.html", b, AFPB_REST_EMB.get(s, "rule"))
+            for s, t, b in AFPB if s not in AFPB_CYCLE and s in ANCIENT]
+    if rest:
+        o.append('<h2 class="browse-group">Sacraments &amp; occasions</h2>')
+        o.append('<ul class="browse-list">')
+        for row in rest:
+            o.append(_browse_row(*row))
+        o.append('</ul>')
+    o.append(NOW_JS)
+    o.append('</section>')
     return "\n".join(o)
 
 
@@ -1069,7 +1175,7 @@ EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#232327":"#faf6ee");})();
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#1b1612":"#faf6ee");})();
 </script>'''
 
 CONTROL_JS = '''<script>
@@ -1111,7 +1217,7 @@ CONTROL_JS = '''<script>
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#232327":"#faf6ee"); }
+    if(tc) tc.setAttribute("content", dark?"#1b1612":"#faf6ee"); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 
@@ -1345,7 +1451,7 @@ page("index.html", "Prayers for Morning, Day &amp; Night",
      "An Orthodox prayer book and companion for the journey — daily prayers for morning, the "
      "table, the hours of the day and night, and before sleep, with resources for inquirers "
      "coming from Western Protestant Christianity to Orthodoxy.",
-     LANDING.format(cross=CLOSING, rule=RULE_FIG), active="home")
+     LANDING.format(cross=CLOSING, rule=RULE_FIG, pray_js=HOME_JS), active="home")
 
 # Prayers index (card hub; replaces the old slide-up Prayers menu)
 page("prayers.html", "Prayers — Daily Prayers",
