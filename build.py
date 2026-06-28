@@ -1524,7 +1524,7 @@ HEAD_TMPL = '''<!doctype html>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=7">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=7">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=7">
-<link rel="manifest" href="site.webmanifest?v=7">
+<link rel="manifest" href="site.webmanifest?v=8">
 <meta name="apple-mobile-web-app-title" content="Prayers">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
