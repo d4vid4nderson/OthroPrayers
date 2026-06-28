@@ -16,11 +16,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="themes.css?v=1">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#161518":"#faf6ee");})();
+var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
+var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
+var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
+var dk=r.dataset.theme==="dark";
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
 </script>
 </head>
 <body>
@@ -151,6 +156,61 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
     </span>
   </div>
   <div class="menu-row">
+    <span class="menu-label">Background</span>
+    <span class="seg" role="group" aria-label="Background temperature">
+      <button id="temp-warm" type="button" aria-pressed="true">Warm</button>
+      <button id="temp-cool" type="button" aria-pressed="false">Cool</button>
+    </span>
+  </div>
+  <div class="menu-col">
+    <span class="menu-label">Primary colour</span>
+    <div class="swatches" role="group" aria-label="primary colour">
+<button class="swatch swatch-default" type="button" data-k="primary" data-c="" style="--sw:#b3322a" title="Default" aria-label="Default" aria-pressed="true"></button>
+<button class="swatch" type="button" data-k="primary" data-c="red" style="--sw:#ef4444" title="Red" aria-label="red" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="orange" style="--sw:#f97316" title="Orange" aria-label="orange" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="amber" style="--sw:#f59e0b" title="Amber" aria-label="amber" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="yellow" style="--sw:#eab308" title="Yellow" aria-label="yellow" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="lime" style="--sw:#84cc16" title="Lime" aria-label="lime" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="green" style="--sw:#22c55e" title="Green" aria-label="green" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="emerald" style="--sw:#10b981" title="Emerald" aria-label="emerald" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="teal" style="--sw:#14b8a6" title="Teal" aria-label="teal" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="cyan" style="--sw:#06b6d4" title="Cyan" aria-label="cyan" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="sky" style="--sw:#0ea5e9" title="Sky" aria-label="sky" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="blue" style="--sw:#3b82f6" title="Blue" aria-label="blue" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="indigo" style="--sw:#6366f1" title="Indigo" aria-label="indigo" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="violet" style="--sw:#8b5cf6" title="Violet" aria-label="violet" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="purple" style="--sw:#a855f7" title="Purple" aria-label="purple" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="fuchsia" style="--sw:#d946ef" title="Fuchsia" aria-label="fuchsia" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="pink" style="--sw:#ec4899" title="Pink" aria-label="pink" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="rose" style="--sw:#f43f5e" title="Rose" aria-label="rose" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="primary" data-c="slate" style="--sw:#64748b" title="Slate" aria-label="slate" aria-pressed="false"></button>
+</div>
+  </div>
+  <div class="menu-col">
+    <span class="menu-label">Secondary colour</span>
+    <div class="swatches" role="group" aria-label="secondary colour">
+<button class="swatch swatch-default" type="button" data-k="secondary" data-c="" style="--sw:#9a7b1e" title="Default" aria-label="Default" aria-pressed="true"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="red" style="--sw:#ef4444" title="Red" aria-label="red" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="orange" style="--sw:#f97316" title="Orange" aria-label="orange" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="amber" style="--sw:#f59e0b" title="Amber" aria-label="amber" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="yellow" style="--sw:#eab308" title="Yellow" aria-label="yellow" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="lime" style="--sw:#84cc16" title="Lime" aria-label="lime" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="green" style="--sw:#22c55e" title="Green" aria-label="green" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="emerald" style="--sw:#10b981" title="Emerald" aria-label="emerald" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="teal" style="--sw:#14b8a6" title="Teal" aria-label="teal" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="cyan" style="--sw:#06b6d4" title="Cyan" aria-label="cyan" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="sky" style="--sw:#0ea5e9" title="Sky" aria-label="sky" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="blue" style="--sw:#3b82f6" title="Blue" aria-label="blue" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="indigo" style="--sw:#6366f1" title="Indigo" aria-label="indigo" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="violet" style="--sw:#8b5cf6" title="Violet" aria-label="violet" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="purple" style="--sw:#a855f7" title="Purple" aria-label="purple" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="fuchsia" style="--sw:#d946ef" title="Fuchsia" aria-label="fuchsia" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="pink" style="--sw:#ec4899" title="Pink" aria-label="pink" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="rose" style="--sw:#f43f5e" title="Rose" aria-label="rose" aria-pressed="false"></button>
+<button class="swatch" type="button" data-k="secondary" data-c="slate" style="--sw:#64748b" title="Slate" aria-label="slate" aria-pressed="false"></button>
+</div>
+  </div>
+  <div class="menu-row">
     <span class="menu-label">Dyslexia-friendly</span>
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
@@ -215,12 +275,33 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
   d.getElementById("size-dn").onclick=function(){ setSize(cur()-1); };
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
+  function paintTC(){ if(!tc) return; var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
+    tc.setAttribute("content", dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee")); }
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
-    tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#161518":"#faf6ee"); }
+    tl.setAttribute("aria-pressed", dark?"false":"true"); paintTC(); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
+
+  // background temperature (warm is the default; cool tints the page cooler)
+  var twb=d.getElementById("temp-warm"), tcb=d.getElementById("temp-cool");
+  function paintTemp(){ var cool=r.dataset.temp==="cool";
+    if(tcb) tcb.setAttribute("aria-pressed", cool?"true":"false");
+    if(twb) twb.setAttribute("aria-pressed", cool?"false":"true"); paintTC(); }
+  function setTemp(v){ if(v==="cool"){ r.dataset.temp="cool"; L.setItem("temp","cool"); }
+    else { delete r.dataset.temp; L.setItem("temp","warm"); } paintTemp(); }
+  if(twb) twb.onclick=function(){ setTemp("warm"); };
+  if(tcb) tcb.onclick=function(){ setTemp("cool"); };
+
+  // primary / secondary colour swatches (Tailwind families; "" = brand default)
+  var swatches=d.querySelectorAll(".swatch");
+  function paintSwatches(){ Array.prototype.forEach.call(swatches,function(b){
+    var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||""; var cur=L.getItem(k)||"";
+    b.setAttribute("aria-pressed", c===cur?"true":"false"); }); }
+  Array.prototype.forEach.call(swatches,function(b){ b.onclick=function(){
+    var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||"";
+    if(c){ r.dataset[k]=c; L.setItem(k,c); } else { delete r.dataset[k]; L.removeItem(k); }
+    paintSwatches(); }; });
 
   var dys=d.getElementById("dys");
   function paintDys(){ dys.setAttribute("aria-checked", r.dataset.font==="dyslexic"?"true":"false"); }
@@ -299,7 +380,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.t
     });
   }
 
-  paintTheme(); paintDys(); paintCal(); paintFn(); paintOff();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
 })();
 </script>
 <script src="calendar-data.js?v=1" defer></script>

@@ -91,9 +91,9 @@ html[data-theme="dark"]{
   --desk:       #0d0c0e;   /* darker still behind the page */
   --hairline:   #34333c;   /* near-neutral borders */
   --hairline-strong:#454450; /* tab bar / section rules */
-  /* warm light glows so interactive elements read as lit, not flat */
-  --glow-red:  0 0 16px rgba(226,81,61,.5);
-  --glow-gold: 0 0 14px rgba(230,195,107,.45);
+  /* warm glows so interactive elements read as lit — follow the chosen accents */
+  --glow-red:  0 0 16px color-mix(in srgb, var(--rubric) 55%, transparent);
+  --glow-gold: 0 0 14px color-mix(in srgb, var(--gold) 50%, transparent);
   --elev-1:0 1px 3px rgba(0,0,0,.5);
   --elev-2:0 6px 18px rgba(0,0,0,.55);
   --elev-3:0 16px 40px rgba(0,0,0,.66);
@@ -530,7 +530,7 @@ html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); 
 .tabbar{
   flex:0 0 auto; z-index:30;
   display:flex; align-items:stretch;
-  background:rgba(250,246,238,.86);
+  background:color-mix(in srgb, var(--paper) 86%, transparent);
   backdrop-filter:saturate(1.3) blur(12px);
   -webkit-backdrop-filter:saturate(1.3) blur(12px);
   border-top:1px solid var(--hairline-strong);   /* gilt-tinged hairline */
@@ -538,7 +538,7 @@ html[data-theme="dark"] .pn-primary{ box-shadow:var(--elev-2), var(--glow-red); 
      safe-area inset reports 0 in some installed web-app contexts) */
   padding-bottom:max(.25rem, env(safe-area-inset-bottom));
 }
-html[data-theme="dark"] .tabbar{ background:rgba(30,30,34,.82); }
+html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%, transparent); }
 .tab{
   position:relative;
   flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -555,7 +555,7 @@ html[data-theme="dark"] .tabbar{ background:rgba(30,30,34,.82); }
   background:var(--gold); border-radius:var(--r-pill);
 }
 html[data-theme="dark"] .tab.active::before{ box-shadow:var(--glow-gold); }
-html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 8px rgba(226,81,61,.45)); }
+html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 8px color-mix(in srgb, var(--rubric) 45%, transparent)); }
 .tab-i{ display:flex; }
 .tab-i svg{ width:1.5rem; height:1.5rem; }
 .tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.04em; white-space:nowrap; }
@@ -565,15 +565,17 @@ html[data-theme="dark"] .tab.active .tab-i{ filter:drop-shadow(0 0 8px rgba(226,
 .tab-fab .tab-i{
   width:3.5rem; height:3.5rem; margin-top:-1.7rem; margin-bottom:.1rem;
   align-items:center; justify-content:center; color:#fff; border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #c64635, var(--rubric));
-  box-shadow:0 6px 16px rgba(124,43,34,.38), 0 2px 4px rgba(124,43,34,.3),
-             0 0 0 3px var(--paper), 0 0 0 4px rgba(154,123,30,.6);
+  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--rubric) 80%, #fff), var(--rubric));
+  box-shadow:0 6px 16px color-mix(in srgb, var(--rubric) 40%, transparent),
+             0 2px 4px color-mix(in srgb, var(--rubric) 32%, transparent),
+             0 0 0 3px var(--paper), 0 0 0 4px color-mix(in srgb, var(--gold) 60%, transparent);
   transition:transform .12s ease, box-shadow .2s ease;
 }
 html[data-theme="dark"] .tab-fab .tab-i{
-  background:radial-gradient(circle at 35% 30%, #ef6a57, var(--rubric));
-  box-shadow:0 6px 18px rgba(226,81,61,.5), 0 0 22px rgba(226,81,61,.45),
-             0 0 0 3px var(--paper), 0 0 0 4px rgba(230,195,107,.7);
+  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--rubric) 72%, #fff), var(--rubric));
+  box-shadow:0 6px 18px color-mix(in srgb, var(--rubric) 50%, transparent),
+             0 0 22px color-mix(in srgb, var(--rubric) 42%, transparent),
+             0 0 0 3px var(--paper), 0 0 0 4px color-mix(in srgb, var(--gold) 70%, transparent);
 }
 .tab-fab:active .tab-i{ transform:scale(.94); }
 .tab-fab .tab-i svg{ width:1.7rem; height:1.7rem; }
@@ -649,6 +651,21 @@ html[data-theme="dark"] .drawer-settings{ border-top-color:#37373c; }
 .menu-label{ font-family:var(--serif); }
 .menu-note{ padding:.1rem .8rem .4rem; margin:0; font-size:.82rem; line-height:1.4; opacity:.7; text-indent:0; }
 .menu-note a{ color:var(--link); }
+/* stacked row (label above a full-width control) — for the colour swatches */
+.menu-col{ display:flex; flex-direction:column; gap:.5rem; padding:.5rem .7rem; }
+.swatches{ display:flex; gap:.6rem; overflow-x:auto; padding:.2rem .1rem .35rem;
+  scrollbar-width:none; -ms-overflow-style:none; }
+.swatches::-webkit-scrollbar{ display:none; }
+.swatch{ flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; cursor:pointer; padding:0;
+  background:var(--sw); border:1px solid rgba(0,0,0,.22);
+  transition:transform .1s ease, box-shadow .15s ease; }
+html[data-theme="dark"] .swatch{ border-color:rgba(255,255,255,.18); }
+.swatch:active{ transform:scale(.9); }
+.swatch[aria-pressed="true"]{ box-shadow:0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+/* the leading "default / brand" swatch carries a tiny gilt dot to read as the reset */
+.swatch-default{ position:relative; }
+.swatch-default::after{ content:""; position:absolute; inset:0; border-radius:50%;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.55); }
 
 /* segmented icon/text controls inside the menu */
 .seg{ display:inline-flex; border:1px solid #d9d2c4; border-radius:8px; overflow:hidden; }
@@ -1123,13 +1140,13 @@ html[data-theme="dark"] .tts-player.open{ border-color:var(--hairline-strong); b
 /* ---- dark theme: warm glow on the lights (gilt ornaments + red buttons) */
 html[data-theme="dark"] .divider .cross,
 html[data-theme="dark"] .divider .art-rule,
-html[data-theme="dark"] .landing > .art-rule{ filter:drop-shadow(0 0 7px rgba(230,195,107,.3)); }
+html[data-theme="dark"] .landing > .art-rule{ filter:drop-shadow(0 0 7px color-mix(in srgb, var(--gold) 32%, transparent)); }
 html[data-theme="dark"] :where(.landing-cta .cta:not(.cta-ghost), .cal-btn:not(.sub),
   .gk-cta, .tw-prompt-btn, .gk-pick){ box-shadow:var(--glow-red); }
-html[data-theme="dark"] .cf-fill{ box-shadow:0 0 10px rgba(230,195,107,.5); }
+html[data-theme="dark"] .cf-fill{ box-shadow:0 0 10px color-mix(in srgb, var(--gold) 50%, transparent); }
 /* the read-aloud play button glows like the FAB */
-html[data-theme="dark"] .tts-player:not(.open){ box-shadow:0 6px 18px rgba(226,81,61,.5),
-  0 0 22px rgba(226,81,61,.4); }
+html[data-theme="dark"] .tts-player:not(.open){ box-shadow:0 6px 18px color-mix(in srgb, var(--rubric) 50%, transparent),
+  0 0 22px color-mix(in srgb, var(--rubric) 40%, transparent); }
 
 @media print{
   html, body{ height:auto; }

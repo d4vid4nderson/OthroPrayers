@@ -264,6 +264,21 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     </span>
   </div>
   <div class="menu-row">
+    <span class="menu-label">Background</span>
+    <span class="seg" role="group" aria-label="Background temperature">
+      <button id="temp-warm" type="button" aria-pressed="true">Warm</button>
+      <button id="temp-cool" type="button" aria-pressed="false">Cool</button>
+    </span>
+  </div>
+  <div class="menu-col">
+    <span class="menu-label">Primary colour</span>
+    {primary_sw}
+  </div>
+  <div class="menu-col">
+    <span class="menu-label">Secondary colour</span>
+    {secondary_sw}
+  </div>
+  <div class="menu-row">
     <span class="menu-label">Dyslexia-friendly</span>
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
@@ -299,7 +314,8 @@ def tabbar(active="", current=""):
         h_act=" active" if active == "home" else "",
         p_act=" active" if active == "prayers" else "",
         r_act=" active" if active == "resources" else "",
-        HOME=HOME, BOOK=BOOK, CAMERA=CAMERA, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE)
+        HOME=HOME, BOOK=BOOK, CAMERA=CAMERA, COMPASS=COMPASS, GEAR=GEAR, SUN=SUN, MOON=MOON, CLOSE=CLOSE,
+        primary_sw=_swatches("primary", BRAND_PRIMARY), secondary_sw=_swatches("secondary", BRAND_SECONDARY))
 
 
 # ---- Early Church Fathers reading checklist --------------------------------
@@ -1181,7 +1197,11 @@ EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",r.dataset.theme==="dark"?"#161518":"#faf6ee");})();
+var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
+var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
+var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
+var dk=r.dataset.theme==="dark";
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
 </script>'''
 
 CONTROL_JS = '''<script>
@@ -1220,12 +1240,33 @@ CONTROL_JS = '''<script>
   d.getElementById("size-dn").onclick=function(){ setSize(cur()-1); };
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
+  function paintTC(){ if(!tc) return; var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
+    tc.setAttribute("content", dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee")); }
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
-    tl.setAttribute("aria-pressed", dark?"false":"true");
-    if(tc) tc.setAttribute("content", dark?"#161518":"#faf6ee"); }
+    tl.setAttribute("aria-pressed", dark?"false":"true"); paintTC(); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
+
+  // background temperature (warm is the default; cool tints the page cooler)
+  var twb=d.getElementById("temp-warm"), tcb=d.getElementById("temp-cool");
+  function paintTemp(){ var cool=r.dataset.temp==="cool";
+    if(tcb) tcb.setAttribute("aria-pressed", cool?"true":"false");
+    if(twb) twb.setAttribute("aria-pressed", cool?"false":"true"); paintTC(); }
+  function setTemp(v){ if(v==="cool"){ r.dataset.temp="cool"; L.setItem("temp","cool"); }
+    else { delete r.dataset.temp; L.setItem("temp","warm"); } paintTemp(); }
+  if(twb) twb.onclick=function(){ setTemp("warm"); };
+  if(tcb) tcb.onclick=function(){ setTemp("cool"); };
+
+  // primary / secondary colour swatches (Tailwind families; "" = brand default)
+  var swatches=d.querySelectorAll(".swatch");
+  function paintSwatches(){ Array.prototype.forEach.call(swatches,function(b){
+    var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||""; var cur=L.getItem(k)||"";
+    b.setAttribute("aria-pressed", c===cur?"true":"false"); }); }
+  Array.prototype.forEach.call(swatches,function(b){ b.onclick=function(){
+    var k=b.getAttribute("data-k"), c=b.getAttribute("data-c")||"";
+    if(c){ r.dataset[k]=c; L.setItem(k,c); } else { delete r.dataset[k]; L.removeItem(k); }
+    paintSwatches(); }; });
 
   var dys=d.getElementById("dys");
   function paintDys(){ dys.setAttribute("aria-checked", r.dataset.font==="dyslexic"?"true":"false"); }
@@ -1304,7 +1345,7 @@ CONTROL_JS = '''<script>
     });
   }
 
-  paintTheme(); paintDys(); paintCal(); paintFn(); paintOff();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
 })();
 </script>'''
 
@@ -1341,6 +1382,70 @@ self.addEventListener("fetch", function(e){
 });
 '''
 
+# ---- user theming: Tailwind palette for primary/secondary colour pickers ----
+# shades used: 400/500 (dark accents + swatch dots), 600 (secondary light),
+# 700/800 (primary light + deep). Values are Tailwind v3.
+TW = {
+ "red":     {"400": "#f87171", "500": "#ef4444", "600": "#dc2626", "700": "#b91c1c", "800": "#991b1b"},
+ "orange":  {"400": "#fb923c", "500": "#f97316", "600": "#ea580c", "700": "#c2410c", "800": "#9a3412"},
+ "amber":   {"400": "#fbbf24", "500": "#f59e0b", "600": "#d97706", "700": "#b45309", "800": "#92400e"},
+ "yellow":  {"400": "#facc15", "500": "#eab308", "600": "#ca8a04", "700": "#a16207", "800": "#854d0e"},
+ "lime":    {"400": "#a3e635", "500": "#84cc16", "600": "#65a30d", "700": "#4d7c0f", "800": "#3f6212"},
+ "green":   {"400": "#4ade80", "500": "#22c55e", "600": "#16a34a", "700": "#15803d", "800": "#166534"},
+ "emerald": {"400": "#34d399", "500": "#10b981", "600": "#059669", "700": "#047857", "800": "#065f46"},
+ "teal":    {"400": "#2dd4bf", "500": "#14b8a6", "600": "#0d9488", "700": "#0f766e", "800": "#115e59"},
+ "cyan":    {"400": "#22d3ee", "500": "#06b6d4", "600": "#0891b2", "700": "#0e7490", "800": "#155e75"},
+ "sky":     {"400": "#38bdf8", "500": "#0ea5e9", "600": "#0284c7", "700": "#0369a1", "800": "#075985"},
+ "blue":    {"400": "#60a5fa", "500": "#3b82f6", "600": "#2563eb", "700": "#1d4ed8", "800": "#1e40af"},
+ "indigo":  {"400": "#818cf8", "500": "#6366f1", "600": "#4f46e5", "700": "#4338ca", "800": "#3730a3"},
+ "violet":  {"400": "#a78bfa", "500": "#8b5cf6", "600": "#7c3aed", "700": "#6d28d9", "800": "#5b21b6"},
+ "purple":  {"400": "#c084fc", "500": "#a855f7", "600": "#9333ea", "700": "#7e22ce", "800": "#6b21a8"},
+ "fuchsia": {"400": "#e879f9", "500": "#d946ef", "600": "#c026d3", "700": "#a21caf", "800": "#86198f"},
+ "pink":    {"400": "#f472b6", "500": "#ec4899", "600": "#db2777", "700": "#be185d", "800": "#9d174d"},
+ "rose":    {"400": "#fb7185", "500": "#f43f5e", "600": "#e11d48", "700": "#be123c", "800": "#9f1239"},
+ "slate":   {"400": "#94a3b8", "500": "#64748b", "600": "#475569", "700": "#334155", "800": "#1e293b"},
+}
+TW_ORDER = ["red", "orange", "amber", "yellow", "lime", "green", "emerald", "teal", "cyan",
+            "sky", "blue", "indigo", "violet", "purple", "fuchsia", "pink", "rose", "slate"]
+# the app's own identity, shown as the "Default" swatch (data-c="")
+BRAND_PRIMARY = "#b3322a"   # cinnabar
+BRAND_SECONDARY = "#9a7b1e" # gold
+
+
+def themes_css():
+    """Generated stylesheet: background temperature + Tailwind primary/secondary."""
+    o = ["/* generated by build.py — user theming (do not edit by hand) */",
+         "/* background temperature: warm is the styles.css default; cool tints cooler */",
+         ('html[data-temp="cool"]{ --paper:#f4f5f7; --surface:#ffffff; --surface-sunk:#e9ecf1;'
+          ' --desk:#dfe3ea; --hairline:#dde1e8; --hairline-strong:#c7cdd8; }'),
+         ('html[data-theme="dark"][data-temp="cool"]{ --paper:#121317; --surface:#1b1d22;'
+          ' --surface-sunk:#0e0f12; --desk:#0a0b0d; --hairline:#2c2f37; --hairline-strong:#3c404a; }'),
+         "/* primary colour (accent: titles, active state, buttons, FAB) */"]
+    for fam in TW_ORDER:
+        c = TW[fam]
+        o.append(f'html[data-primary="{fam}"]{{ --rubric:{c["700"]}; --rubric-deep:{c["800"]}; }}')
+        o.append(f'html[data-theme="dark"][data-primary="{fam}"]{{ --rubric:{c["400"]}; --rubric-deep:{c["500"]}; }}')
+    o.append("/* secondary colour (gilding accent) */")
+    for fam in TW_ORDER:
+        c = TW[fam]
+        o.append(f'html[data-secondary="{fam}"]{{ --gold:{c["600"]}; }}')
+        o.append(f'html[data-theme="dark"][data-secondary="{fam}"]{{ --gold:{c["400"]}; }}')
+    return "\n".join(o) + "\n"
+
+
+def _swatches(kind, default_hex):
+    """A horizontally-scrolling row of colour dots for the settings sheet."""
+    o = [f'<div class="swatches" role="group" aria-label="{kind} colour">',
+         (f'<button class="swatch swatch-default" type="button" data-k="{kind}" data-c="" '
+          f'style="--sw:{default_hex}" title="Default" aria-label="Default" aria-pressed="true"></button>')]
+    for fam in TW_ORDER:
+        o.append(f'<button class="swatch" type="button" data-k="{kind}" data-c="{fam}" '
+                 f'style="--sw:{TW[fam]["500"]}" title="{fam.capitalize()}" '
+                 f'aria-label="{fam}" aria-pressed="false"></button>')
+    o.append('</div>')
+    return "\n".join(o)
+
+
 HEAD_TMPL = '''<!doctype html>
 <html lang="en">
 <head>
@@ -1359,6 +1464,7 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#faf6ee">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="themes.css?v=1">
 {early}
 </head>
 <body>
@@ -1538,13 +1644,17 @@ _caldata = {
 open("calendar-data.js", "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
 print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "moveable")
 
+# generated theming stylesheet (background temperature + Tailwind primary/secondary)
+open("themes.css", "w").write(themes_css())
+print("wrote themes.css", len(TW_ORDER), "colour families")
+
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
 # or cache.addAll() would 404 and the whole offline install would fail
 _NODEPLOY = {"prayers.content.html", "ancient.content.html", "assets/icons/app-icon.png"}
 _assets = {"./"}
 _assets.update(glob.glob("*.html"))
-for _p in ["styles.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
+for _p in ["styles.css", "themes.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
            "site.webmanifest", "favicon.ico"]:
     if os.path.exists(_p):
         _assets.add(_p)
