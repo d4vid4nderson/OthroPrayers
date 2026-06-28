@@ -93,7 +93,32 @@
   function renderWeek(cal) {
     var box = document.getElementById("this-week");
     if (!box) return;
-    if (!cal) { box.hidden = true; box.innerHTML = ""; return; }
+    if (!cal) {
+      // empty state that teaches: invite the reader to follow the calendar,
+      // unless they've dismissed the prompt
+      if (localStorage.getItem("tw-hide-prompt") === "1") { box.hidden = true; box.innerHTML = ""; return; }
+      box.classList.add("tw-prompt-mode");
+      box.innerHTML =
+        '<span class="tw-prompt-emblem" aria-hidden="true">&#10022;</span>'
+        + '<h2 class="tw-h">Follow the Church Calendar</h2>'
+        + '<p class="tw-prompt-d">See this week&rsquo;s feasts and fasts here on the home page, '
+        + 'with guidance on how to keep each day. Choose the Old (Julian) or New calendar in Settings.</p>'
+        + '<div class="tw-prompt-actions">'
+        + '<button class="tw-prompt-btn" id="tw-open-settings" type="button">Open Settings</button>'
+        + '<button class="tw-prompt-skip" id="tw-skip" type="button">Not now</button>'
+        + '</div>';
+      box.hidden = false;
+      var os = document.getElementById("tw-open-settings");
+      if (os) os.addEventListener("click", function () {
+        var sb = document.getElementById("settings-btn"); if (sb) sb.click();
+      });
+      var sk = document.getElementById("tw-skip");
+      if (sk) sk.addEventListener("click", function () {
+        localStorage.setItem("tw-hide-prompt", "1"); box.hidden = true; box.innerHTML = "";
+      });
+      return;
+    }
+    box.classList.remove("tw-prompt-mode");
     var today = todayUTC();
     var h = '<h2 class="tw-h">This Week</h2>'
           + '<div class="tw-sub">' + (cal === "old" ? "Old (Julian)" : "New (Revised Julian)") + ' calendar</div>'

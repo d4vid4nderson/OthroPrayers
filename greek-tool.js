@@ -3,7 +3,7 @@
  * inline translation, with a one-tap hand-off to Google Translate (much better
  * quality). Online-only and approximate; best on clear, printed Greek. */
 (function () {
-  var fileIn, img, status, gEl, tEl, enEl, gt, go;
+  var fileIn, img, status, spin, gEl, tEl, enEl, gt, go;
   function $(id) { return document.getElementById(id); }
 
   var MAP = { "α": "a", "β": "v", "γ": "g", "δ": "d", "ε": "e", "ζ": "z", "η": "i",
@@ -19,7 +19,11 @@
     }).join("");
   }
 
-  function setStatus(t) { if (status) status.textContent = t || ""; }
+  // busy = show the spinner (a working state); omitted/false hides it
+  function setStatus(t, busy) {
+    if (status) status.textContent = t || "";
+    if (spin) spin.hidden = !busy;
+  }
 
   function loadTesseract() {
     return new Promise(function (res, rej) {
@@ -79,7 +83,7 @@
 
   function process(src) {
     gEl.value = ""; tEl.textContent = ""; enEl.textContent = ""; gt.hidden = true;
-    setStatus("Reading the Greek…");
+    setStatus("Reading the Greek…", true);
     prep(src).then(function (canvas) {
       var durl = canvas ? canvas.toDataURL("image/jpeg", 0.85) : null;
       return (durl ? tryBackend(durl) : Promise.resolve(null)).then(function (best) {
@@ -96,11 +100,11 @@
   }
 
   function ocrFallback(imgSrc) {
-    setStatus("Reading the Greek…");
+    setStatus("Reading the Greek…", true);
     return loadTesseract().then(function () {
       return Tesseract.recognize(imgSrc, "ell", {
         logger: function (m) {
-          if (m.status === "recognizing text") setStatus("Reading the Greek… " + Math.round(m.progress * 100) + "%");
+          if (m.status === "recognizing text") setStatus("Reading the Greek… " + Math.round(m.progress * 100) + "%", true);
         }
       });
     }).then(function (r) {
@@ -119,7 +123,7 @@
     var clean = text.replace(/[ \t]+/g, " ").replace(/[ \t]*\n[ \t]*/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
     gt.href = "https://translate.google.com/?sl=el&tl=en&op=translate&text=" + encodeURIComponent(clean);
     gt.hidden = false;
-    setStatus("Translating…");
+    setStatus("Translating…", true);
     fetch("https://api.mymemory.translated.net/get?langpair=el|en&q=" + encodeURIComponent(clean.slice(0, 480)))
       .then(function (r) { return r.json(); })
       .then(function (j) {
@@ -138,7 +142,7 @@
   }
 
   function ready() {
-    fileIn = $("gk-file"); img = $("gk-img"); status = $("gk-status");
+    fileIn = $("gk-file"); img = $("gk-img"); status = $("gk-status"); spin = $("gk-spin");
     gEl = $("gk-greek"); tEl = $("gk-translit"); enEl = $("gk-en");
     gt = $("gk-gt"); go = $("gk-go");
     if (!fileIn) return;

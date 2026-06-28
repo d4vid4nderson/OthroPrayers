@@ -784,7 +784,7 @@ ARTICLE_BY_SLUG = {a["slug"]: a for a in ARTICLES}
 def article_page(a):
     o = ['<section class="resources">', BACK, _divider(a["name"])]
     if a.get("lead"):
-        o.append(f'<p class="topic-intro">{a["lead"]}</p>')
+        o.append(f'<p class="article-lead">{a["lead"]}</p>')
     for sub, paras in a["sections"]:
         o.append(f'<h2 class="subhead">{sub}</h2>')
         for p in paras:
@@ -1019,7 +1019,7 @@ document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
-GREEK_JS = '<script src="greek-tool.js?v=5" defer></script>'
+GREEK_JS = '<script src="greek-tool.js?v=6" defer></script>'
 
 
 def greek_page():
@@ -1031,16 +1031,27 @@ def greek_page():
         'calligraphy and heavy accents are often misread — when that happens, correct the text in '
         'the box and translate again, or open it in Google Translate for the best result.</p>',
         '<div class="gk">',
-        '<label class="gk-pick" for="gk-file">Take or choose a photo</label>',
+        # capture zone — doubles as the empty state
+        f'<label class="gk-drop" for="gk-file"><span class="gk-drop-i" aria-hidden="true">{CAMERA}</span>'
+        '<span class="gk-drop-t">Take or choose a photo</span>'
+        '<span class="gk-drop-d">Clear, straight-on, well-lit printed Greek works best</span></label>',
         '<input id="gk-file" type="file" accept="image/*" hidden>',
         '<img id="gk-img" class="gk-img" alt="Your photo" hidden>',
-        '<p id="gk-status" class="gk-status" aria-live="polite"></p>',
-        '<p class="gk-lbl">Greek <span class="gk-hint">(correct it if the reading is off)</span></p>',
-        '<textarea id="gk-greek" class="gk-greek" rows="3" dir="auto"></textarea>',
-        '<button id="gk-go" class="cta cta-ghost" type="button">Translate again</button>',
-        '<p class="gk-lbl">Transliteration</p><p id="gk-translit" class="gk-translit"></p>',
-        '<p class="gk-lbl">English <span class="gk-hint">(rough)</span></p><p id="gk-en" class="gk-en"></p>',
-        '<a id="gk-gt" class="cta" target="_blank" rel="noopener" hidden>Open in Google Translate</a>',
+        '<div class="gk-status-row"><span id="gk-spin" class="gk-spin" aria-hidden="true" hidden></span>'
+        '<p id="gk-status" class="gk-status" aria-live="polite"></p></div>',
+        # result cards
+        '<div class="gk-card gk-card-greek">'
+        '<div class="gk-card-h">Greek <span class="gk-hint">(correct it if the reading is off)</span></div>'
+        '<textarea id="gk-greek" class="gk-greek" rows="3" dir="auto" '
+        'placeholder="Greek text appears here — or type it in"></textarea>'
+        '<button id="gk-go" class="gk-mini" type="button">Translate again</button></div>',
+        '<div class="gk-card gk-card-translit">'
+        '<div class="gk-card-h">Transliteration</div>'
+        '<p id="gk-translit" class="gk-translit"></p></div>',
+        '<div class="gk-card gk-card-en">'
+        '<div class="gk-card-h">English <span class="gk-hint">(rough)</span></div>'
+        '<p id="gk-en" class="gk-en"></p>'
+        '<a id="gk-gt" class="gk-cta" target="_blank" rel="noopener" hidden>Open in Google Translate</a></div>',
         '</div>',
         '<p class="res-foot">Text recognition runs in your browser (open-source); the rough '
         'translation uses a free public service, and the button above hands the text to Google '
@@ -1244,7 +1255,7 @@ HEAD_TMPL = '''<!doctype html>
 {topnav}
 {control}
 <script src="calendar-data.js?v=1" defer></script>
-<script src="calendar.js?v=2" defer></script>
+<script src="calendar.js?v=3" defer></script>
 {scripts}
 </body>
 </html>
