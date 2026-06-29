@@ -646,7 +646,7 @@ html[data-theme="dark"] .drawer-settings{ border-top-color:#37373c; }
 .menu-note a{ color:var(--link); }
 /* stacked row (label above a full-width control) — for the colour swatches */
 .menu-col{ display:flex; flex-direction:column; gap:.5rem; padding:.5rem .7rem; }
-.swatches{ display:flex; gap:.6rem; overflow-x:auto; padding:.2rem .1rem .35rem;
+.swatches{ display:flex; gap:.6rem; overflow-x:auto; padding:.4rem .5rem .45rem;
   scrollbar-width:none; -ms-overflow-style:none; touch-action:pan-x; }
 .swatches::-webkit-scrollbar{ display:none; }
 .swatch{ flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; cursor:pointer; padding:0;
