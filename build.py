@@ -1206,7 +1206,8 @@ a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 
 GREEK_JS = '<script src="greek-tool.js?v=8" defer></script>'
 BIBLE_JS = ('<script src="bible-index.js?v=1" defer></script>\n'
-            '<script src="bible.js?v=1" defer></script>')
+            '<script src="bible-plan-data.js?v=1" defer></script>\n'
+            '<script src="bible.js?v=2" defer></script>')
 
 
 # ---- the People's Responses at the services (laity's parts) ----------------
@@ -1361,6 +1362,14 @@ def _build_bible_plan():
 
 BIBLE_PLAN = _build_bible_plan()
 
+# a compact day -> [[bookId, startChapter, endChapter], ...] table so bible.js
+# can render a whole day's reading (which may span several books) as one page,
+# without duplicating the plan's chapter math client-side
+_plan_days = [[[g[0], g[2], g[3]] for g in d["groups"]] for d in BIBLE_PLAN]
+open("bible-plan-data.js", "w").write(
+    "window.BIBLE_DAYS=" + json.dumps(_plan_days, ensure_ascii=False, separators=(",", ":")) + ";\n")
+print("wrote bible-plan-data.js", len(_plan_days), "days")
+
 
 def _byr_ref(groups):
     parts = []
@@ -1410,12 +1419,11 @@ def bible_plan_page():
                 o.append('</ul></section>')
             cur_month = d["month"]
             o.append(f'<section class="cf-era"><h3 class="cf-era-h">{_MONTHS[cur_month]}</h3><ul class="cf-list">')
-        bid, _name0, start, _end0, _tot0 = d["groups"][0]
         o.append(f'<li class="cf-item byr-item" data-day="{d["day"]}">'
                   f'<label class="cf-check"><input type="checkbox" data-byr="{d["day"]}">'
                   f'<span class="cf-title">{d["label"]}<span class="office-now">Today</span></span></label>'
                   f'<div class="cf-meta"><span class="cf-by">{_byr_ref(d["groups"])}</span></div>'
-                  f'<div class="cf-chips"><a class="cf-chip" href="scripture.html#{bid}/{start}">'
+                  f'<div class="cf-chips"><a class="cf-chip" href="scripture.html#day/{d["day"]}">'
                   f'{_BYR_READ_I}<span>Read</span></a></div></li>')
     o.append('</ul></section>')
     o.append('<p class="res-foot">A straight read-through, not a lectionary &mdash; for the '
@@ -1971,7 +1979,7 @@ _assets.update(glob.glob("*.html"))
 # note: the per-book bible/*.json (~5MB) are intentionally NOT precached — they
 # are cached at runtime as chapters are read, to keep the offline install lean
 for _p in ["styles.css", "themes.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
-           "bible-index.js", "bible.js", "site.webmanifest", "favicon.ico"]:
+           "bible-index.js", "bible-plan-data.js", "bible.js", "site.webmanifest", "favicon.ico"]:
     if os.path.exists(_p):
         _assets.add(_p)
 for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*", "calendars/*.ics"]:

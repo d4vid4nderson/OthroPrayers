@@ -1185,6 +1185,10 @@ html[data-theme="dark"] .bib-continue{ box-shadow:var(--elev-2), var(--glow-red)
 .bib-chap-sel{ font-family:var(--serif); font-size:1.05rem; padding:.15rem .4rem; border-radius:var(--r-sm);
   border:1px solid var(--hairline); background:var(--surface-sunk); color:var(--ink); cursor:pointer; }
 .bib-verses{ margin:.3rem 0 0; }
+/* a chapter heading inside a multi-chapter day reading (Bible in a Year) */
+.bib-chaph{ font-family:var(--serif); font-weight:600; font-variant-caps:small-caps;
+  letter-spacing:.04em; color:var(--rubric); font-size:1.05rem; margin:1.3em 0 .4em; }
+.bib-chaph:first-child{ margin-top:0; }
 .bib-v{ text-indent:0; margin:0 0 .5em; line-height:1.62; font-size:1.12rem; }
 .bib-n{ display:inline-block; min-width:1.3em; margin-right:.15em; vertical-align:.4em;
   font-size:.6em; font-weight:600; color:var(--gold); font-variant-numeric:lining-nums; }
