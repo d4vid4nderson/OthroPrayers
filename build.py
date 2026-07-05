@@ -1204,7 +1204,7 @@ document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
-GREEK_JS = '<script src="greek-tool.js?v=7" defer></script>'
+GREEK_JS = '<script src="greek-tool.js?v=8" defer></script>'
 BIBLE_JS = ('<script src="bible-index.js?v=1" defer></script>\n'
             '<script src="bible.js?v=1" defer></script>')
 

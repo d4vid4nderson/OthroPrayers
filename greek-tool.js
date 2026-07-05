@@ -70,6 +70,39 @@
     return "https://translate.google.com/?sl=el&tl=en&op=translate&text=" + encodeURIComponent(text.replace(/\s+/g, " ").trim());
   }
 
+  // a rough check that a reading is actually Greek — OCR on a blurry/angled
+  // photo sometimes comes back as near-random Latin letters and digits, which
+  // no translator can do anything useful with
+  function looksGreek(s) {
+    var letters = s.match(/[A-Za-zΑ-Ωα-ωΆ-Ώά-ώ]/g) || [];
+    if (letters.length < 2) return false;
+    var greek = s.match(/[Α-Ωα-ωΆ-Ώά-ώ]/g) || [];
+    return greek.length / letters.length >= 0.5;
+  }
+
+  // true when a "translation" is really just the same text handed back
+  // unchanged (a common failure mode when a translator can't do anything
+  // with garbled input) — comparison ignores case, accents and punctuation
+  function isEcho(a, b) {
+    function norm(s) {
+      return (s || "").normalize("NFD").replace(/[̀-ͯ͂-ͅ]/g, "")
+        .toLowerCase().replace(/[^a-zͰ-Ͽ]/gi, "");
+    }
+    var na = norm(a), nb = norm(b);
+    return !!na && na === nb;
+  }
+
+  // after any automatic reading: translate it, unless the reading itself
+  // doesn't look like Greek — then ask for a clearer photo or a correction
+  // instead of "translating" nonsense
+  function afterRead(text) {
+    if (!looksGreek(text)) {
+      setStatus("That doesn’t look like Greek — check the text above, fix it, or retake a clearer, straight-on photo.");
+      return;
+    }
+    translate(text);
+  }
+
   // high-accuracy path: send the photo to the server (Google Vision + Translate);
   // returns {greek, english} or null if the backend isn't configured / fails
   function tryBackend(dataURL) {
@@ -90,10 +123,10 @@
         if (best && best.greek) {                 // server read it
           gEl.value = best.greek; tEl.textContent = translit(best.greek);
           gt.href = googleUrl(best.greek);
-          if (best.english) {                      // server also translated it
+          if (best.english && !isEcho(best.greek, best.english)) {   // server also translated it
             enEl.textContent = best.english; gt.hidden = false; setStatus("");
           } else {                                 // OCR worked but translation didn't —
-            translate(best.greek);                 // fall back to the free translator + button
+            afterRead(best.greek);                 // fall back to the free translator + button
           }
           return;
         }
@@ -114,7 +147,7 @@
       var text = ((r && r.data && r.data.text) || "").replace(/[ \t]+\n/g, "\n").trim();
       if (!text) { setStatus("No Greek text found — try a clearer, straight-on, well-lit photo."); return; }
       gEl.value = text; tEl.textContent = translit(text);
-      translate(text);
+      afterRead(text);
     }).catch(function () {
       setStatus("Couldn’t read the image. This tool needs an internet connection.");
     });
@@ -132,7 +165,8 @@
       .then(function (j) {
         var en = j && j.responseData && j.responseData.translatedText;
         var bad = !en || (j.responseStatus && j.responseStatus !== 200) ||
-                  /MYMEMORY WARNING|INVALID|PLEASE SELECT|^[\s?]*$/i.test(en);
+                  /MYMEMORY WARNING|INVALID|PLEASE SELECT|^[\s?]*$/i.test(en) ||
+                  isEcho(clean, en);
         enEl.textContent = bad
           ? "A reliable translation isn’t available here — tap “Open in Google Translate” below for a much better result."
           : en + (clean.length > 480 ? " …" : "");
