@@ -965,6 +965,7 @@ RES_GROUPS = [
     ("History &amp; Scripture", [
         ("The Ecumenical Councils", "councils.html", "The seven councils that shaped the faith, and those after.", "cross"),
         ("The Bible &amp; Its Canon", "bible.html", "How the Church received the Scriptures — canon, Septuagint, the books.", "gospel"),
+        ("Bible in a Year", "bible-plan.html", "A daily reading plan through the whole canon, paced across 365 days.", "gospel"),
         ("The Early Church Fathers", "fathers.html", "A reading checklist by era, with text and audio.", "chirho"),
     ]),
     ("Going Deeper", [
@@ -1323,6 +1324,107 @@ def bible_page():
         '</section>'])
 
 
+# ---- Bible in a Year: a cover-to-cover daily reading plan -------------------
+# Built from the app's own canon data (bible-index.js), so it always matches
+# what's actually in the reader. The whole canon, in its existing OT->NT order,
+# is flattened to one chapter per entry and cut into 365 contiguous, evenly
+# sized slices — a straight read-through plan, not a lectionary.
+_bidx_raw = open("bible-index.js", encoding="utf-8").read().strip()
+BIBLE_CANON = json.loads(_bidx_raw[len("window.BIBLE="):].rstrip(";"))
+
+_MONTHS = ["January", "February", "March", "April", "May", "June",
+           "July", "August", "September", "October", "November", "December"]
+_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+
+def _build_bible_plan():
+    flat = []
+    for b in BIBLE_CANON["books"]:
+        for c in range(1, b["ch"] + 1):
+            flat.append((b["id"], b["n"], b["ch"], c))
+    total = len(flat)
+    cal = [(mi, dd) for mi, nd in enumerate(_MONTH_DAYS) for dd in range(1, nd + 1)]
+    plan, prev = [], 0
+    for day in range(1, 366):
+        end = total if day == 365 else round(total * day / 365)
+        groups = []
+        for bid, name, tot, ch in flat[prev:end]:
+            if groups and groups[-1][0] == bid:
+                groups[-1][3] = ch      # extend the current book's range
+            else:
+                groups.append([bid, name, ch, ch, tot])   # bid, name, start, end, total-ch
+        prev = end
+        mi, dd = cal[day - 1]
+        plan.append({"day": day, "month": mi, "label": f"{_MONTHS[mi][:3]} {dd}", "groups": groups})
+    return plan
+
+
+BIBLE_PLAN = _build_bible_plan()
+
+
+def _byr_ref(groups):
+    parts = []
+    for bid, name, start, end, tot in groups:
+        if tot == 1:
+            parts.append(name)                         # a one-chapter book is cited without a number
+        elif start == end:
+            parts.append(f"{name} {start}")
+        else:
+            parts.append(f"{name} {start}–{end}")
+    return " · ".join(parts)
+
+
+_BYR_READ_I = ('<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" '
+               'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+               '<path d="M2 5h8a3 3 0 0 1 3 3v11a2.5 2.5 0 0 0-2.5-2.5H2z"/>'
+               '<path d="M22 5h-8a3 3 0 0 0-3 3v11a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>')
+
+# highlights today's row (a 365-day table, so a leap day shares Feb 28's reading)
+# and drives the "Jump to today" button
+BYR_JS = ('<script>(function(){'
+          'function leap(y){return (y%4===0&&y%100!==0)||y%400===0;}'
+          'var now=new Date(),day=Math.floor((now-new Date(now.getFullYear(),0,1))/86400000)+1;'
+          'if(leap(now.getFullYear())&&day>59)day--; if(day>365)day=365;'
+          'var el=document.querySelector(\'.byr-item[data-day="\'+day+\'"]\');'
+          'if(el)el.classList.add("byr--today");'
+          'var jump=document.getElementById("byr-today");'
+          'if(jump)jump.addEventListener("click",function(e){e.preventDefault();'
+          'if(el)el.scrollIntoView({block:"center",behavior:"smooth"});});'
+          '})();</script>')
+
+
+def bible_plan_page():
+    o = ['<section class="resources byr-page" id="top">', BACK, _divider("Bible in a Year")]
+    o.append('<p class="res-intro">The whole canon, cover to cover &mdash; the Old Testament in '
+              'Brenton&rsquo;s Septuagint with the deuterocanon, and the New Testament in the World '
+              'English Bible &mdash; paced evenly across 365 days. Tick off each day as you go; your '
+              'progress is saved on this device.</p>')
+    o.append('<p class="byr-jump"><a class="cf-chip" id="byr-today" href="#">Jump to today</a></p>')
+    o.append('<div class="cf-progress-wrap"><div class="cf-progress-row">'
+              '<span id="byr-progress">0 read</span></div>'
+              '<span class="cf-track"><span id="byr-bar" class="cf-fill"></span></span></div>')
+    cur_month = -1
+    for d in BIBLE_PLAN:
+        if d["month"] != cur_month:
+            if cur_month != -1:
+                o.append('</ul></section>')
+            cur_month = d["month"]
+            o.append(f'<section class="cf-era"><h3 class="cf-era-h">{_MONTHS[cur_month]}</h3><ul class="cf-list">')
+        bid, _name0, start, _end0, _tot0 = d["groups"][0]
+        o.append(f'<li class="cf-item byr-item" data-day="{d["day"]}">'
+                  f'<label class="cf-check"><input type="checkbox" data-byr="{d["day"]}">'
+                  f'<span class="cf-title">{d["label"]}<span class="office-now">Today</span></span></label>'
+                  f'<div class="cf-meta"><span class="cf-by">{_byr_ref(d["groups"])}</span></div>'
+                  f'<div class="cf-chips"><a class="cf-chip" href="scripture.html#{bid}/{start}">'
+                  f'{_BYR_READ_I}<span>Read</span></a></div></li>')
+    o.append('</ul></section>')
+    o.append('<p class="res-foot">A straight read-through, not a lectionary &mdash; for the '
+              'Church&rsquo;s appointed daily Scripture readings, follow your parish calendar.</p>')
+    o.append(art("gospel", foot=True))
+    o.append('</section>')
+    return "\n".join(o)
+
+
 def greek_page():
     return "\n".join([
         '<section class="resources" id="top">', BACK, _divider("Greek Photo Translator"),
@@ -1457,17 +1559,23 @@ CONTROL_JS = '''<script>
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
-  // reading-checklist progress (saved per device)
-  var boxes=d.querySelectorAll('input[type=checkbox][data-cf]');
-  function progress(){ if(!boxes.length) return; var done=0;
-    Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
-    var p=d.getElementById("cf-progress"); if(p) p.textContent=done+" of "+boxes.length+" read";
-    var b=d.getElementById("cf-bar"); if(b) b.style.width=(100*done/boxes.length)+"%"; }
-  Array.prototype.forEach.call(boxes,function(cb){
-    var k="cf:"+cb.getAttribute("data-cf");
-    if(L.getItem(k)==="1") cb.checked=true;
-    cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
-  progress();
+  // reading-checklist progress (saved per device) — shared by the Church
+  // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
+  function checklist(attr, progId, barId){
+    var boxes=d.querySelectorAll('input[type=checkbox][data-'+attr+']');
+    if(!boxes.length) return;
+    function progress(){ var done=0;
+      Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
+      var p=d.getElementById(progId); if(p) p.textContent=done+" of "+boxes.length+" read";
+      var b=d.getElementById(barId); if(b) b.style.width=(100*done/boxes.length)+"%"; }
+    Array.prototype.forEach.call(boxes,function(cb){
+      var k=attr+":"+cb.getAttribute("data-"+attr);
+      if(L.getItem(k)==="1") cb.checked=true;
+      cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
+    progress();
+  }
+  checklist("cf","cf-progress","cf-bar");
+  checklist("byr","byr-progress","byr-bar");
 
   // follow the Church calendar (off / new / old)
   var calMap=[["off","cal-off"],["new","cal-new"],["old","cal-old"]];
@@ -1816,6 +1924,13 @@ page("scripture.html", "Holy Scripture — Daily Prayers",
      "Read the Bible: the Old Testament in Brenton's Septuagint (with the deuterocanon) and the "
      "New Testament in the World English Bible — public domain, available offline.",
      bible_page(), active="read", scripts=BIBLE_JS)
+
+# a day-by-day cover-to-cover plan generated from the same canon (bible-index.js)
+page("bible-plan.html", "Bible in a Year — Daily Prayers",
+     "A day-by-day plan to read the whole Bible in a year — the Old Testament in Brenton's "
+     "Septuagint with the deuterocanon, and the New Testament in the World English Bible — "
+     "linking straight into the in-app reader.",
+     bible_plan_page(), active="resources", scripts=BYR_JS)
 
 # in-depth articles (Councils, the Bible & its canon)
 for _a in ARTICLES:
