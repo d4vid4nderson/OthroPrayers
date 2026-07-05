@@ -248,17 +248,23 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
-  // reading-checklist progress (saved per device)
-  var boxes=d.querySelectorAll('input[type=checkbox][data-cf]');
-  function progress(){ if(!boxes.length) return; var done=0;
-    Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
-    var p=d.getElementById("cf-progress"); if(p) p.textContent=done+" of "+boxes.length+" read";
-    var b=d.getElementById("cf-bar"); if(b) b.style.width=(100*done/boxes.length)+"%"; }
-  Array.prototype.forEach.call(boxes,function(cb){
-    var k="cf:"+cb.getAttribute("data-cf");
-    if(L.getItem(k)==="1") cb.checked=true;
-    cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
-  progress();
+  // reading-checklist progress (saved per device) — shared by the Church
+  // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
+  function checklist(attr, progId, barId){
+    var boxes=d.querySelectorAll('input[type=checkbox][data-'+attr+']');
+    if(!boxes.length) return;
+    function progress(){ var done=0;
+      Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
+      var p=d.getElementById(progId); if(p) p.textContent=done+" of "+boxes.length+" read";
+      var b=d.getElementById(barId); if(b) b.style.width=(100*done/boxes.length)+"%"; }
+    Array.prototype.forEach.call(boxes,function(cb){
+      var k=attr+":"+cb.getAttribute("data-"+attr);
+      if(L.getItem(k)==="1") cb.checked=true;
+      cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
+    progress();
+  }
+  checklist("cf","cf-progress","cf-bar");
+  checklist("byr","byr-progress","byr-bar");
 
   // follow the Church calendar (off / new / old)
   var calMap=[["off","cal-off"],["new","cal-new"],["old","cal-old"]];

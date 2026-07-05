@@ -44,6 +44,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 <ul class="browse-list">
 <li><a class="browse-row" href="councils.html"><span class="browse-emblem" aria-hidden="true"><svg viewBox="0 0 120 200" fill="currentColor" aria-hidden="true"><rect x="54" y="14" width="12" height="172"/><rect x="42" y="40" width="36" height="9"/><rect x="22" y="80" width="76" height="12"/><polygon points="30,150 90,132 90,143 30,161"/></svg></span><span class="browse-body"><span class="browse-t">The Ecumenical Councils</span><span class="browse-d">The seven councils that shaped the faith, and those after.</span></span><svg class="row-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
 <li><a class="browse-row" href="bible.html"><span class="browse-emblem" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="26" y="14" width="68" height="92" rx="8"/><path d="M60 34v40"/><path d="M44 50h32"/></svg></span><span class="browse-body"><span class="browse-t">The Bible &amp; Its Canon</span><span class="browse-d">How the Church received the Scriptures — canon, Septuagint, the books.</span></span><svg class="row-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
+<li><a class="browse-row" href="bible-plan.html"><span class="browse-emblem" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="26" y="14" width="68" height="92" rx="8"/><path d="M60 34v40"/><path d="M44 50h32"/></svg></span><span class="browse-body"><span class="browse-t">Bible in a Year</span><span class="browse-d">A daily reading plan through the whole canon, paced across 365 days.</span></span><svg class="row-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
 <li><a class="browse-row" href="fathers.html"><span class="browse-emblem" aria-hidden="true"><svg viewBox="0 0 140 170" aria-hidden="true" style="font-family:inherit"><line x1="70" y1="18" x2="70" y2="155" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M70 22 C100 22 100 70 70 70" fill="none" stroke="currentColor" stroke-width="9"/><g stroke="currentColor" stroke-width="9" stroke-linecap="round"><line x1="44" y1="86" x2="96" y2="150"/><line x1="96" y1="86" x2="44" y2="150"/></g><g fill="currentColor" font-size="26" text-anchor="middle"><text x="24" y="138">Α</text><text x="118" y="138">Ω</text></g></svg></span><span class="browse-body"><span class="browse-t">The Early Church Fathers</span><span class="browse-d">A reading checklist by era, with text and audio.</span></span><svg class="row-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>
 </ul>
 <h2 class="browse-group">Going Deeper</h2>
@@ -257,17 +258,23 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
-  // reading-checklist progress (saved per device)
-  var boxes=d.querySelectorAll('input[type=checkbox][data-cf]');
-  function progress(){ if(!boxes.length) return; var done=0;
-    Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
-    var p=d.getElementById("cf-progress"); if(p) p.textContent=done+" of "+boxes.length+" read";
-    var b=d.getElementById("cf-bar"); if(b) b.style.width=(100*done/boxes.length)+"%"; }
-  Array.prototype.forEach.call(boxes,function(cb){
-    var k="cf:"+cb.getAttribute("data-cf");
-    if(L.getItem(k)==="1") cb.checked=true;
-    cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
-  progress();
+  // reading-checklist progress (saved per device) — shared by the Church
+  // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
+  function checklist(attr, progId, barId){
+    var boxes=d.querySelectorAll('input[type=checkbox][data-'+attr+']');
+    if(!boxes.length) return;
+    function progress(){ var done=0;
+      Array.prototype.forEach.call(boxes,function(c){ if(c.checked) done++; });
+      var p=d.getElementById(progId); if(p) p.textContent=done+" of "+boxes.length+" read";
+      var b=d.getElementById(barId); if(b) b.style.width=(100*done/boxes.length)+"%"; }
+    Array.prototype.forEach.call(boxes,function(cb){
+      var k=attr+":"+cb.getAttribute("data-"+attr);
+      if(L.getItem(k)==="1") cb.checked=true;
+      cb.addEventListener("change",function(){ if(cb.checked) L.setItem(k,"1"); else L.removeItem(k); progress(); }); });
+    progress();
+  }
+  checklist("cf","cf-progress","cf-bar");
+  checklist("byr","byr-progress","byr-bar");
 
   // follow the Church calendar (off / new / old)
   var calMap=[["off","cal-off"],["new","cal-new"],["old","cal-old"]];

@@ -1044,6 +1044,11 @@ html[data-theme="dark"] .tw-strict{ color:var(--rubric); }
 .cf-audiohubs a{ color:var(--link); text-decoration:none; }
 .cf-audiohubs a:hover{ text-decoration:underline; }
 
+/* ---- Bible in a Year (daily reading plan) ------------------------------ */
+.byr-jump{ text-align:center; text-indent:0; margin:0 0 1.2em; }
+.byr-item.byr--today{ background:var(--lapis-soft); border-radius:var(--r-md); }
+.byr-item.byr--today .office-now{ display:inline-block; }
+
 /* reference sections (creeds, councils, catechisms, books) */
 /* ---- crafted destination list (premium link rows) ------------------- */
 .link-list{ list-style:none; margin:1.3em 0; padding:0;
