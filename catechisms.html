@@ -19,6 +19,9 @@
 <link rel="stylesheet" href="themes.css?v=1">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
+var path=location.pathname,isGate=/\/rite\.html$/.test(path),isHome=path==="/"||path===""||/\/index\.html$/.test(path);
+var rite=L.getItem("rite");
+if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
@@ -60,6 +63,13 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
     <button class="drawer-close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div class="drawer-heading">Settings</div>
+  <div class="menu-row">
+    <span class="menu-label">Rite</span>
+    <span class="seg" role="group" aria-label="Rite">
+      <button id="rite-eastern" type="button" aria-pressed="true">Eastern</button>
+      <button id="rite-western" type="button" aria-pressed="false">Western</button>
+    </span>
+  </div>
   <div class="menu-row">
     <span class="menu-label">Text size</span>
     <span class="seg" role="group" aria-label="Text size">
@@ -206,6 +216,15 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
 
+  // which rite this device is set to (chosen once on the rite.html gate;
+  // changeable here). Switching navigates to that rite's home page.
+  var riteMap=[["eastern","rite-eastern"],["western","rite-western"]];
+  function paintRite(){ var v=L.getItem("rite")||"eastern";
+    riteMap.forEach(function(p){ var b=d.getElementById(p[1]); if(b) b.setAttribute("aria-pressed", p[0]===v?"true":"false"); }); }
+  function setRite(v){ L.setItem("rite",v); location.href = v==="western" ? "western.html" : "index.html"; }
+  riteMap.forEach(function(p){ var b=d.getElementById(p[1]); if(b) b.onclick=function(){ setRite(p[0]); }; });
+  var rswitch=d.getElementById("rite-switch"); if(rswitch) rswitch.onclick=function(){ setRite("eastern"); };
+
   // background temperature (warm is the default; cool tints the page cooler)
   var twb=d.getElementById("temp-warm"), tcb=d.getElementById("temp-cool");
   function paintTemp(){ var cool=r.dataset.temp==="cool";
@@ -300,7 +319,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
   }
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
 
-  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff(); paintRite();
 
   // The tab bar is plain navigation: each tab is an <a> that loads its page,
   // and CSS marks the active one (a filled highlight behind the icon). No JS.

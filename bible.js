@@ -1,9 +1,11 @@
 /* In-app Bible reader. Reads the canon index from window.BIBLE (bible-index.js)
- * and lazy-loads each book from bible/<id>.json on demand. Two views: a grouped
- * library, and a chapter reader with prev/next + a chapter picker. The last
- * position is remembered, and #book or #book/chapter deep-links work. The
- * service worker caches each book as it is read, so visited text is available
- * offline. */
+ * and lazy-loads each book from bible/<id>.json on demand. Three views: a
+ * grouped library, a chapter reader with prev/next + a chapter picker, and a
+ * "day" view (window.BIBLE_DAYS, from the Bible-in-a-Year plan) that renders
+ * just that day's chapters — which may span more than one book — as a single
+ * reading. The last chapter-reader position is remembered, and #book,
+ * #book/chapter or #day/N deep-links work. The service worker caches each
+ * book as it is read, so visited text is available offline. */
 (function () {
   var DATA = window.BIBLE;
   var root = document.getElementById("bible");
@@ -11,6 +13,7 @@
 
   var byId = {};
   DATA.books.forEach(function (b) { byId[b.id] = b; });
+  var DAYS = window.BIBLE_DAYS || [];   // day (1-based) -> [[bookId, startCh, endCh], ...]
   var cache = {};                       // id -> book json (in memory for the session)
   var LAST = "bible-last";
   var currentKey = null;                // what view is shown, to avoid re-render loops
@@ -106,12 +109,69 @@
     if (sel) sel.addEventListener("change", function () { show(b.id, sel.value); });
   }
 
+  // --- a day's reading (Bible in a Year) ------------------------------------
+  // Renders every chapter assigned to that day, across as many books as it
+  // spans, as one continuous reading — not the single-chapter browsing view.
+  function showDay(day) {
+    var groups = DAYS[day - 1];
+    if (!groups) { renderLibrary(); return; }
+    root.innerHTML = '<p class="bible-loading">Opening today&rsquo;s reading&hellip;</p>';
+    var ids = groups.map(function (g) { return g[0]; })
+      .filter(function (id, i, a) { return a.indexOf(id) === i; });
+    Promise.all(ids.map(loadBook)).then(function (books) {
+      var byBook = {};
+      ids.forEach(function (id, i) { byBook[id] = books[i]; });
+      renderDay(day, groups, byBook);
+    }).catch(function () {
+      root.innerHTML = '<p class="bible-loading">Couldn’t open today’s reading. '
+        + 'Check your connection and try again.</p>';
+    });
+  }
+
+  function renderDay(day, groups, byBook) {
+    location.hash = "day/" + day;
+    currentKey = "day/" + day;
+    var h = '<div class="bib-bar">'
+      + '<button class="bib-lib" data-lib="1" aria-label="All books">' + BOOKS_I + "<span>Books</span></button>"
+      + '<span class="bib-title">Day ' + day + "</span>"
+      + "</div>";
+    h += '<div class="bib-verses">';
+    groups.forEach(function (g) {
+      var id = g[0], start = g[1], end = g[2], b = byId[id], book = byBook[id];
+      for (var c = start; c <= end; c++) {
+        h += '<h2 class="bib-chaph">' + esc(b.n) + " " + c + "</h2>";
+        (book.c[c - 1] || []).forEach(function (vt) {
+          h += '<p class="bib-v"><span class="bib-n">' + vt[0] + "</span>" + esc(vt[1]) + "</p>";
+        });
+      }
+    });
+    h += "</div>";
+    h += '<div class="bib-chapnav">';
+    h += day > 1
+      ? '<button class="bib-pn" data-go="day/' + (day - 1) + '">' + CHEV_L + " Previous day</button>"
+      : "<span></span>";
+    h += day < DAYS.length
+      ? '<button class="bib-pn" data-go="day/' + (day + 1) + '">Next day ' + CHEV_R + "</button>"
+      : "<span></span>";
+    h += "</div>";
+    root.innerHTML = h;
+    var scroller = document.querySelector(".scroll");
+    if (scroller) scroller.scrollTop = 0;
+  }
+
   // --- routing -------------------------------------------------------------
   function keyFor(hash) {
     hash = (hash || "").replace(/^#/, "");
     if (!hash) return "";
     var p = hash.split("/");
+    if (p[0] === "day") return DAYS[(parseInt(p[1], 10) || 0) - 1] ? "day/" + p[1] : "";
     return byId[p[0]] ? p[0] + "/" + (parseInt(p[1], 10) || 1) : "";
+  }
+  function goTo(hash) {
+    var q = hash.split("/");
+    if (q[0] === "day") { showDay(parseInt(q[1], 10) || 0); return; }
+    if (byId[q[0]]) { show(q[0], q[1] || 1); return; }
+    renderLibrary();
   }
   function route() {
     var hash = (location.hash || "").replace(/^#/, "");
@@ -120,8 +180,7 @@
       if (last) { var p = last.split("/"); show(p[0], p[1] || 1); return; }
       renderLibrary(); return;
     }
-    var q = hash.split("/");
-    if (byId[q[0]]) show(q[0], q[1] || 1); else renderLibrary();
+    goTo(hash);
   }
   // honour back/forward and deep links, but not our own hash writes
   window.addEventListener("hashchange", function () {
@@ -132,7 +191,7 @@
     var lib = e.target.closest("[data-lib]");
     if (lib) { renderLibrary(); return; }
     var go = e.target.closest("[data-go]");
-    if (go) { var v = go.getAttribute("data-go").split("/"); show(v[0], v[1] || 1); }
+    if (go) goTo(go.getAttribute("data-go"));
   });
 
   route();

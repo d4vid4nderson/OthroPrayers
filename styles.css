@@ -497,6 +497,23 @@ figure.art svg{ display:inline-block; height:auto; }
 html[data-theme="dark"] .landing-cta .cta{ color:var(--on-rubric); }
 html[data-theme="dark"] .landing-cta .cta-ghost{ color:var(--ink); }
 
+/* ---- rite gate: the first-launch Eastern/Western choice screen ------- */
+.rite-choices{
+  display:flex; flex-direction:column; gap:.9rem;
+  width:100%; max-width:26rem; margin:1.7rem auto .5rem;
+}
+.rite-card{
+  display:block; width:100%; text-align:left; font:inherit; cursor:pointer;
+  padding:1.1rem 1.2rem; background:var(--surface); border:1px solid var(--hairline);
+  border-radius:var(--r-md); color:var(--ink); box-shadow:var(--elev-1);
+  transition:box-shadow .2s ease, border-color .2s ease, transform .1s ease;
+}
+@media (hover:hover){ .rite-card:hover{ box-shadow:var(--elev-2); border-color:var(--gold); } }
+.rite-card:active{ transform:scale(.99); }
+.rite-card-t{ display:block; font-family:var(--display); font-weight:600; color:var(--rubric); font-size:1.28rem; line-height:1.15; }
+.rite-card-d{ display:block; margin-top:.3rem; font-size:.92rem; line-height:1.45; opacity:.85; }
+.rite-note{ text-align:center; text-indent:0; font-size:.86rem; opacity:.7; margin:.3rem 0 0; }
+
 /* ---- home "pray now" hero: the office of the moment ----------------- */
 .pray-now{ width:100%; max-width:30rem; margin:.4rem auto 1.7rem; }
 .pn-eyebrow{ text-align:center; font-variant-caps:small-caps; letter-spacing:.1em;
@@ -1185,6 +1202,10 @@ html[data-theme="dark"] .bib-continue{ box-shadow:var(--elev-2), var(--glow-red)
 .bib-chap-sel{ font-family:var(--serif); font-size:1.05rem; padding:.15rem .4rem; border-radius:var(--r-sm);
   border:1px solid var(--hairline); background:var(--surface-sunk); color:var(--ink); cursor:pointer; }
 .bib-verses{ margin:.3rem 0 0; }
+/* a chapter heading inside a multi-chapter day reading (Bible in a Year) */
+.bib-chaph{ font-family:var(--serif); font-weight:600; font-variant-caps:small-caps;
+  letter-spacing:.04em; color:var(--rubric); font-size:1.05rem; margin:1.3em 0 .4em; }
+.bib-chaph:first-child{ margin-top:0; }
 .bib-v{ text-indent:0; margin:0 0 .5em; line-height:1.62; font-size:1.12rem; }
 .bib-n{ display:inline-block; min-width:1.3em; margin-right:.15em; vertical-align:.4em;
   font-size:.6em; font-weight:600; color:var(--gold); font-variant-numeric:lining-nums; }
