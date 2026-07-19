@@ -258,6 +258,13 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   </div>
   <div class="drawer-heading">Settings</div>
   <div class="menu-row">
+    <span class="menu-label">Rite</span>
+    <span class="seg" role="group" aria-label="Rite">
+      <button id="rite-eastern" type="button" aria-pressed="true">Eastern</button>
+      <button id="rite-western" type="button" aria-pressed="false">Western</button>
+    </span>
+  </div>
+  <div class="menu-row">
     <span class="menu-label">Text size</span>
     <span class="seg" role="group" aria-label="Text size">
       <button id="size-dn" type="button" title="Smaller text" aria-label="Smaller text">A&minus;</button>
@@ -1475,6 +1482,9 @@ def greek_page():
 # ---- scripts ---------------------------------------------------------------
 EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
+var path=location.pathname,isGate=/\\/rite\\.html$/.test(path),isHome=path==="/"||path===""||/\\/index\\.html$/.test(path);
+var rite=L.getItem("rite");
+if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
@@ -1530,6 +1540,15 @@ CONTROL_JS = '''<script>
     tl.setAttribute("aria-pressed", dark?"false":"true"); paintTC(); }
   tl.onclick=function(){ r.dataset.theme="light"; L.setItem("theme","light"); paintTheme(); };
   td.onclick=function(){ r.dataset.theme="dark";  L.setItem("theme","dark");  paintTheme(); };
+
+  // which rite this device is set to (chosen once on the rite.html gate;
+  // changeable here). Switching navigates to that rite's home page.
+  var riteMap=[["eastern","rite-eastern"],["western","rite-western"]];
+  function paintRite(){ var v=L.getItem("rite")||"eastern";
+    riteMap.forEach(function(p){ var b=d.getElementById(p[1]); if(b) b.setAttribute("aria-pressed", p[0]===v?"true":"false"); }); }
+  function setRite(v){ L.setItem("rite",v); location.href = v==="western" ? "western.html" : "index.html"; }
+  riteMap.forEach(function(p){ var b=d.getElementById(p[1]); if(b) b.onclick=function(){ setRite(p[0]); }; });
+  var rswitch=d.getElementById("rite-switch"); if(rswitch) rswitch.onclick=function(){ setRite("eastern"); };
 
   // background temperature (warm is the default; cool tints the page cooler)
   var twb=d.getElementById("temp-warm"), tcb=d.getElementById("temp-cool");
@@ -1625,7 +1644,7 @@ CONTROL_JS = '''<script>
   }
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
 
-  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff(); paintRite();
 
   // The tab bar is plain navigation: each tab is an <a> that loads its page,
   // and CSS marks the active one (a filled highlight behind the icon). No JS.
@@ -1791,6 +1810,97 @@ def page(path, title, desc, body, active="", scripts=""):
     print("wrote", path, len(html), "bytes")
 
 
+# a bare page template with no tab bar / Settings drawer — for the one-time
+# rite gate, which is a choice screen shown before the app chrome makes sense
+GATE_TMPL = '''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content="{desc}">
+<link rel="icon" href="favicon.ico?v=7" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=7">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=7">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=7">
+<link rel="manifest" href="site.webmanifest?v=8">
+<meta name="apple-mobile-web-app-title" content="Prayers">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" id="tc" content="#faf6ee">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="themes.css?v=1">
+{early}
+</head>
+<body>
+<div class="scroll">
+<main class="book">
+{body}
+</main>
+</div>
+{scripts}
+</body>
+</html>
+'''
+
+
+def gate_page(path, title, desc, body, scripts=""):
+    html = GATE_TMPL.format(title=title, desc=desc, body=body, early=EARLY_JS, scripts=scripts)
+    open(path, "w").write(html)
+    print("wrote", path, len(html), "bytes")
+
+
+RITE_JS = '''<script>
+(function(){
+  document.querySelectorAll("[data-rite]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var v=b.getAttribute("data-rite");
+      try{ localStorage.setItem("rite", v); }catch(e){}
+      location.href = v==="western" ? "western.html" : "index.html";
+    });
+  });
+})();
+</script>'''
+
+
+def rite_page():
+    return '\n'.join([
+        '<section class="cover rite-gate" id="top">',
+        '  <figure class="coverimg">',
+        '    <span class="reframe"><span class="reicon" role="img"',
+        '      aria-label="Icon of the Mother of God &ldquo;of the Sign&rdquo; (Znamenie)"',
+        '      style="--m:url(assets/img/icon_p1-mask.png); aspect-ratio:760/806"></span></span>',
+        '  </figure>',
+        '  <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>',
+        '  <p class="landing-sub">Which tradition of prayer are you looking for?</p>',
+        f'  {RULE_FIG}',
+        '  <div class="rite-choices">',
+        '    <button class="rite-card" type="button" data-rite="eastern">',
+        '      <span class="rite-card-t">Eastern Orthodox</span>',
+        '      <span class="rite-card-d">The Byzantine tradition &mdash; daily prayers, the hours of the day '
+        'and night, the Divine Liturgy, the Fathers, and more.</span>',
+        '    </button>',
+        '    <button class="rite-card" type="button" data-rite="western">',
+        '      <span class="rite-card-t">Western Rite Orthodoxy</span>',
+        '      <span class="rite-card-d">Orthodoxy prayed in Western liturgical forms. Resources are being '
+        'built &mdash; choosing this for now opens what&rsquo;s ready so far.</span>',
+        '    </button>',
+        '  </div>',
+        '  <p class="rite-note">You can switch this anytime in Settings.</p>',
+        '</section>'])
+
+
+def western_page():
+    return "\n".join([
+        '<section class="resources rite-soon" id="top">', _divider("Western Rite Orthodoxy"),
+        '<p class="res-intro">Resources for Western Rite Orthodoxy are being built. Check back soon.</p>',
+        '<p class="topic-intro">In the meantime you&rsquo;re welcome to look around &mdash; everything '
+        'else in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>',
+        '<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>',
+        art("cross", foot=True), '</section>'])
+
+
 # split the prayer content into one page per prayer time, at the section dividers
 _marks = list(re.finditer(r'<section class="divider[^"]*" id="(morning|table|hours|sleep)">', content))
 PRAYERS = {}
@@ -1856,6 +1966,18 @@ def with_jump_nav(seg):
 
 
 PLAYER = '<script src="player.js?v=5" defer></script>'
+
+# the rite gate: a one-time (per device) choice screen, shown before anything
+# else via the redirect in EARLY_JS whenever localStorage has no "rite" yet
+gate_page("rite.html", "Welcome — Daily Prayers",
+          "Choose Eastern Orthodox or Western Rite Orthodoxy to get started.",
+          rite_page(), scripts=RITE_JS)
+
+# Western Rite placeholder — chosen on the gate, or from Settings; full chrome
+# so nothing is off-limits while the Western Rite section is being built
+page("western.html", "Western Rite Orthodoxy — Daily Prayers",
+     "Western Rite Orthodoxy resources are being built.",
+     western_page(), active="home")
 
 # home / landing page
 page("index.html", "Prayers for Morning, Day &amp; Night",

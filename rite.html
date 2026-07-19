@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Welcome — Daily Prayers</title>
+<meta name="description" content="Choose Eastern Orthodox or Western Rite Orthodoxy to get started.">
+<link rel="icon" href="favicon.ico?v=7" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=7">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=7">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=7">
+<link rel="manifest" href="site.webmanifest?v=8">
+<meta name="apple-mobile-web-app-title" content="Prayers">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" id="tc" content="#faf6ee">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="themes.css?v=1">
+<script>
+(function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
+var path=location.pathname,isGate=/\/rite\.html$/.test(path),isHome=path==="/"||path===""||/\/index\.html$/.test(path);
+var rite=L.getItem("rite");
+if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
+if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
+if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
+var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
+var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
+var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
+var dk=r.dataset.theme==="dark";
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
+</script>
+</head>
+<body>
+<div class="scroll">
+<main class="book">
+<section class="cover rite-gate" id="top">
+  <figure class="coverimg">
+    <span class="reframe"><span class="reicon" role="img"
+      aria-label="Icon of the Mother of God &ldquo;of the Sign&rdquo; (Znamenie)"
+      style="--m:url(assets/img/icon_p1-mask.png); aspect-ratio:760/806"></span></span>
+  </figure>
+  <h1>PRAYERS <span class="i">for</span> MORNING,<br>DAY &amp; NIGHT</h1>
+  <p class="landing-sub">Which tradition of prayer are you looking for?</p>
+  <figure class="art art-rule" role="img" aria-label="Ornamental rule"><svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><g stroke="currentColor" stroke-width="2" fill="currentColor"><line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/><circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/><circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/><polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg></figure>
+  <div class="rite-choices">
+    <button class="rite-card" type="button" data-rite="eastern">
+      <span class="rite-card-t">Eastern Orthodox</span>
+      <span class="rite-card-d">The Byzantine tradition &mdash; daily prayers, the hours of the day and night, the Divine Liturgy, the Fathers, and more.</span>
+    </button>
+    <button class="rite-card" type="button" data-rite="western">
+      <span class="rite-card-t">Western Rite Orthodoxy</span>
+      <span class="rite-card-d">Orthodoxy prayed in Western liturgical forms. Resources are being built &mdash; choosing this for now opens what&rsquo;s ready so far.</span>
+    </button>
+  </div>
+  <p class="rite-note">You can switch this anytime in Settings.</p>
+</section>
+</main>
+</div>
+<script>
+(function(){
+  document.querySelectorAll("[data-rite]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var v=b.getAttribute("data-rite");
+      try{ localStorage.setItem("rite", v); }catch(e){}
+      location.href = v==="western" ? "western.html" : "index.html";
+    });
+  });
+})();
+</script>
+</body>
+</html>
