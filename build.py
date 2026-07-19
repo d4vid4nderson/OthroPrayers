@@ -1891,14 +1891,315 @@ def rite_page():
         '</section>'])
 
 
-def western_page():
+# ---- Western Rite Orthodoxy: the Daily Office -------------------------------
+# Content: the traditional Western daily office from the 1928 American Book of
+# Common Prayer (public domain) -- the historic text Western Rite Orthodox
+# parishes draw on for these Hours. Presented largely as received. Western
+# Rite practice everywhere omits the Filioque clause from the Creed, but that
+# clause belongs to the Nicene Creed said at the Divine Liturgy, not to the
+# Apostles' Creed said at these Hours below, so no change to the Creed text
+# was needed. Individual parishes vary some particulars by jurisdiction and
+# local custom -- check with your own priest.
+WESTERN_OFFICES = [
+    ("western-morning", "Morning Prayer", "Matins &mdash; the office that opens the day.",
+     "cross", "On rising", 4, 11),
+    ("western-evening", "Evening Prayer", "Vespers, or Evensong &mdash; the office of the evening.",
+     "chirho", "This evening", 17, 21),
+    ("western-compline", "Compline", "Night Prayer &mdash; the Church&rsquo;s bedtime office.",
+     "mono", "At nightfall", 21, 4),
+]
+
+_W_SCRIPTURE_NOTE = (
+    '<p class="rubric"><span class="r">Here follow the Psalms appointed, and the First Lesson '
+    '(Old Testament) and Second Lesson (New Testament) for the day.</span></p>'
+    '<p class="byr-jump"><a class="cf-chip" href="scripture.html">Read the appointed Scripture</a></p>')
+
+_W_CONFESSION = (
+    '<h2 class="subhead">A General Confession</h2>'
+    '<p class="rubric"><span class="r">To be said by the whole congregation, after the Officiant, '
+    'all kneeling.</span></p>'
+    '<p>Almighty and most merciful Father; We have erred and strayed from thy ways like lost sheep. '
+    'We have followed too much the devices and desires of our own hearts. We have offended against thy '
+    'holy laws. We have left undone those things which we ought to have done; And we have done those '
+    'things which we ought not to have done; And there is no health in us. But thou, O Lord, have mercy '
+    'upon us, miserable offenders. Spare thou them, O God, which confess their faults. Restore thou them '
+    'that are penitent; According to thy promises declared unto mankind in Christ Jesu our Lord. And '
+    'grant, O most merciful Father, for his sake; That we may hereafter live a godly, righteous, and '
+    'sober life, To the glory of thy holy Name. Amen.</p>'
+    '<h2 class="subhead">The Absolution</h2>'
+    '<p class="rubric"><span class="r">The Officiant, if a Priest, alone stands and says:</span></p>'
+    '<p>Almighty God, our heavenly Father, who of his great mercy hath promised forgiveness of sins to '
+    'all those who with hearty repentance and true faith turn unto him; Have mercy upon you; pardon and '
+    'deliver you from all your sins; confirm and strengthen you in all goodness; and bring you to '
+    'everlasting life; through Jesus Christ our Lord. Amen.</p>'
+    '<p class="rubric"><span class="r">Or, when there is no Priest, this Collect:</span></p>'
+    '<p>O Lord, we beseech thee, absolve thy people from their offences; that through thy bountiful '
+    'goodness we may all be delivered from the bands of those sins which by our frailty we have '
+    'committed. Grant this, O merciful Father, for Jesus Christ&rsquo;s sake, our blessed Lord and '
+    'Saviour. Amen.</p>'
+    '<h2 class="subhead">The Lord&rsquo;s Prayer</h2>'
+    '<p class="rubric"><span class="r">The Officiant then says:</span></p>'
+    '<p>Our Father, who art in heaven, hallowed be thy Name; thy kingdom come; thy will be done, on '
+    'earth as it is in heaven. Give us this day our daily bread; And forgive us our trespasses, as we '
+    'forgive those who trespass against us. And lead us not into temptation; But deliver us from evil. '
+    'For thine is the kingdom, and the power, and the glory, for ever and ever. Amen.</p>')
+
+_W_SUFFRAGES = (
+    '<h2 class="subhead">The Suffrages</h2>'
+    '<p class="verse">O Lord, show thy mercy upon us;<br>And grant us thy salvation.</p>'
+    '<p class="verse">O Lord, save thy people;<br>And bless thine inheritance.</p>'
+    '<p class="verse">Give peace in our time, O Lord;<br>Because there is none other that fighteth for '
+    'us, but only thou, O God.</p>'
+    '<p class="verse">O God, make clean our hearts within us;<br>And take not thy Holy Spirit from us.</p>')
+
+_W_CHRYSOSTOM = (
+    '<h2 class="subhead">A Prayer of St. Chrysostom</h2>'
+    '<p>Almighty God, who hast given us grace at this time with one accord to make our common '
+    'supplications unto thee; and dost promise that when two or three are gathered together in thy '
+    'Name thou wilt grant their requests; Fulfil now, O Lord, the desires and petitions of thy servants, '
+    'as may be most expedient for them; granting us in this world knowledge of thy truth, and in the '
+    'world to come life everlasting. Amen.</p>'
+    '<h2 class="subhead">The Grace</h2>'
+    '<p>The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy Ghost, '
+    'be with us all evermore. Amen. <span class="r">2 Corinthians 13:14</span></p>')
+
+_W_CREED = (
+    '<h2 class="subhead">The Apostles&rsquo; Creed</h2>'
+    '<p class="rubric"><span class="r">The Officiant and People together, all standing:</span></p>'
+    '<p>I believe in God the Father Almighty, Maker of heaven and earth: And in Jesus Christ his only '
+    'Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary; suffered under Pontius '
+    'Pilate, was crucified, dead, and buried; he descended into hell; the third day he rose again from '
+    'the dead; he ascended into heaven, and sitteth on the right hand of God the Father Almighty; from '
+    'thence he shall come to judge the quick and the dead. I believe in the Holy Ghost; the holy '
+    'Catholic Church; the Communion of Saints; the Forgiveness of sins; the Resurrection of the body; '
+    'And the Life everlasting. Amen.</p>'
+    '<p class="rubric"><span class="r">The Apostles&rsquo; Creed has no clause on the Holy Spirit&rsquo;s '
+    'procession, so nothing here has been altered for Orthodox use &mdash; the Filioque that Western Rite '
+    'Orthodox omit belongs to the Nicene Creed, said instead at the Divine Liturgy.</span></p>')
+
+
+def western_morning_page():
     return "\n".join([
-        '<section class="resources rite-soon" id="top">', _divider("Western Rite Orthodoxy"),
-        '<p class="res-intro">Resources for Western Rite Orthodoxy are being built. Check back soon.</p>',
-        '<p class="topic-intro">In the meantime you&rsquo;re welcome to look around &mdash; everything '
-        'else in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>',
-        '<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>',
-        art("cross", foot=True), '</section>'])
+        _divider("Morning Prayer"),
+        '<p class="res-intro">The Order for Daily Morning Prayer, from the 1928 American Book of '
+        'Common Prayer (public domain) &mdash; the historic office Western Rite parishes pray each '
+        'morning.</p>',
+        '<h2 class="subhead">Opening Sentences</h2>',
+        '<p class="rubric"><span class="r">The Officiant begins with one or more of these '
+        'sentences of Scripture:</span></p>',
+        '<p><span class="dropcap gilt">T</span><span class="sc">HE LORD</span> is in his holy '
+        'temple: let all the earth keep silence before him. <span class="r">Habakkuk 2:20</span></p>',
+        '<p>I was glad when they said unto me, We will go into the house of the Lord. '
+        '<span class="r">Psalm 122:1</span></p>',
+        '<p>The hour cometh, and now is, when the true worshippers shall worship the Father in '
+        'spirit and in truth. <span class="r">St. John 4:23</span></p>',
+        '<h2 class="subhead">The Exhortation</h2>',
+        '<p class="rubric"><span class="r">The Officiant says:</span></p>',
+        '<p>Dearly beloved brethren, the Scripture moveth us in sundry places to acknowledge and '
+        'confess our manifold sins and wickedness; and that we should not dissemble nor cloke them '
+        'before the face of Almighty God our heavenly Father; but confess them with an humble, lowly, '
+        'penitent, and obedient heart, to the end that we may obtain forgiveness of the same, by his '
+        'infinite goodness and mercy. Wherefore let us beseech him to grant us true repentance and his '
+        'Holy Spirit, that those things may please him which we do at this present, and that the rest '
+        'of our life hereafter may be pure and holy; so that at the last we may come to his eternal '
+        'joy; through Jesus Christ our Lord.</p>',
+        _W_CONFESSION,
+        '<h2 class="subhead">Venite, exultemus Domino</h2>',
+        '<p class="rubric"><span class="r">Psalm 95:1&ndash;7</span></p>',
+        '<p>O come, let us sing unto the Lord: let us heartily rejoice in the strength of our '
+        'salvation. Let us come before his presence with thanksgiving: and show ourselves glad in him '
+        'with psalms. For the Lord is a great God: and a great King above all gods. In his hand are all '
+        'the corners of the earth: and the strength of the hills is his also. The sea is his, and he '
+        'made it: and his hands prepared the dry land. O come, let us worship and fall down: and kneel '
+        'before the Lord our Maker. For he is the Lord our God: and we are the people of his pasture, '
+        'and the sheep of his hand.</p>',
+        _W_SCRIPTURE_NOTE,
+        '<h2 class="subhead">Te Deum Laudamus</h2>',
+        '<p class="rubric"><span class="r">We praise thee, O God: we acknowledge thee to be the '
+        'Lord.</span></p>',
+        '<p>All the earth doth worship thee: the Father everlasting. To thee all Angels cry aloud: the '
+        'Heavens, and all the Powers therein. To thee Cherubim and Seraphim: continually do cry, Holy, '
+        'Holy, Holy: Lord God of Sabaoth; Heaven and earth are full of the Majesty: of thy glory. The '
+        'glorious company of the Apostles: praise thee. The goodly fellowship of the Prophets: praise '
+        'thee. The noble army of Martyrs: praise thee. The holy Church throughout all the world: doth '
+        'acknowledge thee; The Father: of an infinite Majesty; Thine honourable, true: and only Son; '
+        'Also the Holy Ghost: the Comforter. Thou art the King of Glory, O Christ. Thou art the '
+        'everlasting Son: of the Father. When thou tookest upon thee to deliver man: thou didst not '
+        'abhor the Virgin&rsquo;s womb. When thou hadst overcome the sharpness of death: thou didst open '
+        'the Kingdom of Heaven to all believers. Thou sittest at the right hand of God: in the glory of '
+        'the Father. We believe that thou shalt come: to be our Judge. We therefore pray thee, help thy '
+        'servants: whom thou hast redeemed with thy precious blood. Make them to be numbered with thy '
+        'Saints: in glory everlasting.</p>',
+        '<h2 class="subhead">Benedictus</h2>',
+        '<p class="rubric"><span class="r">The Song of Zacharias &mdash; St. Luke 1:68&ndash;79</span></p>',
+        '<p>Blessed be the Lord God of Israel: for he hath visited, and redeemed his people; And hath '
+        'raised up a mighty salvation for us: in the house of his servant David; As he spake by the '
+        'mouth of his holy Prophets: which have been since the world began; That we should be saved '
+        'from our enemies: and from the hands of all that hate us; To perform the mercy promised to our '
+        'forefathers: and to remember his holy Covenant; To perform the oath which he sware to our '
+        'forefather Abraham: that he would give us; That we, being delivered out of the hand of our '
+        'enemies: might serve him without fear; In holiness and righteousness before him: all the days '
+        'of our life. And thou, child, shalt be called the Prophet of the Highest: for thou shalt go '
+        'before the face of the Lord to prepare his ways; To give knowledge of salvation unto his '
+        'people: for the remission of their sins, Through the tender mercy of our God: whereby the '
+        'dayspring from on high hath visited us; To give light to them that sit in darkness, and in the '
+        'shadow of death: and to guide our feet into the way of peace.</p>',
+        _W_CREED,
+        _W_SUFFRAGES,
+        '<h2 class="subhead">The Collects</h2>',
+        '<p class="rubric"><span class="r">The Collect of the Day is said first, then:</span></p>',
+        '<p><span class="r i">A Collect for Peace.</span><br>O God, who art the author of peace and '
+        'lover of concord, in knowledge of whom standeth our eternal life, whose service is perfect '
+        'freedom; Defend us thy humble servants in all assaults of our enemies; that we, surely trusting '
+        'in thy defence, may not fear the power of any adversaries, through the might of Jesus Christ '
+        'our Lord. Amen.</p>',
+        '<p><span class="r i">A Collect for Grace.</span><br>O Lord, our heavenly Father, Almighty and '
+        'everlasting God, who hast safely brought us to the beginning of this day; Defend us in the '
+        'same with thy mighty power; and grant that this day we fall into no sin, neither run into any '
+        'kind of danger; but that all our doings, being ordered by thy governance, may be righteous in '
+        'thy sight; through Jesus Christ our Lord. Amen.</p>',
+        _W_CHRYSOSTOM])
+
+
+def western_evening_page():
+    return "\n".join([
+        _divider("Evening Prayer"),
+        '<p class="res-intro">The Order for Daily Evening Prayer &mdash; Vespers, or Evensong &mdash; '
+        'from the 1928 American Book of Common Prayer (public domain).</p>',
+        '<h2 class="subhead">Opening Sentences</h2>',
+        '<p class="rubric"><span class="r">The Officiant begins with one or more of these '
+        'sentences of Scripture:</span></p>',
+        '<p><span class="dropcap gilt">T</span><span class="sc">HE LORD</span> is in his holy '
+        'temple: let all the earth keep silence before him. <span class="r">Habakkuk 2:20</span></p>',
+        '<p>The Lord is nigh unto all them that call upon him: to all that call upon him faithfully. '
+        '<span class="r">Psalm 145:18</span></p>',
+        _W_CONFESSION,
+        '<h2 class="subhead">Magnificat</h2>',
+        '<p class="rubric"><span class="r">The Song of the Virgin Mary &mdash; St. Luke '
+        '1:46&ndash;55</span></p>',
+        '<p>My soul doth magnify the Lord: and my spirit hath rejoiced in God my Saviour. For he hath '
+        'regarded: the lowliness of his handmaiden. For behold, from henceforth: all generations shall '
+        'call me blessed. For he that is mighty hath magnified me: and holy is his Name. And his mercy '
+        'is on them that fear him: throughout all generations. He hath showed strength with his arm: he '
+        'hath scattered the proud in the imagination of their hearts. He hath put down the mighty from '
+        'their seat: and hath exalted the humble and meek. He hath filled the hungry with good things: '
+        'and the rich he hath sent empty away. He remembering his mercy hath holpen his servant Israel: '
+        'as he promised to our forefathers, Abraham and his seed, for ever.</p>',
+        _W_SCRIPTURE_NOTE,
+        '<h2 class="subhead">Nunc Dimittis</h2>',
+        '<p class="rubric"><span class="r">The Song of Simeon &mdash; St. Luke 2:29&ndash;32</span></p>',
+        '<p>Lord, now lettest thou thy servant depart in peace: according to thy word. For mine eyes '
+        'have seen: thy salvation, Which thou hast prepared: before the face of all people, To be a '
+        'light to lighten the Gentiles: and to be the glory of thy people Israel.</p>',
+        _W_CREED,
+        _W_SUFFRAGES,
+        '<h2 class="subhead">The Collects</h2>',
+        '<p class="rubric"><span class="r">The Collect of the Day is said first, then:</span></p>',
+        '<p><span class="r i">A Collect for Peace.</span><br>O God, from whom all holy desires, all '
+        'good counsels, and all just works do proceed; Give unto thy servants that peace which the '
+        'world cannot give; that both our hearts may be set to obey thy commandments, and also that by '
+        'thee we, being defended from the fear of our enemies, may pass our time in rest and quietness; '
+        'through the merits of Jesus Christ our Saviour. Amen.</p>',
+        '<p><span class="r i">A Collect for Aid against all Perils.</span><br>Lighten our darkness, we '
+        'beseech thee, O Lord; and by thy great mercy defend us from all perils and dangers of this '
+        'night; for the love of thy only Son, our Saviour Jesus Christ. Amen.</p>',
+        _W_CHRYSOSTOM])
+
+
+def western_compline_page():
+    return "\n".join([
+        _divider("Compline"),
+        '<p class="res-intro">An Order of Compline, the Church&rsquo;s night office, from the 1928 '
+        'American Book of Common Prayer (public domain). For simplicity this uses the same Confession '
+        'as Morning and Evening Prayer above.</p>',
+        '<p class="verse">The Lord be with you.<br>And with thy spirit.</p>',
+        '<p class="verse">Let us pray.</p>',
+        '<h2 class="subhead">The Confession</h2>',
+        '<p>Almighty and most merciful Father; We have erred and strayed from thy ways like lost sheep. '
+        'We have followed too much the devices and desires of our own hearts. We have offended against '
+        'thy holy laws. We have left undone those things which we ought to have done; And we have done '
+        'those things which we ought not to have done; And there is no health in us. But thou, O Lord, '
+        'have mercy upon us, miserable offenders. Spare thou them, O God, which confess their faults. '
+        'Restore thou them that are penitent; According to thy promises declared unto mankind in Christ '
+        'Jesu our Lord. Grant, O most merciful Father, for his sake, that we may hereafter live a '
+        'godly, righteous, and sober life, to the glory of thy holy Name. Amen.</p>',
+        '<h2 class="subhead">Psalm 4</h2>',
+        '<p>Hear me when I call, O God of my righteousness: thou hast enlarged me when I was in '
+        'distress; have mercy upon me, and hear my prayer. O ye sons of men, how long will ye turn my '
+        'glory into shame? how long will ye love vanity, and seek after leasing? But know that the Lord '
+        'hath set apart him that is godly for himself: the Lord will hear when I call unto him. Stand '
+        'in awe, and sin not: commune with your own heart upon your bed, and be still. Offer the '
+        'sacrifices of righteousness, and put your trust in the Lord. There be many that say, Who will '
+        'show us any good? Lord, lift thou up the light of thy countenance upon us. Thou hast put '
+        'gladness in my heart, more than in the time that their corn and their wine increased. I will '
+        'both lay me down in peace, and sleep: for thou, Lord, only makest me dwell in safety. '
+        '<span class="r">(KJV)</span></p>',
+        '<h2 class="subhead">Psalm 91</h2>',
+        '<p>He that dwelleth in the secret place of the most High shall abide under the shadow of the '
+        'Almighty. I will say of the Lord, He is my refuge and my fortress: my God; in him will I '
+        'trust. Surely he shall deliver thee from the snare of the fowler, and from the noisome '
+        'pestilence. He shall cover thee with his feathers, and under his wings shalt thou trust: his '
+        'truth shall be thy shield and buckler. Thou shalt not be afraid for the terror by night; nor '
+        'for the arrow that flieth by day; Nor for the pestilence that walketh in darkness; nor for the '
+        'destruction that wasteth at noonday. A thousand shall fall at thy side, and ten thousand at '
+        'thy right hand; but it shall not come nigh thee. Because thou hast made the Lord, which is my '
+        'refuge, even the most High, thy habitation; There shall no evil befall thee, neither shall any '
+        'plague come nigh thy dwelling. For he shall give his angels charge over thee, to keep thee in '
+        'all thy ways. They shall bear thee up in their hands, lest thou dash thy foot against a stone. '
+        'Thou shalt tread upon the lion and adder: the young lion and the dragon shalt thou trample '
+        'under feet. Because he hath set his love upon me, therefore will I deliver him: I will set him '
+        'on high, because he hath known my name. He shall call upon me, and I will answer him: I will '
+        'be with him in trouble; I will deliver him, and honour him. With long life will I satisfy him, '
+        'and show him my salvation. <span class="r">(KJV)</span></p>',
+        '<h2 class="subhead">Psalm 134</h2>',
+        '<p>Behold, bless ye the Lord, all ye servants of the Lord, which by night stand in the house '
+        'of the Lord. Lift up your hands in the sanctuary, and bless the Lord. The Lord that made '
+        'heaven and earth bless thee out of Zion. <span class="r">(KJV)</span></p>',
+        '<h2 class="subhead">Before the Ending of the Day</h2>',
+        '<p class="rubric"><span class="r">A translation of the ancient hymn Te lucis ante '
+        'terminum</span></p>',
+        '<p>Before the ending of the day, Creator of the world, we pray, that with thy wonted favour '
+        'thou wouldst be our guard and keeper now.</p>',
+        '<p>From all ill dreams defend our eyes, from nightly fears and fantasies; tread under foot our '
+        'ghostly foe, that no pollution we may know.</p>',
+        '<p>O Father, that we ask be done, through Jesus Christ, thine only Son; who, with the Holy '
+        'Ghost and thee, doth live and reign eternally. Amen.</p>',
+        '<h2 class="subhead">Nunc Dimittis</h2>',
+        '<p class="rubric"><span class="r">The Song of Simeon &mdash; St. Luke 2:29&ndash;32</span></p>',
+        '<p>Lord, now lettest thou thy servant depart in peace: according to thy word. For mine eyes '
+        'have seen: thy salvation, Which thou hast prepared: before the face of all people, To be a '
+        'light to lighten the Gentiles: and to be the glory of thy people Israel.</p>',
+        '<h2 class="subhead">The Lord&rsquo;s Prayer &amp; Versicles</h2>',
+        '<p class="verse">Keep me as the apple of an eye;<br>Hide me under the shadow of thy wings.</p>',
+        '<p class="verse">Into thy hands, O Lord, I commend my spirit;<br>For thou hast redeemed me, '
+        'O Lord, thou God of truth.</p>',
+        '<h2 class="subhead">The Collect</h2>',
+        '<p>Visit, we beseech thee, O Lord, this dwelling, and drive far from it all snares of the '
+        'enemy; let thy holy Angels dwell herein to preserve us in peace; and let thy blessing be '
+        'always upon us; through Jesus Christ our Lord. Amen.</p>',
+        '<p class="verse">The Lord Almighty grant us a quiet night and a perfect end.<br>Amen.</p>',
+        '<p class="verse">Let us bless the Lord.<br>Thanks be to God.</p>',
+        '<h2 class="subhead">Sub Tuum Praesidium</h2>',
+        '<p class="rubric"><span class="r">The most ancient prayer to the Theotokos (3rd century), '
+        'held in common by East and West</span></p>',
+        '<p>We fly to thy protection, O Holy Mother of God; do not despise our petitions in our '
+        'necessities, but deliver us always from all dangers, O glorious and blessed Virgin. Amen.</p>'])
+
+
+def western_page():
+    o = ['<section class="resources western-hub" id="top">', _divider("Western Rite Orthodoxy")]
+    o.append('<p class="res-intro">The daily office, in the historic Western form &mdash; the '
+             'text is the 1928 Book of Common Prayer (public domain), the same footing the '
+             'Church&rsquo;s Bible in this app already stands on.</p>')
+    o.append(_cycle([(o_title, f"{slug}.html", blurb, emb, when, h0, h1)
+                      for slug, o_title, blurb, emb, when, h0, h1 in WESTERN_OFFICES]))
+    o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
+             'in its Western form, and further reading &mdash; is still being built. Everything else '
+             'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
+    o.append('<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>')
+    o.append(art("mono", foot=True))
+    o.append('</section>')
+    return "\n".join(o)
 
 
 # split the prayer content into one page per prayer time, at the section dividers
@@ -1973,11 +2274,19 @@ gate_page("rite.html", "Welcome — Daily Prayers",
           "Choose Eastern Orthodox or Western Rite Orthodoxy to get started.",
           rite_page(), scripts=RITE_JS)
 
-# Western Rite placeholder — chosen on the gate, or from Settings; full chrome
-# so nothing is off-limits while the Western Rite section is being built
+# Western Rite hub — chosen on the gate, or from Settings; full chrome so
+# nothing is off-limits while the rest of the Western Rite section is built
 page("western.html", "Western Rite Orthodoxy — Daily Prayers",
-     "Western Rite Orthodoxy resources are being built.",
+     "The Western Rite Orthodox daily office: Morning Prayer, Evening Prayer and Compline.",
      western_page(), active="home")
+
+# the Western daily office: one page per Hour, from the 1928 BCP (public domain)
+_W_PAGE_FN = {"western-morning": western_morning_page, "western-evening": western_evening_page,
+              "western-compline": western_compline_page}
+for _slug, _title, _blurb, _emb, _when, _h0, _h1 in WESTERN_OFFICES:
+    page(f"{_slug}.html", f"{_title} — Western Rite Orthodoxy",
+         re.sub(r"<[^>]+>", "", _blurb), back_link("western.html", "Western Rite")
+         + with_jump_nav(_W_PAGE_FN[_slug]()) + CLOSING, active="home")
 
 # home / landing page
 page("index.html", "Prayers for Morning, Day &amp; Night",
