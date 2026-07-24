@@ -762,6 +762,10 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
 .res-sub, .cf-era, .ref-era{ scroll-margin-top:1rem; }
 
 .topic-intro{ text-indent:0; margin:0 0 .9em; }
+/* short catechetical enumerations (the cardinal virtues, the four last
+   things, etc.) — centred and gold, like a definition list of terms */
+.pb-terms{ text-indent:0; text-align:center; color:var(--gold); font-weight:600;
+  letter-spacing:.02em; margin:0 0 .9em; }
 /* article lead: the standfirst paragraph, set larger with a gilt drop-cap */
 .article-lead{ text-indent:0; font-size:1.22rem; line-height:1.6; color:var(--ink);
   margin:0 0 1.1em; }
