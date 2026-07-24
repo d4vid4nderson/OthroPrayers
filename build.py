@@ -2191,8 +2191,16 @@ def western_page():
     o.append('<p class="res-intro">The daily office, in the historic Western form &mdash; the '
              'text is the 1928 Book of Common Prayer (public domain), the same footing the '
              'Church&rsquo;s Bible in this app already stands on.</p>')
-    o.append(_cycle([(o_title, f"{slug}.html", blurb, emb, when, h0, h1)
-                      for slug, o_title, blurb, emb, when, h0, h1 in WESTERN_OFFICES]))
+    _cyc = []
+    for slug, o_title, blurb, emb, when, h0, h1 in WESTERN_OFFICES:
+        # the parish prayer book's own short Morning Prayer stands in for the
+        # formal BCP office here; the BCP page still exists, linked from it
+        if slug == "western-morning" and "pb-morning" in PB_CONTENT:
+            _cyc.append(("Morning Prayer", "pb-morning.html",
+                          "A short form of morning prayer, for use alone.", "cross", when, h0, h1))
+        else:
+            _cyc.append((o_title, f"{slug}.html", blurb, emb, when, h0, h1))
+    o.append(_cycle(_cyc))
     if PB_CONTENT:
         o.append('<a class="hub-feature" href="prayerbook.html">'
                   f'{_emblem("mono")}'
@@ -2371,7 +2379,9 @@ _pb_page("pb-morning",
     'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
     'with:</span></p>',
     '<p>The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy '
-    'Spirit, be with us all evermore. Amen.</p>')
+    'Spirit, be with us all evermore. Amen.</p>',
+    '<p class="res-foot">Looking for the fuller, formal office instead? See the Book of Common '
+    'Prayer&rsquo;s <a href="western-morning.html">Order for Daily Morning Prayer</a>.</p>')
 
 
 def prayerbook_hub():
