@@ -2191,13 +2191,224 @@ def western_page():
     o.append('<p class="res-intro">The daily office, in the historic Western form &mdash; the '
              'text is the 1928 Book of Common Prayer (public domain), the same footing the '
              'Church&rsquo;s Bible in this app already stands on.</p>')
-    o.append(_cycle([(o_title, f"{slug}.html", blurb, emb, when, h0, h1)
-                      for slug, o_title, blurb, emb, when, h0, h1 in WESTERN_OFFICES]))
+    _cyc = []
+    for slug, o_title, blurb, emb, when, h0, h1 in WESTERN_OFFICES:
+        # the parish prayer book's own short Morning Prayer stands in for the
+        # formal BCP office here; the BCP page still exists, linked from it
+        if slug == "western-morning" and "pb-morning" in PB_CONTENT:
+            _cyc.append(("Morning Prayer", "pb-morning.html",
+                          "A short form of morning prayer, for use alone.", "cross", when, h0, h1))
+        else:
+            _cyc.append((o_title, f"{slug}.html", blurb, emb, when, h0, h1))
+    o.append(_cycle(_cyc))
+    if PB_CONTENT:
+        o.append('<a class="hub-feature" href="prayerbook.html">'
+                  f'{_emblem("mono")}'
+                  '<span class="hub-feature-body">'
+                  '<span class="hub-feature-t">A Little Prayer Book</span>'
+                  '<span class="hub-feature-d">A pocket manual of daily and occasional prayers, '
+                  'in the Western devotional tradition &mdash; being added page by page.</span>'
+                  '</span>'
+                  f'{_CHEV_R}</a>')
     o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
              'in its Western form, and further reading &mdash; is still being built. Everything else '
              'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
     o.append('<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>')
     o.append(art("mono", foot=True))
+    o.append('</section>')
+    return "\n".join(o)
+
+
+# ---- A Little Prayer Book (Western Rite): a scanned parish booklet ----------
+# Working title until the booklet's own cover/title page is confirmed. Content
+# transcribed page by page from user-supplied photos. What's here so far is
+# very traditional Western Catholic/Western Rite devotional material -- the
+# Hail Mary, the Apostles' Creed, the Guardian Angel prayer, table graces, the
+# classic catechetical enumerations (the cardinal/theological virtues, the
+# works of mercy, the penitential psalms, etc.), and the hymn "Now that
+# daylight fills the sky" (John Mason Neale's public-domain translation of
+# the ancient office hymn Iam lucis orto sidere) -- all centuries-old, shared
+# devotional heritage, not any one publisher's original composition. Flag
+# anything that looks otherwise as pages are added.
+PB_SECTIONS = [
+    ("pb-duties", "Christian Duties and Virtues",
+     "A short catechism of duties, virtues and the rules of fasting.", "chirho"),
+    ("pb-morning", "Morning Prayer", "A short form of morning prayer, for use alone.", "cross"),
+    ("pb-noon", "Noon Time Prayers", "A short form for the middle of the day.", "gospel"),
+    ("pb-evening", "Evening Prayers", "A short form for the close of the day.", "roundel"),
+    ("pb-general", "General Prayers", "A gathering of further prayers.", "mono"),
+    ("pb-precommunion", "Preparation for Holy Communion",
+     "Prayers before receiving the Mysteries.", "gospel"),
+    ("pb-thanks-communion", "Thanksgiving after Communion",
+     "Prayers of thanksgiving after Communion.", "chirho"),
+    ("pb-sick-communion", "Communion of the Sick",
+     "For those who receive at home or in hospital.", "cross"),
+    ("pb-confession-prep", "Preparation for Confession", "An examination of conscience.", "roundel"),
+    ("pb-confession", "Confession", "The rite of Confession.", "chirho"),
+    ("pb-thanks-forgiveness", "Thanksgiving for Forgiveness", "After Confession.", "mono"),
+    ("pb-sickness", "Prayers in Sickness", "For those who are unwell.", "cross"),
+    ("pb-recovery", "Thanksgiving for Recovery", "On recovering from sickness.", "gospel"),
+    ("pb-departed", "Prayers for the Departed", "For those who have fallen asleep.", "roundel"),
+    ("pb-marian", "Devotions to the Blessed Virgin", "Prayers to the Mother of God.", "mono"),
+    ("pb-theotokos", "Prayer of Intercession to the Most Holy Theotokos", "", "mono"),
+    ("pb-litany-saints", "Litany to the Saints", "", "chirho"),
+    ("pb-holyspirit", "To the Holy Spirit", "", "gospel"),
+    ("pb-dying", "For the Dying", "", "cross"),
+    ("pb-trinity", "To the Holy Trinity", "", "roundel"),
+    ("pb-blessed-sacrament", "To the Blessed Sacrament", "", "gospel"),
+    ("pb-passion", "Of the Passion", "", "cross"),
+    ("pb-collects", "Collects", "", "chirho"),
+    ("pb-meditation", "Meditation", "", "mono"),
+]
+PB_TITLES = {slug: title for slug, title, _b, _e in PB_SECTIONS}
+# the three sections that map to a time of day, for the hub's daily cycle
+PB_CYCLE = {"pb-morning": ("Morning", 4, 11), "pb-noon": ("Midday", 11, 17),
+            "pb-evening": ("Evening", 17, 21)}
+PB_CONTENT = {}   # slug -> page body html, filled in below as pages are transcribed
+
+
+def _pb_page(slug, *parts):
+    PB_CONTENT[slug] = "\n".join(parts)
+
+
+_pb_page("pb-duties",
+    _divider("Christian Duties and Virtues"),
+    '<p class="res-intro">A short catechism carried in the back of the booklet &mdash; traditional '
+    'Western enumerations of duties, virtues and the discipline of fasting.</p>',
+    '<h2 class="subhead">Christian Duties</h2>',
+    '<ol><li>To attend the Liturgy every Sunday and on major feast days.</li>'
+    '<li>To keep fasts and abstinences as the Church requires.</li>'
+    '<li>To be regular in Confession of sins.</li>'
+    '<li>To give alms regularly to support the Church and its ministry.</li>'
+    '<li>To pray daily.</li></ol>',
+    '<h2 class="subhead">Rules of Fasting and Abstinence</h2>',
+    '<ol><li>Abstinence from flesh meat on all Wednesdays and Fridays throughout the year, except '
+    'those falling between Christmas and Epiphany.</li>'
+    '<li>Fasting, which means not more than one full meal and a light breakfast, one half meal, '
+    'during the forty days of Lent, and other fasts as the Church prescribes.</li>'
+    '<li>Fasting with abstinence on Ember Days, on Wednesdays and Fridays in Lent, and on Holy '
+    'Saturday up to noon.</li></ol>',
+    '<h2 class="subhead">The Three Theological Virtues</h2>',
+    '<p class="pb-terms">Faith &middot; Hope &middot; Charity</p>',
+    '<h2 class="subhead">The Four Cardinal Virtues</h2>',
+    '<p class="pb-terms">Prudence &middot; Justice &middot; Temperance &middot; Fortitude</p>',
+    '<h2 class="subhead">The Seven Gifts of the Holy Spirit</h2>',
+    '<p class="pb-terms">Wisdom and Understanding &middot; Counsel and Ghostly Strength &middot; '
+    'Knowledge and True Godliness &middot; Holy Fear</p>',
+    '<h2 class="subhead">The Seven Spiritual Works of Mercy</h2>',
+    '<p class="topic-intro">To instruct the ignorant and endure injury. To counsel the doubtful and '
+    'forgive wrong. To correct offenders and pray for others. To comfort the afflicted.</p>',
+    '<h2 class="subhead">The Seven Corporal Works of Mercy</h2>',
+    '<p class="topic-intro">To feed the hungry and clothe the naked. To shelter the stranger and '
+    'visit the sick. To help prisoners and bury the dead. To visit the parentless and widows.</p>',
+    '<h2 class="subhead">Three Dangers to the Soul</h2>',
+    '<p class="pb-terms">The World &middot; The Flesh &middot; The Devil</p>',
+    '<h2 class="subhead">The Four Last Things</h2>',
+    '<p class="pb-terms">Death &middot; Judgement &middot; Heaven &middot; Hell</p>',
+    '<h2 class="subhead">The Seven Capital Sins</h2>',
+    '<p class="pb-terms">Pride &middot; Anger &middot; Covetousness &middot; Lust &middot; Envy '
+    '&middot; Sloth &middot; Gluttony</p>',
+    '<h2 class="subhead">Four Notes of the True Church</h2>',
+    '<p class="pb-terms">One &middot; Holy &middot; Catholic &middot; Apostolic</p>',
+    '<h2 class="subhead">Seven Penitential Psalms</h2>',
+    '<p class="pb-terms">6, 32, 38, 51, 102, 130, 143</p>',
+    '<h2 class="subhead">The Marks of Real Repentance</h2>',
+    '<p class="pb-terms">Contrition &middot; Confession &middot; Amendment</p>',
+    '<h2 class="subhead">Grace before Meals</h2>',
+    '<p>Bless, O Lord, these gifts to our use, and us to thy service, for Jesus Christ&rsquo;s sake. '
+    'Amen.</p>',
+    '<h2 class="subhead">After Meals</h2>',
+    '<p>Thanks be to thee, O God, for all thy mercies. Amen.</p>')
+
+_pb_page("pb-morning",
+    _divider("Morning Prayer"),
+    '<p class="res-intro">A short form of morning prayer for use alone, from the same booklet as '
+    'the Christian Duties and Virtues opposite.</p>',
+    '<p class="rubric"><span class="r">Gather your thoughts quietly, and begin:</span></p>',
+    '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
+    'of the Son, and of the Holy Spirit. Amen.</p>',
+    '<h2 class="subhead">The Lord&rsquo;s Prayer</h2>',
+    '<p>Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on '
+    'earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as '
+    'we forgive those who trespass against us. And lead us not into temptation, but deliver us from '
+    'evil. Amen.</p>',
+    '<h2 class="subhead">The Hail Mary</h2>',
+    '<p>Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed '
+    'is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the '
+    'hour of our death. Amen.</p>',
+    '<h2 class="subhead">The Trisagion</h2>',
+    '<p>Holy God, Holy Mighty, Holy Immortal, have mercy upon us. <span class="r">(thrice)</span></p>',
+    '<p>Glory be to the Father, and to the Son, and to the Holy Spirit; as it was in the beginning, '
+    'is now, and ever shall be, world without end. Amen.</p>',
+    '<h2 class="subhead">The Apostles&rsquo; Creed</h2>',
+    '<p>I believe in God the Father Almighty, maker of heaven and earth: and in Jesus Christ his '
+    'only Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary: suffered '
+    'under Pontius Pilate, was crucified, dead, and buried: He descended into hell; the third day '
+    'he rose again from the dead: He ascended into heaven, and sitteth on the right hand of God the '
+    'Father Almighty: from thence He shall come to judge the quick and the dead. I believe in the '
+    'Holy Ghost: the holy Catholic Church: the communion of saints: the forgiveness of sins: the '
+    'resurrection of the body: and the life everlasting. Amen.</p>',
+    '<h2 class="subhead">A Morning Offering</h2>',
+    '<p>I thank thee, Heavenly Father, for the rest of the past night and the gift of a new day. '
+    'Grant that I may so live today in thy presence and service, that at evening I may truly praise '
+    'thy holy Name; through Jesus Christ, our Lord. Amen.</p>',
+    '<h2 class="subhead">Intercessions</h2>',
+    '<p class="rubric"><span class="r">Naming those you carry in prayer where the booklet leaves a '
+    'blank:</span></p>',
+    '<p>Have mercy, God, upon all people. Bless thy holy Church, thy bishops and clergy, and all '
+    'faithful people on earth and in paradise. Bless my family, friends, and neighbors, especially '
+    'N.; have compassion upon those who are sick, in trouble or danger, especially N.; and may the '
+    'souls of the faithful, through the mercy of God, rest in peace. Amen.</p>',
+    '<h2 class="subhead">A Commendation</h2>',
+    '<p>I commit myself to God for today. By the help of his grace, I will endeavor to keep his '
+    'commandments, and to follow faithfully in the way of Jesus Christ, our Lord. Amen.</p>',
+    '<h2 class="subhead">To the Guardian Angel</h2>',
+    '<p>O holy guardian angel, to whose care God, in his mercy, has committed me, stand by me now '
+    'and at my last hour; protect me against all the powers of darkness; defend me from all my '
+    'enemies, and conduct my soul to the mansions of bliss. Amen.</p>',
+    '<h2 class="subhead">Hymn &mdash; Now that Daylight Fills the Sky</h2>',
+    '<p class="rubric"><span class="r">John Mason Neale&rsquo;s translation of the ancient office '
+    'hymn Iam lucis ortu sidere</span></p>',
+    '<p>Now that daylight fills the sky,<br>We lift our hearts to God on high,<br>That he in all we '
+    'do or say,<br>May keep us free from sin today.</p>',
+    '<p>O Father, fill our hearts with love,<br>That we may seek the things above,<br>Extinguish '
+    'thou each sinful fire,<br>And banish every wrong desire.</p>',
+    '<p>Father, that we ask be done,<br>Through Jesus Christ, thine only Son,<br>Who with the Holy '
+    'Ghost and thee,<br>Doth live and reign eternally. Amen.</p>',
+    '<p class="rubric"><span class="r">You may add any other prayers from this book, say one of '
+    'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
+    'with:</span></p>',
+    '<p>The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy '
+    'Spirit, be with us all evermore. Amen.</p>',
+    '<p class="res-foot">Looking for the fuller, formal office instead? See the Book of Common '
+    'Prayer&rsquo;s <a href="western-morning.html">Order for Daily Morning Prayer</a>.</p>')
+
+
+def prayerbook_hub():
+    o = ['<section class="resources afpb-hub prayers-hub" id="top">',
+         back_link("western.html", "Western Rite"), _divider("A Little Prayer Book")]
+    o.append('<p class="res-intro">A pocket manual of daily and occasional prayers, in the Western '
+             'devotional tradition &mdash; scanned in from a parish booklet, page by page.</p>')
+    cyc = []
+    for slug in PB_CYCLE:
+        if slug in PB_CONTENT:
+            when, h0, h1 = PB_CYCLE[slug]
+            title = PB_TITLES[slug]
+            blurb = next(b for s, _t, b, _e in PB_SECTIONS if s == slug)
+            emb = next(e for s, _t, _b, e in PB_SECTIONS if s == slug)
+            cyc.append((title, f"{slug}.html", blurb, emb, when, h0, h1))
+    if cyc:
+        o.append('<h2 class="browse-group">The daily round</h2>')
+        o.append(_cycle(cyc))
+    rest = [(title, f"{slug}.html", blurb, emb) for slug, title, blurb, emb in PB_SECTIONS
+            if slug not in PB_CYCLE and slug in PB_CONTENT]
+    if rest:
+        o.append('<h2 class="browse-group">Occasional prayers</h2>')
+        o.append('<ul class="browse-list">')
+        for row in rest:
+            o.append(_browse_row(*row))
+        o.append('</ul>')
+    o.append(NOW_JS)
     o.append('</section>')
     return "\n".join(o)
 
@@ -2287,6 +2498,19 @@ for _slug, _title, _blurb, _emb, _when, _h0, _h1 in WESTERN_OFFICES:
     page(f"{_slug}.html", f"{_title} — Western Rite Orthodoxy",
          re.sub(r"<[^>]+>", "", _blurb), back_link("western.html", "Western Rite")
          + with_jump_nav(_W_PAGE_FN[_slug]()) + CLOSING, active="home")
+
+# "A Little Prayer Book" — a second Western Rite booklet, built page by page;
+# hub + pages only appear once at least one page has been transcribed
+if PB_CONTENT:
+    page("prayerbook.html", "A Little Prayer Book — Western Rite Orthodoxy",
+         "A pocket manual of daily and occasional Western Rite prayers.",
+         prayerbook_hub(), active="home")
+    for _slug, _title, _blurb, _emb in PB_SECTIONS:
+        if _slug not in PB_CONTENT:
+            continue
+        page(f"{_slug}.html", f"{_title} — A Little Prayer Book",
+             _blurb or _title, back_link("prayerbook.html", "Prayer Book")
+             + with_jump_nav(PB_CONTENT[_slug]) + CLOSING, active="home")
 
 # home / landing page
 page("index.html", "Prayers for Morning, Day &amp; Night",
