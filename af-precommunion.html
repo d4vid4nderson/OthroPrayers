@@ -15,8 +15,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#faf6ee">
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="themes.css?v=1">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 var path=location.pathname,isGate=/\/rite\.html$/.test(path),isHome=path==="/"||path===""||/\/index\.html$/.test(path);
@@ -28,8 +26,14 @@ var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
+var bg=dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+// paint the root now, so the very first frame of a navigation is the
+// right colour even before styles.css has been parsed
+r.style.backgroundColor=bg;
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
 <div class="scroll">
@@ -315,8 +319,10 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
   d.getElementById("size-dn").onclick=function(){ setSize(cur()-1); };
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
-  function paintTC(){ if(!tc) return; var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    tc.setAttribute("content", dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee")); }
+  function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
+    var bg = dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+    if(tc) tc.setAttribute("content", bg);
+    r.style.backgroundColor = bg; }   // stays in step with EARLY_JS
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true"); paintTC(); }

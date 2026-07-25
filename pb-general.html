@@ -15,8 +15,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#faf6ee">
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="themes.css?v=1">
 <script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 var path=location.pathname,isGate=/\/rite\.html$/.test(path),isHome=path==="/"||path===""||/\/index\.html$/.test(path);
@@ -28,8 +26,14 @@ var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
+var bg=dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+// paint the root now, so the very first frame of a navigation is the
+// right colour even before styles.css has been parsed
+r.style.backgroundColor=bg;
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
 <div class="scroll">
@@ -59,7 +63,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
 <p>O merciful God, giver of life and health: bless, we pray thee, thy servant N., and those who administer to him of thy healing gifts; that he may be restored to health of body and of mind; through Jesus Christ our Lord. Amen.</p>
 <h2 class="subhead" id="j11">For the Departed</h2>
 <p>Almighty and eternal God, to whom no prayer is made without hope of mercy, behold and bless the souls of thy servants in Paradise, and grant them continual growth in thy love and service. I especially pray for N., that the joy and strength and peace of thy presence may abide with him always, and bring him at last to the perfect bliss of thy heavenly kingdom; through Jesus Christ our Lord. Amen.</p>
-<p><span class="signum" role="img" aria-label="Make the sign of the cross"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><rect x="5.1" y="0.5" width="1.8" height="11"/><rect x="0.5" y="3.9" width="11" height="1.8"/></svg></span>May the souls of all the faithful departed, through the mercy of God, rest in peace. Amen.</p>
+<p><span class="signum" role="img" aria-label="Make the sign of the cross"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.7 2h2.6v8.7h8.7v2.6h-8.7V22h-2.6v-8.7H2v-2.6h8.7Z"/><rect x="9.1" y="1.5" width="5.8" height="1.4"/><rect x="9.1" y="21.1" width="5.8" height="1.4"/><rect x="21.1" y="9.1" width="1.4" height="5.8"/><rect x="1.5" y="9.1" width="1.4" height="5.8"/></svg></span>May the souls of all the faithful departed, through the mercy of God, rest in peace. Amen.</p>
 <h2 class="subhead" id="j12">A Parent&rsquo;s Prayer</h2>
 <p>O heavenly Father, I commend the soul(s) of my children to thee. Be thou their God and Father, and mercifully supply whatever is wanting in me through frailty or negligence. Strengthen them to overcome the corruptions of the world, to resist all solicitations to evil, whether from within or without; and deliver them from the secret snares of the enemy. Pour thy grace into their heart(s), and confirm and multiply in them the gifts of thy Holy Spirit, that they may daily grow in grace and knowledge of our Lord Jesus Christ; and so faithfully serving thee here, may come to rejoice in thy presence hereafter; through the same Christ our Lord. Amen.</p>
 <h2 class="subhead" id="j13">For a Husband or Wife</h2>
@@ -231,8 +235,10 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#
   d.getElementById("size-dn").onclick=function(){ setSize(cur()-1); };
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
-  function paintTC(){ if(!tc) return; var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    tc.setAttribute("content", dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee")); }
+  function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
+    var bg = dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+    if(tc) tc.setAttribute("content", bg);
+    r.style.backgroundColor = bg; }   // stays in step with EARLY_JS
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true"); paintTC(); }
