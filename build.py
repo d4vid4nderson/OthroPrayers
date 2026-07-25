@@ -149,9 +149,14 @@ ORTHODOX_CROSS = (
 # from many faces) so it renders identically everywhere, and sized in em so it
 # scales with the reader's chosen text size.
 SIGNUM = ('<span class="signum" role="img" aria-label="Make the sign of the cross">'
-          '<svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">'
-          '<rect x="5.1" y="0.5" width="1.8" height="11"/>'
-          '<rect x="0.5" y="3.9" width="11" height="1.8"/></svg></span>')
+          '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+          # a serifed Greek cross — the slab terminals echo the app's
+          # high-contrast serif, and stay legible down at text size
+          '<path d="M10.7 2h2.6v8.7h8.7v2.6h-8.7V22h-2.6v-8.7H2v-2.6h8.7Z"/>'
+          '<rect x="9.1" y="1.5" width="5.8" height="1.4"/>'
+          '<rect x="9.1" y="21.1" width="5.8" height="1.4"/>'
+          '<rect x="21.1" y="9.1" width="1.4" height="5.8"/>'
+          '<rect x="1.5" y="9.1" width="1.4" height="5.8"/></svg></span>')
 
 ICXC_ROUNDEL = (
     '<svg viewBox="0 0 140 140" aria-hidden="true" style="font-family:inherit">'
@@ -1502,7 +1507,11 @@ var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));})();
+var bg=dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+// paint the root now, so the very first frame of a navigation is the
+// right colour even before styles.css has been parsed
+r.style.backgroundColor=bg;
+var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </script>'''
 
 CONTROL_JS = '''<script>
@@ -1544,8 +1553,10 @@ CONTROL_JS = '''<script>
   d.getElementById("size-dn").onclick=function(){ setSize(cur()-1); };
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
-  function paintTC(){ if(!tc) return; var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    tc.setAttribute("content", dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee")); }
+  function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
+    var bg = dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+    if(tc) tc.setAttribute("content", bg);
+    r.style.backgroundColor = bg; }   // stays in step with EARLY_JS
   function paintTheme(){ var dark=r.dataset.theme==="dark";
     td.setAttribute("aria-pressed", dark?"true":"false");
     tl.setAttribute("aria-pressed", dark?"false":"true"); paintTC(); }
@@ -1792,9 +1803,9 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#faf6ee">
+{early}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="themes.css?v=1">
-{early}
 </head>
 <body>
 <div class="scroll">
@@ -1840,9 +1851,9 @@ GATE_TMPL = '''<!doctype html>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="tc" content="#faf6ee">
+{early}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="themes.css?v=1">
-{early}
 </head>
 <body>
 <div class="scroll">

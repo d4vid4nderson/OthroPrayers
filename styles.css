@@ -591,9 +591,14 @@ html[data-theme="dark"] .tabbar{ background:color-mix(in srgb, var(--paper) 82%,
 }
 @media (hover:hover){ .tab:hover{ opacity:.85; } }
 .tab:active{ opacity:1; }
-.tab-i{ display:flex; align-items:center; justify-content:center; }
+/* icon box and label are given explicit boxes so the bar's height is fixed by
+   the stylesheet alone. Left to `line-height:normal` the label's box comes from
+   the font's own metrics, so the bar could change height the moment a webfont
+   swaps in (font-display:swap) — a visible jump on every navigation. */
+.tab-i{ display:flex; align-items:center; justify-content:center; height:1.5rem; }
 .tab-i svg{ width:1.5rem; height:1.5rem; }
-.tab-l{ font-size:.72rem; font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap; }
+.tab-l{ font-size:.72rem; line-height:1.25; height:.9rem;
+  font-variant-caps:small-caps; letter-spacing:.03em; white-space:nowrap; }
 /* the active page's tab: simply tinted in the accent colour — no filled block,
    no glow. Clean and calm. */
 .tab.active{ opacity:1; color:var(--rubric); }
