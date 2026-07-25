@@ -2320,6 +2320,37 @@ _pb_page("pb-duties",
     '<h2 class="subhead">After Meals</h2>',
     '<p>Thanks be to thee, O God, for all thy mercies. Amen.</p>')
 
+# The booklet prints these four in full in Morning Prayer, then at Noon and
+# Evening only says "say the Our Father, Hail Mary…" — sensible in a pocket
+# book you hold open at two places, but on a phone it would mean navigating
+# away in the middle of praying. So they are inlined into each office that
+# calls for them, in the order that office asks for.
+_PB_OUR_FATHER = (
+    '<h2 class="subhead">The Lord&rsquo;s Prayer</h2>'
+    '<p>Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on '
+    'earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as '
+    'we forgive those who trespass against us. And lead us not into temptation, but deliver us from '
+    'evil. Amen.</p>')
+_PB_HAIL_MARY = (
+    '<h2 class="subhead">The Hail Mary</h2>'
+    '<p>Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed '
+    'is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the '
+    'hour of our death. Amen.</p>')
+_PB_TRISAGION = (
+    '<h2 class="subhead">The Trisagion</h2>'
+    '<p>Holy God, Holy Mighty, Holy Immortal, have mercy upon us. <span class="r">(thrice)</span></p>'
+    '<p>Glory be to the Father, and to the Son, and to the Holy Spirit; as it was in the beginning, '
+    'is now, and ever shall be, world without end. Amen.</p>')
+_PB_CREED = (
+    '<h2 class="subhead">The Apostles&rsquo; Creed</h2>'
+    '<p>I believe in God the Father Almighty, maker of heaven and earth: and in Jesus Christ his '
+    'only Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary: suffered '
+    'under Pontius Pilate, was crucified, dead, and buried: He descended into hell; the third day '
+    'he rose again from the dead: He ascended into heaven, and sitteth on the right hand of God the '
+    'Father Almighty: from thence He shall come to judge the quick and the dead. I believe in the '
+    'Holy Ghost: the holy Catholic Church: the communion of saints: the forgiveness of sins: the '
+    'resurrection of the body: and the life everlasting. Amen.</p>')
+
 _pb_page("pb-morning",
     _divider("Morning Prayer"),
     '<p class="res-intro">A short form of morning prayer for use alone, from the same booklet as '
@@ -2327,27 +2358,7 @@ _pb_page("pb-morning",
     '<p class="rubric"><span class="r">Gather your thoughts quietly, and begin:</span></p>',
     '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
     'of the Son, and of the Holy Spirit. Amen.</p>',
-    '<h2 class="subhead">The Lord&rsquo;s Prayer</h2>',
-    '<p>Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on '
-    'earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as '
-    'we forgive those who trespass against us. And lead us not into temptation, but deliver us from '
-    'evil. Amen.</p>',
-    '<h2 class="subhead">The Hail Mary</h2>',
-    '<p>Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed '
-    'is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the '
-    'hour of our death. Amen.</p>',
-    '<h2 class="subhead">The Trisagion</h2>',
-    '<p>Holy God, Holy Mighty, Holy Immortal, have mercy upon us. <span class="r">(thrice)</span></p>',
-    '<p>Glory be to the Father, and to the Son, and to the Holy Spirit; as it was in the beginning, '
-    'is now, and ever shall be, world without end. Amen.</p>',
-    '<h2 class="subhead">The Apostles&rsquo; Creed</h2>',
-    '<p>I believe in God the Father Almighty, maker of heaven and earth: and in Jesus Christ his '
-    'only Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary: suffered '
-    'under Pontius Pilate, was crucified, dead, and buried: He descended into hell; the third day '
-    'he rose again from the dead: He ascended into heaven, and sitteth on the right hand of God the '
-    'Father Almighty: from thence He shall come to judge the quick and the dead. I believe in the '
-    'Holy Ghost: the holy Catholic Church: the communion of saints: the forgiveness of sins: the '
-    'resurrection of the body: and the life everlasting. Amen.</p>',
+    _PB_OUR_FATHER, _PB_HAIL_MARY, _PB_TRISAGION, _PB_CREED,
     '<h2 class="subhead">A Morning Offering</h2>',
     '<p>I thank thee, Heavenly Father, for the rest of the past night and the gift of a new day. '
     'Grant that I may so live today in thy presence and service, that at evening I may truly praise '
@@ -2389,8 +2400,7 @@ _pb_page("pb-noon",
     'Lord was lifted up on the Cross.</p>',
     '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
     'of the Son, and of the Holy Spirit. Amen.</p>',
-    '<p class="rubric"><span class="r">Say the Our Father, the Hail Mary, and the Apostles&rsquo; '
-    'Creed &mdash; all three are printed in the Morning Prayer.</span></p>',
+    _PB_OUR_FATHER, _PB_HAIL_MARY, _PB_CREED,
     '<h2 class="subhead">O Saviour of the World</h2>',
     '<p>O Saviour of the world, who by thy cross and Passion hast redeemed us, save us and help us, '
     'we humbly beseech thee, O Lord.</p>',
@@ -2417,9 +2427,8 @@ _pb_page("pb-evening",
     'end of this day. Then, kneeling or standing before your icon or cross, say:</span></p>',
     '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
     'of the Son, and of the Holy Spirit. Amen.</p>',
-    '<p class="rubric"><span class="r">Say the Our Father, the Hail Mary, the Trisagion (Holy God) '
-    'and the Apostles&rsquo; Creed &mdash; all printed in the Morning Prayer. Then '
-    'continue:</span></p>',
+    _PB_OUR_FATHER, _PB_HAIL_MARY, _PB_TRISAGION, _PB_CREED,
+    '<p class="rubric"><span class="r">Then continue:</span></p>',
     '<h2 class="subhead">Let My Prayer Be Set Forth</h2>',
     '<p>Let my prayer be set forth in thy sight as the incense; and let the lifting up of my hands '
     'be an evening sacrifice.</p>',
