@@ -2158,11 +2158,11 @@ def western_compline_page():
         '<h2 class="subhead">Before the Ending of the Day</h2>',
         '<p class="rubric"><span class="r">A translation of the ancient hymn Te lucis ante '
         'terminum</span></p>',
-        '<p>Before the ending of the day, Creator of the world, we pray, that with thy wonted favour '
+        '<p class="verse">Before the ending of the day, Creator of the world, we pray, that with thy wonted favour '
         'thou wouldst be our guard and keeper now.</p>',
-        '<p>From all ill dreams defend our eyes, from nightly fears and fantasies; tread under foot our '
+        '<p class="verse">From all ill dreams defend our eyes, from nightly fears and fantasies; tread under foot our '
         'ghostly foe, that no pollution we may know.</p>',
-        '<p>O Father, that we ask be done, through Jesus Christ, thine only Son; who, with the Holy '
+        '<p class="verse">O Father, that we ask be done, through Jesus Christ, thine only Son; who, with the Holy '
         'Ghost and thee, doth live and reign eternally. Amen.</p>',
         '<h2 class="subhead">Nunc Dimittis</h2>',
         '<p class="rubric"><span class="r">The Song of Simeon &mdash; St. Luke 2:29&ndash;32</span></p>',
@@ -2369,11 +2369,11 @@ _pb_page("pb-morning",
     '<h2 class="subhead">Hymn &mdash; Now that Daylight Fills the Sky</h2>',
     '<p class="rubric"><span class="r">John Mason Neale&rsquo;s translation of the ancient office '
     'hymn Iam lucis ortu sidere</span></p>',
-    '<p>Now that daylight fills the sky,<br>We lift our hearts to God on high,<br>That he in all we '
+    '<p class="verse">Now that daylight fills the sky,<br>We lift our hearts to God on high,<br>That he in all we '
     'do or say,<br>May keep us free from sin today.</p>',
-    '<p>O Father, fill our hearts with love,<br>That we may seek the things above,<br>Extinguish '
+    '<p class="verse">O Father, fill our hearts with love,<br>That we may seek the things above,<br>Extinguish '
     'thou each sinful fire,<br>And banish every wrong desire.</p>',
-    '<p>Father, that we ask be done,<br>Through Jesus Christ, thine only Son,<br>Who with the Holy '
+    '<p class="verse">Father, that we ask be done,<br>Through Jesus Christ, thine only Son,<br>Who with the Holy '
     'Ghost and thee,<br>Doth live and reign eternally. Amen.</p>',
     '<p class="rubric"><span class="r">You may add any other prayers from this book, say one of '
     'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
@@ -2382,6 +2382,160 @@ _pb_page("pb-morning",
     'Spirit, be with us all evermore. Amen.</p>',
     '<p class="res-foot">Looking for the fuller, formal office instead? See the Book of Common '
     'Prayer&rsquo;s <a href="western-morning.html">Order for Daily Morning Prayer</a>.</p>')
+
+_pb_page("pb-noon",
+    _divider("Noon Time Prayers"),
+    '<p class="res-intro">A short form for the middle of the day &mdash; the sixth hour, when the '
+    'Lord was lifted up on the Cross.</p>',
+    '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
+    'of the Son, and of the Holy Spirit. Amen.</p>',
+    '<p class="rubric"><span class="r">Say the Our Father, the Hail Mary, and the Apostles&rsquo; '
+    'Creed &mdash; all three are printed in the Morning Prayer.</span></p>',
+    '<h2 class="subhead">O Saviour of the World</h2>',
+    '<p>O Saviour of the world, who by thy cross and Passion hast redeemed us, save us and help us, '
+    'we humbly beseech thee, O Lord.</p>',
+    '<h2 class="subhead">At the Sixth Hour</h2>',
+    '<p>O most gracious Jesus, our Lord and our God, who, as at this hour, didst bear our sins in '
+    'thine own body on the tree, that we being dead unto sin might live unto righteousness: have '
+    'mercy upon us, we beseech thee, both now and at the hour of our death; and grant unto us, thy '
+    'humble servants, with all other Christian people who have this thy blessed passion in devout '
+    'remembrance, a godly and peaceful life in this present world, and through thy grace eternal '
+    'glory in the life to come, where, with the Father and the Holy Spirit, thou livest and '
+    'reignest, ever one God, world without end. Amen.</p>',
+    '<h2 class="subhead">For the Faithful Departed</h2>',
+    '<p>May the Lord of his mercy grant unto us, with all his faithful servants, eternal rest and '
+    'peace. Amen.</p>')
+
+_pb_page("pb-evening",
+    _divider("Evening Prayers"),
+    '<p class="res-intro">A short form for the close of the day, with a confession and Bishop '
+    'Thomas Ken&rsquo;s evening hymn.</p>',
+    '<p class="rubric"><span class="r">Spend some moments in quiet before beginning your prayers. '
+    'Go over the past day, and remember those things done and undone that you must ask God&rsquo;s '
+    'forgiveness for. Ask God to show you your sins, to make you sorry for your sins, and to '
+    'deliver you from your sins. Remember also those things that God should be thanked for at the '
+    'end of this day. Then, kneeling or standing before your icon or cross, say:</span></p>',
+    '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
+    'of the Son, and of the Holy Spirit. Amen.</p>',
+    '<p class="rubric"><span class="r">Say the Our Father, the Hail Mary, the Trisagion (Holy God) '
+    'and the Apostles&rsquo; Creed &mdash; all printed in the Morning Prayer. Then '
+    'continue:</span></p>',
+    '<h2 class="subhead">Let My Prayer Be Set Forth</h2>',
+    '<p>Let my prayer be set forth in thy sight as the incense; and let the lifting up of my hands '
+    'be an evening sacrifice.</p>',
+    '<h2 class="subhead">A Confession</h2>',
+    '<p>Most merciful Father, I confess that I have sinned in thought, word, deed, and omission, by '
+    'my own grievous fault. I am heartily sorry and firmly purpose amendment. Make me a clean '
+    'heart, O God, and renew a right spirit within me. Pardon and deliver me from all my sins, and '
+    'bring me to everlasting life; for Jesus Christ&rsquo;s sake, who died for me and for all '
+    'mankind, and who liveth and reigneth with thee and the Holy Spirit, one God, world without '
+    'end. Amen.</p>',
+    '<h2 class="subhead">Hymn &mdash; All Praise to Thee, My God, This Night</h2>',
+    '<p class="rubric"><span class="r">Bishop Thomas Ken, 1674</span></p>',
+    '<p class="verse">All praise to thee, my God, this night<br>For all the blessings of the light.<br>Keep me, '
+    'O keep me, King of Kings,<br>Beneath thine own Almighty wings.</p>',
+    '<p class="verse">Forgive me, Lord, for thy dear Son,<br>The ill that I this day have done;<br>That with the '
+    'world, myself and thee<br>I, ere I sleep, at peace may be.</p>',
+    '<p class="verse">Teach me to live that I may dread<br>The grave as little as my bed;<br>Teach me to die '
+    'that so I may<br>Rise glorious at the awful day.</p>',
+    '<p class="verse">O may my soul on thee repose,<br>And may sweet sleep mine eyelids close;<br>Sleep that '
+    'shall me more vigorous make<br>To serve my God when I awake.</p>',
+    '<p class="verse">When in the night I sleepless lie,<br>My soul with heavenly thoughts supply;<br>Let no ill '
+    'dreams disturb my rest,<br>No powers of darkness me molest.</p>',
+    '<p class="verse">Praise God from whom all blessings flow;<br>Praise him, all creatures here below;<br>'
+    'Praise him above, angelic host;<br>Praise Father, Son, and Holy Ghost.</p>',
+    '<p class="rubric"><span class="r">Other prayers may be added.</span></p>',
+    '<h2 class="subhead">The Grace</h2>',
+    '<p>The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy '
+    'Spirit be with us all evermore. Amen.</p>')
+
+_pb_page("pb-general",
+    _divider("General Prayers"),
+    '<p class="res-intro">A gathering of prayers for the needs and seasons of a life &mdash; to be '
+    'added to any of the daily offices, or prayed on their own.</p>',
+    '<h2 class="subhead">Act of Faith</h2>',
+    '<p><span class="dropcap gilt">M</span><span class="sc">Y GOD</span>, I believe in thee, and '
+    'all thy Church doth teach, because thou hast said it, and thy word is true.</p>',
+    '<h2 class="subhead">Act of Hope</h2>',
+    '<p>My God, I hope in thee, for grace and for glory, because of thy mercy, thy promises, and '
+    'thy power.</p>',
+    '<h2 class="subhead">Act of Love</h2>',
+    '<p>My God, I love thee, and I want to love thee more.</p>',
+    '<h2 class="subhead">For Faith, Hope and Love</h2>',
+    '<p>Almighty and everlasting God, give unto us the increase of faith, hope, and love: and, that '
+    'we may obtain that which thou dost promise, make us to love that which thou dost command; '
+    'through Jesus Christ our Lord. Amen.</p>',
+    '<h2 class="subhead">The Jesus Prayer</h2>',
+    '<p>O Lord Jesus Christ, Son of God, have mercy upon me a sinner.</p>',
+    '<h2 class="subhead">For Service</h2>',
+    '<p>O God, set our hearts at liberty from the service of ourselves, that we may do thy will; '
+    'through Jesus Christ. Amen.</p>',
+    '<h2 class="subhead">For the Parish</h2>',
+    '<p>Almighty and everlasting God, who dost govern all things in heaven and earth, mercifully '
+    'grant to this parish all things needful for its spiritual welfare, especially N. Strengthen '
+    'the faithful, relieve the sick, turn and soften the wicked, rouse the careless, recover the '
+    'fallen, restore the penitent, remove all hindrances to the advancement of thy truth, and bring '
+    'all to be of one heart and mind within the fold of thy holy Church, to the honor and glory of '
+    'thy blessed Son, Jesus Christ our Lord. Amen.</p>',
+    '<h2 class="subhead">For Patience</h2>',
+    '<p>O most meek Jesus, Prince of Peace, who, when thou wast reviled, reviled not again, and on '
+    'the Cross didst pray for thy murderers: implant in my heart the virtues of gentleness and '
+    'patience, that restraining the fierceness of anger, impatience, and resentment, I may overcome '
+    'evil with good, for thy sake love my enemies, and as a child of my heavenly Father seek thy '
+    'peace, and evermore rejoice in thy love. Amen.</p>',
+    '<h2 class="subhead">For Missions</h2>',
+    '<p>O God, who hast made of one blood all the nations of men for to dwell on the face of the '
+    'whole earth: we give thee most humble and hearty thanks for the revelation of thyself in thy '
+    'Son, Jesus Christ; for the commission to thy Church to proclaim the Gospel to every creature; '
+    'for those who have gone to the ends of the earth to bring light to them that dwell in darkness '
+    'and in the shadow of death; and for the innumerable company who now praise thy Name out of '
+    'every kindred and tongue. To thee be ascribed the praise of their faith for ever and ever. '
+    'Amen.</p>',
+    '<h2 class="subhead">For a Sick Person</h2>',
+    '<p>O merciful God, giver of life and health: bless, we pray thee, thy servant N., and those '
+    'who administer to him of thy healing gifts; that he may be restored to health of body and of '
+    'mind; through Jesus Christ our Lord. Amen.</p>',
+    '<h2 class="subhead">For the Departed</h2>',
+    '<p>Almighty and eternal God, to whom no prayer is made without hope of mercy, behold and bless '
+    'the souls of thy servants in Paradise, and grant them continual growth in thy love and '
+    'service. I especially pray for N., that the joy and strength and peace of thy presence may '
+    'abide with him always, and bring him at last to the perfect bliss of thy heavenly kingdom; '
+    'through Jesus Christ our Lord. Amen.</p>',
+    '<p>May the souls of all the faithful departed, through the mercy of God, rest in peace. '
+    'Amen.</p>',
+    '<h2 class="subhead">A Parent&rsquo;s Prayer</h2>',
+    '<p>O heavenly Father, I commend the soul(s) of my children to thee. Be thou their God and '
+    'Father, and mercifully supply whatever is wanting in me through frailty or negligence. '
+    'Strengthen them to overcome the corruptions of the world, to resist all solicitations to evil, '
+    'whether from within or without; and deliver them from the secret snares of the enemy. Pour thy '
+    'grace into their heart(s), and confirm and multiply in them the gifts of thy Holy Spirit, that '
+    'they may daily grow in grace and knowledge of our Lord Jesus Christ; and so faithfully serving '
+    'thee here, may come to rejoice in thy presence hereafter; through the same Christ our Lord. '
+    'Amen.</p>',
+    '<h2 class="subhead">For a Husband or Wife</h2>',
+    '<p>O Almighty God, who in the beginning didst institute the sacrament of marriage: bless with '
+    'happiness our union, and grant that amid all the changes and chances of this mortal life, we '
+    'may so live together in thy love and fear, that in the end we may meet in thy eternal home; '
+    'through Jesus Christ our Lord. Amen.</p>',
+    '<h2 class="subhead">For a Home</h2>',
+    '<p>Visit, we beseech thee, O Lord, this habitation, and drive far from it all the snares of '
+    'the enemy. Let thy holy angels dwell herein to preserve us in peace, and let thy blessing be '
+    'ever upon us; through Jesus Christ our Lord. Amen.</p>',
+    '<h2 class="subhead">For Those of Advanced Years</h2>',
+    '<p>Heavenly Father, whose gift is length of days: help us to make noble use of mind and body '
+    'in our advancing years. As thou hast pardoned our transgressions, sift the ingatherings of our '
+    'memory that evil may grow dim and good may shine forth. We bless thee for thy gifts, and '
+    'especially for thy presence and the love of friends in heaven and earth. Grant us new ties of '
+    'friendship, new opportunities for service, joy in the growth and happiness of children, '
+    'sympathy with those who bear the world&rsquo;s burdens, clear thought and quiet faith. Teach '
+    'us to bear infirmities with cheerful patience. Keep us from narrow pride in outgrown ways, '
+    'blind eyes that will not see the good of change, impatient judgements of the methods and '
+    'experiments of others. Let thy peace rule our spirits, through all the trials of our waning '
+    'powers. Take from us all fear of death, and all despair or undue love of life, that with glad '
+    'hearts at rest in thee we may await thy will concerning us; through Jesus Christ our Lord. '
+    'Amen.</p>',
+    '<p class="res-foot">The booklet&rsquo;s General Prayers run on for a few more pages &mdash; '
+    'the rest, beginning with the Prayer to St. Michael, are still to be added.</p>')
 
 
 def prayerbook_hub():
