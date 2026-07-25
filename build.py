@@ -624,6 +624,14 @@ REF_SECTIONS = [
     ("Georges Florovsky — The Eastern Fathers of the Fourth Century",
      "http://www.holytrinitymission.org/books/english/fathers_florovsky_1.htm",
      "A free, masterful survey of the Greek Fathers.", True),
+    ("The Book of Enoch (1 Enoch) — McCracken translation",
+     "http://www.bookofenoch.org/ENOCH-McCracken2020.pdf",
+     "A Second-Temple apocalyptic work, quoted in Jude 1:14&ndash;15 and known to several "
+     "Fathers. Canonical Scripture in the Ethiopian Orthodox Tewahedo Church; elsewhere in "
+     "Orthodoxy it is read as ancient and instructive but outside the canon.", True),
+    ("The Book of Enoch — R. H. Charles translation (1917)",
+     "https://en.wikisource.org/wiki/Book_of_Enoch",
+     "The standard older English rendering, in the public domain.", True),
   ]},
 ]
 
@@ -1988,11 +1996,11 @@ def western_compline_page():
         '<h2 class="subhead">Before the Ending of the Day</h2>',
         '<p class="rubric"><span class="r">A translation of the ancient hymn Te lucis ante '
         'terminum</span></p>',
-        '<p class="verse">Before the ending of the day, Creator of the world, we pray, that with thy wonted favour '
+        '<p class="verse hymn">Before the ending of the day, Creator of the world, we pray, that with thy wonted favour '
         'thou wouldst be our guard and keeper now.</p>',
-        '<p class="verse">From all ill dreams defend our eyes, from nightly fears and fantasies; tread under foot our '
+        '<p class="verse hymn">From all ill dreams defend our eyes, from nightly fears and fantasies; tread under foot our '
         'ghostly foe, that no pollution we may know.</p>',
-        '<p class="verse">O Father, that we ask be done, through Jesus Christ, thine only Son; who, with the Holy '
+        '<p class="verse hymn">O Father, that we ask be done, through Jesus Christ, thine only Son; who, with the Holy '
         'Ghost and thee, doth live and reign eternally. Amen.</p>',
         '<h2 class="subhead">Nunc Dimittis</h2>',
         '<p class="rubric"><span class="r">The Song of Simeon &mdash; St. Luke 2:29&ndash;32</span></p>',
@@ -2202,11 +2210,11 @@ _pb_page("pb-morning",
     '<h2 class="subhead">Hymn &mdash; Now that Daylight Fills the Sky</h2>',
     '<p class="rubric"><span class="r">John Mason Neale&rsquo;s translation of the ancient office '
     'hymn Iam lucis ortu sidere</span></p>',
-    '<p class="verse">Now that daylight fills the sky,<br>We lift our hearts to God on high,<br>That he in all we '
+    '<p class="verse hymn">Now that daylight fills the sky,<br>We lift our hearts to God on high,<br>That he in all we '
     'do or say,<br>May keep us free from sin today.</p>',
-    '<p class="verse">O Father, fill our hearts with love,<br>That we may seek the things above,<br>Extinguish '
+    '<p class="verse hymn">O Father, fill our hearts with love,<br>That we may seek the things above,<br>Extinguish '
     'thou each sinful fire,<br>And banish every wrong desire.</p>',
-    '<p class="verse">Father, that we ask be done,<br>Through Jesus Christ, thine only Son,<br>Who with the Holy '
+    '<p class="verse hymn">Father, that we ask be done,<br>Through Jesus Christ, thine only Son,<br>Who with the Holy '
     'Ghost and thee,<br>Doth live and reign eternally. Amen.</p>',
     '<p class="rubric"><span class="r">You may add any other prayers from this book, say one of '
     'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
@@ -2262,17 +2270,17 @@ _pb_page("pb-evening",
     'end. Amen.</p>',
     '<h2 class="subhead">Hymn &mdash; All Praise to Thee, My God, This Night</h2>',
     '<p class="rubric"><span class="r">Bishop Thomas Ken, 1674</span></p>',
-    '<p class="verse">All praise to thee, my God, this night<br>For all the blessings of the light.<br>Keep me, '
+    '<p class="verse hymn">All praise to thee, my God, this night<br>For all the blessings of the light.<br>Keep me, '
     'O keep me, King of Kings,<br>Beneath thine own Almighty wings.</p>',
-    '<p class="verse">Forgive me, Lord, for thy dear Son,<br>The ill that I this day have done;<br>That with the '
+    '<p class="verse hymn">Forgive me, Lord, for thy dear Son,<br>The ill that I this day have done;<br>That with the '
     'world, myself and thee<br>I, ere I sleep, at peace may be.</p>',
-    '<p class="verse">Teach me to live that I may dread<br>The grave as little as my bed;<br>Teach me to die '
+    '<p class="verse hymn">Teach me to live that I may dread<br>The grave as little as my bed;<br>Teach me to die '
     'that so I may<br>Rise glorious at the awful day.</p>',
-    '<p class="verse">O may my soul on thee repose,<br>And may sweet sleep mine eyelids close;<br>Sleep that '
+    '<p class="verse hymn">O may my soul on thee repose,<br>And may sweet sleep mine eyelids close;<br>Sleep that '
     'shall me more vigorous make<br>To serve my God when I awake.</p>',
-    '<p class="verse">When in the night I sleepless lie,<br>My soul with heavenly thoughts supply;<br>Let no ill '
+    '<p class="verse hymn">When in the night I sleepless lie,<br>My soul with heavenly thoughts supply;<br>Let no ill '
     'dreams disturb my rest,<br>No powers of darkness me molest.</p>',
-    '<p class="verse">Praise God from whom all blessings flow;<br>Praise him, all creatures here below;<br>'
+    '<p class="verse hymn">Praise God from whom all blessings flow;<br>Praise him, all creatures here below;<br>'
     'Praise him above, angelic host;<br>Praise Father, Son, and Holy Ghost.</p>',
     '<p class="rubric"><span class="r">Other prayers may be added.</span></p>',
     '<h2 class="subhead">The Grace</h2>',

@@ -270,6 +270,14 @@ p.verse{
   line-height:1.5;
   margin:1em 0;
 }
+/* hymn stanzas read better flush left than centred — the eye returns to a
+   single margin each line instead of hunting for a ragged one. Every line is
+   flush: the lines are separated by <br>, so a text-indent could not tell a
+   wrapped line from a new line of verse and would just indent lines 2-n. */
+p.verse.hymn{
+  text-align:left;
+  text-indent:0;
+}
 
 /* psalmody set left with a hanging indent (how psalters are typeset) — for the
    longer psalm runs, vs the centred couplets above */
