@@ -144,6 +144,15 @@ ORTHODOX_CROSS = (
     # crucified at Christ's right hand, and falls to the right toward the other
     '<polygon points="30,132 90,150 90,161 30,143"/></svg>')
 
+# The rubrical mark the prayer books print as "+" where the reader signs
+# themself with the cross. Drawn rather than set as a font glyph (✠ is missing
+# from many faces) so it renders identically everywhere, and sized in em so it
+# scales with the reader's chosen text size.
+SIGNUM = ('<span class="signum" role="img" aria-label="Make the sign of the cross">'
+          '<svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">'
+          '<rect x="5.1" y="0.5" width="1.8" height="11"/>'
+          '<rect x="0.5" y="3.9" width="11" height="1.8"/></svg></span>')
+
 ICXC_ROUNDEL = (
     '<svg viewBox="0 0 140 140" aria-hidden="true" style="font-family:inherit">'
     '<circle cx="70" cy="70" r="64" fill="none" stroke="currentColor" stroke-width="4"/>'
@@ -2158,8 +2167,8 @@ _pb_page("pb-morning",
     '<p class="res-intro">A short form of morning prayer for use alone, from the same booklet as '
     'the Christian Duties and Virtues opposite.</p>',
     '<p class="rubric"><span class="r">Gather your thoughts quietly, and begin:</span></p>',
-    '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
-    'of the Son, and of the Holy Spirit. Amen.</p>',
+    '<p class="pb-open">' + SIGNUM + '<span class="sc">In the Name</span> of the Father, and of '
+    'the Son, and of the Holy Spirit. Amen.</p>',
     _PB_OUR_FATHER, _PB_HAIL_MARY, _PB_TRISAGION, _PB_CREED,
     '<h2 class="subhead">A Morning Offering</h2>',
     '<p>I thank thee, Heavenly Father, for the rest of the past night and the gift of a new day. '
@@ -2170,8 +2179,8 @@ _pb_page("pb-morning",
     'blank:</span></p>',
     '<p>Have mercy, God, upon all people. Bless thy holy Church, thy bishops and clergy, and all '
     'faithful people on earth and in paradise. Bless my family, friends, and neighbors, especially '
-    'N.; have compassion upon those who are sick, in trouble or danger, especially N.; and may the '
-    'souls of the faithful, through the mercy of God, rest in peace. Amen.</p>',
+    'N.; have compassion upon those who are sick, in trouble or danger, especially N.; ' + SIGNUM
+    + 'and may the souls of the faithful, through the mercy of God, rest in peace. Amen.</p>',
     '<h2 class="subhead">A Commendation</h2>',
     '<p>I commit myself to God for today. By the help of his grace, I will endeavor to keep his '
     'commandments, and to follow faithfully in the way of Jesus Christ, our Lord. Amen.</p>',
@@ -2191,15 +2200,15 @@ _pb_page("pb-morning",
     '<p class="rubric"><span class="r">You may add any other prayers from this book, say one of '
     'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
     'with:</span></p>',
-    '<p>The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy '
-    'Spirit, be with us all evermore. Amen.</p>')
+    '<p>The grace of our Lord Jesus Christ, ' + SIGNUM + 'and the love of God, and the fellowship of '
+    'the Holy Spirit, be with us all evermore. Amen.</p>')
 
 _pb_page("pb-noon",
     _divider("Noon Time Prayers"),
     '<p class="res-intro">A short form for the middle of the day &mdash; the sixth hour, when the '
     'Lord was lifted up on the Cross.</p>',
-    '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
-    'of the Son, and of the Holy Spirit. Amen.</p>',
+    '<p class="pb-open">' + SIGNUM + '<span class="sc">In the Name</span> of the Father, and of '
+    'the Son, and of the Holy Spirit. Amen.</p>',
     _PB_OUR_FATHER, _PB_HAIL_MARY, _PB_CREED,
     '<h2 class="subhead">O Saviour of the World</h2>',
     '<p>O Saviour of the world, who by thy cross and Passion hast redeemed us, save us and help us, '
@@ -2213,8 +2222,8 @@ _pb_page("pb-noon",
     'glory in the life to come, where, with the Father and the Holy Spirit, thou livest and '
     'reignest, ever one God, world without end. Amen.</p>',
     '<h2 class="subhead">For the Faithful Departed</h2>',
-    '<p>May the Lord of his mercy grant unto us, with all his faithful servants, eternal rest and '
-    'peace. Amen.</p>')
+    '<p>' + SIGNUM + 'May the Lord of his mercy grant unto us, with all his faithful servants, '
+    'eternal rest and peace. Amen.</p>')
 
 _pb_page("pb-evening",
     _divider("Evening Prayers"),
@@ -2225,8 +2234,8 @@ _pb_page("pb-evening",
     'forgiveness for. Ask God to show you your sins, to make you sorry for your sins, and to '
     'deliver you from your sins. Remember also those things that God should be thanked for at the '
     'end of this day. Then, kneeling or standing before your icon or cross, say:</span></p>',
-    '<p><span class="dropcap gilt">I</span><span class="sc">N THE NAME</span> of the Father, and '
-    'of the Son, and of the Holy Spirit. Amen.</p>',
+    '<p class="pb-open">' + SIGNUM + '<span class="sc">In the Name</span> of the Father, and of '
+    'the Son, and of the Holy Spirit. Amen.</p>',
     _PB_OUR_FATHER, _PB_HAIL_MARY, _PB_TRISAGION, _PB_CREED,
     '<p class="rubric"><span class="r">Then continue:</span></p>',
     '<h2 class="subhead">Let My Prayer Be Set Forth</h2>',
@@ -2235,7 +2244,8 @@ _pb_page("pb-evening",
     '<h2 class="subhead">A Confession</h2>',
     '<p>Most merciful Father, I confess that I have sinned in thought, word, deed, and omission, by '
     'my own grievous fault. I am heartily sorry and firmly purpose amendment. Make me a clean '
-    'heart, O God, and renew a right spirit within me. Pardon and deliver me from all my sins, and '
+    'heart, O God, and renew a right spirit within me. ' + SIGNUM + 'Pardon and deliver me from all '
+    'my sins, and '
     'bring me to everlasting life; for Jesus Christ&rsquo;s sake, who died for me and for all '
     'mankind, and who liveth and reigneth with thee and the Holy Spirit, one God, world without '
     'end. Amen.</p>',
@@ -2255,8 +2265,8 @@ _pb_page("pb-evening",
     'Praise him above, angelic host;<br>Praise Father, Son, and Holy Ghost.</p>',
     '<p class="rubric"><span class="r">Other prayers may be added.</span></p>',
     '<h2 class="subhead">The Grace</h2>',
-    '<p>The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy '
-    'Spirit be with us all evermore. Amen.</p>')
+    '<p>The grace of our Lord Jesus Christ, ' + SIGNUM + 'and the love of God, and the fellowship of '
+    'the Holy Spirit be with us all evermore. Amen.</p>')
 
 _pb_page("pb-general",
     _divider("General Prayers"),
@@ -2310,8 +2320,8 @@ _pb_page("pb-general",
     'service. I especially pray for N., that the joy and strength and peace of thy presence may '
     'abide with him always, and bring him at last to the perfect bliss of thy heavenly kingdom; '
     'through Jesus Christ our Lord. Amen.</p>',
-    '<p>May the souls of all the faithful departed, through the mercy of God, rest in peace. '
-    'Amen.</p>',
+    '<p>' + SIGNUM + 'May the souls of all the faithful departed, through the mercy of God, rest in '
+    'peace. Amen.</p>',
     '<h2 class="subhead">A Parent&rsquo;s Prayer</h2>',
     '<p>O heavenly Father, I commend the soul(s) of my children to thee. Be thou their God and '
     'Father, and mercifully supply whatever is wanting in me through frailty or negligence. '
