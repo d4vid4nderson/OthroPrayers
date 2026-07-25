@@ -140,7 +140,9 @@ ORTHODOX_CROSS = (
     '<rect x="54" y="14" width="12" height="172"/>'
     '<rect x="42" y="40" width="36" height="9"/>'
     '<rect x="22" y="80" width="76" height="12"/>'
-    '<polygon points="30,150 90,132 90,143 30,161"/></svg>')
+    # the slanted footrest rises to the viewer's LEFT — toward the Good Thief,
+    # crucified at Christ's right hand, and falls to the right toward the other
+    '<polygon points="30,132 90,150 90,161 30,143"/></svg>')
 
 ICXC_ROUNDEL = (
     '<svg viewBox="0 0 140 140" aria-hidden="true" style="font-family:inherit">'
