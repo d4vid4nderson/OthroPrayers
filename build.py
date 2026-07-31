@@ -2024,6 +2024,54 @@ def western_compline_page():
         'necessities, but deliver us always from all dangers, O glorious and blessed Virgin. Amen.</p>'])
 
 
+# ---- Fasting & Abstinence: the Vicariate norms of 2012 ----------------------
+# From the Vicariate Fasting Norms, in force from Advent Sunday 2012. These are
+# a discipline the faithful are meant to know, so they are set out in full
+# rather than linked as a PDF -- and in the app they inherit the reader's text
+# size and dyslexia-friendly font, which a PDF cannot.
+def western_fasting_page():
+    return "\n".join([
+        _divider("Fasting &amp; Abstinence"),
+        '<p class="res-intro">The Vicariate Fasting Norms, in force from Advent Sunday 2012.</p>',
+        '<h2 class="subhead">Fasting</h2>',
+        '<p><span class="dropcap gilt">F</span><span class="sc">ASTING</span> includes abstinence '
+        'and adds requirements of its own: it governs both the kind of food and the quantity. On a '
+        'fasting day, besides abstaining from flesh-meat, meals themselves are restricted &mdash; '
+        'one full meal only, and not before twelve o&rsquo;clock, together with a collation of about '
+        'a quarter of a meal.</p>',
+        '<p>The fasts of the Church bind all who have completed their twenty-first year, unless '
+        'their father confessor exempts them for some legitimate reason.</p>',
+        '<h2 class="subhead">Days of Fasting</h2>',
+        '<ul>'
+        '<li>Mondays, Wednesdays and Fridays in Advent.</li>'
+        '<li>Every day in Lent, Sundays excepted.</li>'
+        '<li>The Ember Days, which fall four times a year: the Wednesday, Friday and Saturday '
+        'immediately after the first Sunday in Lent, in Whitsun week, immediately after the 14th of '
+        'September, and immediately after the third Sunday in Advent.</li>'
+        '<li>The vigils of Whitsunday (Pentecost), the Assumption, All Saints, and Christmas.</li>'
+        '</ul>',
+        '<p class="rubric"><span class="r">When a fasting day falls on a Sunday, it is kept on the '
+        'Saturday preceding.</span></p>',
+        '<h2 class="subhead">Abstinence</h2>',
+        '<p>Abstinence governs only the kind of food, not the quantity. On a day of abstinence the '
+        'faithful abstain from flesh-meat and from the juice thereof &mdash; soup and the like. The '
+        'number of meals and the amount of food may be as on any other day.</p>',
+        '<p>Abstinence binds all who have attained the age of reason.</p>',
+        '<h2 class="subhead">Days of Abstinence</h2>',
+        '<p>Every Friday throughout the year. When Christmas falls on a Friday, abstinence is not of '
+        'precept.</p>',
+        '<h2 class="subhead">The Eucharistic Fast</h2>',
+        '<p>The Eucharistic fast is to take no food or drink &mdash; water and medicines excepted '
+        '&mdash; from midnight until receiving the Eucharist the next morning.</p>',
+        '<p>Where the Eucharist is to be received at a Mass celebrated in the evening, it may be kept '
+        'thus instead: take the midday meal as close to noon as possible, and from then take no food '
+        'or drink, again excepting water and medicines, until receiving.</p>',
+        '<p class="res-foot">These are the Vicariate&rsquo;s norms, effective Advent Sunday 2012. '
+        'The norms themselves provide for exemption by one&rsquo;s father confessor &mdash; so on '
+        'anything touching your own health or circumstances, your confessor directs your practice, '
+        'not this page.</p>'])
+
+
 def western_page():
     o = ['<section class="resources western-hub" id="top">', _divider("Western Rite Orthodoxy")]
     o.append('<p class="res-intro">The hours of the day, in the Western form &mdash; the short '
@@ -2040,6 +2088,13 @@ def western_page():
                   'in the Western devotional tradition &mdash; being added page by page.</span>'
                   '</span>'
                   f'{_CHEV_R}</a>')
+    o.append('<a class="hub-feature" href="western-fasting.html">'
+             f'{_emblem("cross")}'
+             '<span class="hub-feature-body">'
+             '<span class="hub-feature-t">Fasting &amp; Abstinence</span>'
+             '<span class="hub-feature-d">The Vicariate&rsquo;s norms &mdash; the fasts and days of '
+             'abstinence, and the Eucharistic fast.</span></span>'
+             f'{_CHEV_R}</a>')
     o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
              'in its Western form, and further reading &mdash; is still being built. Everything else '
              'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
@@ -2118,6 +2173,9 @@ _pb_page("pb-duties",
     'during the forty days of Lent, and other fasts as the Church prescribes.</li>'
     '<li>Fasting with abstinence on Ember Days, on Wednesdays and Fridays in Lent, and on Holy '
     'Saturday up to noon.</li></ol>',
+    '<p class="rubric"><span class="r">The booklet&rsquo;s rules predate the Vicariate Fasting '
+    'Norms of 2012, which differ in several particulars and are the ones now in force &mdash; see '
+    '<a href="western-fasting.html">Fasting &amp; Abstinence</a>.</span></p>',
     '<h2 class="subhead">The Three Theological Virtues</h2>',
     '<p class="pb-terms">Faith &middot; Hope &middot; Charity</p>',
     '<h2 class="subhead">The Four Cardinal Virtues</h2>',
@@ -2482,6 +2540,13 @@ gate_page("rite.html", "Welcome — Daily Prayers",
 page("western.html", "Western Rite Orthodoxy — Daily Prayers",
      "The Western Rite Orthodox daily office: Morning Prayer, Evening Prayer and Compline.",
      western_page(), active="home")
+
+# the Vicariate's fasting discipline, set out in full rather than linked as a PDF
+page("western-fasting.html", "Fasting &amp; Abstinence — Western Rite Orthodoxy",
+     "The Vicariate Fasting Norms in force from Advent Sunday 2012: the days of fasting and "
+     "abstinence, and the Eucharistic fast.",
+     back_link("western.html", "Western Rite")
+     + with_jump_nav(western_fasting_page()) + CLOSING, active="home")
 
 # the Hours still drawn from the 1928 BCP (public domain) — Compline only;
 # Morning, Noon and Evening come from the parish booklet
