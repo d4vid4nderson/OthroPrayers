@@ -788,6 +788,22 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
 .res-sub, .cf-era, .ref-era{ scroll-margin-top:1rem; }
 
 .topic-intro{ text-indent:0; margin:0 0 .9em; }
+/* the Twelve Great Feasts: name on the left, its date on the right, with a
+   hairline leading the eye across. Stacks on narrow screens. */
+.feasts{ margin:1.1em 0 1.3em; padding:0; }
+.feasts > div{
+  display:flex; align-items:baseline; gap:.5rem;
+  padding:.34em 0; border-top:1px solid var(--hairline);
+}
+.feasts > div:first-child{ border-top:0; }
+.feasts dt{ flex:1 1 auto; }
+.feasts dd{ flex:0 0 auto; margin:0; color:var(--gold); font-variant-numeric:lining-nums;
+  font-size:.94em; text-align:right; }
+@media (max-width:22rem){
+  .feasts > div{ flex-direction:column; gap:0; }
+  .feasts dd{ text-align:left; }
+}
+
 /* short catechetical enumerations (the cardinal virtues, the four last
    things, etc.) — centred and gold, like a definition list of terms */
 .pb-terms{ text-indent:0; text-align:center; color:var(--gold); font-weight:600;
