@@ -788,6 +788,16 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
 .res-sub, .cf-era, .ref-era{ scroll-margin-top:1rem; }
 
 .topic-intro{ text-indent:0; margin:0 0 .9em; }
+/* a quotation set inside a missal page — a patristic passage quoted at length
+   within an essay. Ruled off and slightly reduced so it reads as another
+   voice, with its citation beneath. */
+.mq{
+  margin:1.1em 0 1.3em; padding:0 0 0 1rem;
+  border-left:2px solid var(--hairline-strong);
+}
+.mq p{ text-indent:0; font-size:.98rem; line-height:1.6; margin:0 0 .7em; }
+.mq footer{ text-align:right; font-size:.86rem; font-style:italic; }
+
 /* the Twelve Great Feasts: name on the left, its date on the right, with a
    hairline leading the eye across. Stacks on narrow screens. */
 .feasts{ margin:1.1em 0 1.3em; padding:0; }

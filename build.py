@@ -2340,30 +2340,65 @@ _spm_page("spm-mass-essay",
     _divider("The Western Orthodox Mass"),
     '<p class="res-intro">An explanation of the Mass carried at the front of the missal, by the '
     'V. Rev. Fr. John Winfrey of St. George Orthodox Church, Grand Rapids, Michigan.</p>',
-    '<p><span class="dropcap gilt">T</span><span class="sc">HE ESSAY</span> begins from a plain '
-    'observation: nothing a person accumulates finally satisfies. Money is spent, friends fall away '
-    'when prosperity does, health flatters the young into thinking it will always keep them '
-    'company, and possessions quietly change from things we own into things that own us &mdash; our '
-    'time, our concern, our freedom. It is the preacher&rsquo;s cry, <em>vanity of vanities</em>. '
-    'And yet every one of us also knows we were made for glory, for beauty, for honour &mdash; made '
-    'for love.</p>',
-    '<p>That, Fr. Winfrey argues, is the work of the Mass, and the only work of humanity that '
-    'finally matters: to be united in love with God, with one another, and with the whole creation '
-    'remade in Christ. It is the keeping of what the Lord gave his disciples on the night before he '
-    'suffered &mdash; <em>Do this</em> &mdash; and from the upper room and Pentecost onward the '
-    'Church has never stopped keeping it.</p>',
-    '<p>He draws out how the risen Christ is known in the breaking of bread: at Emmaus the two '
-    'disciples did not recognise him until the bread was broken, though their hearts had burned '
-    'within them on the road; he appeared to the apostles as they sat at table. So to see the Lord '
-    'is to stand within the Church offering the Eucharist. The essay closes with St. Cyril of '
-    'Jerusalem, catechising the newly baptized: he who turned water into wine at Cana is surely to '
-    'be trusted when he gives his Body and Blood, that we might become, in St. Peter&rsquo;s words, '
-    '<em>partakers of the divine nature</em>.</p>',
-    '<p class="res-foot">Summarised here rather than reprinted, as it is a modern authored work '
-    'rather than a liturgical text. The full essay is in the printed missal, and is cited there to '
-    'Luke 22:19, I Corinthians 11:23&ndash;26, Luke 24:13&ndash;25 and 24:32, Mark 16:14, Matthew '
-    '28:20, John 6:48&ndash;51, St. Cyril&rsquo;s <em>Mystagogical Catechesis</em> iv.2&ndash;3, '
-    'and II Peter 1:4.</p>')
+    '<p><span class="dropcap gilt">E</span><span class="sc">VERY PERSON</span> who has ever walked '
+    'this earth has found nothing that satisfies him. The money we slave for is quickly spent. Our '
+    'friends leave us when prosperity is no longer ours. When we are young, health deceives us into '
+    'thinking that it shall always be our companion. Possessions begin as treasures that we slowly '
+    'accumulate, only to turn into our rulers and governors. We do not so much possess things, as '
+    'they possess us (our time, our concern, our freedom). We are left like the prophet who cried, '
+    '&ldquo;Vanity, all is vanity!&rdquo; But every man who has ever lived also knows the truth that '
+    'he is made for glory, beauty, and honor. He is made for love. Yet how often do we hear that '
+    'even those who are considered most dear are the very ones who betray and use us?</p>',
+    '<p>Man <em>is</em> made for love. He is made to live in love with God and with his fellow man. '
+    'Man is made to be united in love with the entire cosmos, recreated in the love of Christ our '
+    'God. This is the work of the Mass. It is the only work of humanity that really matters. It is '
+    'the fulfillment of the great commandment that Christ himself gave us the night before he '
+    'suffered for our salvation. He said to his holy apostles and disciples &mdash; and through them '
+    'to us, &ldquo;Do this&hellip;&rdquo; '
+    '<span class="r">Luke 22:19; I Corinthians 11:23&ndash;26</span></p>',
+    '<p>Since that night in the upper room, and certainly since the day of Pentecost, the Church has '
+    'always kept this Breaking of Bread, this Eucharist, this Mass as its primary source of life and '
+    'worship. It was in the breaking of bread that Saints Cleopas and Luke recognized our Lord on '
+    'the road to Emmaus. It was as the apostles sat at the table breaking bread that our Lord '
+    'appeared to them after his Resurrection from the dead. To see our Lord is to be in the midst of '
+    'the Church offering Eucharist, to celebrate the Mass. '
+    '<span class="r">Luke 24:13&ndash;25; Mark 16:14</span></p>',
+    '<p>The Mass is the most profound way to see our Lord. Truly, we are told that until they broke '
+    'the bread &mdash; even though their hearts burned within them &mdash; Saints Cleopas and Luke '
+    'did not recognize Him. How often do we come into contact with the living Christ in our '
+    'day-to-day lives and yet we fail to recognize Him? <span class="r">Luke 24:32</span></p>',
+    '<p>In the Mass, just as with Saints Cleopas and Luke, our Lord is revealed to us in the '
+    'breaking of the bread. He is with us just as He promised; even unto the end of time. He reveals '
+    'Himself to us that we might know Him and be transformed into His likeness. He offers Himself to '
+    'us for the healing of our soul that we might then offer what we have received to a world in '
+    'such need of salvation. <span class="r">Matthew 28:20</span></p>',
+    '<p>The breaking of the bread of heaven, the Mass, is the start and fulfillment of the Christian '
+    'life. Everything else flows from it. Our salvation is found by celebrating and partaking of the '
+    'Mass. Our Lord Jesus Christ said, &ldquo;I am the bread of life. This is the bread which cometh '
+    'down from heaven; that if any man eat of it, he may not die. I am the living bread, which came '
+    'down from heaven. If any man eat of this bread, he shall live forever; and the bread that I '
+    'will give, is my flesh for the life of the world.&rdquo; '
+    '<span class="r">John 6:48&ndash;51</span></p>',
+    '<p>As our Father in the Faith, St. Cyril of Jerusalem (AD 386), wrote for the newly '
+    'baptized:</p>',
+    '<blockquote class="mq"><p>He once turned water into wine, in Cana of Galilee, at His own will, '
+    'and is it incredible that He should have turned wine into blood? That wonderful work He '
+    'miraculously wrought, when called to an earthly marriage; and shall He not much rather be '
+    'acknowledged to have bestowed the fruition of His Body and Blood on the children of the bridal '
+    'chamber (the Church)?</p>'
+    '<p>Therefore with fullest assurance let us partake as the Body and Blood of Christ; for in the '
+    'figure of Bread is given to thee His Body, and in the figure of Wine His Blood; that thou by '
+    'partaking of the Body and Blood of Christ, mightest be made of the same body and the same blood '
+    'with Him. For thus we come to bear Christ in us, because His Body and Blood are diffused '
+    'through our members; thus it is that, according to the blessed Peter, <em>we become partakers '
+    'of the divine nature</em>.</p>'
+    '<footer><span class="r">Mystagogical Catechesis iv:2 &amp; 3; II Peter 1:4</span></footer>'
+    '</blockquote>',
+    '<p>We welcome you to this Mass, and pray that you might see the Risen Lord on this Altar and '
+    'among us, and so be drawn more deeply into His worship and to His Body, the Orthodox Catholic '
+    'Church.</p>',
+    '<p class="res-foot">An explanation of the Mass by the V. Rev. Fr. John Winfrey of St. George '
+    'Orthodox Church, Grand Rapids, Michigan. Reproduced by permission.</p>')
 
 # the Twelve Great Feasts, as the missal lists them
 SPM_FEASTS = [
