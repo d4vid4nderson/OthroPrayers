@@ -2032,7 +2032,7 @@ def western_compline_page():
 def western_fasting_page():
     return "\n".join([
         _divider("Fasting &amp; Abstinence"),
-        '<p class="res-intro">The Vicariate Fasting Norms, in force from Advent Sunday 2012.</p>',
+        '<p class="res-intro">The Fasting Norms of the Antiochian Western-Rite Vicariate, in force from Advent Sunday 2012.</p>',
         '<h2 class="subhead">Fasting</h2>',
         '<p><span class="dropcap gilt">F</span><span class="sc">ASTING</span> includes abstinence '
         'and adds requirements of its own: it governs both the kind of food and the quantity. On a '
@@ -2066,7 +2066,8 @@ def western_fasting_page():
         '<p>Where the Eucharist is to be received at a Mass celebrated in the evening, it may be kept '
         'thus instead: take the midday meal as close to noon as possible, and from then take no food '
         'or drink, again excepting water and medicines, until receiving.</p>',
-        '<p class="res-foot">These are the Vicariate&rsquo;s norms, effective Advent Sunday 2012. '
+        '<p class="res-foot">The norms of the Western-Rite Vicariate of the Antiochian Orthodox '
+        'Christian Archdiocese of North America, effective Advent Sunday 2012. '
         'The norms themselves provide for exemption by one&rsquo;s father confessor &mdash; so on '
         'anything touching your own health or circumstances, your confessor directs your practice, '
         'not this page.</p>'])
@@ -2088,6 +2089,14 @@ def western_page():
                   'in the Western devotional tradition &mdash; being added page by page.</span>'
                   '</span>'
                   f'{_CHEV_R}</a>')
+    if SPM_CONTENT:
+        o.append('<a class="hub-feature" href="st-peter-missal.html">'
+                 f'{_emblem("gospel")}'
+                 '<span class="hub-feature-body">'
+                 '<span class="hub-feature-t">The St. Peter Pew Missal</span>'
+                 '<span class="hub-feature-d">The parish service book &mdash; the Mass according to '
+                 'the Rite of St. Tikhon, with the prayers before and after.</span></span>'
+                 f'{_CHEV_R}</a>')
     o.append('<a class="hub-feature" href="western-fasting.html">'
              f'{_emblem("cross")}'
              '<span class="hub-feature-body">'
@@ -2154,6 +2163,122 @@ PB_CONTENT = {}   # slug -> page body html, filled in below as pages are transcr
 
 def _pb_page(slug, *parts):
     PB_CONTENT[slug] = "\n".join(parts)
+
+
+# ---- The St. Peter Pew Missal ----------------------------------------------
+# The service book of St. Peter Antiochian Orthodox Church, a parish of the
+# Western-Rite Vicariate of the Antiochian Orthodox Christian Archdiocese of
+# North America: the Great Litany, the Decalogue, the Divine Eucharist
+# according to the Rite of St. Tikhon, and the Rite of Chrismation. Built up
+# page by page from photographs, the same way as the little prayer book, so
+# only the sections actually transcribed get a page.
+SPM_SECTIONS = [
+    ("spm-before-mass", "Prayers Before Mass",
+     "Preparing to approach the holy Mysteries.", "cross"),
+    ("spm-welcome", "Welcome &amp; the Great Feasts",
+     "A word to those visiting, and the Twelve Great Feasts.", "roundel"),
+]
+SPM_CONTENT = {}   # slug -> page body html, filled in as pages are transcribed
+
+
+def _spm_page(slug, *parts):
+    SPM_CONTENT[slug] = "\n".join(parts)
+
+
+_spm_page("spm-before-mass",
+    _divider("Prayers Before Mass"),
+    '<p class="res-intro">Said quietly before the Liturgy begins, to prepare to approach the holy '
+    'Mysteries.</p>',
+    '<p><span class="dropcap gilt">R</span><span class="sc">EMEMBER NOT</span>, Lord, our offenses, '
+    'nor the offenses of our forefathers: neither take thou vengeance of our sins.</p>',
+    '<h2 class="subhead">Kyrie &amp; the Lord&rsquo;s Prayer</h2>',
+    '<p>Lord, have mercy upon us. Christ, have mercy upon us. Lord, have mercy upon us.</p>',
+    '<p>Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, Thy will be done, on '
+    'earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as '
+    'we forgive those who trespass against us. And lead us not into temptation, but deliver us from '
+    'evil.</p>',
+    '<h2 class="subhead">The Versicles</h2>',
+    '<p class="verse">I said, Lord, be merciful unto me.<br>Heal my soul, for I have sinned against '
+    'thee.</p>',
+    '<p class="verse">Turn thee again, O Lord, at the last.<br>And be gracious unto thy servants.</p>',
+    '<p class="verse">Let thy mercy, O Lord, be showed upon us.<br>As we do put our trust in thee.</p>',
+    '<p class="verse">Let thy Priests be clothed with righteousness.<br>And thy Saints sing with '
+    'joyfulness.</p>',
+    '<p class="verse">Cleanse me, O Lord, from my secret faults.<br>And keep thy servant from '
+    'presumptuous sins.</p>',
+    '<p class="verse">O Lord, hear my prayer.<br>And let my cry come unto thee.</p>',
+    '<h2 class="subhead">The Collects</h2>',
+    '<p>Most gracious God, incline thy merciful ears to our prayers, and enlighten our hearts by the '
+    'grace of the Holy Ghost; that we may worthily approach thy holy Mysteries, and love thee with '
+    'an everlasting love.</p>',
+    '<p>Inflame, O Lord, our minds and our hearts with the fire of the Holy Ghost; that we may serve '
+    'thee with a chaste body, and please thee with a clean heart.</p>',
+    '<p>We beseech thee, O Lord, that the Comforter, who proceedeth from thee, may enlighten our '
+    'hearts; and lead us, as thy Son hath promised, into all truth.</p>',
+    '<p>We beseech thee, O Lord, let the power of the Holy Ghost come upon us: that it may mercifully '
+    'cleanse our hearts, and defend us from all adversities.</p>',
+    '<p>Purify our consciences, we beseech thee, O Lord, by thy visitation: that our Lord Jesus '
+    'Christ thy Son, when he cometh, may find in us a mansion prepared for himself; who liveth and '
+    'reigneth with thee, in the unity of the Holy Ghost, ever one God, world without end. Amen.</p>',
+    '<h2 class="subhead">A Blessing</h2>',
+    '<p>The Almighty and Merciful Lord grant unto me joy with peace, amendment of life, time for true '
+    'repentance, the grace and comfort of the Holy Ghost, and perseverance in good works. Amen.</p>')
+
+# the Twelve Great Feasts, as the missal lists them
+SPM_FEASTS = [
+    ("The Nativity of the Theotokos", "September 8"),
+    ("The Elevation of the Holy Cross", "September 14"),
+    ("The Presentation of the Theotokos", "November 21"),
+    ("Christmas", "December 25"),
+    ("Epiphany", "January 6"),
+    ("The Presentation of our Lord", "February 2"),
+    ("The Annunciation", "March 25"),
+    ("Palm Sunday", "the Sunday before Easter"),
+    ("The Ascension of the Lord", "forty days after Easter"),
+    ("Pentecost", "fifty days after Easter"),
+    ("The Transfiguration", "August 6"),
+    ("The Dormition of the Theotokos", "August 15"),
+]
+
+_spm_page("spm-welcome",
+    _divider("Welcome"),
+    '<p class="res-intro">A word to those worshipping with the parish, and the Twelve Great Feasts '
+    'of the Church.</p>',
+    '<p><span class="dropcap gilt">T</span><span class="sc">HANK YOU</span> for being with us '
+    'today. We pray that your participation will be enriching to you. Classes of instruction are '
+    'offered through the year for those interested in entering into the Body of Christ; if you would '
+    'like to know more about the Church, or have any questions, please speak with one of the '
+    'reverend clergy today. Glory to Jesus Christ forever!</p>',
+    '<h2 class="subhead">The Great Feasts of the Church</h2>',
+    '<p>The greatest feast of the Church is Easter, the feast of the Resurrection of our Lord Jesus '
+    'Christ. Eight further great feasts in honour of our Lord, together with four in honour of his '
+    'Mother, the Blessed Virgin Mary, are known as the Twelve Great Feasts.</p>',
+    '<dl class="feasts">'
+    + "".join(f'<div><dt>{n}</dt><dd>{d}</dd></div>' for n, d in SPM_FEASTS)
+    + '</dl>',
+    '<p>The Church calls on all the faithful to attend Mass on these great feasts.</p>',
+    '<p class="res-foot">The St. Peter Pew Missal is inscribed in memory of the Very Reverend '
+    'Patrick M. L. McCauley (1946&ndash;1996) and the Very Reverend Anthony Miller '
+    '(1958&ndash;2013). May their memory be eternal.</p>')
+
+
+def st_peter_missal_hub():
+    o = ['<section class="resources afpb-hub prayers-hub" id="top">',
+         back_link("western.html", "Western Rite"), _divider("The St. Peter Pew Missal")]
+    o.append('<p class="res-intro">The service book of St. Peter Antiochian Orthodox Church &mdash; '
+             'the Great Litany, the Decalogue, the Divine Eucharist according to the Rite of St. '
+             'Tikhon, and the Rite of Chrismation. Being added page by page.</p>')
+    rows = [(t, f"{s}.html", b, e) for s, t, b, e in SPM_SECTIONS if s in SPM_CONTENT]
+    if rows:
+        o.append('<ul class="browse-list">')
+        for r in rows:
+            o.append(_browse_row(*r))
+        o.append('</ul>')
+    o.append('<p class="res-foot">A parish of the Western-Rite Vicariate of the Antiochian Orthodox '
+             'Christian Archdiocese of North America.</p>')
+    o.append(art("gospel", foot=True))
+    o.append('</section>')
+    return "\n".join(o)
 
 
 _pb_page("pb-duties",
@@ -2547,6 +2672,20 @@ page("western-fasting.html", "Fasting &amp; Abstinence — Western Rite Orthodox
      "abstinence, and the Eucharistic fast.",
      back_link("western.html", "Western Rite")
      + with_jump_nav(western_fasting_page()) + CLOSING, active="home")
+
+# the parish service book — hub + a page per section transcribed so far
+if SPM_CONTENT:
+    page("st-peter-missal.html", "The St. Peter Pew Missal — Western Rite Orthodoxy",
+         "The service book of St. Peter Antiochian Orthodox Church: the Mass according to the "
+         "Rite of St. Tikhon, with the prayers before and after.",
+         st_peter_missal_hub(), active="home")
+    for _slug, _title, _blurb, _emb in SPM_SECTIONS:
+        if _slug not in SPM_CONTENT:
+            continue
+        page(f"{_slug}.html", f"{re.sub(r'&[a-z]+;', '&', _title)} — The St. Peter Pew Missal",
+             re.sub(r"<[^>]+>", "", _blurb),
+             back_link("st-peter-missal.html", "Pew Missal")
+             + with_jump_nav(SPM_CONTENT[_slug]) + CLOSING, active="home")
 
 # the Hours still drawn from the 1928 BCP (public domain) — Compline only;
 # Morning, Noon and Evening come from the parish booklet
