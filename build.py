@@ -759,6 +759,44 @@ def _browse_row(name, href, blurb, emb):
             f'<span class="browse-d">{blurb}</span></span>{_CHEV_R}</a></li>')
 
 
+# ---- previous / next through a book ----------------------------------------
+# Several sections of the app are books meant to be read straight through, so
+# each of their pages carries controls to the one before and after. A page
+# belongs to exactly one sequence -- its own book -- so the controls never
+# straddle two different orders.
+_SEQ_L = ('<svg class="seq-i" viewBox="0 0 24 24" width="18" height="18" fill="none" '
+          'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+          'aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>')
+_SEQ_R = ('<svg class="seq-i" viewBox="0 0 24 24" width="18" height="18" fill="none" '
+          'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+          'aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>')
+
+
+def seq_nav(seq, slug, label="In this book"):
+    """Previous / next at the foot of a page. `seq` is [(slug, title), ...] in
+    reading order; returns nothing when the page is not in it or stands alone."""
+    idx = next((i for i, (s, _t) in enumerate(seq) if s == slug), None)
+    if idx is None or len(seq) < 2:
+        return ""
+    o = [f'<nav class="seqnav" aria-label="{label}">']
+    if idx > 0:
+        s, t = seq[idx - 1]
+        o.append(f'<a class="seq seq-prev" href="{s}.html" rel="prev">{_SEQ_L}'
+                 f'<span class="seq-b"><span class="seq-k">Previous</span>'
+                 f'<span class="seq-t">{t}</span></span></a>')
+    else:
+        o.append('<span class="seq-gap"></span>')
+    if idx < len(seq) - 1:
+        s, t = seq[idx + 1]
+        o.append(f'<a class="seq seq-next" href="{s}.html" rel="next">'
+                 f'<span class="seq-b"><span class="seq-k">Next</span>'
+                 f'<span class="seq-t">{t}</span></span>{_SEQ_R}</a>')
+    else:
+        o.append('<span class="seq-gap"></span>')
+    o.append('</nav>')
+    return "".join(o)
+
+
 def _host(url):
     try:
         h = urlparse(url).netloc.lower()
@@ -2930,6 +2968,9 @@ page("western-fasting.html", "Fasting &amp; Abstinence — Western Rite Orthodox
      + with_jump_nav(western_fasting_page()) + CLOSING, active="home")
 
 # the parish service book — hub + a page per section transcribed so far
+# reading order, derived from the same list the pages are built from, so it
+# can never drift out of step with the pages that actually exist
+_SPM_SEQ = [(s, t) for s, t, _b, _e in SPM_SECTIONS if s in SPM_CONTENT]
 if SPM_CONTENT:
     page("st-peter-missal.html", "The St. Peter Pew Missal — Western Rite Orthodoxy",
          "The service book of St. Peter Antiochian Orthodox Church: the Mass according to the "
@@ -2938,10 +2979,11 @@ if SPM_CONTENT:
     for _slug, _title, _blurb, _emb in SPM_SECTIONS:
         if _slug not in SPM_CONTENT:
             continue
-        page(f"{_slug}.html", f"{re.sub(r'&[a-z]+;', '&', _title)} — The St. Peter Pew Missal",
+        page(f"{_slug}.html", f"{_title} — The St. Peter Pew Missal",
              re.sub(r"<[^>]+>", "", _blurb),
              back_link("st-peter-missal.html", "Pew Missal")
-             + with_jump_nav(SPM_CONTENT[_slug]) + CLOSING, active="home")
+             + with_jump_nav(SPM_CONTENT[_slug])
+             + seq_nav(_SPM_SEQ, _slug, "In the Pew Missal") + CLOSING, active="home")
 
 # the Hours still drawn from the 1928 BCP (public domain) — Compline only;
 # Morning, Noon and Evening come from the parish booklet
@@ -2953,6 +2995,9 @@ for _slug, _title, _blurb, _emb, _when, _h0, _h1 in WESTERN_OFFICES:
 
 # "A Little Prayer Book" — a second Western Rite booklet, built page by page;
 # hub + pages only appear once at least one page has been transcribed
+# reading order, derived from the same list the pages are built from, so it
+# can never drift out of step with the pages that actually exist
+_PB_SEQ = [(s, t) for s, t, _b, _e in PB_SECTIONS if s in PB_CONTENT]
 if PB_CONTENT:
     page("prayerbook.html", "A Little Prayer Book — Western Rite Orthodoxy",
          "A pocket manual of daily and occasional Western Rite prayers.",
@@ -2962,7 +3007,8 @@ if PB_CONTENT:
             continue
         page(f"{_slug}.html", f"{_title} — A Little Prayer Book",
              _blurb or _title, back_link("prayerbook.html", "Prayer Book")
-             + with_jump_nav(PB_CONTENT[_slug]) + CLOSING, active="home")
+             + with_jump_nav(PB_CONTENT[_slug])
+             + seq_nav(_PB_SEQ, _slug, "In this prayer book") + CLOSING, active="home")
 
 # home / landing page
 page("index.html", "Prayers for Morning, Day &amp; Night",
@@ -2980,13 +3026,18 @@ page("prayers.html", "Prayers — Daily Prayers",
 # one page per prayer time (read-aloud player on each)
 PRAYER_PAGES = [("morning", "Morning Prayers"), ("table", "Prayers at Table"),
                 ("hours", "Prayers for the Hours of the Day & Night"), ("sleep", "Prayers Before Sleep")]
+_PRAYER_SEQ = [(s, t) for s, t in PRAYER_PAGES]
 for slug, title in PRAYER_PAGES:
     page(f"{slug}.html", f"{title} — Daily Prayers",
          f"{title}: a web edition of the St. Tikhon's Monastery Press / OCA daily-prayers booklet.",
-         back_link("prayers.html", "All prayers") + with_jump_nav(_headpiece(PRAYERS[slug])) + CLOSING,
+         back_link("prayers.html", "All prayers") + with_jump_nav(_headpiece(PRAYERS[slug]))
+         + seq_nav(_PRAYER_SEQ, slug, "The daily prayers") + CLOSING,
          active="prayers", scripts=PLAYER)
 
 # The Ancient Faith Prayer Book: a hub + one page per office (read-aloud on each)
+# reading order, derived from the same list the pages are built from, so it
+# can never drift out of step with the pages that actually exist
+_AFPB_SEQ = [(s, t) for s, t, _b in AFPB if s in ANCIENT]
 if ANCIENT:
     page("ancient.html", "The Ancient Faith Prayer Book — Daily Prayers",
          "Prayers from The Ancient Faith Prayer Book (Ancient Faith Publishing): "
@@ -2999,7 +3050,9 @@ if ANCIENT:
         body = with_jump_nav(_headpiece(ANCIENT[slug])).replace('</section>\n', '</section>\n' + _credit, 1)
         page(f"{slug}.html", f"{title} — The Ancient Faith Prayer Book",
              f"{title}, from The Ancient Faith Prayer Book (Ancient Faith Publishing).",
-             back_link("ancient.html", "Prayer Book") + body + CLOSING, active="prayers", scripts=PLAYER)
+             back_link("ancient.html", "Prayer Book") + body
+             + seq_nav(_AFPB_SEQ, slug, "In this prayer book") + CLOSING,
+             active="prayers", scripts=PLAYER)
 
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",

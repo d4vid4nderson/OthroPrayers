@@ -788,6 +788,26 @@ h2.subhead[id], p.rubric[id]{ scroll-margin-top:1rem; }
 .res-sub, .cf-era, .ref-era{ scroll-margin-top:1rem; }
 
 .topic-intro{ text-indent:0; margin:0 0 .9em; }
+/* ---- previous / next through a book --------------------------------- */
+.seqnav{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:.8rem;
+  margin:2.4em 0 .2em; padding-top:1.2em; border-top:1px solid var(--hairline);
+}
+.seq{
+  display:flex; align-items:center; gap:.4rem; min-width:0; max-width:47%;
+  text-decoration:none; color:var(--rubric);
+  padding:.35rem .1rem; transition:opacity .15s ease;
+}
+.seq-gap{ flex:0 1 47%; }              /* holds the other side in place at the ends */
+.seq-next{ margin-left:auto; text-align:right; }
+.seq-b{ display:flex; flex-direction:column; min-width:0; }
+.seq-k{ font-variant-caps:small-caps; letter-spacing:.07em; font-size:.72rem;
+  color:var(--gold); line-height:1.3; }
+.seq-t{ font-size:.98rem; line-height:1.28; }
+.seq-i{ flex:0 0 auto; opacity:.55; }
+@media (hover:hover){ .seq:hover{ opacity:.75; } }
+.seq:active{ opacity:.6; }
+
 /* an ornament lifted from the printed missal, recoloured by the mask to
    follow the accent. Sits small and centred, as a breather in the page. */
 .spm-orn{ margin:1.4em auto 1.6em; }
