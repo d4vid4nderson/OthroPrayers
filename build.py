@@ -1022,6 +1022,16 @@ ICON_MASKS = [
     ("assets/img/icon_p15.png", "assets/img/icon_p15-mask.png", 820, 981),
 ]
 
+# Ornaments photographed from a printed page rather than scanned flat: the
+# paper carries a lighting gradient and its own tone, so a plain threshold
+# would keep the shadow and lose the engraving. These are flat-fielded against
+# a local estimate of the paper, then reduced to alpha, so the illustration's
+# shading survives and CSS can still recolour it with the live accent.
+#   (source, destination, intrinsic w, h)
+PHOTO_MASKS = [
+    ("assets/img/spm-cross.jpg", "assets/img/spm-cross-mask.png", 636, 820),
+]
+
 
 def reicon(mask, w, h, alt):
     return (f'<span class="reframe"><span class="reicon" role="img" aria-label="{alt}" '
@@ -1046,6 +1056,73 @@ def gen_icon_masks():
         out = Image.new("RGBA", im.size, (0, 0, 0, 0)); out.putalpha(alpha)
         out.save(dst)
     print("wrote icon masks", len(ICON_MASKS))
+
+
+def gen_photo_masks():
+    """Lift an ornament off a photographed page into a recolourable alpha mask.
+
+    Unlike the flat-scanned woodcuts, a photograph carries a lighting gradient
+    and the paper's own tone, so the ink is divided by a local estimate of the
+    paper behind it (a max-filter, since paper is the bright neighbour of ink).
+    Connected components are then filtered to drop the printed column rule and
+    stray specks, keeping only the ornament. Needs Pillow + numpy; if either is
+    missing the committed mask is reused."""
+    try:
+        from PIL import Image, ImageFilter
+        import numpy as np
+        from collections import deque
+    except ImportError:
+        print("Pillow/numpy not available — keeping existing photo masks"); return
+    for src, dst, _w, _h in PHOTO_MASKS:
+        if not os.path.exists(src):
+            continue
+        im = Image.open(src).convert("L")
+        W, H = im.size
+        a = np.asarray(im, float)
+        # estimate the paper behind the ink, then divide it out
+        small = im.resize((W // 6, H // 6), Image.BILINEAR).filter(ImageFilter.MaxFilter(9))
+        bg = np.asarray(small.filter(ImageFilter.GaussianBlur(6)).resize((W, H), Image.BICUBIC), float)
+        ink = 1.0 - np.clip(a / np.maximum(bg, 1e-6), 0, 1)
+        lo, hi = np.percentile(ink, 60), np.percentile(ink, 99.5)
+        alpha = np.clip((ink - lo) / (hi - lo), 0, 1) ** 0.85
+        alpha[alpha < 0.06] = 0.0
+        # label components so the page's column rule and specks can be dropped
+        solid = alpha > 0.22
+        lab = np.zeros(solid.shape, np.int32); nxt = 0; sizes = []; boxes = []
+        for sy in range(H):
+            for sx in range(W):
+                if solid[sy, sx] and lab[sy, sx] == 0:
+                    nxt += 1; q = deque([(sy, sx)]); lab[sy, sx] = nxt; n = 0
+                    y0 = y1 = sy; x0 = x1 = sx
+                    while q:
+                        cy, cx = q.popleft(); n += 1
+                        y0 = min(y0, cy); y1 = max(y1, cy); x0 = min(x0, cx); x1 = max(x1, cx)
+                        for dy in (-1, 0, 1):
+                            for dx in (-1, 0, 1):
+                                ny, nx = cy + dy, cx + dx
+                                if 0 <= ny < H and 0 <= nx < W and solid[ny, nx] and lab[ny, nx] == 0:
+                                    lab[ny, nx] = nxt; q.append((ny, nx))
+                    sizes.append(n); boxes.append((x0, y0, x1, y1))
+        if not sizes:
+            continue
+        big = int(np.argmax(sizes)) + 1
+        bx0, by0, bx1, by1 = boxes[big - 1]
+        keep = np.zeros(nxt + 1, bool)
+        for i, (x0, y0, x1, y1) in enumerate(boxes, start=1):
+            if i != big and (x1 - x0 + 1) <= 14 and (y1 - y0 + 1) >= 120:
+                continue                                  # a printed rule
+            if i != big and sizes[i - 1] < 25:
+                continue                                  # a speck
+            if x1 >= bx0 - 12 and x0 <= bx1 + 12 and y1 >= by0 - 12 and y0 <= by1 + 12:
+                keep[i] = True
+        grow = Image.fromarray((keep[lab] * 255).astype("uint8")).filter(ImageFilter.MaxFilter(7))
+        alpha = alpha * (np.asarray(grow, float) / 255.0)
+        out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        out.putalpha(Image.fromarray((alpha * 255).astype("uint8"), "L"))
+        out = out.crop(out.getbbox())
+        out.thumbnail((820, 820), Image.LANCZOS)
+        out.save(dst)
+    print("wrote photo masks", len(PHOTO_MASKS))
 
 
 def hub_page():
@@ -2206,6 +2283,9 @@ _spm_page("spm-before-mass",
     _divider("Prayers Before Mass"),
     '<p class="res-intro">Said quietly before the Liturgy begins, to prepare to approach the holy '
     'Mysteries.</p>',
+    '<figure class="spm-orn">'
+    + reicon("assets/img/spm-cross-mask.png", 636, 820,
+             "Ornamental cross from the missal") + '</figure>',
     '<p><span class="dropcap gilt">R</span><span class="sc">EMEMBER NOT</span>, Lord, our offenses, '
     'nor the offenses of our forefathers: neither take thou vengeance of our sins.</p>',
     '<h2 class="subhead">Kyrie &amp; the Lord&rsquo;s Prayer</h2>',
@@ -2996,6 +3076,7 @@ print("wrote themes.css", len(TW_ORDER), "colour families")
 
 # recolourable masks for the red woodcut icons (so they follow the primary colour)
 gen_icon_masks()
+gen_photo_masks()
 
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
