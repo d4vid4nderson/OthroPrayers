@@ -2165,6 +2165,13 @@ def _pb_page(slug, *parts):
     PB_CONTENT[slug] = "\n".join(parts)
 
 
+# the Hail Mary without its own heading, for the repetitions in the Angelus
+_PB_HAIL_MARY_PLAIN = (
+    '<p>Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed '
+    'is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the '
+    'hour of our death. Amen.</p>')
+
+
 # ---- The St. Peter Pew Missal ----------------------------------------------
 # The service book of St. Peter Antiochian Orthodox Church, a parish of the
 # Western-Rite Vicariate of the Antiochian Orthodox Christian Archdiocese of
@@ -2177,6 +2184,16 @@ SPM_SECTIONS = [
      "Preparing to approach the holy Mysteries.", "cross"),
     ("spm-welcome", "Welcome &amp; the Great Feasts",
      "A word to those visiting, and the Twelve Great Feasts.", "roundel"),
+    ("spm-mass-essay", "The Western Orthodox Mass",
+     "Why the Mass stands at the centre of the Christian life.", "gospel"),
+    ("spm-angelus", "The Angelus",
+     "Said before Mass, in memory of the Incarnation.", "mono"),
+    ("spm-regina-caeli", "The Regina C&aelig;li",
+     "Said in Eastertide in place of the Angelus.", "mono"),
+    ("spm-asperges", "The Asperges Me",
+     "The Sunday sprinkling with holy water.", "chirho"),
+    ("spm-vidi-aquam", "The Vidi Aquam",
+     "The sprinkling in Paschaltide, from Pascha to Pentecost.", "chirho"),
 ]
 SPM_CONTENT = {}   # slug -> page body html, filled in as pages are transcribed
 
@@ -2223,6 +2240,130 @@ _spm_page("spm-before-mass",
     '<h2 class="subhead">A Blessing</h2>',
     '<p>The Almighty and Merciful Lord grant unto me joy with peace, amendment of life, time for true '
     'repentance, the grace and comfort of the Holy Ghost, and perseverance in good works. Amen.</p>')
+
+_spm_page("spm-angelus",
+    _divider("The Angelus"),
+    '<p class="res-intro">Said before each Mass except in Eastertide, in memory of the '
+    'Incarnation. The bells are rung in groups of three.</p>',
+    _svc_item("The Angel of the Lord announced unto Mary.",
+              "And she conceived by the Holy Ghost."),
+    _PB_HAIL_MARY_PLAIN,
+    _svc_item("Behold the handmaid of the Lord;",
+              "Be it unto me according to thy word."),
+    _PB_HAIL_MARY_PLAIN,
+    _svc_item("And the Word was made flesh,", "And dwelt among us."),
+    _PB_HAIL_MARY_PLAIN,
+    _svc_item("Pray for us, O holy Mother of God,",
+              "That we may be made worthy of the promises of Christ."),
+    '<h2 class="subhead">The Collect</h2>',
+    '<p class="rubric"><span class="r">Let us pray.</span></p>',
+    '<p>We beseech thee, O Lord, pour thy grace into our hearts; that as we have known the '
+    'incarnation of thy Son Jesus Christ by the message of an angel, so by his ' + SIGNUM +
+    'cross and passion we may be brought unto the glory of his resurrection. Through the same '
+    'Christ our Lord. Amen.</p>')
+
+_spm_page("spm-regina-caeli",
+    _divider("The Regina C&aelig;li"),
+    '<p class="res-intro">Said through Eastertide in place of the Angelus. The bells are rung in '
+    'pairs.</p>',
+    _svc_item("O Queen of heaven, be joyful, Alleluia,",
+              "Because he whom so meetly thou barest, Alleluia,"),
+    _svc_item("Hath arisen as he hath promised, Alleluia;",
+              "Pray for us to the Father, Alleluia."),
+    _svc_item("Rejoice and be glad, O Virgin Mary, Alleluia.",
+              "For the Lord is risen indeed, Alleluia."),
+    '<h2 class="subhead">The Collect</h2>',
+    '<p><span class="dropcap gilt">O</span> <span class="sc">GOD</span>, who by the resurrection '
+    'of thy Son Jesus Christ didst vouchsafe to give gladness unto the world: grant, we beseech '
+    'thee, that we, being holpen by the Virgin Mary his Mother, may attain unto the joys of '
+    'everlasting life. Through the same Christ our Lord. Amen.</p>')
+
+_ASPERGES_SUFFRAGES = "".join([
+    _svc_item("O Lord, show thy mercy upon us.", "And grant us thy salvation."),
+    _svc_item("O Lord, hear my prayer.", "And let my cry come unto thee."),
+    _svc_item("The Lord be with you.", "And with thy spirit."),
+])
+_ASPERGES_COLLECT = (
+    '<p>Graciously hear us, O Lord, Holy Father, Almighty, everlasting God; and vouchsafe to send '
+    'thy holy Angel from heaven, to guard and cherish, to protect and visit, and to defend all who '
+    'dwell in this thy holy habitation; through Christ our Lord. Amen.</p>')
+_SPRINKLING_NOTE = (
+    '<p class="rubric"><span class="r">Immediately before the principal Sunday Mass the priest '
+    'intones the Asperges Me or the Vidi Aquam, according to the season, and sprinkles the altar, '
+    'the servers and the people with holy water. This little service is not part of the Mass '
+    'itself, but a reminder of our Baptism, in which we were made members of the Body of Christ.'
+    '</span></p>')
+
+_spm_page("spm-asperges",
+    _divider("The Asperges Me"),
+    '<p class="res-intro">Sung on Sundays outside Paschaltide, at the sprinkling with holy '
+    'water.</p>',
+    _SPRINKLING_NOTE,
+    '<h2 class="subhead">The Antiphon</h2>',
+    '<p class="verse">Thou shalt purge me, O Lord, with hyssop, and I shall be clean;<br>'
+    'Thou shalt wash me, and I shall be whiter than snow.</p>',
+    _svc_item("Have mercy upon me, O God,", "After thy great goodness."),
+    '<p class="verse">Glory be to the Father, and to the Son, and to the Holy Ghost;<br>'
+    'As it was in the beginning, is now, and ever shall be, world without end. Amen.</p>',
+    '<p class="rubric"><span class="r">The antiphon is then repeated.</span></p>',
+    '<h2 class="subhead">The Suffrages</h2>',
+    _ASPERGES_SUFFRAGES,
+    '<h2 class="subhead">The Collect</h2>',
+    '<p class="rubric"><span class="r">Let us pray.</span></p>',
+    _ASPERGES_COLLECT)
+
+_spm_page("spm-vidi-aquam",
+    _divider("The Vidi Aquam"),
+    '<p class="res-intro">Sung in place of the Asperges Me on the Sundays of Paschaltide, from '
+    'Pascha until Pentecost inclusive.</p>',
+    _SPRINKLING_NOTE,
+    '<h2 class="subhead">The Antiphon</h2>',
+    '<p>I beheld water which proceeded from the temple, on the right side thereof, alleluia: and '
+    'all they to whom that water came were healed every one, and they say, alleluia, alleluia.</p>',
+    '<h2 class="subhead">Psalm 117</h2>',
+    '<p class="verse">O give thanks unto the Lord, for he is gracious:<br>and his mercy endureth '
+    'for ever.</p>',
+    '<p class="verse">Glory be to the Father, and to the Son, and to the Holy Ghost;<br>'
+    'As it was in the beginning, is now, and ever shall be, world without end. Amen.</p>',
+    '<p class="rubric"><span class="r">The antiphon is then repeated. In the missal this is set to '
+    'chant; the notation is not reproduced here.</span></p>',
+    '<h2 class="subhead">The Suffrages</h2>',
+    _ASPERGES_SUFFRAGES,
+    '<h2 class="subhead">The Collect</h2>',
+    '<p class="rubric"><span class="r">Let us pray.</span></p>',
+    _ASPERGES_COLLECT)
+
+# Pages 3-4 are a modern essay by a named author, reprinted in the missal, not
+# a liturgical text -- so this page gives its substance and points to the book
+# rather than reprinting it.
+_spm_page("spm-mass-essay",
+    _divider("The Western Orthodox Mass"),
+    '<p class="res-intro">An explanation of the Mass carried at the front of the missal, by the '
+    'V. Rev. Fr. John Winfrey of St. George Orthodox Church, Grand Rapids, Michigan.</p>',
+    '<p><span class="dropcap gilt">T</span><span class="sc">HE ESSAY</span> begins from a plain '
+    'observation: nothing a person accumulates finally satisfies. Money is spent, friends fall away '
+    'when prosperity does, health flatters the young into thinking it will always keep them '
+    'company, and possessions quietly change from things we own into things that own us &mdash; our '
+    'time, our concern, our freedom. It is the preacher&rsquo;s cry, <em>vanity of vanities</em>. '
+    'And yet every one of us also knows we were made for glory, for beauty, for honour &mdash; made '
+    'for love.</p>',
+    '<p>That, Fr. Winfrey argues, is the work of the Mass, and the only work of humanity that '
+    'finally matters: to be united in love with God, with one another, and with the whole creation '
+    'remade in Christ. It is the keeping of what the Lord gave his disciples on the night before he '
+    'suffered &mdash; <em>Do this</em> &mdash; and from the upper room and Pentecost onward the '
+    'Church has never stopped keeping it.</p>',
+    '<p>He draws out how the risen Christ is known in the breaking of bread: at Emmaus the two '
+    'disciples did not recognise him until the bread was broken, though their hearts had burned '
+    'within them on the road; he appeared to the apostles as they sat at table. So to see the Lord '
+    'is to stand within the Church offering the Eucharist. The essay closes with St. Cyril of '
+    'Jerusalem, catechising the newly baptized: he who turned water into wine at Cana is surely to '
+    'be trusted when he gives his Body and Blood, that we might become, in St. Peter&rsquo;s words, '
+    '<em>partakers of the divine nature</em>.</p>',
+    '<p class="res-foot">Summarised here rather than reprinted, as it is a modern authored work '
+    'rather than a liturgical text. The full essay is in the printed missal, and is cited there to '
+    'Luke 22:19, I Corinthians 11:23&ndash;26, Luke 24:13&ndash;25 and 24:32, Mark 16:14, Matthew '
+    '28:20, John 6:48&ndash;51, St. Cyril&rsquo;s <em>Mystagogical Catechesis</em> iv.2&ndash;3, '
+    'and II Peter 1:4.</p>')
 
 # the Twelve Great Feasts, as the missal lists them
 SPM_FEASTS = [
