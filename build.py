@@ -14,11 +14,16 @@ import generate_calendars as gc
 
 # ---- build modes -----------------------------------------------------------
 # The normal build writes the whole site — both rites — into the repo root,
-# which is what Vercel deploys. WESTERN_ONLY=1 writes a trimmed, Western-Rite
-# copy into OUT_DIR instead, for bundling into the iOS app: no rite gate, no
-# Eastern pages, no Bible, no calendar, no Greek tool, and no service worker
+# which is what Vercel deploys. APP_BUILD=1 with OUT_DIR writes the same pages
+# for bundling into the iOS app instead: no favicon, manifest or service worker
 # (everything ships inside the app, so there is nothing to cache).
-WESTERN_ONLY = os.environ.get("WESTERN_ONLY") == "1"
+# Two independent switches, deliberately:
+#   WESTERN_ONLY — content scope. On by default: the site is a Western Rite
+#     prayer book. WESTERN_ONLY=0 brings the Eastern side back.
+#   APP_BUILD    — the bundled-app target. No favicon, manifest or service
+#     worker (a WebView needs none), and the assets are copied to OUT_DIR.
+WESTERN_ONLY = os.environ.get("WESTERN_ONLY", "1") != "0"
+APP_BUILD = os.environ.get("APP_BUILD") == "1"
 OUT_DIR = os.environ.get("OUT_DIR", ".")
 
 # the only pages the Western-only build emits; the hub becomes index.html
@@ -2055,7 +2060,7 @@ HEAD_TMPL = '''<!doctype html>
 '''
 
 
-if WESTERN_ONLY:
+if APP_BUILD:
     # a bundled WebView has no browser tab, no home-screen shortcut and no
     # manifest — the app icon comes from the Xcode asset catalog instead
     _WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
@@ -3365,12 +3370,12 @@ print("wrote themes.css", len(TW_ORDER), "colour families")
 # recolourable masks for the red woodcut icons (so they follow the primary colour).
 # These write back into the repo's own assets, so only the web build runs them;
 # the app build copies the results.
-if not WESTERN_ONLY:
+if not APP_BUILD:
     gen_icon_masks()
     gen_photo_masks()
 
-if WESTERN_ONLY:
-    # copy the static files the Western pages actually reference. No service
+if APP_BUILD:
+    # copy the static files the built pages actually reference. No service
     # worker: a bundled app is already offline, and there is nothing to update.
     import shutil
     for _f in ["styles.css", "sanctuary.css", "calendar.js"]:
@@ -3397,16 +3402,25 @@ if WESTERN_ONLY:
 _NODEPLOY = {"prayers.content.html", "ancient.content.html",
              "assets/icons/app-icon.png", "assets/icons/app-icon-dark.png"}
 _assets = {"./"}
-_assets.update(glob.glob("*.html"))
-# note: the per-book bible/*.json (~5MB) are intentionally NOT precached — they
-# are cached at runtime as chapters are read, to keep the offline install lean
-for _p in ["styles.css", "themes.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
-           "bible-index.js", "bible-plan-data.js", "bible.js", "site.webmanifest", "favicon.ico",
-           "sanctuary.css"]:
+_pages = sorted(set(glob.glob("*.html")) - _NODEPLOY)
+_assets.update(_pages)
+# precache only what the built pages actually pull in. Deriving this from the
+# output rather than a hand-kept list means trimming the site's scope can never
+# leave a dead entry behind — one 404 fails cache.addAll() and the whole
+# offline install with it.
+_referenced = set()
+for _p in _pages:
+    _referenced.update(re.findall(r'(?:src|href)="([^"]+?\.(?:js|css|webmanifest|ico))(?:\?[^"]*)?"',
+                                  open(_p).read()))
+for _p in sorted(_referenced) + ["favicon.ico"]:
     if os.path.exists(_p):
         _assets.add(_p)
-for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*", "calendars/*.ics"]:
+# note: the per-book bible/*.json (~5MB) are never precached — they are cached
+# at runtime as chapters are read, to keep the offline install lean
+for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*"]:
     _assets.update(glob.glob(_pat))
+if not WESTERN_ONLY:
+    _assets.update(glob.glob("calendars/*.ics"))
 _assets = sorted(a for a in _assets if a not in _NODEPLOY)
 # cache version = hash of the cached files' contents, so a new deploy busts it
 _h = hashlib.sha1()

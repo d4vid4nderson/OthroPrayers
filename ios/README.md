@@ -17,13 +17,22 @@ single source of truth for the content; the app is just a second output target.
 |---|---|---|
 | Command | `python3 build.py` | `npm run build` |
 | Output | the repo root (Vercel deploys it) | `ios/www/` |
-| Content | both rites | Western Rite only |
-| Size | ~13 MB | ~1.4 MB |
-| Rite gate | yes | no — the Western hub *is* the home screen |
-| Tabs | Home, Prayers, Read, Resources, Settings | Home, Prayers, Missal, Settings |
-| Settings | everything | no Rite, no "available offline" (it always is) |
+| Content | Western Rite | Western Rite |
+| Size | ~1.5 MB | ~1.5 MB |
+| Favicon, manifest, service worker | yes | no — a WebView needs none |
+| Assets | already in place | copied into `ios/www/` |
 
-The web build is untouched by any of this.
+Both builds carry the same 17 pages now: the site itself is a Western Rite
+prayer book. The only difference is the target.
+
+Two switches, deliberately separate:
+
+- `WESTERN_ONLY` — content scope, on by default. **`WESTERN_ONLY=0` brings the
+  whole Eastern side back**: the Bible reader, the calendar, the Greek tool,
+  the resources, the rite gate. Nothing was deleted from `build.py`; those
+  pages simply stop being written. The Eastern runtime files are still in the
+  repo, just out of the deploy (see `.vercelignore`).
+- `APP_BUILD` — the bundled-app target, which is what `npm run build` sets.
 
 ## What you need on the Mac
 

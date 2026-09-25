@@ -21,7 +21,6 @@
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 var path=location.pathname,isGate=/\/rite\.html$/.test(path),isHome=path==="/"||path===""||/\/index\.html$/.test(path);
 var rite=L.getItem("rite");
-if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
 var st=L.getItem("style")||"sanctuary";if(st!=="paper")r.dataset.style=st;
@@ -44,7 +43,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 <div class="scroll">
 <main class="book">
 <section class="resources afpb-hub prayers-hub" id="top">
-<div class="page-back"><a class="res-back" href="western.html"><svg class="res-back__i" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span>Western Rite</span></a></div>
+<div class="page-back"><a class="res-back" href="index.html"><svg class="res-back__i" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span>Western Rite</span></a></div>
 <section class="divider"><span class="cross"><svg viewBox="0 0 120 200" fill="currentColor" aria-hidden="true"><rect x="54" y="14" width="12" height="172"/><rect x="42" y="40" width="36" height="9"/><rect x="22" y="80" width="76" height="12"/><polygon points="30,132 90,150 90,161 30,143"/></svg></span><h1>The St. Peter Pew Missal</h1><figure class="art art-rule" role="img" aria-label="Ornamental rule"><svg viewBox="0 0 240 18" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><g stroke="currentColor" stroke-width="2" fill="currentColor"><line x1="14" y1="9" x2="100" y2="9"/><line x1="140" y1="9" x2="226" y2="9"/><circle cx="14" cy="9" r="3" stroke="none"/><circle cx="226" cy="9" r="3" stroke="none"/><circle cx="104" cy="9" r="2" stroke="none"/><circle cx="136" cy="9" r="2" stroke="none"/><polygon points="120,1 129,9 120,17 111,9" stroke="none"/></g></svg></figure></section>
 <p class="res-intro">The service book of St. Peter Antiochian Orthodox Church &mdash; the Great Litany, the Decalogue, the Divine Eucharist according to the Rite of St. Tikhon, and the Rite of Chrismation. Being added page by page.</p>
 <ul class="browse-list">
@@ -62,10 +61,9 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </main>
 </div>
 <nav class="tabbar" aria-label="Primary">
-  <a class="tab active" href="index.html" aria-label="Home"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v2.4"/><path d="M10.7 3.2h2.6"/><path d="M12 4.8c1.4 0 2.3 1.1 2.3 2.4 0 1.5-2.3 3.2-2.3 3.2S9.7 8.7 9.7 7.2C9.7 5.9 10.6 4.8 12 4.8z"/><path d="M6 21v-8.6l6-2.4 6 2.4V21"/><path d="M4 21h16"/><path d="M10.3 21v-3.1a1.7 1.7 0 0 1 3.4 0V21"/></svg></span><span class="tab-l">Home</span></a>
-  <a class="tab" href="prayers.html" aria-label="Prayers"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1.6"/><path d="M12 7.4v6"/><path d="M9.4 9.6h5.2"/></svg></span><span class="tab-l">Prayers</span></a>
-  <a class="tab" href="scripture.html" aria-label="Read the Bible"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.6C10.3 5.4 7.6 4.9 4 5.4v12.4c3.6-.5 6.3 0 8 1.2"/><path d="M12 6.6C13.7 5.4 16.4 4.9 20 5.4v12.4c-3.6-.5-6.3 0-8 1.2"/><path d="M12 6.6V19.2"/></svg></span><span class="tab-l">Read</span></a>
-  <a class="tab" href="resources.html" aria-label="Resources"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="16.2 7.8 14.1 14.1 7.8 16.2 9.9 9.9"/></svg></span><span class="tab-l">Resources</span></a>
+  <a class="tab active" href="index.html" aria-label="Today"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v2.4"/><path d="M10.7 3.2h2.6"/><path d="M12 4.8c1.4 0 2.3 1.1 2.3 2.4 0 1.5-2.3 3.2-2.3 3.2S9.7 8.7 9.7 7.2C9.7 5.9 10.6 4.8 12 4.8z"/><path d="M6 21v-8.6l6-2.4 6 2.4V21"/><path d="M4 21h16"/><path d="M10.3 21v-3.1a1.7 1.7 0 0 1 3.4 0V21"/></svg></span><span class="tab-l">Today</span></a>
+  <a class="tab" href="prayerbook.html" aria-label="Prayer book"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1.6"/><path d="M12 7.4v6"/><path d="M9.4 9.6h5.2"/></svg></span><span class="tab-l">Prayers</span></a>
+  <a class="tab" href="st-peter-missal.html" aria-label="Missal"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.6C10.3 5.4 7.6 4.9 4 5.4v12.4c3.6-.5 6.3 0 8 1.2"/><path d="M12 6.6C13.7 5.4 16.4 4.9 20 5.4v12.4c-3.6-.5-6.3 0-8 1.2"/><path d="M12 6.6V19.2"/></svg></span><span class="tab-l">Missal</span></a>
   <button class="tab" id="settings-btn" type="button" aria-haspopup="true" aria-expanded="false"
           aria-controls="menu" aria-label="Settings"><span class="tab-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="tab-l">Settings</span></button>
 </nav>
@@ -76,13 +74,6 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
     <button class="drawer-close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div class="drawer-heading">Settings</div>
-  <div class="menu-row">
-    <span class="menu-label">Rite</span>
-    <span class="seg" role="group" aria-label="Rite">
-      <button id="rite-eastern" type="button" aria-pressed="true">Eastern</button>
-      <button id="rite-western" type="button" aria-pressed="false">Western</button>
-    </span>
-  </div>
   <div class="menu-row">
     <span class="menu-label">Text size</span>
     <span class="seg" role="group" aria-label="Text size">
@@ -97,85 +88,11 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
       <button id="theme-dark" type="button" title="Dark" aria-label="Dark mode" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button>
     </span>
   </div>
-  <div class="menu-row" id="row-temp">
-    <span class="menu-label">Background</span>
-    <span class="seg" role="group" aria-label="Background temperature">
-      <button id="temp-warm" type="button" aria-pressed="true">Warm</button>
-      <button id="temp-cool" type="button" aria-pressed="false">Cool</button>
-    </span>
-  </div>
-  <div class="menu-col" id="row-primary">
-    <span class="menu-label">Primary colour <span class="menu-pick" id="primary-pick">Default</span></span>
-    <div class="swatches" role="group" aria-label="primary colour">
-<button class="swatch swatch-default" type="button" data-k="primary" data-c="" style="--sw:#b3322a" title="Default" aria-label="Default" aria-pressed="true"></button>
-<button class="swatch" type="button" data-k="primary" data-c="red" style="--sw:#ef4444" title="Red" aria-label="red" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="orange" style="--sw:#f97316" title="Orange" aria-label="orange" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="amber" style="--sw:#f59e0b" title="Amber" aria-label="amber" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="yellow" style="--sw:#eab308" title="Yellow" aria-label="yellow" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="lime" style="--sw:#84cc16" title="Lime" aria-label="lime" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="green" style="--sw:#22c55e" title="Green" aria-label="green" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="emerald" style="--sw:#10b981" title="Emerald" aria-label="emerald" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="teal" style="--sw:#14b8a6" title="Teal" aria-label="teal" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="cyan" style="--sw:#06b6d4" title="Cyan" aria-label="cyan" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="sky" style="--sw:#0ea5e9" title="Sky" aria-label="sky" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="blue" style="--sw:#3b82f6" title="Blue" aria-label="blue" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="indigo" style="--sw:#6366f1" title="Indigo" aria-label="indigo" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="violet" style="--sw:#8b5cf6" title="Violet" aria-label="violet" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="purple" style="--sw:#a855f7" title="Purple" aria-label="purple" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="fuchsia" style="--sw:#d946ef" title="Fuchsia" aria-label="fuchsia" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="pink" style="--sw:#ec4899" title="Pink" aria-label="pink" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="rose" style="--sw:#f43f5e" title="Rose" aria-label="rose" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="primary" data-c="slate" style="--sw:#64748b" title="Slate" aria-label="slate" aria-pressed="false"></button>
-</div>
-  </div>
-  <div class="menu-col" id="row-secondary">
-    <span class="menu-label">Secondary colour <span class="menu-pick" id="secondary-pick">Default</span></span>
-    <div class="swatches" role="group" aria-label="secondary colour">
-<button class="swatch swatch-default" type="button" data-k="secondary" data-c="" style="--sw:#9a7b1e" title="Default" aria-label="Default" aria-pressed="true"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="red" style="--sw:#ef4444" title="Red" aria-label="red" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="orange" style="--sw:#f97316" title="Orange" aria-label="orange" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="amber" style="--sw:#f59e0b" title="Amber" aria-label="amber" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="yellow" style="--sw:#eab308" title="Yellow" aria-label="yellow" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="lime" style="--sw:#84cc16" title="Lime" aria-label="lime" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="green" style="--sw:#22c55e" title="Green" aria-label="green" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="emerald" style="--sw:#10b981" title="Emerald" aria-label="emerald" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="teal" style="--sw:#14b8a6" title="Teal" aria-label="teal" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="cyan" style="--sw:#06b6d4" title="Cyan" aria-label="cyan" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="sky" style="--sw:#0ea5e9" title="Sky" aria-label="sky" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="blue" style="--sw:#3b82f6" title="Blue" aria-label="blue" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="indigo" style="--sw:#6366f1" title="Indigo" aria-label="indigo" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="violet" style="--sw:#8b5cf6" title="Violet" aria-label="violet" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="purple" style="--sw:#a855f7" title="Purple" aria-label="purple" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="fuchsia" style="--sw:#d946ef" title="Fuchsia" aria-label="fuchsia" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="pink" style="--sw:#ec4899" title="Pink" aria-label="pink" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="rose" style="--sw:#f43f5e" title="Rose" aria-label="rose" aria-pressed="false"></button>
-<button class="swatch" type="button" data-k="secondary" data-c="slate" style="--sw:#64748b" title="Slate" aria-label="slate" aria-pressed="false"></button>
-</div>
-    <button class="menu-reset" id="appearance-reset" type="button">Reset to default</button>
-  </div>
   <div class="menu-row">
     <span class="menu-label">Dyslexia-friendly</span>
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
-  <div class="menu-col" id="row-style">
-    <span class="menu-label">Style</span>
-    <span class="seg seg-3" role="group" aria-label="Style">
-      <button id="style-paper" type="button" aria-pressed="true">Paper</button>
-      <button id="style-manuscript" type="button" aria-pressed="false">Manuscript</button>
-      <button id="style-sanctuary" type="button" aria-pressed="false">Sanctuary</button>
-    </span>
-  </div>
-  <p class="menu-note">Paper is the printed booklet. Manuscript is vellum and an
-     insular hand. Sanctuary is dark, for early and late. Dyslexia-friendly text
-     overrides all three.</p>
-  <div class="menu-row">
-    <span class="menu-label">Available offline</span>
-    <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
-            aria-label="Available offline"><span class="knob"></span></button>
-  </div>
-  <p class="menu-note" id="offline-note">Save every page and your settings on this device, so the
-     app works with no connection. External links still need internet.</p>
   <div class="drawer-heading">Church calendar</div>
   <div class="menu-row">
     <span class="menu-label">Follow the calendar</span>
@@ -190,8 +107,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
     <button id="fastnotify" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Fast-day reminders"><span class="knob"></span></button>
   </div>
-  <p class="menu-note">Reminders appear when you open the app. For alerts even when it&rsquo;s
-     closed, <a href="calendar.html">subscribe to the calendar</a>.</p>
+  <p class="menu-note">Reminders appear when you open the app.</p>
 </div>
 <script>
 (function(){

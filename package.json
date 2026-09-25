@@ -4,7 +4,7 @@
   "private": true,
   "description": "The Western Rite prayers, wrapped as a native iOS app for personal use.",
   "scripts": {
-    "build": "WESTERN_ONLY=1 OUT_DIR=ios/www python3 build.py",
+    "build": "APP_BUILD=1 OUT_DIR=ios/www python3 build.py",
     "sync": "npm run build && cap sync ios",
     "open": "npm run sync && cap open ios",
     "icons": "python3 generate_icons.py --ios",
