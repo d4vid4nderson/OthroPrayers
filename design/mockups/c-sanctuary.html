@@ -66,13 +66,24 @@ h1{font-family:"Cormorant",serif;font-size:36px;font-weight:600;color:var(--text
 .row-w{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);
   margin-left:auto;flex:none}
 
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r);padding:17px 16px 18px;
-  min-height:124px;display:flex;flex-direction:column}
-.card-i{color:var(--gold);opacity:.9}
-.card-t{font-family:"Cormorant",serif;font-size:20px;font-weight:600;color:var(--text);
-  margin-top:auto;line-height:1.14}
-.card-d{font-size:12.5px;color:var(--text-3);margin-top:4px;line-height:1.3}
+/* the books, as rounded rows rather than square tiles — one shape language
+   with the hours above, and the titles get room to breathe on one line */
+.brow{display:flex;align-items:center;gap:15px;padding:16px 18px;border-bottom:1px solid var(--hair)}
+.brow:last-child{border-bottom:0}
+.brow-i{width:38px;height:38px;border-radius:12px;flex:none;display:grid;place-items:center;
+  background:rgba(217,179,108,.10);border:1px solid rgba(217,179,108,.18);color:var(--gold)}
+.brow-b{min-width:0}
+.brow-t{font-family:"Cormorant",serif;font-size:22px;font-weight:600;color:var(--text);line-height:1.14}
+.brow-d{font-size:12.5px;color:var(--text-3);margin-top:2px}
+.brow-c{margin-left:auto;color:var(--text-3);flex:none}
+
+/* the alternative: wide rounded cards, 2.4:1 rather than square */
+.wides{margin-top:12px;display:flex;flex-direction:column;gap:12px}
+.wide{background:linear-gradient(150deg,rgba(217,179,108,.07),transparent 58%),var(--surface);
+  border:1px solid var(--hair);border-radius:24px;padding:18px 20px;display:flex;align-items:center;gap:16px}
+.wide-i{color:var(--gold);flex:none;opacity:.92}
+.wide-t{font-family:"Cormorant",serif;font-size:23px;font-weight:600;color:var(--text);line-height:1.12}
+.wide-d{font-size:12.5px;color:var(--text-3);margin-top:3px}
 
 /* --- prayer --- */
 .p-nav{display:flex;align-items:center;gap:7px;padding:12px 2px 0;color:var(--text-2);font-size:15px;font-weight:550}
@@ -124,16 +135,18 @@ svg{display:block}
     </div>
 
     <div class="sec micro">Books</div>
-    <div class="cards">
-      <div class="card">
-        <span class="card-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>
-        <div class="card-t">A Little Prayer Book</div>
-        <div class="card-d">Daily &amp; occasional</div>
+    <div class="list">
+      <div class="brow">
+        <span class="brow-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>
+        <span class="brow-b"><div class="brow-t">A Little Prayer Book</div>
+          <div class="brow-d">Daily &amp; occasional prayers</div></span>
+        <svg class="brow-c" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       </div>
-      <div class="card">
-        <span class="card-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg></span>
-        <div class="card-t">Pew Missal</div>
-        <div class="card-d">Rite of St. Tikhon</div>
+      <div class="brow">
+        <span class="brow-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg></span>
+        <span class="brow-b"><div class="brow-t">The Pew Missal</div>
+          <div class="brow-d">The Mass, Rite of St. Tikhon</div></span>
+        <svg class="brow-c" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       </div>
     </div>
   </div>
@@ -143,7 +156,55 @@ svg{display:block}
     <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
     <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
   </div>
-  <div class="label">C &mdash; Sanctuary &middot; home</div>
+  <div class="label">C1 &mdash; books as rounded rows</div>
+</div>
+
+
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="head">
+      <div class="micro">Thursday, 25 September</div>
+      <h1>Western Rite</h1>
+    </div>
+
+    <div class="now">
+      <div class="now-k">Now &middot; On rising</div>
+      <div class="now-t">Morning Prayer</div>
+      <div class="now-d">A short form for use alone</div>
+      <span class="now-b">Begin
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1A1508" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+
+    <div class="sec micro">The rest of the day</div>
+    <div class="list">
+      <div class="row"><span class="dot"></span><span class="row-t">Noon Prayers</span><span class="row-w">Midday</span></div>
+      <div class="row"><span class="dot"></span><span class="row-t">Evening Prayers</span><span class="row-w">6 pm</span></div>
+      <div class="row"><span class="dot"></span><span class="row-t">Compline</span><span class="row-w">Nightfall</span></div>
+    </div>
+
+    <div class="sec micro">Books</div>
+    <div class="wides">
+      <div class="wide">
+        <span class="wide-i"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>
+        <span><div class="wide-t">A Little Prayer Book</div>
+          <div class="wide-d">Daily &amp; occasional prayers</div></span>
+      </div>
+      <div class="wide">
+        <span class="wide-i"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg></span>
+        <span><div class="wide-t">The Pew Missal</div>
+          <div class="wide-d">The Mass, Rite of St. Tikhon</div></span>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">C2 &mdash; books as wide cards</div>
 </div>
 
 <div class="phone">
