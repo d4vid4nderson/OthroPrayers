@@ -1916,11 +1916,13 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="icon" href="favicon.ico?v=7" sizes="32x32">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=7">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=7">
-<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=7">
-<link rel="manifest" href="site.webmanifest?v=8">
+<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=8">
+<link rel="manifest" href="site.webmanifest?v=9">
 <meta name="apple-mobile-web-app-title" content="Prayers">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1964,11 +1966,13 @@ GATE_TMPL = '''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="icon" href="favicon.ico?v=7" sizes="32x32">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=7">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=7">
-<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=7">
-<link rel="manifest" href="site.webmanifest?v=8">
+<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=8">
+<link rel="manifest" href="site.webmanifest?v=9">
 <meta name="apple-mobile-web-app-title" content="Prayers">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -3134,7 +3138,8 @@ gen_photo_masks()
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
 # or cache.addAll() would 404 and the whole offline install would fail
-_NODEPLOY = {"prayers.content.html", "ancient.content.html", "assets/icons/app-icon.png"}
+_NODEPLOY = {"prayers.content.html", "ancient.content.html",
+             "assets/icons/app-icon.png", "assets/icons/app-icon-dark.png"}
 _assets = {"./"}
 _assets.update(glob.glob("*.html"))
 # note: the per-book bible/*.json (~5MB) are intentionally NOT precached — they
