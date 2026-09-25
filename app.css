@@ -232,3 +232,28 @@ html[data-app="sanctuary"] .menu-label{ font-size:.94rem; font-weight:500; }
 html[data-app="sanctuary"] .seg button{ font-size:.82rem; font-weight:600; }
 html[data-app="sanctuary"] .drawer-heading{ font-family:var(--sans); font-size:.66rem;
   font-weight:600; text-transform:uppercase; }
+
+/* ---- in-page contents: folded away -------------------------------------
+   The chips were a row of buttons to read past before reaching the prayer.
+   This is one quiet line that opens into the same links. */
+.page-contents{ margin:0 0 1.9em; }
+.page-contents summary{
+  display:flex; align-items:center; justify-content:center; gap:.45em;
+  list-style:none; cursor:pointer;
+  font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--text-3); padding:.5em 0;
+}
+.page-contents summary::-webkit-details-marker{ display:none; }
+.page-contents summary svg{ transition:transform .18s ease; }
+.page-contents[open] summary svg{ transform:rotate(180deg); }
+.page-contents nav{ display:flex; flex-direction:column; margin:.2em 0 .4em; }
+.page-contents nav a{
+  padding:.72em .2em; border-top:1px solid var(--hair);
+  color:var(--text-2); text-decoration:none;
+  font-family:var(--serif); font-size:1.02rem; line-height:1.2;
+}
+.page-contents nav a:last-child{ border-bottom:1px solid var(--hair); }
+.page-contents nav a:active{ color:var(--text); }
+html[data-app="sanctuary"][data-font="dyslexic"] .page-contents nav a{
+  font-family:"OpenDyslexic", var(--serif);
+}

@@ -3161,8 +3161,19 @@ def with_jump_nav(seg):
     seg = re.sub(r'<p class="rubric">(.*?)</p>', on_rub, seg, flags=re.S)
     if len(targets) < 2:
         return seg
-    chips = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
-    nav = f'<nav class="page-toc" aria-label="On this page">{chips}</nav>'
+    if WESTERN_ONLY:
+        # In the app a page of prayer opens on the prayer, not on a menu. The
+        # contents fold away behind one quiet line — still one tap from any
+        # section, but nothing to read past. <details> needs no script.
+        links = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
+        nav = ('<details class="page-contents"><summary>Contents'
+               '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" '
+               'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+               '<path d="M6 9l6 6 6-6"/></svg></summary>'
+               f'<nav aria-label="On this page">{links}</nav></details>')
+    else:
+        chips = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
+        nav = f'<nav class="page-toc" aria-label="On this page">{chips}</nav>'
     parts = seg.split('</section>', 1)               # place after the section title
     return (parts[0] + '</section>\n' + nav + parts[1]) if len(parts) == 2 else nav + seg
 
