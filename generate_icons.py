@@ -16,7 +16,9 @@ Pass the original mock-up as an argument to re-cut them:
     ... generate_icons.py path/to/mockup.png
 """
 import io
+import json
 import os
+import shutil
 import struct
 import sys
 
@@ -87,6 +89,8 @@ def render(master, size, scale=1.0, opaque=False, backdrop=False):
     inner = max(1, round(size * scale))
     art = im.resize((inner, inner), Image.LANCZOS)
     if backdrop:
+        # the 1.35x blow-up is centre-cropped, so only the middle of the master
+        # survives — well inside the squircle, and clear of its masked corners
         big = round(size * 1.35)
         out = im.resize((big, big), Image.LANCZOS).convert("RGB")
         crop = (big - size) // 2
@@ -116,7 +120,55 @@ def ico(pngs, sizes, path):
     print("wrote", path, "/".join(str(s) for s in sizes))
 
 
+IOS_SET = "ios/AppIcon.appiconset"
+# where `npx cap add ios` puts the real catalog, once it has been run on a Mac
+IOS_XCODE = "ios/App/App/Assets.xcassets/AppIcon.appiconset"
+
+
+def ios_icons(dest=IOS_SET):
+    """The Xcode asset catalog: one 1024px square per appearance.
+
+    iOS masks the corners itself and rejects alpha, so these are flattened and
+    full-bleed — the squircle's own corners are filled with a blurred blow-up of
+    the same metal. Light and dark are the two masters; tinted is a greyscale
+    the system recolours with the user's chosen tint.
+    """
+    os.makedirs(dest, exist_ok=True)
+    variants = [
+        ("AppIcon-1024.png", MASTER_LIGHT, None),
+        ("AppIcon-1024-dark.png", MASTER_DARK, "dark"),
+        ("AppIcon-1024-tinted.png", MASTER_DARK, "tinted"),
+    ]
+    images = []
+    for name, master, appearance in variants:
+        im = render(master, 1024, scale=1.0, backdrop=True).convert("RGB")
+        # the masters are only 356px, so 1024 is a 2.9x upscale — a touch of
+        # unsharp masking puts back the edge the resampling costs
+        im = im.filter(ImageFilter.UnsharpMask(radius=3, percent=90, threshold=2))
+        if appearance == "tinted":
+            im = im.convert("L").convert("RGB")
+        im.save(f"{dest}/{name}")
+        entry = {"filename": name, "idiom": "universal", "platform": "ios", "size": "1024x1024"}
+        if appearance:
+            entry["appearances"] = [{"appearance": "luminosity", "value": appearance}]
+        images.append(entry)
+        print("wrote", f"{dest}/{name}", appearance or "light")
+    with open(f"{dest}/Contents.json", "w") as f:
+        json.dump({"images": images, "info": {"author": "xcode", "version": 1}}, f, indent=2)
+    print("wrote", f"{dest}/Contents.json")
+
+    # if the Xcode project already exists, drop them straight in
+    if os.path.isdir(os.path.dirname(IOS_XCODE)) and dest != IOS_XCODE:
+        os.makedirs(IOS_XCODE, exist_ok=True)
+        for f in os.listdir(dest):
+            shutil.copy2(os.path.join(dest, f), os.path.join(IOS_XCODE, f))
+        print("copied into", IOS_XCODE)
+
+
 def main():
+    if "--ios" in sys.argv:
+        ios_icons()
+        return
     if len(sys.argv) > 1:
         cut(sys.argv[1])
     for m in (MASTER_LIGHT, MASTER_DARK):

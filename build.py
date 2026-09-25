@@ -12,6 +12,33 @@ from urllib.parse import quote, urlparse
 
 import generate_calendars as gc
 
+# ---- build modes -----------------------------------------------------------
+# The normal build writes the whole site — both rites — into the repo root,
+# which is what Vercel deploys. WESTERN_ONLY=1 writes a trimmed, Western-Rite
+# copy into OUT_DIR instead, for bundling into the iOS app: no rite gate, no
+# Eastern pages, no Bible, no calendar, no Greek tool, and no service worker
+# (everything ships inside the app, so there is nothing to cache).
+WESTERN_ONLY = os.environ.get("WESTERN_ONLY") == "1"
+OUT_DIR = os.environ.get("OUT_DIR", ".")
+
+# the only pages the Western-only build emits; the hub becomes index.html
+WESTERN_KEEP = {"western.html", "western-compline.html", "western-fasting.html",
+                "prayerbook.html", "st-peter-missal.html"}
+
+
+def _wanted(path):
+    """Is this page part of the Western-only build?"""
+    return path in WESTERN_KEEP or path.startswith(("pb-", "spm-"))
+
+
+def _out(path):
+    """Where a generated file is written (the repo root, or OUT_DIR)."""
+    if OUT_DIR == ".":
+        return path
+    full = os.path.join(OUT_DIR, path)
+    os.makedirs(os.path.dirname(full) or ".", exist_ok=True)
+    return full
+
 content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
@@ -339,6 +366,41 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <p class="menu-note">Reminders appear when you open the app. For alerts even when it&rsquo;s
      closed, <a href="calendar.html">subscribe to the calendar</a>.</p>
 </div>'''
+
+
+def _western_chrome(tmpl):
+    """The app build's chrome: three tabs instead of five, and a Settings panel
+    with nothing on it that the bundled app can't do. Derived from the web
+    template rather than duplicated, so the two never drift apart."""
+    tabs = ('  <a class="tab{h_act}" href="index.html" aria-label="Home">'
+            '<span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>\n'
+            '  <a class="tab{p_act}" href="prayerbook.html" aria-label="Prayer book">'
+            '<span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>\n'
+            '  <a class="tab{r_act}" href="st-peter-missal.html" aria-label="Missal">'
+            '<span class="tab-i">{READ}</span><span class="tab-l">Missal</span></a>\n')
+    start = tmpl.index('  <a class="tab{h_act}"')
+    end = tmpl.index('  <button class="tab" id="settings-btn"')
+    tmpl = tmpl[:start] + tabs + tmpl[end:]
+
+    # no rite to switch: this build is the Western one
+    rite = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Rite</span>')
+    after = tmpl.index('  <div class="menu-row">', rite + 20)
+    tmpl = tmpl[:rite] + tmpl[after:]
+
+    # everything ships inside the app, so there is no offline switch to throw.
+    # The Church calendar stays — fast days matter in a prayer book — but its
+    # note points at a subscribe page this build doesn't carry.
+    off = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Available offline</span>')
+    cal = tmpl.index('  <div class="drawer-heading">Church calendar</div>')
+    tmpl = tmpl[:off] + tmpl[cal:]
+    note = tmpl.index('  <p class="menu-note">Reminders appear')
+    return (tmpl[:note]
+            + '  <p class="menu-note">Reminders appear when you open the app.</p>\n'
+            + tmpl[tmpl.rindex("</div>"):])
+
+
+if WESTERN_ONLY:
+    TABBAR_TMPL = _western_chrome(TABBAR_TMPL)
 
 
 def tabbar(active="", current=""):
@@ -1619,6 +1681,8 @@ def greek_page():
 
 
 # ---- scripts ---------------------------------------------------------------
+_EARLY_GATE = '''if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }'''
+
 EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 var path=location.pathname,isGate=/\\/rite\\.html$/.test(path),isHome=path==="/"||path===""||/\\/index\\.html$/.test(path);
@@ -1636,6 +1700,10 @@ var bg=dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
 r.style.backgroundColor=bg;
 var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </script>'''
+
+if WESTERN_ONLY:
+    # a single-rite app has no gate to send anyone through
+    EARLY_JS = EARLY_JS.replace(_EARLY_GATE + "\n", "")
 
 CONTROL_JS = '''<script>
 (function(){
@@ -1948,12 +2016,35 @@ HEAD_TMPL = '''<!doctype html>
 '''
 
 
+if WESTERN_ONLY:
+    # a bundled WebView has no browser tab, no home-screen shortcut and no
+    # manifest — the app icon comes from the Xcode asset catalog instead
+    _WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=8">
+<link rel="manifest" href="site.webmanifest?v=9">
+"""
+    HEAD_TMPL = HEAD_TMPL.replace(_WEB_ICON_LINKS, "")
+
+
 def page(path, title, desc, body, active="", scripts=""):
+    if WESTERN_ONLY:
+        if not _wanted(path):
+            return
+        # the Western hub is the app's home screen, so it takes index.html —
+        # and every link to it follows
+        if path == "western.html":
+            path = "index.html"
     # gild the single page-opening drop-cap (the grandest initial)
     body = body.replace('<span class="dropcap">', '<span class="dropcap gilt">', 1)
     html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=tabbar(active, path),
                             control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
-    open(path, "w").write(html)
+    if WESTERN_ONLY:
+        html = html.replace('href="western.html"', 'href="index.html"')
+    open(_out(path), "w").write(html)
     print("wrote", path, len(html), "bytes")
 
 
@@ -1995,8 +2086,10 @@ GATE_TMPL = '''<!doctype html>
 
 
 def gate_page(path, title, desc, body, scripts=""):
+    if WESTERN_ONLY:            # nothing to choose between in a single-rite app
+        return
     html = GATE_TMPL.format(title=title, desc=desc, body=body, early=EARLY_JS, scripts=scripts)
-    open(path, "w").write(html)
+    open(_out(path), "w").write(html)
     print("wrote", path, len(html), "bytes")
 
 
@@ -2223,10 +2316,14 @@ def western_page():
              '<span class="hub-feature-d">The Vicariate&rsquo;s norms &mdash; the fasts and days of '
              'abstinence, and the Eucharistic fast.</span></span>'
              f'{_CHEV_R}</a>')
-    o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
-             'in its Western form, and further reading &mdash; is still being built. Everything else '
-             'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
-    o.append('<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>')
+    if WESTERN_ONLY:
+        o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine '
+                 'Liturgy in its Western form, and further reading &mdash; is still being built.</p>')
+    else:
+        o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
+                 'in its Western form, and further reading &mdash; is still being built. Everything else '
+                 'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
+        o.append('<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>')
     o.append(art("mono", foot=True))
     o.append('</section>')
     return "\n".join(o)
@@ -3124,16 +3221,41 @@ _caldata = {
     "moveable": [[off, name, great] for (off, name, great) in gc.MOVEABLE],
     "offset": gc.JULIAN_OFFSET,
 }
-open("calendar-data.js", "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
+open(_out("calendar-data.js"), "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
 print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "moveable")
 
 # generated theming stylesheet (background temperature + Tailwind primary/secondary)
-open("themes.css", "w").write(themes_css())
+open(_out("themes.css"), "w").write(themes_css())
 print("wrote themes.css", len(TW_ORDER), "colour families")
 
-# recolourable masks for the red woodcut icons (so they follow the primary colour)
-gen_icon_masks()
-gen_photo_masks()
+# recolourable masks for the red woodcut icons (so they follow the primary colour).
+# These write back into the repo's own assets, so only the web build runs them;
+# the app build copies the results.
+if not WESTERN_ONLY:
+    gen_icon_masks()
+    gen_photo_masks()
+
+if WESTERN_ONLY:
+    # copy the static files the Western pages actually reference. No service
+    # worker: a bundled app is already offline, and there is nothing to update.
+    import shutil
+    for _f in ["styles.css", "calendar.js"]:
+        shutil.copy2(_f, _out(_f))
+    shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
+    # only the artwork the built pages actually reference
+    _refs = set()
+    for _html in glob.glob(os.path.join(OUT_DIR, "*.html")):
+        _refs.update(re.findall(r'(assets/[A-Za-z0-9_./-]+?\.(?:png|jpg|jpeg|svg|webp))',
+                                open(_html).read()))
+    for _a in sorted(_refs):
+        if os.path.exists(_a):
+            shutil.copy2(_a, _out(_a))
+    print("copied", len(_refs), "artwork files")
+    _n = sum(len(fs) for _r, _ds, fs in os.walk(OUT_DIR))
+    _sz = sum(os.path.getsize(os.path.join(_r, f))
+              for _r, _ds, fs in os.walk(OUT_DIR) for f in fs)
+    print(f"western-only build -> {OUT_DIR}: {_n} files, {_sz / 1e6:.1f} MB")
+    raise SystemExit(0)
 
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,

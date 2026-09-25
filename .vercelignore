@@ -14,3 +14,8 @@ assets/icons/app-icon-dark.png
 generate_icons.py
 voice/
 DESIGN.md
+ios/
+package.json
+package-lock.json
+capacitor.config.json
+node_modules/
