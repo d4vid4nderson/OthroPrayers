@@ -343,6 +343,13 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
   <div class="menu-row">
+    <span class="menu-label">Manuscript style</span>
+    <button id="mss" class="switch" type="button" role="switch" aria-checked="false"
+            aria-label="Manuscript style"><span class="knob"></span></button>
+  </div>
+  <p class="menu-note">Vellum, iron-gall ink and an insular hand for the titles.
+     Dyslexia-friendly text still overrides it.</p>
+  <div class="menu-row">
     <span class="menu-label">Available offline</span>
     <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Available offline"><span class="knob"></span></button>
@@ -1690,11 +1697,13 @@ var rite=L.getItem("rite");
 if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
+var st=L.getItem("style");if(st==="manuscript")r.dataset.style="manuscript";
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var bg=dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+var ms=r.dataset.style==="manuscript";
+var bg=ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
 r.style.backgroundColor=bg;
@@ -1704,6 +1713,11 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 if WESTERN_ONLY:
     # a single-rite app has no gate to send anyone through
     EARLY_JS = EARLY_JS.replace(_EARLY_GATE + "\n", "")
+    # and the app is a prayer book, so it opens in the manuscript style unless
+    # the reader has turned it off
+    EARLY_JS = EARLY_JS.replace(
+        'var st=L.getItem("style");if(st==="manuscript")r.dataset.style="manuscript";',
+        'var st=L.getItem("style")||"manuscript";if(st==="manuscript")r.dataset.style="manuscript";')
 
 CONTROL_JS = '''<script>
 (function(){
@@ -1745,7 +1759,9 @@ CONTROL_JS = '''<script>
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var bg = dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+    var ms=r.dataset.style==="manuscript";
+    var bg = ms?(dark?"#1c1811":"#f0e4c8")
+              :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
     if(tc) tc.setAttribute("content", bg);
     r.style.backgroundColor = bg; }   // stays in step with EARLY_JS
   function paintTheme(){ var dark=r.dataset.theme==="dark";
@@ -1798,6 +1814,14 @@ CONTROL_JS = '''<script>
   function paintDys(){ dys.setAttribute("aria-checked", r.dataset.font==="dyslexic"?"true":"false"); }
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
+
+  // the manuscript skin (vellum + insular display type)
+  var mss=d.getElementById("mss");
+  function paintMss(){ if(mss) mss.setAttribute("aria-checked", r.dataset.style==="manuscript"?"true":"false"); }
+  if(mss) mss.onclick=function(){
+    if(r.dataset.style==="manuscript"){ delete r.dataset.style; L.removeItem("style"); }
+    else { r.dataset.style="manuscript"; L.setItem("style","manuscript"); }
+    paintMss(); paintTC(); };
 
   // reading-checklist progress (saved per device) — shared by the Church
   // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
@@ -1857,7 +1881,7 @@ CONTROL_JS = '''<script>
   }
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
 
-  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff(); paintRite();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintMss(); paintCal(); paintFn(); paintOff(); paintRite();
 
   // The tab bar is plain navigation: each tab is an <a> that loads its page,
   // and CSS marks the active one (a filled highlight behind the icon). No JS.
