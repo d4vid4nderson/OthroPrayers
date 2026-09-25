@@ -19,3 +19,4 @@ package.json
 package-lock.json
 capacitor.config.json
 node_modules/
+design/

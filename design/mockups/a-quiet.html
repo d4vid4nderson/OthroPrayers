@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Direction A — Quiet</title>
+<style>
+@font-face{font-family:"Inter";src:url(fonts/inter.woff2) format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:"EB Garamond";src:url(fonts/ebgaramond.woff2) format("woff2");font-weight:400 800;font-display:block}
+@font-face{font-family:"EB Garamond";src:url(fonts/ebgaramond-italic.woff2) format("woff2");font-style:italic;font-weight:400 800;font-display:block}
+
+/* ---- Direction A: Quiet -------------------------------------------------
+   The modern iOS idiom. Inter stands in for SF Pro. Grouped rows, generous
+   air, one restrained accent, depth from soft shadow rather than ornament.
+   Prayer text alone stays in a serif — it is the one thing you read at
+   length, and it should feel like a book inside an app that doesn't. */
+:root{
+  --bg:#F7F7F9;          /* the app ground */
+  --card:#FFFFFF;
+  --ink:#16161A;
+  --ink-2:#6E6E78;       /* secondary */
+  --ink-3:#A3A3AD;       /* tertiary / captions */
+  --accent:#8C2F27;      /* oxblood, used only where it means something */
+  --hair:rgba(22,22,26,.07);
+  --r:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#8b8b93;font-family:"Inter",system-ui,sans-serif;
+  display:flex;gap:44px;padding:44px;justify-content:center;align-items:flex-start}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:44px;overflow:hidden;
+  position:relative;box-shadow:0 30px 70px rgba(0,0,0,.35);display:flex;flex-direction:column}
+.status{height:52px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 30px 6px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.scroll{flex:1;overflow:hidden;padding:0 20px}
+.label{position:absolute;bottom:-34px;left:0;right:0;text-align:center;color:#fff;
+  font-size:14px;font-weight:600;letter-spacing:.04em}
+
+/* --- home --- */
+.h-top{padding:14px 4px 20px}
+.kicker{font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-size:34px;line-height:1.1;letter-spacing:-.022em;font-weight:700;margin:6px 0 0;color:var(--ink)}
+.now{margin:18px 0 0;background:var(--accent);border-radius:var(--r);padding:16px 18px;color:#fff;
+  display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px rgba(140,47,39,.28)}
+.now-k{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;opacity:.82}
+.now-t{font-size:19px;font-weight:650;letter-spacing:-.01em;margin-top:2px}
+.now-go{margin-left:auto;width:32px;height:32px;border-radius:99px;background:rgba(255,255,255,.18);
+  display:grid;place-items:center}
+.sec{font-size:13px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);
+  margin:26px 4px 10px}
+.group{background:var(--card);border-radius:var(--r);box-shadow:0 1px 2px rgba(22,22,26,.05),0 6px 16px rgba(22,22,26,.05)}
+.row{display:flex;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid var(--hair)}
+.row:last-child{border-bottom:0}
+.ic{width:34px;height:34px;border-radius:10px;flex:none;display:grid;place-items:center;
+  background:rgba(140,47,39,.08);color:var(--accent)}
+.row-b{min-width:0}
+.row-t{font-size:16.5px;font-weight:560;letter-spacing:-.011em;color:var(--ink)}
+.row-d{font-size:13.5px;color:var(--ink-2);margin-top:1px}
+.chev{margin-left:auto;color:var(--ink-3);flex:none}
+
+/* --- prayer --- */
+.p-nav{display:flex;align-items:center;gap:6px;padding:10px 2px 4px;color:var(--accent);
+  font-size:16px;font-weight:550}
+.p-head{padding:16px 4px 6px}
+.p-title{font-size:30px;font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.12}
+.p-sub{font-size:14.5px;color:var(--ink-2);margin-top:6px}
+.chips{display:flex;gap:8px;margin:16px 0 20px;overflow:hidden}
+.chip{font-size:13px;font-weight:550;color:var(--ink-2);background:var(--card);
+  border:1px solid var(--hair);border-radius:99px;padding:7px 13px;white-space:nowrap}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rub{font-size:13.5px;font-weight:600;letter-spacing:.02em;color:var(--accent);margin:0 4px 10px}
+.verse{font-family:"EB Garamond",Georgia,serif;font-size:20px;line-height:1.52;color:var(--ink);
+  margin:0 4px 16px;letter-spacing:.002em}
+.verse .cross{color:var(--accent);font-weight:600}
+.ph{font-size:12.5px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:26px 4px 10px;display:flex;align-items:center;gap:12px}
+.ph::after{content:"";flex:1;height:1px;background:var(--hair)}
+
+/* --- tab bar --- */
+.tabs{flex:none;height:84px;background:rgba(255,255,255,.86);backdrop-filter:blur(20px);
+  border-top:1px solid var(--hair);display:flex;padding:10px 6px 0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-3);
+  font-size:10.5px;font-weight:550;letter-spacing:.01em}
+.tab.on{color:var(--accent)}
+svg{display:block}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="h-top">
+      <div class="kicker">Thursday, 25 September</div>
+      <h1>Western Rite</h1>
+    </div>
+
+    <a class="now">
+      <div>
+        <div class="now-k">Now &middot; On rising</div>
+        <div class="now-t">Morning Prayer</div>
+      </div>
+      <span class="now-go">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <div class="sec">The hours</div>
+    <div class="group">
+      <div class="row">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
+        <span class="row-b"><span class="row-t">Morning Prayer</span><div class="row-d">On rising</div></span>
+        <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+      <div class="row">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <span class="row-b"><span class="row-t">Noon Prayers</span><div class="row-d">Midday</div></span>
+        <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+      <div class="row">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3v18M5 10l7 7 7-7"/></svg></span>
+        <span class="row-b"><span class="row-t">Evening Prayers</span><div class="row-d">This evening</div></span>
+        <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+      <div class="row">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.6 6.6 0 0 0 10.5 10.5z"/></svg></span>
+        <span class="row-b"><span class="row-t">Compline</span><div class="row-d">At nightfall</div></span>
+        <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+    </div>
+
+    <div class="sec">Books</div>
+    <div class="group">
+      <div class="row">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>
+        <span class="row-b"><span class="row-t">A Little Prayer Book</span><div class="row-d">Daily &amp; occasional prayers</div></span>
+        <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+      <div class="row">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg></span>
+        <span class="row-b"><span class="row-t">St. Peter Pew Missal</span><div class="row-d">The Mass, Rite of St. Tikhon</div></span>
+        <svg class="chev" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">A &mdash; Quiet &middot; home</div>
+</div>
+
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="p-nav">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      Prayer Book
+    </div>
+    <div class="p-head">
+      <div class="p-title">Morning Prayer</div>
+      <div class="p-sub">A short form for use alone &middot; 4 min</div>
+    </div>
+    <div class="chips">
+      <span class="chip on">Lord&rsquo;s Prayer</span>
+      <span class="chip">Hail Mary</span>
+      <span class="chip">Creed</span>
+    </div>
+    <p class="rub">Gather your thoughts quietly, and begin:</p>
+    <p class="verse"><span class="cross">&#10014;</span> In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.</p>
+    <div class="ph">The Lord&rsquo;s Prayer</div>
+    <p class="verse">Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us.</p>
+  </div>
+  <div class="tabs">
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">A &mdash; Quiet &middot; prayer</div>
+</div>
+
+</body>
+</html>
