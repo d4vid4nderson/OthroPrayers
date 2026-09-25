@@ -12,6 +12,38 @@ from urllib.parse import quote, urlparse
 
 import generate_calendars as gc
 
+# ---- build modes -----------------------------------------------------------
+# The normal build writes the whole site — both rites — into the repo root,
+# which is what Vercel deploys. APP_BUILD=1 with OUT_DIR writes the same pages
+# for bundling into the iOS app instead: no favicon, manifest or service worker
+# (everything ships inside the app, so there is nothing to cache).
+# Two independent switches, deliberately:
+#   WESTERN_ONLY — content scope. On by default: the site is a Western Rite
+#     prayer book. WESTERN_ONLY=0 brings the Eastern side back.
+#   APP_BUILD    — the bundled-app target. No favicon, manifest or service
+#     worker (a WebView needs none), and the assets are copied to OUT_DIR.
+WESTERN_ONLY = os.environ.get("WESTERN_ONLY", "1") != "0"
+APP_BUILD = os.environ.get("APP_BUILD") == "1"
+OUT_DIR = os.environ.get("OUT_DIR", ".")
+
+# the only pages the Western-only build emits; the hub becomes index.html
+WESTERN_KEEP = {"western.html", "western-compline.html", "western-fasting.html",
+                "prayerbook.html", "st-peter-missal.html"}
+
+
+def _wanted(path):
+    """Is this page part of the Western-only build?"""
+    return path in WESTERN_KEEP or path.startswith(("pb-", "spm-"))
+
+
+def _out(path):
+    """Where a generated file is written (the repo root, or OUT_DIR)."""
+    if OUT_DIR == ".":
+        return path
+    full = os.path.join(OUT_DIR, path)
+    os.makedirs(os.path.dirname(full) or ".", exist_ok=True)
+    return full
+
 content = open("prayers.content.html").read()
 # one black, letter-spaced title the generator can't auto-clean (CSS spaces it)
 content = re.sub(r"for\s+a\s+n\s+y\s+m\s+e\s+a\s+l", "for any meal", content)
@@ -294,18 +326,18 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
       <button id="theme-dark" type="button" title="Dark" aria-label="Dark mode" aria-pressed="false">{MOON}</button>
     </span>
   </div>
-  <div class="menu-row">
+  <div class="menu-row" id="row-temp">
     <span class="menu-label">Background</span>
     <span class="seg" role="group" aria-label="Background temperature">
       <button id="temp-warm" type="button" aria-pressed="true">Warm</button>
       <button id="temp-cool" type="button" aria-pressed="false">Cool</button>
     </span>
   </div>
-  <div class="menu-col">
+  <div class="menu-col" id="row-primary">
     <span class="menu-label">Primary colour <span class="menu-pick" id="primary-pick">Default</span></span>
     {primary_sw}
   </div>
-  <div class="menu-col">
+  <div class="menu-col" id="row-secondary">
     <span class="menu-label">Secondary colour <span class="menu-pick" id="secondary-pick">Default</span></span>
     {secondary_sw}
     <button class="menu-reset" id="appearance-reset" type="button">Reset to default</button>
@@ -315,6 +347,17 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
+  <div class="menu-col" id="row-style">
+    <span class="menu-label">Style</span>
+    <span class="seg seg-3" role="group" aria-label="Style">
+      <button id="style-paper" type="button" aria-pressed="true">Paper</button>
+      <button id="style-manuscript" type="button" aria-pressed="false">Manuscript</button>
+      <button id="style-sanctuary" type="button" aria-pressed="false">Sanctuary</button>
+    </span>
+  </div>
+  <p class="menu-note">Paper is the printed booklet. Manuscript is vellum and an
+     insular hand. Sanctuary is dark, for early and late. Dyslexia-friendly text
+     overrides all three.</p>
   <div class="menu-row">
     <span class="menu-label">Available offline</span>
     <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
@@ -339,6 +382,51 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
   <p class="menu-note">Reminders appear when you open the app. For alerts even when it&rsquo;s
      closed, <a href="calendar.html">subscribe to the calendar</a>.</p>
 </div>'''
+
+
+def _western_chrome(tmpl):
+    """The app build's chrome: three tabs instead of five, and a Settings panel
+    with nothing on it that the bundled app can't do. Derived from the web
+    template rather than duplicated, so the two never drift apart."""
+    tabs = ('  <a class="tab{h_act}" href="index.html" aria-label="Today">'
+            '<span class="tab-i">{HOME}</span><span class="tab-l">Today</span></a>\n'
+            '  <a class="tab{p_act}" href="prayerbook.html" aria-label="Prayer book">'
+            '<span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>\n'
+            '  <a class="tab{r_act}" href="st-peter-missal.html" aria-label="Missal">'
+            '<span class="tab-i">{READ}</span><span class="tab-l">Missal</span></a>\n')
+    start = tmpl.index('  <a class="tab{h_act}"')
+    end = tmpl.index('  <button class="tab" id="settings-btn"')
+    tmpl = tmpl[:start] + tabs + tmpl[end:]
+
+    # no rite to switch: this build is the Western one
+    rite = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Rite</span>')
+    after = tmpl.index('  <div class="menu-row">', rite + 20)
+    tmpl = tmpl[:rite] + tmpl[after:]
+
+    # everything ships inside the app, so there is no offline switch to throw.
+    # The Church calendar stays — fast days matter in a prayer book — but its
+    # note points at a subscribe page this build doesn't carry.
+    # Sanctuary is one designed system, not a themeable one: the background
+    # temperature and the accent palettes would only let it be broken, and the
+    # manuscript style belongs to the web build
+    bgrow = tmpl.index('  <div class="menu-row" id="row-temp">')
+    dys = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Dyslexia-friendly</span>')
+    tmpl = tmpl[:bgrow] + tmpl[dys:]
+    mss = tmpl.index('  <div class="menu-col" id="row-style">')
+    after_note = tmpl.index('</p>', tmpl.index('<p class="menu-note">', mss)) + len('</p>\n')
+    tmpl = tmpl[:mss] + tmpl[after_note:]
+
+    off = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Available offline</span>')
+    cal = tmpl.index('  <div class="drawer-heading">Church calendar</div>')
+    tmpl = tmpl[:off] + tmpl[cal:]
+    note = tmpl.index('  <p class="menu-note">Reminders appear')
+    return (tmpl[:note]
+            + '  <p class="menu-note">Reminders appear when you open the app.</p>\n'
+            + tmpl[tmpl.rindex("</div>"):])
+
+
+if WESTERN_ONLY:
+    TABBAR_TMPL = _western_chrome(TABBAR_TMPL)
 
 
 def tabbar(active="", current=""):
@@ -1619,6 +1707,8 @@ def greek_page():
 
 
 # ---- scripts ---------------------------------------------------------------
+_EARLY_GATE = '''if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }'''
+
 EARLY_JS = '''<script>
 (function(){var r=document.documentElement,L=localStorage,t=L.getItem("theme"),s=L.getItem("size"),f=L.getItem("font");
 var path=location.pathname,isGate=/\\/rite\\.html$/.test(path),isHome=path==="/"||path===""||/\\/index\\.html$/.test(path);
@@ -1626,16 +1716,22 @@ var rite=L.getItem("rite");
 if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
+var st=L.getItem("style")||"sanctuary";if(st!=="paper")r.dataset.style=st;
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var bg=dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary";
+var bg=ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
 r.style.backgroundColor=bg;
 var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </script>'''
+
+if WESTERN_ONLY:
+    # a single-rite app has no gate to send anyone through
+    EARLY_JS = EARLY_JS.replace(_EARLY_GATE + "\n", "")
 
 CONTROL_JS = '''<script>
 (function(){
@@ -1677,7 +1773,10 @@ CONTROL_JS = '''<script>
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var bg = dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee");
+    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary";
+    var bg = ap?"#0C0D10"
+            :ms?(dark?"#1c1811":"#f0e4c8")
+              :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
     if(tc) tc.setAttribute("content", bg);
     r.style.backgroundColor = bg; }   // stays in step with EARLY_JS
   function paintTheme(){ var dark=r.dataset.theme==="dark";
@@ -1730,6 +1829,18 @@ CONTROL_JS = '''<script>
   function paintDys(){ dys.setAttribute("aria-checked", r.dataset.font==="dyslexic"?"true":"false"); }
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
+
+  // the three skins sit on one axis: paper (the default), manuscript, sanctuary
+  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],["sanctuary","style-sanctuary"]];
+  function paintMss(){ var v=r.dataset.style||"paper";
+    styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
+      if(btn) btn.setAttribute("aria-pressed", pr[0]===v?"true":"false"); }); }
+  function setStyle(v){
+    if(v==="paper"){ delete r.dataset.style; L.setItem("style","paper"); }
+    else { r.dataset.style=v; L.setItem("style",v); }
+    paintMss(); paintTC(); }
+  styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
+    if(btn) btn.onclick=function(){ setStyle(pr[0]); }; });
 
   // reading-checklist progress (saved per device) — shared by the Church
   // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
@@ -1789,7 +1900,7 @@ CONTROL_JS = '''<script>
   }
   if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
 
-  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintCal(); paintFn(); paintOff(); paintRite();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintMss(); paintCal(); paintFn(); paintOff(); paintRite();
 
   // The tab bar is plain navigation: each tab is an <a> that loads its page,
   // and CSS marks the active one (a filled highlight behind the icon). No JS.
@@ -1930,6 +2041,7 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="theme-color" id="tc" content="#faf6ee">
 {early}
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sanctuary.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -1948,12 +2060,35 @@ HEAD_TMPL = '''<!doctype html>
 '''
 
 
+if APP_BUILD:
+    # a bundled WebView has no browser tab, no home-screen shortcut and no
+    # manifest — the app icon comes from the Xcode asset catalog instead
+    _WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=8" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16-dark.png?v=8" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=8">
+<link rel="manifest" href="site.webmanifest?v=9">
+"""
+    HEAD_TMPL = HEAD_TMPL.replace(_WEB_ICON_LINKS, "")
+
+
 def page(path, title, desc, body, active="", scripts=""):
+    if WESTERN_ONLY:
+        if not _wanted(path):
+            return
+        # the Western hub is the app's home screen, so it takes index.html —
+        # and every link to it follows
+        if path == "western.html":
+            path = "index.html"
     # gild the single page-opening drop-cap (the grandest initial)
     body = body.replace('<span class="dropcap">', '<span class="dropcap gilt">', 1)
     html = HEAD_TMPL.format(title=title, desc=desc, body=body, topnav=tabbar(active, path),
                             control=CONTROL_JS, early=EARLY_JS, scripts=scripts)
-    open(path, "w").write(html)
+    if WESTERN_ONLY:
+        html = html.replace('href="western.html"', 'href="index.html"')
+    open(_out(path), "w").write(html)
     print("wrote", path, len(html), "bytes")
 
 
@@ -1980,6 +2115,7 @@ GATE_TMPL = '''<!doctype html>
 <meta name="theme-color" id="tc" content="#faf6ee">
 {early}
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sanctuary.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -1995,8 +2131,10 @@ GATE_TMPL = '''<!doctype html>
 
 
 def gate_page(path, title, desc, body, scripts=""):
+    if WESTERN_ONLY:            # nothing to choose between in a single-rite app
+        return
     html = GATE_TMPL.format(title=title, desc=desc, body=body, early=EARLY_JS, scripts=scripts)
-    open(path, "w").write(html)
+    open(_out(path), "w").write(html)
     print("wrote", path, len(html), "bytes")
 
 
@@ -2061,6 +2199,88 @@ WESTERN_CYCLE = [
     ("pb-evening", "Evening Prayers", "A short form for the close of the day.",
      "chirho", "This evening", 17, 21),
 ] + WESTERN_OFFICES
+
+
+# ---- the app's Today screen (Sanctuary) -------------------------------------
+# Only the app build uses this. The office due now is lifted out of the list
+# into a lit card; everything else on the screen recedes behind it.
+_APP_CHEV = ('<svg class="app-row-c" viewBox="0 0 24 24" width="17" height="17" fill="none" '
+             'stroke="currentColor" stroke-width="2.1" stroke-linecap="round" '
+             'stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>')
+_APP_BOOK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+             'stroke-linejoin="round" aria-hidden="true"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>')
+_APP_MISSAL = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+               'stroke-linejoin="round" aria-hidden="true"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 '
+               '0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>')
+_APP_CROSS = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+              'stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M7 8h10"/></svg>')
+
+
+def _app_book_row(href, icon, title, desc):
+    return (f'<a class="app-row" href="{href}">'
+            f'<span class="app-row-i">{icon}</span>'
+            f'<span class="app-row-b"><span class="app-row-t">{title}</span>'
+            f'<span class="app-row-d">{desc}</span></span>{_APP_CHEV}</a>')
+
+
+def app_today_page():
+    o = ['<section class="today" id="top">',
+         '<div class="today-head">',
+         '<div class="today-date" id="today-date"></div>',
+         '<h1 class="today-t">Western Rite</h1>',
+         '</div>',
+         '<div id="now-slot"></div>',
+         '<div class="app-sec" id="rest-label">The hours</div>',
+         '<div class="app-list" id="hours">']
+    for slug, title, blurb, _emb, when, h0, h1 in WESTERN_CYCLE:
+        o.append(f'<a class="app-row" href="{slug}.html" data-h0="{h0}" data-h1="{h1}" '
+                 f'data-t="{title}" data-w="{when}" data-d="{blurb}">'
+                 f'<span class="dot"></span><span class="app-row-t">{title}</span>'
+                 f'<span class="app-row-w">{when}</span></a>')
+    o.append('</div>')
+    o.append('<div class="app-sec">Books</div><div class="app-list">')
+    if PB_CONTENT:
+        o.append(_app_book_row("prayerbook.html", _APP_BOOK, "A Little Prayer Book",
+                               "Daily &amp; occasional prayers"))
+    if SPM_CONTENT:
+        o.append(_app_book_row("st-peter-missal.html", _APP_MISSAL, "The Pew Missal",
+                               "The Mass, Rite of St. Tikhon"))
+    o.append(_app_book_row("western-fasting.html", _APP_CROSS, "Fasting &amp; Abstinence",
+                           "The Vicariate&rsquo;s norms"))
+    o.append('</div></section>')
+    return "\n".join(o)
+
+
+APP_TODAY_JS = '''<script>
+(function(){
+  var d=document, slot=d.getElementById("now-slot"), list=d.getElementById("hours");
+  if(!slot||!list) return;
+  var dt=d.getElementById("today-date");
+  if(dt) dt.textContent=new Date().toLocaleDateString(undefined,
+    {weekday:"long",day:"numeric",month:"long"});
+  var rows=[].slice.call(list.querySelectorAll(".app-row")), h=new Date().getHours(), now=null;
+  rows.forEach(function(r){
+    var a=+r.getAttribute("data-h0"), b=+r.getAttribute("data-h1");
+    // a window that wraps past midnight (e.g. Compline, 21 to 4) still matches
+    var inside = a<b ? (h>=a&&h<b) : (h>=a||h<b);
+    if(inside && !now) now=r;
+  });
+  if(!now) now=rows[0];
+  if(!now) return;
+  var esc=function(t){ var e=d.createElement("span"); e.textContent=t; return e.innerHTML; };
+  slot.innerHTML='<a class="now-card" href="'+now.getAttribute("href")+'">'
+    +'<span class="now-k">Now &middot; '+esc(now.getAttribute("data-w"))+'</span>'
+    +'<span class="now-t">'+esc(now.getAttribute("data-t"))+'</span>'
+    +'<span class="now-d">'+esc(now.getAttribute("data-d"))+'</span>'
+    +'<span class="now-go">Begin<svg viewBox="0 0 24 24" fill="none" stroke="#1A1508" '
+    +'stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    +'<path d="M9 6l6 6-6 6"/></svg></span></a>';
+  now.parentNode.removeChild(now);
+  var label=d.getElementById("rest-label");
+  if(label) label.textContent = list.querySelector(".app-row") ? "The rest of the day" : "The hours";
+  if(!list.querySelector(".app-row")){ list.style.display="none"; if(label) label.style.display="none"; }
+})();
+</script>'''
 
 
 def western_compline_page():
@@ -2223,10 +2443,14 @@ def western_page():
              '<span class="hub-feature-d">The Vicariate&rsquo;s norms &mdash; the fasts and days of '
              'abstinence, and the Eucharistic fast.</span></span>'
              f'{_CHEV_R}</a>')
-    o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
-             'in its Western form, and further reading &mdash; is still being built. Everything else '
-             'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
-    o.append('<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>')
+    if WESTERN_ONLY:
+        o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine '
+                 'Liturgy in its Western form, and further reading &mdash; is still being built.</p>')
+    else:
+        o.append('<p class="topic-intro">More &mdash; the Church calendar of saints, the Divine Liturgy '
+                 'in its Western form, and further reading &mdash; is still being built. Everything else '
+                 'in this app is Eastern Orthodox at present, but nothing here is off-limits.</p>')
+        o.append('<button class="gk-cta" id="rite-switch" type="button">Switch to Eastern Orthodox</button>')
     o.append(art("mono", foot=True))
     o.append('</section>')
     return "\n".join(o)
@@ -2944,8 +3168,19 @@ def with_jump_nav(seg):
     seg = re.sub(r'<p class="rubric">(.*?)</p>', on_rub, seg, flags=re.S)
     if len(targets) < 2:
         return seg
-    chips = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
-    nav = f'<nav class="page-toc" aria-label="On this page">{chips}</nav>'
+    if WESTERN_ONLY:
+        # In the app a page of prayer opens on the prayer, not on a menu. The
+        # contents fold away behind one quiet line — still one tap from any
+        # section, but nothing to read past. <details> needs no script.
+        links = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
+        nav = ('<details class="page-contents"><summary>Contents'
+               '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" '
+               'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+               '<path d="M6 9l6 6 6-6"/></svg></summary>'
+               f'<nav aria-label="On this page">{links}</nav></details>')
+    else:
+        chips = "".join(f'<a href="#{sid}">{lab}</a>' for sid, lab in targets)
+        nav = f'<nav class="page-toc" aria-label="On this page">{chips}</nav>'
     parts = seg.split('</section>', 1)               # place after the section title
     return (parts[0] + '</section>\n' + nav + parts[1]) if len(parts) == 2 else nav + seg
 
@@ -2962,7 +3197,8 @@ gate_page("rite.html", "Welcome — Daily Prayers",
 # nothing is off-limits while the rest of the Western Rite section is built
 page("western.html", "Western Rite Orthodoxy — Daily Prayers",
      "The Western Rite Orthodox daily office: Morning Prayer, Evening Prayer and Compline.",
-     western_page(), active="home")
+     app_today_page() if WESTERN_ONLY else western_page(), active="home",
+     scripts=APP_TODAY_JS if WESTERN_ONLY else "")
 
 # the Vicariate's fasting discipline, set out in full rather than linked as a PDF
 page("western-fasting.html", "Fasting &amp; Abstinence — Western Rite Orthodoxy",
@@ -3124,16 +3360,41 @@ _caldata = {
     "moveable": [[off, name, great] for (off, name, great) in gc.MOVEABLE],
     "offset": gc.JULIAN_OFFSET,
 }
-open("calendar-data.js", "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
+open(_out("calendar-data.js"), "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
 print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "moveable")
 
 # generated theming stylesheet (background temperature + Tailwind primary/secondary)
-open("themes.css", "w").write(themes_css())
+open(_out("themes.css"), "w").write(themes_css())
 print("wrote themes.css", len(TW_ORDER), "colour families")
 
-# recolourable masks for the red woodcut icons (so they follow the primary colour)
-gen_icon_masks()
-gen_photo_masks()
+# recolourable masks for the red woodcut icons (so they follow the primary colour).
+# These write back into the repo's own assets, so only the web build runs them;
+# the app build copies the results.
+if not APP_BUILD:
+    gen_icon_masks()
+    gen_photo_masks()
+
+if APP_BUILD:
+    # copy the static files the built pages actually reference. No service
+    # worker: a bundled app is already offline, and there is nothing to update.
+    import shutil
+    for _f in ["styles.css", "sanctuary.css", "calendar.js"]:
+        shutil.copy2(_f, _out(_f))
+    shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
+    # only the artwork the built pages actually reference
+    _refs = set()
+    for _html in glob.glob(os.path.join(OUT_DIR, "*.html")):
+        _refs.update(re.findall(r'(assets/[A-Za-z0-9_./-]+?\.(?:png|jpg|jpeg|svg|webp))',
+                                open(_html).read()))
+    for _a in sorted(_refs):
+        if os.path.exists(_a):
+            shutil.copy2(_a, _out(_a))
+    print("copied", len(_refs), "artwork files")
+    _n = sum(len(fs) for _r, _ds, fs in os.walk(OUT_DIR))
+    _sz = sum(os.path.getsize(os.path.join(_r, f))
+              for _r, _ds, fs in os.walk(OUT_DIR) for f in fs)
+    print(f"western-only build -> {OUT_DIR}: {_n} files, {_sz / 1e6:.1f} MB")
+    raise SystemExit(0)
 
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
@@ -3141,15 +3402,25 @@ gen_photo_masks()
 _NODEPLOY = {"prayers.content.html", "ancient.content.html",
              "assets/icons/app-icon.png", "assets/icons/app-icon-dark.png"}
 _assets = {"./"}
-_assets.update(glob.glob("*.html"))
-# note: the per-book bible/*.json (~5MB) are intentionally NOT precached — they
-# are cached at runtime as chapters are read, to keep the offline install lean
-for _p in ["styles.css", "themes.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
-           "bible-index.js", "bible-plan-data.js", "bible.js", "site.webmanifest", "favicon.ico"]:
+_pages = sorted(set(glob.glob("*.html")) - _NODEPLOY)
+_assets.update(_pages)
+# precache only what the built pages actually pull in. Deriving this from the
+# output rather than a hand-kept list means trimming the site's scope can never
+# leave a dead entry behind — one 404 fails cache.addAll() and the whole
+# offline install with it.
+_referenced = set()
+for _p in _pages:
+    _referenced.update(re.findall(r'(?:src|href)="([^"]+?\.(?:js|css|webmanifest|ico))(?:\?[^"]*)?"',
+                                  open(_p).read()))
+for _p in sorted(_referenced) + ["favicon.ico"]:
     if os.path.exists(_p):
         _assets.add(_p)
-for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*", "calendars/*.ics"]:
+# note: the per-book bible/*.json (~5MB) are never precached — they are cached
+# at runtime as chapters are read, to keep the offline install lean
+for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*"]:
     _assets.update(glob.glob(_pat))
+if not WESTERN_ONLY:
+    _assets.update(glob.glob("calendars/*.ics"))
 _assets = sorted(a for a in _assets if a not in _NODEPLOY)
 # cache version = hash of the cached files' contents, so a new deploy busts it
 _h = hashlib.sha1()

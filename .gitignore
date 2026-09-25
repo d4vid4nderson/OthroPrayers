@@ -9,3 +9,9 @@ voice/voice.json
 voice/*.mp3
 voice/*.wav
 *.env
+
+# iOS app: the bundled web build is generated (npm run build), and node_modules
+# and the CocoaPods checkout come from the toolchain
+ios/www/
+node_modules/
+ios/App/Pods/

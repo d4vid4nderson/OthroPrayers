@@ -36,6 +36,23 @@
   font-display:swap;
   src:url(fonts/cormorant.woff2) format("woff2");
 }
+/* Uncial Antiqua (SIL OFL — see fonts/UncialAntiqua-OFL.txt): an insular
+   majuscule, used ONLY for display in the manuscript style. Never body text:
+   uncial is among the least readable letterforms there is, and the
+   dyslexia-friendly setting must always win over it. */
+@font-face{
+  font-family:"Uncial Antiqua";
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url(fonts/uncial-antiqua.woff2) format("woff2");
+}
+/* IM Fell English Small Caps (SIL OFL — see fonts/IMFellEnglishSC-OFL.txt):
+   a digitisation of a 17th-century Fell type, for the small-cap labels and
+   rubric headings in the manuscript style. */
+@font-face{
+  font-family:"IM Fell SC";
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url(fonts/imfell-sc.woff2) format("woff2");
+}
 /* OpenDyslexic (SIL OFL — see fonts/OpenDyslexic-LICENSE.txt) for reading mode */
 @font-face{
   font-family:"OpenDyslexic";
@@ -468,6 +485,12 @@ figure.art svg{ display:inline-block; height:auto; }
   padding-top:1.2rem;
 }
 .colophon cite{ font-style:italic; }
+/* without these the links fall back to the UA's default blue — unreadable on
+   a dark ground and off-palette on a light one. Both were wrong in every
+   style, Sanctuary only made them obvious. */
+.colophon a{ color:var(--link); }
+/* a link inside a rubric reads as part of the rubric, not as prose */
+p.rubric a{ color:inherit; text-decoration:underline; text-underline-offset:.18em; }
 
 /* ---- landing / home page -------------------------------------------- */
 .landing .coverimg{ width:min(58%, 14rem); margin-inline:auto; }
@@ -1341,4 +1364,124 @@ html[data-theme="dark"] .tts-player:not(.open){ box-shadow:0 6px 18px color-mix(
   .res-card:active, .cf-chip:active, .gk-mini:active, .gk-cta:active,
   .cal-btn:active, .landing-cta .cta:active,
   .tw-prompt-btn:active, .gk-drop:active{ transform:none; }
+}
+
+/* ==== the manuscript style (html[data-style="manuscript"]) ================
+   An opt-in skin over the same markup: vellum ground, iron-gall ink, an
+   insular majuscule for display, and illuminated versal initials. It changes
+   surfaces and display type only — never the body face, and never anything
+   the dyslexia-friendly setting controls, which still overrides all of it. */
+html[data-style="manuscript"]{
+  --ink:        #2f2418;            /* iron gall, browner and warmer than lamp black */
+  --ink-soft:   rgba(47,36,24,.7);
+  --paper:      #f0e4c8;            /* vellum, not bleached stock */
+  --surface:    #f6ecd6;
+  --surface-sunk:#e6d7b4;
+  --desk:       #ddcaa2;
+  --hairline:   #d8c49a;
+  --hairline-strong:#c2a97a;
+  --rubric:     #a32a1e;            /* cinnabar, laid on a warmer ground */
+  --gold:       #8a6b16;
+}
+html[data-style="manuscript"][data-theme="dark"]{
+  --ink:        #e8dcc2;
+  --ink-soft:   rgba(232,220,194,.68);
+  --paper:      #1c1811;            /* the same page by candlelight */
+  --surface:    #262117;
+  --surface-sunk:#141109;
+  --desk:       #0f0d08;
+  --hairline:   #3a3223;
+  --hairline-strong:#4d422e;
+  --rubric:     #e08b7a;
+  --gold:       #c9a548;
+}
+
+/* the ground: uneven vellum, built from gradients so it costs no request and
+   stays crisp at any density */
+html[data-style="manuscript"] body{
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 18% 12%, rgba(150,116,60,.08), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 82% 30%, rgba(122,92,44,.07), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 40% 88%, rgba(140,108,54,.06), transparent 72%),
+    repeating-linear-gradient(94deg, rgba(120,92,48,.035) 0 1px, transparent 1px 3px);
+  background-attachment:fixed;
+}
+html[data-style="manuscript"][data-theme="dark"] body{
+  background-image:
+    radial-gradient(ellipse 60% 40% at 18% 12%, rgba(214,178,108,.05), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 82% 30%, rgba(214,178,108,.04), transparent 70%),
+    repeating-linear-gradient(94deg, rgba(214,178,108,.02) 0 1px, transparent 1px 3px);
+}
+
+/* the ruled text block — scribes ruled the frame before they wrote in it */
+html[data-style="manuscript"] .book{
+  border-left:1px solid color-mix(in srgb, var(--gold) 34%, transparent);
+  border-right:1px solid color-mix(in srgb, var(--gold) 34%, transparent);
+}
+
+/* display type: the insular majuscule, and nowhere else */
+html[data-style="manuscript"] .divider h1{
+  font-family:"Uncial Antiqua", var(--display);
+  letter-spacing:.01em;
+  line-height:1.18;
+  font-weight:400;
+}
+html[data-style="manuscript"] .divider h1 .i{ font-style:normal; }
+
+/* the small-cap labels — "On rising", "Midday" — in the Fell type */
+html[data-style="manuscript"] .office-when,
+html[data-style="manuscript"] .drawer-heading,
+html[data-style="manuscript"] .bib-group{
+  font-family:"IM Fell SC", var(--display);
+  letter-spacing:.06em;
+}
+
+/* the illuminated versal: gold letter on a lapis panel, ruled in gold */
+html[data-style="manuscript"] .dropcap{
+  font-family:"Uncial Antiqua", var(--display);
+  font-weight:400;
+  /* a square panel exactly two body lines tall, so the text wraps around it
+     cleanly instead of stepping in for a third line. 2 x 1.46 (body
+     line-height) / 2.2 (this element's font-size) = 1.33em */
+  font-size:2.2em;
+  width:1.35em; height:1.35em;
+  box-sizing:border-box;
+  display:flex; align-items:center; justify-content:center;
+  line-height:1;
+  color:var(--gold);
+  text-shadow:none;
+  background:linear-gradient(160deg,
+      color-mix(in srgb, var(--lapis) 92%, #000) 0%,
+      var(--lapis) 55%,
+      color-mix(in srgb, var(--lapis) 78%, #fff) 100%);
+  border:1px solid color-mix(in srgb, var(--gold) 70%, transparent);
+  border-radius:2px;
+  margin:0 .26em .02em 0;
+  box-shadow:0 1px 2px rgba(40,26,8,.28);
+}
+html[data-style="manuscript"] .dropcap.gilt{ color:#f2d98a; }
+
+/* rubrics sit a shade heavier on vellum than on white stock */
+html[data-style="manuscript"] p.rubric{ font-family:"IM Fell SC", var(--display); letter-spacing:.02em; }
+
+/* the tab bar reads as the board of the binding, not a chrome strip */
+html[data-style="manuscript"] .tabbar{
+  background:linear-gradient(to bottom,
+      color-mix(in srgb, var(--surface) 82%, var(--desk)),
+      color-mix(in srgb, var(--desk) 70%, var(--surface)));
+  border-top:1px solid var(--hairline-strong);
+}
+html[data-style="manuscript"] .tab-l{ font-family:"IM Fell SC", var(--display); letter-spacing:.05em; }
+
+/* the dyslexia-friendly setting is absolute: it outranks every face above */
+html[data-style="manuscript"][data-font="dyslexic"] .divider h1,
+html[data-style="manuscript"][data-font="dyslexic"] .dropcap,
+html[data-style="manuscript"][data-font="dyslexic"] .office-when,
+html[data-style="manuscript"][data-font="dyslexic"] .drawer-heading,
+html[data-style="manuscript"][data-font="dyslexic"] .bib-group,
+html[data-style="manuscript"][data-font="dyslexic"] p.rubric,
+html[data-style="manuscript"][data-font="dyslexic"] .tab-l{
+  font-family:"OpenDyslexic", var(--serif);
+  letter-spacing:normal;
 }

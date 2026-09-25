@@ -1,0 +1,283 @@
+/* ==========================================================================
+   Sanctuary — a dark skin with one warm light source.
+
+   Loaded after styles.css in both builds and gated on data-style="sanctuary",
+   which sits on the same axis as "manuscript": one style at a time. The iOS
+   app opens in it; the web offers it in Settings. styles.css still supplies
+   the content primitives (verses, lists, tables); this file replaces the
+   ground, the chrome and everything you navigate with.
+
+   The rule the design runs on: navigation may use the app idiom — rows,
+   chevrons, a tinted icon — but a page of prayer gets type, white space and
+   one hairline. Gold marks the next thing to do, and nothing else.
+   ========================================================================== */
+
+/* Inter (SIL OFL — see fonts/Inter-OFL.txt) stands in for SF Pro: the app's
+   UI voice. It never sets a word of prayer — that is always the serif. */
+@font-face{
+  font-family:"Inter";
+  font-style:normal; font-weight:100 900; font-display:swap;
+  src:url(fonts/inter.woff2) format("woff2");
+}
+
+html[data-style="sanctuary"]{
+  --sans:"Inter", system-ui, -apple-system, sans-serif;
+  --bg:#0C0D10;
+  --surface:#15171C;
+  --text:#ECEAE6;
+  --text-2:#9AA0AB;
+  --text-3:#646B77;
+  --sanct-gold:#D9B36C;
+  --hair:rgba(236,234,230,.09);
+  --r-card:20px;
+
+  /* re-point the inherited tokens so existing content markup lands in the
+     new palette instead of fighting it */
+  --paper:var(--bg);
+  --surface-sunk:#101216;
+  --desk:#07080A;
+  --ink:var(--text);
+  --ink-soft:var(--text-2);
+  --rubric:var(--sanct-gold);
+  --rubric-deep:#B9914C;
+  --gold:var(--sanct-gold);
+  --lapis:#2E4C8F;
+  --link:#9FC0F5;
+  --hairline:var(--hair);
+  --hairline-strong:rgba(236,234,230,.16);
+  --elev-1:none; --elev-2:none; --elev-3:none;
+}
+html[data-style="sanctuary"] body{ background:var(--bg); color:var(--text); }
+html[data-style="sanctuary"] .scroll{ padding-inline:0; }
+
+/* ---- the booklet page: no card, no border, just a measure ---------------- */
+html[data-style="sanctuary"] .book{
+  background:none; border:0; box-shadow:none;
+  padding-inline:22px; max-width:430px;
+}
+
+/* ---- Today -------------------------------------------------------------- */
+.today-head{ padding:16px 4px 0; }
+.today-date{ font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--text-3); }
+.today-t{ font-family:var(--display); font-size:2.25rem; font-weight:600; line-height:1.06;
+  margin:.24em 0 0; color:var(--text); letter-spacing:.004em; }
+
+/* the one lit object on the screen */
+.now-card{
+  display:block; text-decoration:none; margin-top:22px; padding:22px 22px 20px;
+  border-radius:var(--r-card); position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 130% at 12% 0%, rgba(217,179,108,.22), transparent 62%),
+    linear-gradient(160deg,#20222A,#15171C);
+  border:1px solid rgba(217,179,108,.26);
+  box-shadow:0 0 44px rgba(217,179,108,.10), 0 14px 34px rgba(0,0,0,.45);
+}
+.now-k{ display:block; color:var(--sanct-gold); font-size:.66rem; font-weight:650;
+  letter-spacing:.15em; text-transform:uppercase; }
+.now-t{ display:block; font-family:var(--display); font-size:1.94rem; font-weight:600;
+  color:var(--text); margin-top:.28em; line-height:1.06; }
+.now-d{ display:block; font-style:italic; font-size:1rem; color:var(--text-2); margin-top:.35em; }
+.now-go{ display:inline-flex; align-items:center; gap:.5em; margin-top:17px;
+  background:var(--sanct-gold); color:#1A1508; font-family:var(--sans);
+  font-size:.9rem; font-weight:650; padding:10px 17px; border-radius:999px; }
+.now-go svg{ width:.8em; height:.8em; }
+
+.app-sec{ margin:30px 4px 11px; font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--text-3); }
+.app-list{ background:var(--surface); border:1px solid var(--hair); border-radius:var(--r-card);
+  overflow:hidden; }
+.app-row{ display:flex; align-items:center; gap:14px; padding:15px 18px;
+  border-bottom:1px solid var(--hair); text-decoration:none; color:inherit; }
+.app-row:last-child{ border-bottom:0; }
+.app-row .dot{ width:7px; height:7px; border-radius:999px; background:var(--text-3); flex:none; }
+.app-row-t{ font-family:var(--display); font-size:1.32rem; font-weight:600; color:var(--text);
+  line-height:1.15; }
+.app-row-w{ margin-left:auto; flex:none; font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--text-3); }
+.app-row-i{ width:38px; height:38px; border-radius:12px; flex:none; display:grid; place-items:center;
+  background:rgba(217,179,108,.10); border:1px solid rgba(217,179,108,.18); color:var(--sanct-gold); }
+.app-row-i svg{ width:20px; height:20px; }
+.app-row-b{ min-width:0; }
+.app-row-b .app-row-t, .app-row-d{ display:block; }
+.app-row-d{ font-family:var(--sans); font-size:.76rem; color:var(--text-3); margin-top:2px; }
+.app-row-c{ margin-left:auto; flex:none; color:var(--text-3); }
+.app-row:active{ background:rgba(236,234,230,.04); }
+
+/* ---- reading: Editorial's restraint on Sanctuary's ground ---------------- */
+html[data-style="sanctuary"] .divider{ text-align:center; }
+html[data-style="sanctuary"] .divider h1{
+  font-family:var(--display); font-weight:600; color:var(--text);
+  letter-spacing:.004em; line-height:1.06;
+}
+html[data-style="sanctuary"] .divider .cross{ display:none; }   /* the rule below says it */
+html[data-style="sanctuary"] .divider::after{
+  content:""; display:block; width:28px; height:1.5px; background:var(--sanct-gold);
+  margin:18px auto 0;
+}
+html[data-style="sanctuary"] p.rubric{
+  font-family:var(--serif); font-style:italic; font-weight:400; text-transform:none;
+  letter-spacing:normal; font-size:1.02rem; color:var(--text-2); text-align:center;
+}
+html[data-style="sanctuary"] .verse{ line-height:1.6; }
+html[data-style="sanctuary"] .dropcap{ color:var(--sanct-gold); text-shadow:none; }
+
+/* ---- the page turn: pills, never squares --------------------------------- */
+html[data-style="sanctuary"] .seqnav{
+  gap:10px; margin:36px 0 8px; padding-top:20px; border-top:1px solid var(--hair);
+}
+html[data-style="sanctuary"] .seq{
+  flex:1 1 0; max-width:none; min-width:0;
+  display:flex; align-items:center; gap:9px;
+  padding:12px 16px; border-radius:999px;
+  border:1px solid var(--hair); background:var(--surface); color:var(--text);
+}
+html[data-style="sanctuary"] .seq + .seq{ justify-content:flex-end; text-align:right; }
+html[data-style="sanctuary"] .seq-k{
+  font-family:var(--sans); font-variant-caps:normal; font-size:.6rem; font-weight:650;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--text-3);
+}
+html[data-style="sanctuary"] .seq-t{
+  font-family:var(--display); font-size:1.02rem; font-weight:600; color:var(--text);
+  line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+html[data-style="sanctuary"] .seq-i{ opacity:1; color:var(--text-3); }
+html[data-style="sanctuary"] .seq:active{ background:rgba(236,234,230,.06); opacity:1; }
+
+/* ---- contents: numerals and hairlines, no boxes -------------------------- */
+.toc-list{ margin-top:26px; }
+.toc-i{ display:flex; align-items:baseline; gap:15px; padding:17px 2px;
+  border-bottom:1px solid var(--hair); text-decoration:none; color:inherit; }
+.toc-i:first-child{ border-top:1px solid var(--hair); }
+.toc-n{ font-family:var(--display); font-size:1.02rem; color:var(--text-3); width:24px; flex:none; }
+.toc-t{ font-family:var(--display); font-size:1.38rem; font-weight:600; color:var(--text);
+  line-height:1.14; }
+.toc-d{ font-family:var(--sans); font-size:.74rem; color:var(--text-3); margin-top:3px; }
+.toc-i:active{ opacity:.7; }
+
+/* ---- the tab bar --------------------------------------------------------- */
+html[data-style="sanctuary"] .tabbar{
+  background:rgba(12,13,16,.86); border-top:1px solid var(--hair);
+  -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+}
+html[data-style="sanctuary"] .tab{ color:var(--text-3); }
+html[data-style="sanctuary"] .tab.active{ color:var(--sanct-gold); }
+html[data-style="sanctuary"] .tab-l{ font-family:var(--sans); font-variant-caps:normal;
+  letter-spacing:.01em; text-transform:none; }
+
+/* ---- Settings ------------------------------------------------------------ */
+html[data-style="sanctuary"] .drawer{ background:var(--surface); }
+html[data-style="sanctuary"] .drawer-heading{ color:var(--text-3); letter-spacing:.15em; }
+html[data-style="sanctuary"] .seg{ background:rgba(236,234,230,.06); }
+html[data-style="sanctuary"] .seg button[aria-pressed="true"]{
+  background:var(--sanct-gold); color:#1A1508;
+}
+html[data-style="sanctuary"] .switch[aria-checked="true"]{ background:var(--sanct-gold); }
+html[data-style="sanctuary"] .menu-note{ color:var(--text-3); }
+
+/* the dyslexia-friendly setting still outranks every face this file sets */
+html[data-style="sanctuary"][data-font="dyslexic"] .today-t,
+html[data-style="sanctuary"][data-font="dyslexic"] .now-t,
+html[data-style="sanctuary"][data-font="dyslexic"] .app-row-t,
+html[data-style="sanctuary"][data-font="dyslexic"] .toc-t,
+html[data-style="sanctuary"][data-font="dyslexic"] .toc-n,
+html[data-style="sanctuary"][data-font="dyslexic"] .seq-t,
+html[data-style="sanctuary"][data-font="dyslexic"] .divider h1{
+  font-family:"OpenDyslexic", var(--serif);
+}
+
+/* ---- reading, continued: enforce "nothing but type" --------------------- */
+/* the printed ornaments belong to the paper design; here the single gold rule
+   under the title does all the work the dotted diamond used to */
+html[data-style="sanctuary"] .divider svg{ display:none; }
+html[data-style="sanctuary"] .divider h1{
+  text-transform:none; letter-spacing:.004em; font-size:clamp(1.8rem, 6.6vw, 2.3rem);
+}
+html[data-style="sanctuary"] p.rubric,
+html[data-style="sanctuary"] p.rubric .r{ color:var(--text-2); }
+/* section heads: quiet grey small caps over the page, not a second accent */
+html[data-style="sanctuary"] h2.subhead{
+  font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--text-3); text-align:center;
+  margin:2.2em 0 1.1em;
+}
+html[data-style="sanctuary"] h2.subhead::after{
+  content:""; display:block; width:16px; height:1px; background:var(--hair); margin:12px auto 0;
+}
+
+/* the jump chips stay — losing in-page navigation in a long office is a real
+   cost — but they stop shouting: quiet outlines, not gold pills */
+html[data-style="sanctuary"] .page-toc a,
+html[data-style="sanctuary"] .res-toc a{
+  border-color:var(--hair); background:var(--surface); color:var(--text-2);
+  font-variant-caps:normal; font-family:var(--sans); font-size:.78rem; letter-spacing:.01em;
+  padding:.42rem .85rem;
+}
+html[data-style="sanctuary"] .page-toc a:hover,
+html[data-style="sanctuary"] .res-toc a:hover{ background:rgba(236,234,230,.07); color:var(--text); }
+
+/* the back link is a label, not a button */
+html[data-style="sanctuary"] .page-back,
+html[data-style="sanctuary"] .res-back{
+  background:none; border:0; box-shadow:none; padding:.2rem 0; color:var(--text-3);
+  font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase;
+}
+html[data-style="sanctuary"] .res-back span{ color:inherit; }
+
+/* Settings speaks the UI voice, not the book's */
+html[data-style="sanctuary"] .menu-label,
+html[data-style="sanctuary"] .seg button,
+html[data-style="sanctuary"] .menu-note{ font-family:var(--sans); }
+html[data-style="sanctuary"] .menu-label{ font-size:.94rem; font-weight:500; }
+html[data-style="sanctuary"] .seg button{ font-size:.82rem; font-weight:600; }
+html[data-style="sanctuary"] .drawer-heading{ font-family:var(--sans); font-size:.66rem;
+  font-weight:600; text-transform:uppercase; }
+
+/* ---- in-page contents: folded away -------------------------------------
+   The chips were a row of buttons to read past before reaching the prayer.
+   This is one quiet line that opens into the same links. */
+.page-contents{ margin:0 0 1.9em; }
+.page-contents summary{
+  display:flex; align-items:center; justify-content:center; gap:.45em;
+  list-style:none; cursor:pointer;
+  font-family:var(--sans); font-size:.66rem; font-weight:600; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--text-3); padding:.5em 0;
+}
+.page-contents summary::-webkit-details-marker{ display:none; }
+.page-contents summary svg{ transition:transform .18s ease; }
+.page-contents[open] summary svg{ transform:rotate(180deg); }
+.page-contents nav{ display:flex; flex-direction:column; margin:.2em 0 .4em; }
+.page-contents nav a{
+  padding:.72em .2em; border-top:1px solid var(--hair);
+  color:var(--text-2); text-decoration:none;
+  font-family:var(--serif); font-size:1.02rem; line-height:1.2;
+}
+.page-contents nav a:last-child{ border-bottom:1px solid var(--hair); }
+.page-contents nav a:active{ color:var(--text); }
+html[data-style="sanctuary"][data-font="dyslexic"] .page-contents nav a{
+  font-family:"OpenDyslexic", var(--serif);
+}
+
+/* ---- surfaces styles.css hard-codes for paper --------------------------
+   These carry literal light colours with an html[data-theme="dark"] escape
+   hatch. Sanctuary is dark whatever the theme setting says, so each needs its
+   own override or it stays pale on the dark ground. */
+html[data-style="sanctuary"] .switch{ background:rgba(236,234,230,.14); }
+html[data-style="sanctuary"] .grab{ background:rgba(236,234,230,.22); }
+html[data-style="sanctuary"] .reframe{
+  background:var(--surface); border-color:rgba(217,179,108,.3);
+  box-shadow:0 0 0 5px var(--bg), 0 0 0 6px rgba(217,179,108,.14), 0 8px 22px rgba(0,0,0,.5);
+}
+html[data-style="sanctuary"] .colophon{ color:var(--text-3); }
+
+/* the accent palettes and the background temperature cannot do anything here —
+   Sanctuary pins the accent to its gold — so they come off the panel rather
+   than sitting there inert */
+html[data-style="sanctuary"] #row-temp,
+html[data-style="sanctuary"] #row-primary,
+html[data-style="sanctuary"] #row-secondary{ display:none; }
+
+/* three choices need more room than two */
+.seg-3{ display:flex; width:100%; margin-top:.5rem; }
+.seg-3 button{ flex:1 1 0; min-width:0; }

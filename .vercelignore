@@ -14,3 +14,20 @@ assets/icons/app-icon-dark.png
 generate_icons.py
 voice/
 DESIGN.md
+ios/
+package.json
+package-lock.json
+capacitor.config.json
+node_modules/
+design/
+
+# the Eastern side, kept in the repo but not deployed while the site is
+# Western Rite only (WESTERN_ONLY=0 brings it all back)
+bible/
+bible-index.js
+bible-plan-data.js
+bible.js
+greek-tool.js
+player.js
+api/
+calendars/

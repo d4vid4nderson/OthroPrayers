@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recommended — Sanctuary</title>
+<style>
+@font-face{font-family:"Inter";src:url(fonts/inter.woff2) format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:"EB Garamond";src:url(fonts/ebgaramond.woff2) format("woff2");font-weight:400 800;font-display:block}
+@font-face{font-family:"EB Garamond";src:url(fonts/ebgaramond-italic.woff2) format("woff2");font-style:italic;font-weight:400 800;font-display:block}
+@font-face{font-family:"Cormorant";src:url(fonts/cormorant.woff2) format("woff2");font-weight:400 700;font-display:block}
+
+/* ==== Sanctuary, as recommended =========================================
+   C's dark ground and single warm light source, C1's rounded rows, and B's
+   typographic restraint wherever you are actually reading. The rule that
+   settles every decision: navigation may use the app idiom — rows, chevrons,
+   a tinted icon — but a page of prayer gets nothing but type, white space
+   and one hairline. Gold marks the next thing to do and nothing else. */
+:root{
+  --bg:#0C0D10;
+  --surface:#15171C;
+  --text:#ECEAE6;
+  --text-2:#9AA0AB;
+  --text-3:#646B77;
+  --gold:#D9B36C;
+  --hair:rgba(236,234,230,.09);
+  --r:20px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#3E4148;font-family:"Inter",system-ui,sans-serif;
+  display:flex;gap:40px;padding:44px 40px 72px;justify-content:center;align-items:flex-start}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:44px;overflow:hidden;
+  position:relative;box-shadow:0 30px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;flex:none}
+.status{height:52px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 30px 6px;font-size:13.5px;font-weight:600;color:var(--text)}
+.scroll{flex:1;overflow:hidden;padding:0 22px}
+.label{position:absolute;bottom:-32px;left:0;right:0;text-align:center;color:#fff;
+  font-size:13.5px;font-weight:600;letter-spacing:.04em}
+.micro{font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--text-3)}
+
+/* ---- today ---- */
+.head{padding:16px 4px 4px}
+h1{font-family:"Cormorant",serif;font-size:36px;font-weight:600;color:var(--text);margin:8px 0 0;
+  line-height:1.06}
+.now{margin:22px 0 0;border-radius:var(--r);padding:22px 22px 20px;position:relative;overflow:hidden;
+  background:radial-gradient(120% 130% at 12% 0%, rgba(217,179,108,.22), transparent 62%),
+    linear-gradient(160deg,#20222A,#15171C);
+  border:1px solid rgba(217,179,108,.26);
+  box-shadow:0 0 44px rgba(217,179,108,.10), 0 14px 34px rgba(0,0,0,.45)}
+.now-k{color:var(--gold);font-size:10.5px;font-weight:650;letter-spacing:.15em;text-transform:uppercase}
+.now-t{font-family:"Cormorant",serif;font-size:31px;font-weight:600;color:var(--text);margin-top:9px;line-height:1.06}
+.now-d{font-family:"EB Garamond",Georgia,serif;font-style:italic;font-size:16px;color:var(--text-2);margin-top:7px}
+.now-b{margin-top:17px;display:inline-flex;align-items:center;gap:8px;background:var(--gold);
+  color:#1A1508;font-size:14.5px;font-weight:650;padding:10px 17px;border-radius:99px}
+.sec{margin:30px 4px 11px}
+.list{background:var(--surface);border-radius:var(--r);border:1px solid var(--hair);overflow:hidden}
+.row{display:flex;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid var(--hair)}
+.row:last-child{border-bottom:0}
+.dot{width:7px;height:7px;border-radius:99px;background:var(--text-3);flex:none}
+.row-t{font-family:"Cormorant",serif;font-size:22px;font-weight:600;color:var(--text);line-height:1.15}
+.row-w{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);
+  margin-left:auto;flex:none}
+.brow{display:flex;align-items:center;gap:15px;padding:16px 18px;border-bottom:1px solid var(--hair)}
+.brow:last-child{border-bottom:0}
+.brow-i{width:38px;height:38px;border-radius:12px;flex:none;display:grid;place-items:center;
+  background:rgba(217,179,108,.10);border:1px solid rgba(217,179,108,.18);color:var(--gold)}
+.brow-t{font-family:"Cormorant",serif;font-size:22px;font-weight:600;color:var(--text);line-height:1.14}
+.brow-d{font-size:12.5px;color:var(--text-3);margin-top:2px}
+.brow-c{margin-left:auto;color:var(--text-3);flex:none}
+
+/* ---- reading: Editorial's restraint, on Sanctuary's ground -------------
+   centred masthead, one hairline, nothing else competing with the words */
+.back{display:flex;align-items:center;gap:7px;padding:12px 2px 0;color:var(--text-3);
+  font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.p-mast{text-align:center;padding:36px 0 0}
+.p-t{font-family:"Cormorant",serif;font-size:37px;font-weight:600;color:var(--text);line-height:1.06}
+.p-sub{font-family:"EB Garamond",Georgia,serif;font-style:italic;font-size:16px;color:var(--text-2);margin-top:9px}
+.p-r{width:28px;height:1.5px;background:var(--gold);margin:20px auto 0}
+.rub{font-family:"EB Garamond",Georgia,serif;font-style:italic;font-size:17px;color:var(--text-2);
+  text-align:center;margin:30px 6px 20px}
+.verse{font-family:"EB Garamond",Georgia,serif;font-size:20.5px;line-height:1.6;color:var(--text);margin:0 2px 18px}
+.verse .cross{color:var(--gold)}
+.ph{text-align:center;margin:34px 0 18px}
+.ph-r{width:16px;height:1px;background:var(--hair);margin:12px auto 0}
+
+/* page turn: pills, never squares */
+.turn{display:flex;gap:10px;margin:36px 2px 8px;padding-top:20px;border-top:1px solid var(--hair)}
+.turn a{flex:1;display:flex;align-items:center;gap:9px;padding:12px 16px;border-radius:99px;
+  border:1px solid var(--hair);background:var(--surface);min-width:0}
+.turn a.next{justify-content:flex-end;text-align:right}
+.turn-k{font-size:9.5px;font-weight:650;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.turn-t{font-family:"Cormorant",serif;font-size:17px;font-weight:600;color:var(--text);line-height:1.1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.turn svg{color:var(--text-3);flex:none}
+
+/* ---- contents ---- */
+.c-mast{padding:26px 2px 0}
+.c-t{font-family:"Cormorant",serif;font-size:34px;font-weight:600;color:var(--text);line-height:1.06}
+.c-d{font-family:"EB Garamond",Georgia,serif;font-style:italic;font-size:15.5px;color:var(--text-2);margin-top:8px}
+.toc{margin-top:28px}
+.toc-i{display:flex;align-items:baseline;gap:15px;padding:17px 2px;border-bottom:1px solid var(--hair)}
+.toc-i:first-child{border-top:1px solid var(--hair)}
+.toc-n{font-family:"Cormorant",serif;font-size:17px;color:var(--text-3);width:24px;flex:none}
+.toc-t{font-family:"Cormorant",serif;font-size:23px;font-weight:600;color:var(--text);line-height:1.14}
+.toc-d{font-size:12px;color:var(--text-3);margin-top:3px}
+.toc-i.done .toc-n{color:var(--gold)}
+
+/* ---- settings ---- */
+.s-t{font-family:"Cormorant",serif;font-size:32px;font-weight:600;color:var(--text);padding:18px 4px 0}
+.srow{display:flex;align-items:center;padding:15px 18px;border-bottom:1px solid var(--hair);gap:14px}
+.srow:last-child{border-bottom:0}
+.slab{font-size:15.5px;color:var(--text);font-weight:500}
+.seg{margin-left:auto;display:flex;background:rgba(236,234,230,.06);border-radius:99px;padding:3px;flex:none}
+.seg span{font-size:13px;font-weight:600;color:var(--text-3);padding:6px 14px;border-radius:99px}
+.seg span.on{background:var(--gold);color:#1A1508}
+.sw{margin-left:auto;width:48px;height:29px;border-radius:99px;background:rgba(236,234,230,.12);
+  padding:3px;display:flex;flex:none}
+.sw.on{background:var(--gold);justify-content:flex-end}
+.sw i{width:23px;height:23px;border-radius:99px;background:#fff;display:block}
+.snote{font-size:12.5px;color:var(--text-3);line-height:1.45;margin:10px 6px 0}
+
+/* ---- tab bar ---- */
+.tabs{flex:none;height:84px;background:rgba(12,13,16,.82);backdrop-filter:blur(20px);
+  border-top:1px solid var(--hair);display:flex;padding:11px 6px 0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--text-3);
+  font-size:10.5px;font-weight:550}
+.tab.on{color:var(--gold)}
+svg{display:block}
+</style>
+</head>
+<body>
+
+<!-- 1. Today -->
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="head">
+      <div class="micro">Thursday, 25 September</div>
+      <h1>Western Rite</h1>
+    </div>
+    <div class="now">
+      <div class="now-k">Now &middot; On rising</div>
+      <div class="now-t">Morning Prayer</div>
+      <div class="now-d">A short form for use alone</div>
+      <span class="now-b">Begin
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1A1508" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+    <div class="sec micro">The rest of the day</div>
+    <div class="list">
+      <div class="row"><span class="dot"></span><span class="row-t">Noon Prayers</span><span class="row-w">Midday</span></div>
+      <div class="row"><span class="dot"></span><span class="row-t">Evening Prayers</span><span class="row-w">6 pm</span></div>
+      <div class="row"><span class="dot"></span><span class="row-t">Compline</span><span class="row-w">Nightfall</span></div>
+    </div>
+    <div class="sec micro">Books</div>
+    <div class="list">
+      <div class="brow">
+        <span class="brow-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg></span>
+        <span><div class="brow-t">A Little Prayer Book</div><div class="brow-d">Daily &amp; occasional prayers</div></span>
+        <svg class="brow-c" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+      <div class="brow">
+        <span class="brow-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg></span>
+        <span><div class="brow-t">The Pew Missal</div><div class="brow-d">The Mass, Rite of St. Tikhon</div></span>
+        <svg class="brow-c" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">Today</div>
+</div>
+
+<!-- 2. Reading -->
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      Prayer Book
+    </div>
+    <div class="p-mast">
+      <div class="p-t">Morning Prayer</div>
+      <div class="p-sub">A short form for use alone</div>
+      <div class="p-r"></div>
+    </div>
+    <p class="rub">Gather your thoughts quietly, and begin:</p>
+    <p class="verse"><span class="cross">&#10014;</span> In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.</p>
+    <div class="ph"><div class="micro">The Lord&rsquo;s Prayer</div><div class="ph-r"></div></div>
+    <p class="verse">Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread.</p>
+    <div class="turn">
+      <a>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+        <span style="min-width:0"><div class="turn-k">Previous</div><div class="turn-t">Duties</div></span>
+      </a>
+      <a class="next">
+        <span style="min-width:0"><div class="turn-k">Next</div><div class="turn-t">Noon Prayers</div></span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="tabs">
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">Reading &mdash; nothing but type</div>
+</div>
+
+<!-- 3. Contents -->
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      Today
+    </div>
+    <div class="c-mast">
+      <div class="c-t">A Little Prayer Book</div>
+      <div class="c-d">A pocket manual of daily and occasional prayers</div>
+    </div>
+    <div class="toc">
+      <div class="toc-i done"><span class="toc-n">I</span><span><div class="toc-t">Christian Duties</div><div class="toc-d">The virtues, the works of mercy</div></span></div>
+      <div class="toc-i done"><span class="toc-n">II</span><span><div class="toc-t">Morning Prayer</div><div class="toc-d">On rising</div></span></div>
+      <div class="toc-i"><span class="toc-n">III</span><span><div class="toc-t">Noon Prayers</div><div class="toc-d">Midday</div></span></div>
+      <div class="toc-i"><span class="toc-n">IV</span><span><div class="toc-t">Evening Prayers</div><div class="toc-d">At the close of the day</div></span></div>
+      <div class="toc-i"><span class="toc-n">V</span><span><div class="toc-t">General Prayers</div><div class="toc-d">For every need</div></span></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">Contents</div>
+</div>
+
+<!-- 4. Settings -->
+<div class="phone">
+  <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;&#9679;</span></div>
+  <div class="scroll">
+    <div class="s-t">Settings</div>
+    <div class="sec micro" style="margin-top:24px">Reading</div>
+    <div class="list">
+      <div class="srow"><span class="slab">Text size</span>
+        <span class="seg"><span>A&minus;</span><span class="on">A</span><span>A+</span></span></div>
+      <div class="srow"><span class="slab">Theme</span>
+        <span class="seg"><span>Light</span><span class="on">Dark</span></span></div>
+      <div class="srow"><span class="slab">Dyslexia-friendly</span><span class="sw"><i></i></span></div>
+    </div>
+    <p class="snote">Replaces every face in the app with OpenDyslexic, including the titles.</p>
+
+    <div class="sec micro">Church calendar</div>
+    <div class="list">
+      <div class="srow"><span class="slab">Follow the calendar</span>
+        <span class="seg"><span>Off</span><span class="on">New</span><span>Old</span></span></div>
+      <div class="srow"><span class="slab">Fast-day reminders</span><span class="sw on"><i></i></span></div>
+    </div>
+    <p class="snote">A quiet notification on the eve of a fast.</p>
+  </div>
+  <div class="tabs">
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"/></svg>Today</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>Prayers</span>
+    <span class="tab"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>Missal</span>
+    <span class="tab on"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-3-1.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.4 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.9-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>Settings</span>
+  </div>
+  <div class="label">Settings</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "western-prayers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Western Rite prayers, wrapped as a native iOS app for personal use.",
+  "scripts": {
+    "build": "APP_BUILD=1 OUT_DIR=ios/www python3 build.py",
+    "sync": "npm run build && cap sync ios",
+    "open": "npm run sync && cap open ios",
+    "icons": "python3 generate_icons.py --ios",
+    "doctor": "cap doctor"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "^8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.2"
+  }
+}

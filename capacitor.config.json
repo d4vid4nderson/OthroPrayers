@@ -1,0 +1,9 @@
+{
+  "appId": "com.othroprayers.western",
+  "appName": "Prayers",
+  "webDir": "ios/www",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#faf6ee"
+  }
+}
