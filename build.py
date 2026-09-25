@@ -321,18 +321,18 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
       <button id="theme-dark" type="button" title="Dark" aria-label="Dark mode" aria-pressed="false">{MOON}</button>
     </span>
   </div>
-  <div class="menu-row">
+  <div class="menu-row" id="row-temp">
     <span class="menu-label">Background</span>
     <span class="seg" role="group" aria-label="Background temperature">
       <button id="temp-warm" type="button" aria-pressed="true">Warm</button>
       <button id="temp-cool" type="button" aria-pressed="false">Cool</button>
     </span>
   </div>
-  <div class="menu-col">
+  <div class="menu-col" id="row-primary">
     <span class="menu-label">Primary colour <span class="menu-pick" id="primary-pick">Default</span></span>
     {primary_sw}
   </div>
-  <div class="menu-col">
+  <div class="menu-col" id="row-secondary">
     <span class="menu-label">Secondary colour <span class="menu-pick" id="secondary-pick">Default</span></span>
     {secondary_sw}
     <button class="menu-reset" id="appearance-reset" type="button">Reset to default</button>
@@ -342,13 +342,17 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
-  <div class="menu-row">
-    <span class="menu-label">Manuscript style</span>
-    <button id="mss" class="switch" type="button" role="switch" aria-checked="false"
-            aria-label="Manuscript style"><span class="knob"></span></button>
+  <div class="menu-col" id="row-style">
+    <span class="menu-label">Style</span>
+    <span class="seg seg-3" role="group" aria-label="Style">
+      <button id="style-paper" type="button" aria-pressed="true">Paper</button>
+      <button id="style-manuscript" type="button" aria-pressed="false">Manuscript</button>
+      <button id="style-sanctuary" type="button" aria-pressed="false">Sanctuary</button>
+    </span>
   </div>
-  <p class="menu-note">Vellum, iron-gall ink and an insular hand for the titles.
-     Dyslexia-friendly text still overrides it.</p>
+  <p class="menu-note">Paper is the printed booklet. Manuscript is vellum and an
+     insular hand. Sanctuary is dark, for early and late. Dyslexia-friendly text
+     overrides all three.</p>
   <div class="menu-row">
     <span class="menu-label">Available offline</span>
     <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
@@ -400,10 +404,10 @@ def _western_chrome(tmpl):
     # Sanctuary is one designed system, not a themeable one: the background
     # temperature and the accent palettes would only let it be broken, and the
     # manuscript style belongs to the web build
-    bgrow = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Background</span>')
+    bgrow = tmpl.index('  <div class="menu-row" id="row-temp">')
     dys = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Dyslexia-friendly</span>')
     tmpl = tmpl[:bgrow] + tmpl[dys:]
-    mss = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Manuscript style</span>')
+    mss = tmpl.index('  <div class="menu-col" id="row-style">')
     after_note = tmpl.index('</p>', tmpl.index('<p class="menu-note">', mss)) + len('</p>\n')
     tmpl = tmpl[:mss] + tmpl[after_note:]
 
@@ -1707,12 +1711,12 @@ var rite=L.getItem("rite");
 if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var st=L.getItem("style");if(st==="manuscript")r.dataset.style="manuscript";
+var st=L.getItem("style")||"sanctuary";if(st!=="paper")r.dataset.style=st;
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var ms=r.dataset.style==="manuscript",ap=r.dataset.app==="sanctuary";
+var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary";
 var bg=ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
@@ -1723,11 +1727,6 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 if WESTERN_ONLY:
     # a single-rite app has no gate to send anyone through
     EARLY_JS = EARLY_JS.replace(_EARLY_GATE + "\n", "")
-    # Sanctuary is the app's own skin — dark by construction, so the app opens
-    # dark unless the reader has chosen otherwise
-    EARLY_JS = EARLY_JS.replace(
-        'var st=L.getItem("style");if(st==="manuscript")r.dataset.style="manuscript";',
-        'r.dataset.app="sanctuary";if(!t)r.dataset.theme="dark";')
 
 CONTROL_JS = '''<script>
 (function(){
@@ -1769,7 +1768,7 @@ CONTROL_JS = '''<script>
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var ms=r.dataset.style==="manuscript", ap=r.dataset.app==="sanctuary";
+    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary";
     var bg = ap?"#0C0D10"
             :ms?(dark?"#1c1811":"#f0e4c8")
               :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
@@ -1826,13 +1825,17 @@ CONTROL_JS = '''<script>
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
-  // the manuscript skin (vellum + insular display type)
-  var mss=d.getElementById("mss");
-  function paintMss(){ if(mss) mss.setAttribute("aria-checked", r.dataset.style==="manuscript"?"true":"false"); }
-  if(mss) mss.onclick=function(){
-    if(r.dataset.style==="manuscript"){ delete r.dataset.style; L.removeItem("style"); }
-    else { r.dataset.style="manuscript"; L.setItem("style","manuscript"); }
-    paintMss(); paintTC(); };
+  // the three skins sit on one axis: paper (the default), manuscript, sanctuary
+  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],["sanctuary","style-sanctuary"]];
+  function paintMss(){ var v=r.dataset.style||"paper";
+    styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
+      if(btn) btn.setAttribute("aria-pressed", pr[0]===v?"true":"false"); }); }
+  function setStyle(v){
+    if(v==="paper"){ delete r.dataset.style; L.setItem("style","paper"); }
+    else { r.dataset.style=v; L.setItem("style",v); }
+    paintMss(); paintTC(); }
+  styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
+    if(btn) btn.onclick=function(){ setStyle(pr[0]); }; });
 
   // reading-checklist progress (saved per device) — shared by the Church
   // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
@@ -2033,6 +2036,7 @@ HEAD_TMPL = '''<!doctype html>
 <meta name="theme-color" id="tc" content="#faf6ee">
 {early}
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sanctuary.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -2052,9 +2056,6 @@ HEAD_TMPL = '''<!doctype html>
 
 
 if WESTERN_ONLY:
-    HEAD_TMPL = HEAD_TMPL.replace(
-        '<link rel="stylesheet" href="styles.css">',
-        '<link rel="stylesheet" href="styles.css">\n<link rel="stylesheet" href="app.css">')
     # a bundled WebView has no browser tab, no home-screen shortcut and no
     # manifest — the app icon comes from the Xcode asset catalog instead
     _WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
@@ -2109,6 +2110,7 @@ GATE_TMPL = '''<!doctype html>
 <meta name="theme-color" id="tc" content="#faf6ee">
 {early}
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sanctuary.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -3371,7 +3373,7 @@ if WESTERN_ONLY:
     # copy the static files the Western pages actually reference. No service
     # worker: a bundled app is already offline, and there is nothing to update.
     import shutil
-    for _f in ["styles.css", "app.css", "calendar.js"]:
+    for _f in ["styles.css", "sanctuary.css", "calendar.js"]:
         shutil.copy2(_f, _out(_f))
     shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
     # only the artwork the built pages actually reference
@@ -3399,7 +3401,8 @@ _assets.update(glob.glob("*.html"))
 # note: the per-book bible/*.json (~5MB) are intentionally NOT precached — they
 # are cached at runtime as chapters are read, to keep the offline install lean
 for _p in ["styles.css", "themes.css", "player.js", "calendar.js", "calendar-data.js", "greek-tool.js",
-           "bible-index.js", "bible-plan-data.js", "bible.js", "site.webmanifest", "favicon.ico"]:
+           "bible-index.js", "bible-plan-data.js", "bible.js", "site.webmanifest", "favicon.ico",
+           "sanctuary.css"]:
     if os.path.exists(_p):
         _assets.add(_p)
 for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*", "calendars/*.ics"]:

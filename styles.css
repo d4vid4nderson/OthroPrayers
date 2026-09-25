@@ -485,6 +485,12 @@ figure.art svg{ display:inline-block; height:auto; }
   padding-top:1.2rem;
 }
 .colophon cite{ font-style:italic; }
+/* without these the links fall back to the UA's default blue — unreadable on
+   a dark ground and off-palette on a light one. Both were wrong in every
+   style, Sanctuary only made them obvious. */
+.colophon a{ color:var(--link); }
+/* a link inside a rubric reads as part of the rubric, not as prose */
+p.rubric a{ color:inherit; text-decoration:underline; text-underline-offset:.18em; }
 
 /* ---- landing / home page -------------------------------------------- */
 .landing .coverimg{ width:min(58%, 14rem); margin-inline:auto; }

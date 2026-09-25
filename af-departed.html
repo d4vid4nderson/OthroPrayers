@@ -24,12 +24,12 @@ var rite=L.getItem("rite");
 if(!isGate){ if(!rite){ location.replace("rite.html"); return; } if(rite==="western"&&isHome){ location.replace("western.html"); return; } }
 if(t==="dark"||t==="light")r.dataset.theme=t;else if(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)r.dataset.theme="dark";
 if(s)r.dataset.size=s;if(f==="dyslexic")r.dataset.font="dyslexic";
-var st=L.getItem("style");if(st==="manuscript")r.dataset.style="manuscript";
+var st=L.getItem("style")||"sanctuary";if(st!=="paper")r.dataset.style=st;
 var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var ms=r.dataset.style==="manuscript",ap=r.dataset.app==="sanctuary";
+var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary";
 var bg=ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
@@ -37,6 +37,7 @@ r.style.backgroundColor=bg;
 var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 </script>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sanctuary.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -100,14 +101,14 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
       <button id="theme-dark" type="button" title="Dark" aria-label="Dark mode" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button>
     </span>
   </div>
-  <div class="menu-row">
+  <div class="menu-row" id="row-temp">
     <span class="menu-label">Background</span>
     <span class="seg" role="group" aria-label="Background temperature">
       <button id="temp-warm" type="button" aria-pressed="true">Warm</button>
       <button id="temp-cool" type="button" aria-pressed="false">Cool</button>
     </span>
   </div>
-  <div class="menu-col">
+  <div class="menu-col" id="row-primary">
     <span class="menu-label">Primary colour <span class="menu-pick" id="primary-pick">Default</span></span>
     <div class="swatches" role="group" aria-label="primary colour">
 <button class="swatch swatch-default" type="button" data-k="primary" data-c="" style="--sw:#b3322a" title="Default" aria-label="Default" aria-pressed="true"></button>
@@ -131,7 +132,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 <button class="swatch" type="button" data-k="primary" data-c="slate" style="--sw:#64748b" title="Slate" aria-label="slate" aria-pressed="false"></button>
 </div>
   </div>
-  <div class="menu-col">
+  <div class="menu-col" id="row-secondary">
     <span class="menu-label">Secondary colour <span class="menu-pick" id="secondary-pick">Default</span></span>
     <div class="swatches" role="group" aria-label="secondary colour">
 <button class="swatch swatch-default" type="button" data-k="secondary" data-c="" style="--sw:#9a7b1e" title="Default" aria-label="Default" aria-pressed="true"></button>
@@ -161,13 +162,17 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
     <button id="dys" class="switch" type="button" role="switch" aria-checked="false"
             aria-label="Dyslexia-friendly text"><span class="knob"></span></button>
   </div>
-  <div class="menu-row">
-    <span class="menu-label">Manuscript style</span>
-    <button id="mss" class="switch" type="button" role="switch" aria-checked="false"
-            aria-label="Manuscript style"><span class="knob"></span></button>
+  <div class="menu-col" id="row-style">
+    <span class="menu-label">Style</span>
+    <span class="seg seg-3" role="group" aria-label="Style">
+      <button id="style-paper" type="button" aria-pressed="true">Paper</button>
+      <button id="style-manuscript" type="button" aria-pressed="false">Manuscript</button>
+      <button id="style-sanctuary" type="button" aria-pressed="false">Sanctuary</button>
+    </span>
   </div>
-  <p class="menu-note">Vellum, iron-gall ink and an insular hand for the titles.
-     Dyslexia-friendly text still overrides it.</p>
+  <p class="menu-note">Paper is the printed booklet. Manuscript is vellum and an
+     insular hand. Sanctuary is dark, for early and late. Dyslexia-friendly text
+     overrides all three.</p>
   <div class="menu-row">
     <span class="menu-label">Available offline</span>
     <button id="offline" class="switch" type="button" role="switch" aria-checked="false"
@@ -232,7 +237,7 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var ms=r.dataset.style==="manuscript", ap=r.dataset.app==="sanctuary";
+    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary";
     var bg = ap?"#0C0D10"
             :ms?(dark?"#1c1811":"#f0e4c8")
               :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
@@ -289,13 +294,17 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
   dys.onclick=function(){ if(r.dataset.font==="dyslexic"){ delete r.dataset.font; L.setItem("font","serif"); }
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
-  // the manuscript skin (vellum + insular display type)
-  var mss=d.getElementById("mss");
-  function paintMss(){ if(mss) mss.setAttribute("aria-checked", r.dataset.style==="manuscript"?"true":"false"); }
-  if(mss) mss.onclick=function(){
-    if(r.dataset.style==="manuscript"){ delete r.dataset.style; L.removeItem("style"); }
-    else { r.dataset.style="manuscript"; L.setItem("style","manuscript"); }
-    paintMss(); paintTC(); };
+  // the three skins sit on one axis: paper (the default), manuscript, sanctuary
+  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],["sanctuary","style-sanctuary"]];
+  function paintMss(){ var v=r.dataset.style||"paper";
+    styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
+      if(btn) btn.setAttribute("aria-pressed", pr[0]===v?"true":"false"); }); }
+  function setStyle(v){
+    if(v==="paper"){ delete r.dataset.style; L.setItem("style","paper"); }
+    else { r.dataset.style=v; L.setItem("style",v); }
+    paintMss(); paintTC(); }
+  styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
+    if(btn) btn.onclick=function(){ setStyle(pr[0]); }; });
 
   // reading-checklist progress (saved per device) — shared by the Church
   // Fathers checklist (data-cf) and the Bible-in-a-Year plan (data-byr)
