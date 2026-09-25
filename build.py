@@ -379,8 +379,8 @@ def _western_chrome(tmpl):
     """The app build's chrome: three tabs instead of five, and a Settings panel
     with nothing on it that the bundled app can't do. Derived from the web
     template rather than duplicated, so the two never drift apart."""
-    tabs = ('  <a class="tab{h_act}" href="index.html" aria-label="Home">'
-            '<span class="tab-i">{HOME}</span><span class="tab-l">Home</span></a>\n'
+    tabs = ('  <a class="tab{h_act}" href="index.html" aria-label="Today">'
+            '<span class="tab-i">{HOME}</span><span class="tab-l">Today</span></a>\n'
             '  <a class="tab{p_act}" href="prayerbook.html" aria-label="Prayer book">'
             '<span class="tab-i">{BOOK}</span><span class="tab-l">Prayers</span></a>\n'
             '  <a class="tab{r_act}" href="st-peter-missal.html" aria-label="Missal">'
@@ -397,6 +397,16 @@ def _western_chrome(tmpl):
     # everything ships inside the app, so there is no offline switch to throw.
     # The Church calendar stays — fast days matter in a prayer book — but its
     # note points at a subscribe page this build doesn't carry.
+    # Sanctuary is one designed system, not a themeable one: the background
+    # temperature and the accent palettes would only let it be broken, and the
+    # manuscript style belongs to the web build
+    bgrow = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Background</span>')
+    dys = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Dyslexia-friendly</span>')
+    tmpl = tmpl[:bgrow] + tmpl[dys:]
+    mss = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Manuscript style</span>')
+    after_note = tmpl.index('</p>', tmpl.index('<p class="menu-note">', mss)) + len('</p>\n')
+    tmpl = tmpl[:mss] + tmpl[after_note:]
+
     off = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Available offline</span>')
     cal = tmpl.index('  <div class="drawer-heading">Church calendar</div>')
     tmpl = tmpl[:off] + tmpl[cal:]
@@ -1702,8 +1712,8 @@ var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var ms=r.dataset.style==="manuscript";
-var bg=ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
+var ms=r.dataset.style==="manuscript",ap=r.dataset.app==="sanctuary";
+var bg=ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
 r.style.backgroundColor=bg;
@@ -1713,11 +1723,11 @@ var tc=document.getElementById("tc");if(tc)tc.setAttribute("content",bg);})();
 if WESTERN_ONLY:
     # a single-rite app has no gate to send anyone through
     EARLY_JS = EARLY_JS.replace(_EARLY_GATE + "\n", "")
-    # and the app is a prayer book, so it opens in the manuscript style unless
-    # the reader has turned it off
+    # Sanctuary is the app's own skin — dark by construction, so the app opens
+    # dark unless the reader has chosen otherwise
     EARLY_JS = EARLY_JS.replace(
         'var st=L.getItem("style");if(st==="manuscript")r.dataset.style="manuscript";',
-        'var st=L.getItem("style")||"manuscript";if(st==="manuscript")r.dataset.style="manuscript";')
+        'r.dataset.app="sanctuary";if(!t)r.dataset.theme="dark";')
 
 CONTROL_JS = '''<script>
 (function(){
@@ -1759,8 +1769,9 @@ CONTROL_JS = '''<script>
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var ms=r.dataset.style==="manuscript";
-    var bg = ms?(dark?"#1c1811":"#f0e4c8")
+    var ms=r.dataset.style==="manuscript", ap=r.dataset.app==="sanctuary";
+    var bg = ap?"#0C0D10"
+            :ms?(dark?"#1c1811":"#f0e4c8")
               :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
     if(tc) tc.setAttribute("content", bg);
     r.style.backgroundColor = bg; }   // stays in step with EARLY_JS
@@ -2041,6 +2052,9 @@ HEAD_TMPL = '''<!doctype html>
 
 
 if WESTERN_ONLY:
+    HEAD_TMPL = HEAD_TMPL.replace(
+        '<link rel="stylesheet" href="styles.css">',
+        '<link rel="stylesheet" href="styles.css">\n<link rel="stylesheet" href="app.css">')
     # a bundled WebView has no browser tab, no home-screen shortcut and no
     # manifest — the app icon comes from the Xcode asset catalog instead
     _WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
@@ -2178,6 +2192,88 @@ WESTERN_CYCLE = [
     ("pb-evening", "Evening Prayers", "A short form for the close of the day.",
      "chirho", "This evening", 17, 21),
 ] + WESTERN_OFFICES
+
+
+# ---- the app's Today screen (Sanctuary) -------------------------------------
+# Only the app build uses this. The office due now is lifted out of the list
+# into a lit card; everything else on the screen recedes behind it.
+_APP_CHEV = ('<svg class="app-row-c" viewBox="0 0 24 24" width="17" height="17" fill="none" '
+             'stroke="currentColor" stroke-width="2.1" stroke-linecap="round" '
+             'stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>')
+_APP_BOOK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+             'stroke-linejoin="round" aria-hidden="true"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>')
+_APP_MISSAL = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+               'stroke-linejoin="round" aria-hidden="true"><path d="M3 5h8a2 2 0 0 1 2 2v13a2 2 0 0 '
+               '0-2-2H3zM21 5h-8a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h8z"/></svg>')
+_APP_CROSS = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+              'stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M7 8h10"/></svg>')
+
+
+def _app_book_row(href, icon, title, desc):
+    return (f'<a class="app-row" href="{href}">'
+            f'<span class="app-row-i">{icon}</span>'
+            f'<span class="app-row-b"><span class="app-row-t">{title}</span>'
+            f'<span class="app-row-d">{desc}</span></span>{_APP_CHEV}</a>')
+
+
+def app_today_page():
+    o = ['<section class="today" id="top">',
+         '<div class="today-head">',
+         '<div class="today-date" id="today-date"></div>',
+         '<h1 class="today-t">Western Rite</h1>',
+         '</div>',
+         '<div id="now-slot"></div>',
+         '<div class="app-sec" id="rest-label">The hours</div>',
+         '<div class="app-list" id="hours">']
+    for slug, title, blurb, _emb, when, h0, h1 in WESTERN_CYCLE:
+        o.append(f'<a class="app-row" href="{slug}.html" data-h0="{h0}" data-h1="{h1}" '
+                 f'data-t="{title}" data-w="{when}" data-d="{blurb}">'
+                 f'<span class="dot"></span><span class="app-row-t">{title}</span>'
+                 f'<span class="app-row-w">{when}</span></a>')
+    o.append('</div>')
+    o.append('<div class="app-sec">Books</div><div class="app-list">')
+    if PB_CONTENT:
+        o.append(_app_book_row("prayerbook.html", _APP_BOOK, "A Little Prayer Book",
+                               "Daily &amp; occasional prayers"))
+    if SPM_CONTENT:
+        o.append(_app_book_row("st-peter-missal.html", _APP_MISSAL, "The Pew Missal",
+                               "The Mass, Rite of St. Tikhon"))
+    o.append(_app_book_row("western-fasting.html", _APP_CROSS, "Fasting &amp; Abstinence",
+                           "The Vicariate&rsquo;s norms"))
+    o.append('</div></section>')
+    return "\n".join(o)
+
+
+APP_TODAY_JS = '''<script>
+(function(){
+  var d=document, slot=d.getElementById("now-slot"), list=d.getElementById("hours");
+  if(!slot||!list) return;
+  var dt=d.getElementById("today-date");
+  if(dt) dt.textContent=new Date().toLocaleDateString(undefined,
+    {weekday:"long",day:"numeric",month:"long"});
+  var rows=[].slice.call(list.querySelectorAll(".app-row")), h=new Date().getHours(), now=null;
+  rows.forEach(function(r){
+    var a=+r.getAttribute("data-h0"), b=+r.getAttribute("data-h1");
+    // a window that wraps past midnight (e.g. Compline, 21 to 4) still matches
+    var inside = a<b ? (h>=a&&h<b) : (h>=a||h<b);
+    if(inside && !now) now=r;
+  });
+  if(!now) now=rows[0];
+  if(!now) return;
+  var esc=function(t){ var e=d.createElement("span"); e.textContent=t; return e.innerHTML; };
+  slot.innerHTML='<a class="now-card" href="'+now.getAttribute("href")+'">'
+    +'<span class="now-k">Now &middot; '+esc(now.getAttribute("data-w"))+'</span>'
+    +'<span class="now-t">'+esc(now.getAttribute("data-t"))+'</span>'
+    +'<span class="now-d">'+esc(now.getAttribute("data-d"))+'</span>'
+    +'<span class="now-go">Begin<svg viewBox="0 0 24 24" fill="none" stroke="#1A1508" '
+    +'stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    +'<path d="M9 6l6 6-6 6"/></svg></span></a>';
+  now.parentNode.removeChild(now);
+  var label=d.getElementById("rest-label");
+  if(label) label.textContent = list.querySelector(".app-row") ? "The rest of the day" : "The hours";
+  if(!list.querySelector(".app-row")){ list.style.display="none"; if(label) label.style.display="none"; }
+})();
+</script>'''
 
 
 def western_compline_page():
@@ -3083,7 +3179,8 @@ gate_page("rite.html", "Welcome — Daily Prayers",
 # nothing is off-limits while the rest of the Western Rite section is built
 page("western.html", "Western Rite Orthodoxy — Daily Prayers",
      "The Western Rite Orthodox daily office: Morning Prayer, Evening Prayer and Compline.",
-     western_page(), active="home")
+     app_today_page() if WESTERN_ONLY else western_page(), active="home",
+     scripts=APP_TODAY_JS if WESTERN_ONLY else "")
 
 # the Vicariate's fasting discipline, set out in full rather than linked as a PDF
 page("western-fasting.html", "Fasting &amp; Abstinence — Western Rite Orthodoxy",
@@ -3263,7 +3360,7 @@ if WESTERN_ONLY:
     # copy the static files the Western pages actually reference. No service
     # worker: a bundled app is already offline, and there is nothing to update.
     import shutil
-    for _f in ["styles.css", "calendar.js"]:
+    for _f in ["styles.css", "app.css", "calendar.js"]:
         shutil.copy2(_f, _out(_f))
     shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
     # only the artwork the built pages actually reference
