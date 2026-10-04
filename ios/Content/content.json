@@ -1,0 +1,2884 @@
+{
+ "generated": true,
+ "pages": [
+  {
+   "slug": "pb-duties",
+   "title": "Christian Duties and Virtues",
+   "summary": "A short catechism of duties, virtues and the rules of fasting.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A short catechism carried in the back of the booklet — traditional Western enumerations of duties, virtues and the discipline of fasting."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Christian Duties"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "To attend the Liturgy every Sunday and on major feast days."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "To keep fasts and abstinences as the Church requires."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "To be regular in Confession of sins."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "To give alms regularly to support the Church and its ministry."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "To pray daily."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Rules of Fasting and Abstinence"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "Abstinence from flesh meat on all Wednesdays and Fridays throughout the year, except those falling between Christmas and Epiphany."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "Fasting, which means not more than one full meal and a light breakfast, one half meal, during the forty days of Lent, and other fasts as the Church prescribes."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "Fasting with abstinence on Ember Days, on Wednesdays and Fridays in Lent, and on Holy Saturday up to noon."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "The booklet’s rules predate the Vicariate Fasting Norms of 2012, which differ in several particulars and are the ones now in force — see ",
+       "mark": "rubric"
+      },
+      {
+       "t": "Fasting & Abstinence",
+       "mark": "rubric",
+       "href": "western-fasting"
+      },
+      {
+       "t": ".",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Three Theological Virtues"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Faith · Hope · Charity"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Four Cardinal Virtues"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Prudence · Justice · Temperance · Fortitude"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Seven Gifts of the Holy Spirit"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Wisdom and Understanding · Counsel and Ghostly Strength · Knowledge and True Godliness · Holy Fear"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Seven Spiritual Works of Mercy"
+      }
+     ],
+     "id": "j6"
+    },
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "To instruct the ignorant and endure injury. To counsel the doubtful and forgive wrong. To correct offenders and pray for others. To comfort the afflicted."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Seven Corporal Works of Mercy"
+      }
+     ],
+     "id": "j7"
+    },
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "To feed the hungry and clothe the naked. To shelter the stranger and visit the sick. To help prisoners and bury the dead. To visit the parentless and widows."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Three Dangers to the Soul"
+      }
+     ],
+     "id": "j8"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The World · The Flesh · The Devil"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Four Last Things"
+      }
+     ],
+     "id": "j9"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Death · Judgement · Heaven · Hell"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Seven Capital Sins"
+      }
+     ],
+     "id": "j10"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Pride · Anger · Covetousness · Lust · Envy · Sloth · Gluttony"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Four Notes of the True Church"
+      }
+     ],
+     "id": "j11"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "One · Holy · Catholic · Apostolic"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Seven Penitential Psalms"
+      }
+     ],
+     "id": "j12"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "6, 32, 38, 51, 102, 130, 143"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Marks of Real Repentance"
+      }
+     ],
+     "id": "j13"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Contrition · Confession · Amendment"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Grace before Meals"
+      }
+     ],
+     "id": "j14"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Bless, O Lord, these gifts to our use, and us to thy service, for Jesus Christ’s sake. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "After Meals"
+      }
+     ],
+     "id": "j15"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Thanks be to thee, O God, for all thy mercies. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "pb-evening",
+   "title": "Evening Prayers",
+   "summary": "A short form for the close of the day.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A short form for the close of the day, with a confession and Bishop Thomas Ken’s evening hymn."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Spend some moments in quiet before beginning your prayers. Go over the past day, and remember those things done and undone that you must ask God’s forgiveness for. Ask God to show you your sins, to make you sorry for your sins, and to deliver you from your sins. Remember also those things that God should be thanked for at the end of this day. Then, kneeling or standing before your icon or cross, say:",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "In the Name",
+       "mark": "smallcaps"
+      },
+      {
+       "t": " of the Father, and of the Son, and of the Holy Spirit. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Lord’s Prayer"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Hail Mary"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the hour of our death. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Trisagion"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Holy God, Holy Mighty, Holy Immortal, have mercy upon us. "
+      },
+      {
+       "t": "(thrice)",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Glory be to the Father, and to the Son, and to the Holy Spirit; as it was in the beginning, is now, and ever shall be, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Apostles’ Creed"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "I believe in God the Father Almighty, maker of heaven and earth: and in Jesus Christ his only Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary: suffered under Pontius Pilate, was crucified, dead, and buried: He descended into hell; the third day he rose again from the dead: He ascended into heaven, and sitteth on the right hand of God the Father Almighty: from thence He shall come to judge the quick and the dead. I believe in the Holy Ghost: the holy Catholic Church: the communion of saints: the forgiveness of sins: the resurrection of the body: and the life everlasting. Amen."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Then continue:",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Let My Prayer Be Set Forth"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Let my prayer be set forth in thy sight as the incense; and let the lifting up of my hands be an evening sacrifice."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "A Confession"
+      }
+     ],
+     "id": "j6"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Most merciful Father, I confess that I have sinned in thought, word, deed, and omission, by my own grievous fault. I am heartily sorry and firmly purpose amendment. Make me a clean heart, O God, and renew a right spirit within me. Pardon and deliver me from all my sins, and bring me to everlasting life; for Jesus Christ’s sake, who died for me and for all mankind, and who liveth and reigneth with thee and the Holy Spirit, one God, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Hymn — All Praise to Thee, My God, This Night"
+      }
+     ],
+     "id": "j7"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Bishop Thomas Ken, 1674",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "All praise to thee, my God, this night\nFor all the blessings of the light.\nKeep me, O keep me, King of Kings,\nBeneath thine own Almighty wings."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Forgive me, Lord, for thy dear Son,\nThe ill that I this day have done;\nThat with the world, myself and thee\nI, ere I sleep, at peace may be."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Teach me to live that I may dread\nThe grave as little as my bed;\nTeach me to die that so I may\nRise glorious at the awful day."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "O may my soul on thee repose,\nAnd may sweet sleep mine eyelids close;\nSleep that shall me more vigorous make\nTo serve my God when I awake."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "When in the night I sleepless lie,\nMy soul with heavenly thoughts supply;\nLet no ill dreams disturb my rest,\nNo powers of darkness me molest."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Praise God from whom all blessings flow;\nPraise him, all creatures here below;\nPraise him above, angelic host;\nPraise Father, Son, and Holy Ghost."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Other prayers may be added.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Grace"
+      }
+     ],
+     "id": "j8"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit be with us all evermore. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "pb-general",
+   "title": "General Prayers",
+   "summary": "A gathering of further prayers.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A gathering of prayers for the needs and seasons of a life — to be added to any of the daily offices, or prayed on their own."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Act of Faith"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "M",
+       "mark": "dropcap"
+      },
+      {
+       "t": "Y GOD",
+       "mark": "smallcaps"
+      },
+      {
+       "t": ", I believe in thee, and all thy Church doth teach, because thou hast said it, and thy word is true."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Act of Hope"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "My God, I hope in thee, for grace and for glory, because of thy mercy, thy promises, and thy power."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Act of Love"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "My God, I love thee, and I want to love thee more."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For Faith, Hope and Love"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Almighty and everlasting God, give unto us the increase of faith, hope, and love: and, that we may obtain that which thou dost promise, make us to love that which thou dost command; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Jesus Prayer"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Lord Jesus Christ, Son of God, have mercy upon me a sinner."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For Service"
+      }
+     ],
+     "id": "j6"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O God, set our hearts at liberty from the service of ourselves, that we may do thy will; through Jesus Christ. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For the Parish"
+      }
+     ],
+     "id": "j7"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Almighty and everlasting God, who dost govern all things in heaven and earth, mercifully grant to this parish all things needful for its spiritual welfare, especially N. Strengthen the faithful, relieve the sick, turn and soften the wicked, rouse the careless, recover the fallen, restore the penitent, remove all hindrances to the advancement of thy truth, and bring all to be of one heart and mind within the fold of thy holy Church, to the honor and glory of thy blessed Son, Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For Patience"
+      }
+     ],
+     "id": "j8"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O most meek Jesus, Prince of Peace, who, when thou wast reviled, reviled not again, and on the Cross didst pray for thy murderers: implant in my heart the virtues of gentleness and patience, that restraining the fierceness of anger, impatience, and resentment, I may overcome evil with good, for thy sake love my enemies, and as a child of my heavenly Father seek thy peace, and evermore rejoice in thy love. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For Missions"
+      }
+     ],
+     "id": "j9"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O God, who hast made of one blood all the nations of men for to dwell on the face of the whole earth: we give thee most humble and hearty thanks for the revelation of thyself in thy Son, Jesus Christ; for the commission to thy Church to proclaim the Gospel to every creature; for those who have gone to the ends of the earth to bring light to them that dwell in darkness and in the shadow of death; and for the innumerable company who now praise thy Name out of every kindred and tongue. To thee be ascribed the praise of their faith for ever and ever. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For a Sick Person"
+      }
+     ],
+     "id": "j10"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O merciful God, giver of life and health: bless, we pray thee, thy servant N., and those who administer to him of thy healing gifts; that he may be restored to health of body and of mind; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For the Departed"
+      }
+     ],
+     "id": "j11"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Almighty and eternal God, to whom no prayer is made without hope of mercy, behold and bless the souls of thy servants in Paradise, and grant them continual growth in thy love and service. I especially pray for N., that the joy and strength and peace of thy presence may abide with him always, and bring him at last to the perfect bliss of thy heavenly kingdom; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "May the souls of all the faithful departed, through the mercy of God, rest in peace. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "A Parent’s Prayer"
+      }
+     ],
+     "id": "j12"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O heavenly Father, I commend the soul(s) of my children to thee. Be thou their God and Father, and mercifully supply whatever is wanting in me through frailty or negligence. Strengthen them to overcome the corruptions of the world, to resist all solicitations to evil, whether from within or without; and deliver them from the secret snares of the enemy. Pour thy grace into their heart(s), and confirm and multiply in them the gifts of thy Holy Spirit, that they may daily grow in grace and knowledge of our Lord Jesus Christ; and so faithfully serving thee here, may come to rejoice in thy presence hereafter; through the same Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For a Husband or Wife"
+      }
+     ],
+     "id": "j13"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Almighty God, who in the beginning didst institute the sacrament of marriage: bless with happiness our union, and grant that amid all the changes and chances of this mortal life, we may so live together in thy love and fear, that in the end we may meet in thy eternal home; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For a Home"
+      }
+     ],
+     "id": "j14"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Visit, we beseech thee, O Lord, this habitation, and drive far from it all the snares of the enemy. Let thy holy angels dwell herein to preserve us in peace, and let thy blessing be ever upon us; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For Those of Advanced Years"
+      }
+     ],
+     "id": "j15"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Heavenly Father, whose gift is length of days: help us to make noble use of mind and body in our advancing years. As thou hast pardoned our transgressions, sift the ingatherings of our memory that evil may grow dim and good may shine forth. We bless thee for thy gifts, and especially for thy presence and the love of friends in heaven and earth. Grant us new ties of friendship, new opportunities for service, joy in the growth and happiness of children, sympathy with those who bear the world’s burdens, clear thought and quiet faith. Teach us to bear infirmities with cheerful patience. Keep us from narrow pride in outgrown ways, blind eyes that will not see the good of change, impatient judgements of the methods and experiments of others. Let thy peace rule our spirits, through all the trials of our waning powers. Take from us all fear of death, and all despair or undue love of life, that with glad hearts at rest in thee we may await thy will concerning us; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The booklet’s General Prayers run on for a few more pages — the rest, beginning with the Prayer to St. Michael, are still to be added."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "pb-morning",
+   "title": "Morning Prayer",
+   "summary": "A short form of morning prayer, for use alone.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A short form of morning prayer for use alone, from the same booklet as the Christian Duties and Virtues opposite."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Gather your thoughts quietly, and begin:",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "In the Name",
+       "mark": "smallcaps"
+      },
+      {
+       "t": " of the Father, and of the Son, and of the Holy Spirit. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Lord’s Prayer"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Hail Mary"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the hour of our death. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Trisagion"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Holy God, Holy Mighty, Holy Immortal, have mercy upon us. "
+      },
+      {
+       "t": "(thrice)",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Glory be to the Father, and to the Son, and to the Holy Spirit; as it was in the beginning, is now, and ever shall be, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Apostles’ Creed"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "I believe in God the Father Almighty, maker of heaven and earth: and in Jesus Christ his only Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary: suffered under Pontius Pilate, was crucified, dead, and buried: He descended into hell; the third day he rose again from the dead: He ascended into heaven, and sitteth on the right hand of God the Father Almighty: from thence He shall come to judge the quick and the dead. I believe in the Holy Ghost: the holy Catholic Church: the communion of saints: the forgiveness of sins: the resurrection of the body: and the life everlasting. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "A Morning Offering"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "I thank thee, Heavenly Father, for the rest of the past night and the gift of a new day. Grant that I may so live today in thy presence and service, that at evening I may truly praise thy holy Name; through Jesus Christ, our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Intercessions"
+      }
+     ],
+     "id": "j6"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Naming those you carry in prayer where the booklet leaves a blank:",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Have mercy, God, upon all people. Bless thy holy Church, thy bishops and clergy, and all faithful people on earth and in paradise. Bless my family, friends, and neighbors, especially N.; have compassion upon those who are sick, in trouble or danger, especially N.; and may the souls of the faithful, through the mercy of God, rest in peace. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "A Commendation"
+      }
+     ],
+     "id": "j7"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "I commit myself to God for today. By the help of his grace, I will endeavor to keep his commandments, and to follow faithfully in the way of Jesus Christ, our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "To the Guardian Angel"
+      }
+     ],
+     "id": "j8"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O holy guardian angel, to whose care God, in his mercy, has committed me, stand by me now and at my last hour; protect me against all the powers of darkness; defend me from all my enemies, and conduct my soul to the mansions of bliss. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Hymn — Now that Daylight Fills the Sky"
+      }
+     ],
+     "id": "j9"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "John Mason Neale’s translation of the ancient office hymn Iam lucis ortu sidere",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Now that daylight fills the sky,\nWe lift our hearts to God on high,\nThat he in all we do or say,\nMay keep us free from sin today."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "O Father, fill our hearts with love,\nThat we may seek the things above,\nExtinguish thou each sinful fire,\nAnd banish every wrong desire."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Father, that we ask be done,\nThrough Jesus Christ, thine only Son,\nWho with the Holy Ghost and thee,\nDoth live and reign eternally. Amen."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "You may add any other prayers from this book, say one of the litanies, or read a passage of Scripture and make a simple meditation. Then finish with:",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit, be with us all evermore. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "pb-noon",
+   "title": "Noon Time Prayers",
+   "summary": "A short form for the middle of the day.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A short form for the middle of the day — the sixth hour, when the Lord was lifted up on the Cross."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "In the Name",
+       "mark": "smallcaps"
+      },
+      {
+       "t": " of the Father, and of the Son, and of the Holy Spirit. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Lord’s Prayer"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Hail Mary"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the hour of our death. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Apostles’ Creed"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "I believe in God the Father Almighty, maker of heaven and earth: and in Jesus Christ his only Son our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary: suffered under Pontius Pilate, was crucified, dead, and buried: He descended into hell; the third day he rose again from the dead: He ascended into heaven, and sitteth on the right hand of God the Father Almighty: from thence He shall come to judge the quick and the dead. I believe in the Holy Ghost: the holy Catholic Church: the communion of saints: the forgiveness of sins: the resurrection of the body: and the life everlasting. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "O Saviour of the World"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Saviour of the world, who by thy cross and Passion hast redeemed us, save us and help us, we humbly beseech thee, O Lord."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "At the Sixth Hour"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O most gracious Jesus, our Lord and our God, who, as at this hour, didst bear our sins in thine own body on the tree, that we being dead unto sin might live unto righteousness: have mercy upon us, we beseech thee, both now and at the hour of our death; and grant unto us, thy humble servants, with all other Christian people who have this thy blessed passion in devout remembrance, a godly and peaceful life in this present world, and through thy grace eternal glory in the life to come, where, with the Father and the Holy Spirit, thou livest and reignest, ever one God, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "For the Faithful Departed"
+      }
+     ],
+     "id": "j6"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "May the Lord of his mercy grant unto us, with all his faithful servants, eternal rest and peace. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prayerbook",
+   "title": "A Little Prayer Book",
+   "summary": "A pocket manual of daily and occasional Western Rite prayers.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A pocket manual of daily and occasional prayers, in the Western devotional tradition — scanned in from a parish booklet, page by page."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The daily round"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Occasional prayers"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-angelus",
+   "title": "The Angelus",
+   "summary": "Said before Mass, in memory of the Incarnation.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "Said before each Mass except in Eastertide, in memory of the Incarnation. The bells are rung in groups of three."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Angel of the Lord announced unto Mary."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And she conceived by the Holy Ghost."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the hour of our death. Amen."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Behold the handmaid of the Lord;"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Be it unto me according to thy word."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the hour of our death. Amen."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And the Word was made flesh,"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And dwelt among us."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners now and at the hour of our death. Amen."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Pray for us, O holy Mother of God,"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "That we may be made worthy of the promises of Christ."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Collect"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Let us pray.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "We beseech thee, O Lord, pour thy grace into our hearts; that as we have known the incarnation of thy Son Jesus Christ by the message of an angel, so by his cross and passion we may be brought unto the glory of his resurrection. Through the same Christ our Lord. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-asperges",
+   "title": "The Asperges Me",
+   "summary": "The Sunday sprinkling with holy water.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "Sung on Sundays outside Paschaltide, at the sprinkling with holy water."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Immediately before the principal Sunday Mass the priest intones the Asperges Me or the Vidi Aquam, according to the season, and sprinkles the altar, the servers and the people with holy water. This little service is not part of the Mass itself, but a reminder of our Baptism, in which we were made members of the Body of Christ.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Antiphon"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Thou shalt purge me, O Lord, with hyssop, and I shall be clean;\nThou shalt wash me, and I shall be whiter than snow."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Have mercy upon me, O God,"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "After thy great goodness."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Glory be to the Father, and to the Son, and to the Holy Ghost;\nAs it was in the beginning, is now, and ever shall be, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "The antiphon is then repeated.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Suffrages"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Lord, show thy mercy upon us."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And grant us thy salvation."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Lord, hear my prayer."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And let my cry come unto thee."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Lord be with you."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And with thy spirit."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Collect"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Let us pray.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Graciously hear us, O Lord, Holy Father, Almighty, everlasting God; and vouchsafe to send thy holy Angel from heaven, to guard and cherish, to protect and visit, and to defend all who dwell in this thy holy habitation; through Christ our Lord. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-before-mass",
+   "title": "Prayers Before Mass",
+   "summary": "Preparing to approach the holy Mysteries.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "Said quietly before the Liturgy begins, to prepare to approach the holy Mysteries."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "R",
+       "mark": "dropcap"
+      },
+      {
+       "t": "EMEMBER NOT",
+       "mark": "smallcaps"
+      },
+      {
+       "t": ", Lord, our offenses, nor the offenses of our forefathers: neither take thou vengeance of our sins."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Kyrie & the Lord’s Prayer"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Lord, have mercy upon us. Christ, have mercy upon us. Lord, have mercy upon us."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come, Thy will be done, on earth as it is in heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Versicles"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "I said, Lord, be merciful unto me.\nHeal my soul, for I have sinned against thee."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Turn thee again, O Lord, at the last.\nAnd be gracious unto thy servants."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Let thy mercy, O Lord, be showed upon us.\nAs we do put our trust in thee."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Let thy Priests be clothed with righteousness.\nAnd thy Saints sing with joyfulness."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Cleanse me, O Lord, from my secret faults.\nAnd keep thy servant from presumptuous sins."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "O Lord, hear my prayer.\nAnd let my cry come unto thee."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Collects"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Most gracious God, incline thy merciful ears to our prayers, and enlighten our hearts by the grace of the Holy Ghost; that we may worthily approach thy holy Mysteries, and love thee with an everlasting love."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Inflame, O Lord, our minds and our hearts with the fire of the Holy Ghost; that we may serve thee with a chaste body, and please thee with a clean heart."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "We beseech thee, O Lord, that the Comforter, who proceedeth from thee, may enlighten our hearts; and lead us, as thy Son hath promised, into all truth."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "We beseech thee, O Lord, let the power of the Holy Ghost come upon us: that it may mercifully cleanse our hearts, and defend us from all adversities."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Purify our consciences, we beseech thee, O Lord, by thy visitation: that our Lord Jesus Christ thy Son, when he cometh, may find in us a mansion prepared for himself; who liveth and reigneth with thee, in the unity of the Holy Ghost, ever one God, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "A Blessing"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Almighty and Merciful Lord grant unto me joy with peace, amendment of life, time for true repentance, the grace and comfort of the Holy Ghost, and perseverance in good works. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-mass-essay",
+   "title": "The Western Orthodox Mass",
+   "summary": "Why the Mass stands at the centre of the Christian life.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "An explanation of the Mass carried at the front of the missal, by the V. Rev. Fr. John Winfrey of St. George Orthodox Church, Grand Rapids, Michigan."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "E",
+       "mark": "dropcap"
+      },
+      {
+       "t": "VERY PERSON",
+       "mark": "smallcaps"
+      },
+      {
+       "t": " who has ever walked this earth has found nothing that satisfies him. The money we slave for is quickly spent. Our friends leave us when prosperity is no longer ours. When we are young, health deceives us into thinking that it shall always be our companion. Possessions begin as treasures that we slowly accumulate, only to turn into our rulers and governors. We do not so much possess things, as they possess us (our time, our concern, our freedom). We are left like the prophet who cried, “Vanity, all is vanity!” But every man who has ever lived also knows the truth that he is made for glory, beauty, and honor. He is made for love. Yet how often do we hear that even those who are considered most dear are the very ones who betray and use us?"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Man "
+      },
+      {
+       "t": "is",
+       "mark": "italic"
+      },
+      {
+       "t": " made for love. He is made to live in love with God and with his fellow man. Man is made to be united in love with the entire cosmos, recreated in the love of Christ our God. This is the work of the Mass. It is the only work of humanity that really matters. It is the fulfillment of the great commandment that Christ himself gave us the night before he suffered for our salvation. He said to his holy apostles and disciples — and through them to us, “Do this…” "
+      },
+      {
+       "t": "Luke 22:19; I Corinthians 11:23–26",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Since that night in the upper room, and certainly since the day of Pentecost, the Church has always kept this Breaking of Bread, this Eucharist, this Mass as its primary source of life and worship. It was in the breaking of bread that Saints Cleopas and Luke recognized our Lord on the road to Emmaus. It was as the apostles sat at the table breaking bread that our Lord appeared to them after his Resurrection from the dead. To see our Lord is to be in the midst of the Church offering Eucharist, to celebrate the Mass. "
+      },
+      {
+       "t": "Luke 24:13–25; Mark 16:14",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Mass is the most profound way to see our Lord. Truly, we are told that until they broke the bread — even though their hearts burned within them — Saints Cleopas and Luke did not recognize Him. How often do we come into contact with the living Christ in our day-to-day lives and yet we fail to recognize Him? "
+      },
+      {
+       "t": "Luke 24:32",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "In the Mass, just as with Saints Cleopas and Luke, our Lord is revealed to us in the breaking of the bread. He is with us just as He promised; even unto the end of time. He reveals Himself to us that we might know Him and be transformed into His likeness. He offers Himself to us for the healing of our soul that we might then offer what we have received to a world in such need of salvation. "
+      },
+      {
+       "t": "Matthew 28:20",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The breaking of the bread of heaven, the Mass, is the start and fulfillment of the Christian life. Everything else flows from it. Our salvation is found by celebrating and partaking of the Mass. Our Lord Jesus Christ said, “I am the bread of life. This is the bread which cometh down from heaven; that if any man eat of it, he may not die. I am the living bread, which came down from heaven. If any man eat of this bread, he shall live forever; and the bread that I will give, is my flesh for the life of the world.” "
+      },
+      {
+       "t": "John 6:48–51",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "As our Father in the Faith, St. Cyril of Jerusalem (AD 386), wrote for the newly baptized:"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "He once turned water into wine, in Cana of Galilee, at His own will, and is it incredible that He should have turned wine into blood? That wonderful work He miraculously wrought, when called to an earthly marriage; and shall He not much rather be acknowledged to have bestowed the fruition of His Body and Blood on the children of the bridal chamber (the Church)?"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Therefore with fullest assurance let us partake as the Body and Blood of Christ; for in the figure of Bread is given to thee His Body, and in the figure of Wine His Blood; that thou by partaking of the Body and Blood of Christ, mightest be made of the same body and the same blood with Him. For thus we come to bear Christ in us, because His Body and Blood are diffused through our members; thus it is that, according to the blessed Peter, "
+      },
+      {
+       "t": "we become partakers of the divine nature",
+       "mark": "italic"
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "We welcome you to this Mass, and pray that you might see the Risen Lord on this Altar and among us, and so be drawn more deeply into His worship and to His Body, the Orthodox Catholic Church."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "An explanation of the Mass by the V. Rev. Fr. John Winfrey of St. George Orthodox Church, Grand Rapids, Michigan. Reproduced by permission."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-regina-caeli",
+   "title": "The Regina Cæli",
+   "summary": "Said in Eastertide in place of the Angelus.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "Said through Eastertide in place of the Angelus. The bells are rung in pairs."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Queen of heaven, be joyful, Alleluia,"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Because he whom so meetly thou barest, Alleluia,"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hath arisen as he hath promised, Alleluia;"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Pray for us to the Father, Alleluia."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Rejoice and be glad, O Virgin Mary, Alleluia."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "For the Lord is risen indeed, Alleluia."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Collect"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O",
+       "mark": "dropcap"
+      },
+      {
+       "t": " "
+      },
+      {
+       "t": "GOD",
+       "mark": "smallcaps"
+      },
+      {
+       "t": ", who by the resurrection of thy Son Jesus Christ didst vouchsafe to give gladness unto the world: grant, we beseech thee, that we, being holpen by the Virgin Mary his Mother, may attain unto the joys of everlasting life. Through the same Christ our Lord. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-vidi-aquam",
+   "title": "The Vidi Aquam",
+   "summary": "The sprinkling in Paschaltide, from Pascha to Pentecost.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "Sung in place of the Asperges Me on the Sundays of Paschaltide, from Pascha until Pentecost inclusive."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Immediately before the principal Sunday Mass the priest intones the Asperges Me or the Vidi Aquam, according to the season, and sprinkles the altar, the servers and the people with holy water. This little service is not part of the Mass itself, but a reminder of our Baptism, in which we were made members of the Body of Christ.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Antiphon"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "I beheld water which proceeded from the temple, on the right side thereof, alleluia: and all they to whom that water came were healed every one, and they say, alleluia, alleluia."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Psalm 117"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "O give thanks unto the Lord, for he is gracious:\nand his mercy endureth for ever."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Glory be to the Father, and to the Son, and to the Holy Ghost;\nAs it was in the beginning, is now, and ever shall be, world without end. Amen."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "The antiphon is then repeated. In the missal this is set to chant; the notation is not reproduced here.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Suffrages"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Lord, show thy mercy upon us."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And grant us thy salvation."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Lord, hear my prayer."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And let my cry come unto thee."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Lord be with you."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "And with thy spirit."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Collect"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "Let us pray.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Graciously hear us, O Lord, Holy Father, Almighty, everlasting God; and vouchsafe to send thy holy Angel from heaven, to guard and cherish, to protect and visit, and to defend all who dwell in this thy holy habitation; through Christ our Lord. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "spm-welcome",
+   "title": "Welcome",
+   "summary": "A word to those visiting, and the Twelve Great Feasts.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "A word to those worshipping with the parish, and the Twelve Great Feasts of the Church."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "T",
+       "mark": "dropcap"
+      },
+      {
+       "t": "HANK YOU",
+       "mark": "smallcaps"
+      },
+      {
+       "t": " for being with us today. We pray that your participation will be enriching to you. Classes of instruction are offered through the year for those interested in entering into the Body of Christ; if you would like to know more about the Church, or have any questions, please speak with one of the reverend clergy today. Glory to Jesus Christ forever!"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Great Feasts of the Church"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The greatest feast of the Church is Easter, the feast of the Resurrection of our Lord Jesus Christ. Eight further great feasts in honour of our Lord, together with four in honour of his Mother, the Blessed Virgin Mary, are known as the Twelve Great Feasts."
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Nativity of the Theotokos"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "September 8"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Elevation of the Holy Cross"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "September 14"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Presentation of the Theotokos"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "November 21"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "Christmas"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "December 25"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "Epiphany"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "January 6"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Presentation of our Lord"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "February 2"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Annunciation"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "March 25"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "Palm Sunday"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "the Sunday before Easter"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Ascension of the Lord"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "forty days after Easter"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "Pentecost"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "fifty days after Easter"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Transfiguration"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "August 6"
+      }
+     ]
+    },
+    {
+     "type": "term",
+     "runs": [
+      {
+       "t": "The Dormition of the Theotokos"
+      }
+     ]
+    },
+    {
+     "type": "definition",
+     "runs": [
+      {
+       "t": "August 15"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Church calls on all the faithful to attend Mass on these great feasts."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The St. Peter Pew Missal is inscribed in memory of the Very Reverend Patrick M. L. McCauley (1946–1996) and the Very Reverend Anthony Miller (1958–2013). May their memory be eternal."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "st-peter-missal",
+   "title": "The St. Peter Pew Missal",
+   "summary": "The service book of St. Peter Antiochian Orthodox Church: the Mass according to the Rite of St. Tikhon, with the prayers before and after.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "The service book of St. Peter Antiochian Orthodox Church — the Great Litany, the Decalogue, the Divine Eucharist according to the Rite of St. Tikhon, and the Rite of Chrismation. Being added page by page."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "A parish of the Western-Rite Vicariate of the Antiochian Orthodox Christian Archdiocese of North America."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "western-compline",
+   "title": "Compline",
+   "summary": "Night Prayer — the Church’s bedtime office.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "An Order of Compline, the Church’s night office, from the 1928 American Book of Common Prayer (public domain). For simplicity this uses the same Confession as Morning and Evening Prayer above."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "The Lord be with you.\nAnd with thy spirit."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Let us pray."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Confession"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Almighty and most merciful Father; We have erred and strayed from thy ways like lost sheep. We have followed too much the devices and desires of our own hearts. We have offended against thy holy laws. We have left undone those things which we ought to have done; And we have done those things which we ought not to have done; And there is no health in us. But thou, O Lord, have mercy upon us, miserable offenders. Spare thou them, O God, which confess their faults. Restore thou them that are penitent; According to thy promises declared unto mankind in Christ Jesu our Lord. Grant, O most merciful Father, for his sake, that we may hereafter live a godly, righteous, and sober life, to the glory of thy holy Name. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Psalm 4"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Hear me when I call, O God of my righteousness: thou hast enlarged me when I was in distress; have mercy upon me, and hear my prayer. O ye sons of men, how long will ye turn my glory into shame? how long will ye love vanity, and seek after leasing? But know that the Lord hath set apart him that is godly for himself: the Lord will hear when I call unto him. Stand in awe, and sin not: commune with your own heart upon your bed, and be still. Offer the sacrifices of righteousness, and put your trust in the Lord. There be many that say, Who will show us any good? Lord, lift thou up the light of thy countenance upon us. Thou hast put gladness in my heart, more than in the time that their corn and their wine increased. I will both lay me down in peace, and sleep: for thou, Lord, only makest me dwell in safety. "
+      },
+      {
+       "t": "(KJV)",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Psalm 91"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty. I will say of the Lord, He is my refuge and my fortress: my God; in him will I trust. Surely he shall deliver thee from the snare of the fowler, and from the noisome pestilence. He shall cover thee with his feathers, and under his wings shalt thou trust: his truth shall be thy shield and buckler. Thou shalt not be afraid for the terror by night; nor for the arrow that flieth by day; Nor for the pestilence that walketh in darkness; nor for the destruction that wasteth at noonday. A thousand shall fall at thy side, and ten thousand at thy right hand; but it shall not come nigh thee. Because thou hast made the Lord, which is my refuge, even the most High, thy habitation; There shall no evil befall thee, neither shall any plague come nigh thy dwelling. For he shall give his angels charge over thee, to keep thee in all thy ways. They shall bear thee up in their hands, lest thou dash thy foot against a stone. Thou shalt tread upon the lion and adder: the young lion and the dragon shalt thou trample under feet. Because he hath set his love upon me, therefore will I deliver him: I will set him on high, because he hath known my name. He shall call upon me, and I will answer him: I will be with him in trouble; I will deliver him, and honour him. With long life will I satisfy him, and show him my salvation. "
+      },
+      {
+       "t": "(KJV)",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Psalm 134"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Behold, bless ye the Lord, all ye servants of the Lord, which by night stand in the house of the Lord. Lift up your hands in the sanctuary, and bless the Lord. The Lord that made heaven and earth bless thee out of Zion. "
+      },
+      {
+       "t": "(KJV)",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Before the Ending of the Day"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "A translation of the ancient hymn Te lucis ante terminum",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Before the ending of the day, Creator of the world, we pray, that with thy wonted favour thou wouldst be our guard and keeper now."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "From all ill dreams defend our eyes, from nightly fears and fantasies; tread under foot our ghostly foe, that no pollution we may know."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "O Father, that we ask be done, through Jesus Christ, thine only Son; who, with the Holy Ghost and thee, doth live and reign eternally. Amen."
+      }
+     ],
+     "style": "hymn"
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Nunc Dimittis"
+      }
+     ],
+     "id": "j6"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "The Song of Simeon — St. Luke 2:29–32",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Lord, now lettest thou thy servant depart in peace: according to thy word. For mine eyes have seen: thy salvation, Which thou hast prepared: before the face of all people, To be a light to lighten the Gentiles: and to be the glory of thy people Israel."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Lord’s Prayer & Versicles"
+      }
+     ],
+     "id": "j7"
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Keep me as the apple of an eye;\nHide me under the shadow of thy wings."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Into thy hands, O Lord, I commend my spirit;\nFor thou hast redeemed me, O Lord, thou God of truth."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Collect"
+      }
+     ],
+     "id": "j8"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Visit, we beseech thee, O Lord, this dwelling, and drive far from it all snares of the enemy; let thy holy Angels dwell herein to preserve us in peace; and let thy blessing be always upon us; through Jesus Christ our Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "The Lord Almighty grant us a quiet night and a perfect end.\nAmen."
+      }
+     ]
+    },
+    {
+     "type": "verse",
+     "runs": [
+      {
+       "t": "Let us bless the Lord.\nThanks be to God."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Sub Tuum Praesidium"
+      }
+     ],
+     "id": "j9"
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "The most ancient prayer to the Theotokos (3rd century), held in common by East and West",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "We fly to thy protection, O Holy Mother of God; do not despise our petitions in our necessities, but deliver us always from all dangers, O glorious and blessed Virgin. Amen."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "western-fasting",
+   "title": "Fasting & Abstinence",
+   "summary": "The Vicariate Fasting Norms in force from Advent Sunday 2012: the days of fasting and abstinence, and the Eucharistic fast.",
+   "blocks": [
+    {
+     "type": "lead",
+     "runs": [
+      {
+       "t": "The Fasting Norms of the Antiochian Western-Rite Vicariate, in force from Advent Sunday 2012."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Fasting"
+      }
+     ],
+     "id": "j1"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "F",
+       "mark": "dropcap"
+      },
+      {
+       "t": "ASTING",
+       "mark": "smallcaps"
+      },
+      {
+       "t": " includes abstinence and adds requirements of its own: it governs both the kind of food and the quantity. On a fasting day, besides abstaining from flesh-meat, meals themselves are restricted — one full meal only, and not before twelve o’clock, together with a collation of about a quarter of a meal."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The fasts of the Church bind all who have completed their twenty-first year, unless their father confessor exempts them for some legitimate reason."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Days of Fasting"
+      }
+     ],
+     "id": "j2"
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "Mondays, Wednesdays and Fridays in Advent."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "Every day in Lent, Sundays excepted."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "The Ember Days, which fall four times a year: the Wednesday, Friday and Saturday immediately after the first Sunday in Lent, in Whitsun week, immediately after the 14th of September, and immediately after the third Sunday in Advent."
+      }
+     ]
+    },
+    {
+     "type": "item",
+     "runs": [
+      {
+       "t": "The vigils of Whitsunday (Pentecost), the Assumption, All Saints, and Christmas."
+      }
+     ]
+    },
+    {
+     "type": "rubric",
+     "runs": [
+      {
+       "t": "When a fasting day falls on a Sunday, it is kept on the Saturday preceding.",
+       "mark": "rubric"
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Abstinence"
+      }
+     ],
+     "id": "j3"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Abstinence governs only the kind of food, not the quantity. On a day of abstinence the faithful abstain from flesh-meat and from the juice thereof — soup and the like. The number of meals and the amount of food may be as on any other day."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Abstinence binds all who have attained the age of reason."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Days of Abstinence"
+      }
+     ],
+     "id": "j4"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Every Friday throughout the year. When Christmas falls on a Friday, abstinence is not of precept."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "The Eucharistic Fast"
+      }
+     ],
+     "id": "j5"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The Eucharistic fast is to take no food or drink — water and medicines excepted — from midnight until receiving the Eucharist the next morning."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "Where the Eucharist is to be received at a Mass celebrated in the evening, it may be kept thus instead: take the midday meal as close to noon as possible, and from then take no food or drink, again excepting water and medicines, until receiving."
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "The norms of the Western-Rite Vicariate of the Antiochian Orthodox Christian Archdiocese of North America, effective Advent Sunday 2012. The norms themselves provide for exemption by one’s father confessor — so on anything touching your own health or circumstances, your confessor directs your practice, not this page."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
