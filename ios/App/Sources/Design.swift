@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // Sanctuary, natively.
 //
@@ -27,6 +28,7 @@ extension Color {
 /// whole app follows the reader's Dynamic Type setting. That is the real
 /// accessibility win over the web version, where the text size control was a
 /// bespoke three-step thing that nothing else on the phone knew about.
+@MainActor
 enum Typeface {
     static func prayer(_ style: Font.TextStyle = .body) -> Font {
         if Settings.shared.dyslexicFont, let name = OpenDyslexic.familyName {

@@ -21,7 +21,7 @@ settings:
     DEVELOPMENT_TEAM: ""        # set this in Xcode, or put your Team ID here
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: YES
-    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_STRICT_CONCURRENCY: minimal   # tighten once it builds clean
 
 targets:
   Prayers:

@@ -22,7 +22,7 @@ struct Run: Codable, Hashable {
     var lines: [String] { t.components(separatedBy: "\n") }
 }
 
-struct Block: Codable, Hashable, Identifiable {
+struct Block: Codable, Hashable {
     enum Kind: String, Codable {
         case heading, subheading, rubric, verse, lead, paragraph, item, term, definition
     }
@@ -37,8 +37,8 @@ struct Block: Codable, Hashable, Identifiable {
 }
 
 extension Block {
-    // Identifiable: the generator only gives ids to jump targets, so fall back
-    // to the text, which is stable for a given build.
+    /// The generator only gives ids to jump targets, so fall back to the text,
+    /// which is stable for a given build. Used as the ForEach key.
     var stableID: String { id ?? plain }
 }
 
