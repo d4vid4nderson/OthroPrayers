@@ -22,6 +22,7 @@ import sys
 from html.parser import HTMLParser
 
 OUT = "ios/Content/content.json"
+SIGNUM_CHAR = "\u2720"   # ✠ — the mark the printed booklet uses
 
 # whole subtrees that are page chrome, not content: the native app provides
 # its own navigation, ornaments and page turns
@@ -86,7 +87,7 @@ class PageParser(HTMLParser):
     def _push_text(self, text):
         if self._block is None or not text:
             return
-        mark = self._marks[-1] if self._marks else None
+        mark = "signum" if text == SIGNUM_CHAR else (self._marks[-1] if self._marks else None)
         href = self._links[-1] if self._links else None
         runs = self._block[1]
         if runs and runs[-1].get("mark") == mark and runs[-1].get("href") == href:
@@ -150,6 +151,14 @@ class PageParser(HTMLParser):
             return
         if tag in TAG_MARKS:
             self._marks.append(TAG_MARKS[tag])
+            return
+        if "signum" in classes:
+            # the rubrical cross-mark: "make the sign of the cross here". Its
+            # glyph is an SVG, which is skipped — so emit the character itself,
+            # or the mark vanishes and the reader loses the direction.
+            self._push_text(SIGNUM_CHAR)
+            self._skip_depth = self._depth
+            self._skip_tag = tag
             return
         if tag == "a":
             target = d.get("href", "")
@@ -234,10 +243,19 @@ def main():
     doc = {"generated": True, "pages": pages}
     with open(OUT, "w") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
+    # every mark that exists in the HTML must exist in the model. This caught
+    # all ten cross-marks being dropped once already.
+    import glob as _glob
+    html_signa = sum(open(f).read().count('class="signum"')
+                     for f in _glob.glob("*.html") if ".content." not in f)
+    json_signa = sum(r["t"].count(SIGNUM_CHAR)
+                     for p in pages for b in p["blocks"] for r in b["runs"])
+    if html_signa != json_signa:
+        sys.exit(f"cross-marks lost: {html_signa} in the pages, {json_signa} in the model")
     blocks = sum(len(p["blocks"]) for p in pages)
     runs = sum(len(b["runs"]) for p in pages for b in p["blocks"])
     print(f"wrote {OUT}: {len(pages)} pages, {blocks} blocks, {runs} runs, "
-          f"{os.path.getsize(OUT) / 1024:.0f} KB")
+          f"{json_signa} cross-marks, {os.path.getsize(OUT) / 1024:.0f} KB")
 
 
 if __name__ == "__main__":

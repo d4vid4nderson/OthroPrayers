@@ -363,6 +363,10 @@
      "type": "paragraph",
      "runs": [
       {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
        "t": "In the Name",
        "mark": "smallcaps"
       },
@@ -490,7 +494,14 @@
      "type": "paragraph",
      "runs": [
       {
-       "t": "Most merciful Father, I confess that I have sinned in thought, word, deed, and omission, by my own grievous fault. I am heartily sorry and firmly purpose amendment. Make me a clean heart, O God, and renew a right spirit within me. Pardon and deliver me from all my sins, and bring me to everlasting life; for Jesus Christ’s sake, who died for me and for all mankind, and who liveth and reigneth with thee and the Holy Spirit, one God, world without end. Amen."
+       "t": "Most merciful Father, I confess that I have sinned in thought, word, deed, and omission, by my own grievous fault. I am heartily sorry and firmly purpose amendment. Make me a clean heart, O God, and renew a right spirit within me. "
+      },
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
+       "t": "Pardon and deliver me from all my sins, and bring me to everlasting life; for Jesus Christ’s sake, who died for me and for all mankind, and who liveth and reigneth with thee and the Holy Spirit, one God, world without end. Amen."
       }
      ]
     },
@@ -588,7 +599,14 @@
      "type": "paragraph",
      "runs": [
       {
-       "t": "The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit be with us all evermore. Amen."
+       "t": "The grace of our Lord Jesus Christ, "
+      },
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
+       "t": "and the love of God, and the fellowship of the Holy Spirit be with us all evermore. Amen."
       }
      ]
     }
@@ -806,6 +824,10 @@
      "type": "paragraph",
      "runs": [
       {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
        "t": "May the souls of all the faithful departed, through the mercy of God, rest in peace. Amen."
       }
      ]
@@ -913,6 +935,10 @@
     {
      "type": "paragraph",
      "runs": [
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
       {
        "t": "In the Name",
        "mark": "smallcaps"
@@ -1041,7 +1067,14 @@
      "type": "paragraph",
      "runs": [
       {
-       "t": "Have mercy, God, upon all people. Bless thy holy Church, thy bishops and clergy, and all faithful people on earth and in paradise. Bless my family, friends, and neighbors, especially N.; have compassion upon those who are sick, in trouble or danger, especially N.; and may the souls of the faithful, through the mercy of God, rest in peace. Amen."
+       "t": "Have mercy, God, upon all people. Bless thy holy Church, thy bishops and clergy, and all faithful people on earth and in paradise. Bless my family, friends, and neighbors, especially N.; have compassion upon those who are sick, in trouble or danger, especially N.; "
+      },
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
+       "t": "and may the souls of the faithful, through the mercy of God, rest in peace. Amen."
       }
      ]
     },
@@ -1137,7 +1170,14 @@
      "type": "paragraph",
      "runs": [
       {
-       "t": "The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit, be with us all evermore. Amen."
+       "t": "The grace of our Lord Jesus Christ, "
+      },
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
+       "t": "and the love of God, and the fellowship of the Holy Spirit, be with us all evermore. Amen."
       }
      ]
     }
@@ -1159,6 +1199,10 @@
     {
      "type": "paragraph",
      "runs": [
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
       {
        "t": "In the Name",
        "mark": "smallcaps"
@@ -1265,6 +1309,10 @@
     {
      "type": "paragraph",
      "runs": [
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
       {
        "t": "May the Lord of his mercy grant unto us, with all his faithful servants, eternal rest and peace. Amen."
       }
@@ -1426,7 +1474,14 @@
      "type": "paragraph",
      "runs": [
       {
-       "t": "We beseech thee, O Lord, pour thy grace into our hearts; that as we have known the incarnation of thy Son Jesus Christ by the message of an angel, so by his cross and passion we may be brought unto the glory of his resurrection. Through the same Christ our Lord. Amen."
+       "t": "We beseech thee, O Lord, pour thy grace into our hearts; that as we have known the incarnation of thy Son Jesus Christ by the message of an angel, so by his "
+      },
+      {
+       "t": "✠",
+       "mark": "signum"
+      },
+      {
+       "t": "cross and passion we may be brought unto the glory of his resurrection. Through the same Christ our Lord. Amen."
       }
      ]
     }
