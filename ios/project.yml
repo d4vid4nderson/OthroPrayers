@@ -1,0 +1,64 @@
+# XcodeGen spec. Generating the project beats hand-writing project.pbxproj:
+# the pbxproj format is long, order-sensitive and merges badly, and this file
+# is reviewable.
+#
+#   brew install xcodegen
+#   cd ios && xcodegen generate && open Prayers.xcodeproj
+#
+name: Prayers
+options:
+  bundleIdPrefix: com.othroprayers
+  deploymentTarget:
+    iOS: "26.0"          # Liquid Glass; drop to 18.0 if you need older devices
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: ""        # set this in Xcode, or put your Team ID here
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    SWIFT_STRICT_CONCURRENCY: minimal   # tighten once it builds clean
+
+targets:
+  Prayers:
+    type: application
+    platform: iOS
+    sources:
+      - path: App/Sources
+      # groups, not folder references: the fonts, the privacy manifest and the
+      # JSON must land at the bundle root, where UIAppFonts and Bundle.main
+      # look for them. A folder reference would bury them a level down.
+      - path: App/Resources
+      # the generated content model, referenced where build.py writes it and
+      # never copied, so the app cannot drift from the site
+      - path: Content
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Prayers
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIUserInterfaceStyle: Dark
+        # no encryption beyond what iOS itself provides: this stops App Store
+        # Connect asking about export compliance on every single upload
+        ITSAppUsesNonExemptEncryption: false
+        UIAppFonts:
+          - OpenDyslexic-Regular.ttf
+          - OpenDyslexic-Bold.ttf
+          - OpenDyslexic-Italic.ttf
+        CFBundleURLTypes:
+          - CFBundleURLName: com.othroprayers.western
+            CFBundleURLSchemes: [prayers]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.othroprayers.western
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES

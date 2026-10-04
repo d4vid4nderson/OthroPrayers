@@ -3396,6 +3396,40 @@ if APP_BUILD:
     print(f"western-only build -> {OUT_DIR}: {_n} files, {_sz / 1e6:.1f} MB")
     raise SystemExit(0)
 
+# ---- structure for the native app -----------------------------------------
+# The hours and their time windows, and each book's section order, live here in
+# Python. A native UI needs them as data, and must not get a second, drifting
+# copy — so they are exported beside the content model (see export_content.py).
+if WESTERN_ONLY:
+    import html as _html
+
+    def _plain(t):
+        return _html.unescape(re.sub(r"<[^>]+>", "", t)).strip()
+
+    _structure = {
+        "hours": [
+            {"slug": s_, "title": _plain(t), "blurb": _plain(b),
+             "when": _plain(w), "from": h0, "until": h1}
+            for s_, t, b, _emb, w, h0, h1 in WESTERN_CYCLE
+        ],
+        "books": [],
+    }
+    for _bslug, _btitle, _sections, _content in (
+            ("prayerbook", "A Little Prayer Book", PB_SECTIONS, PB_CONTENT),
+            ("st-peter-missal", "The St. Peter Pew Missal", SPM_SECTIONS, SPM_CONTENT)):
+        _items = [{"slug": s_, "title": _plain(t), "blurb": _plain(b)}
+                  for s_, t, b, *_rest in _sections if s_ in _content]
+        if _items:
+            _structure["books"].append({"slug": _bslug, "title": _plain(_btitle),
+                                        "sections": _items})
+    _structure["extras"] = [{"slug": "western-fasting", "title": "Fasting & Abstinence",
+                             "blurb": "The Vicariate\u2019s norms."}]
+    os.makedirs("ios/Content", exist_ok=True)
+    with open("ios/Content/structure.json", "w") as _f:
+        json.dump(_structure, _f, ensure_ascii=False, indent=1)
+    print("wrote ios/Content/structure.json",
+          len(_structure["hours"]), "hours,", len(_structure["books"]), "books")
+
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
 # or cache.addAll() would 404 and the whole offline install would fail

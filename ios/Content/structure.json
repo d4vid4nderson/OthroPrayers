@@ -1,0 +1,117 @@
+{
+ "hours": [
+  {
+   "slug": "pb-morning",
+   "title": "Morning Prayer",
+   "blurb": "A short form of morning prayer, for use alone.",
+   "when": "On rising",
+   "from": 4,
+   "until": 11
+  },
+  {
+   "slug": "pb-noon",
+   "title": "Noon Time Prayers",
+   "blurb": "A short form for the middle of the day.",
+   "when": "Midday",
+   "from": 11,
+   "until": 17
+  },
+  {
+   "slug": "pb-evening",
+   "title": "Evening Prayers",
+   "blurb": "A short form for the close of the day.",
+   "when": "This evening",
+   "from": 17,
+   "until": 21
+  },
+  {
+   "slug": "western-compline",
+   "title": "Compline",
+   "blurb": "Night Prayer — the Church’s bedtime office.",
+   "when": "At nightfall",
+   "from": 21,
+   "until": 4
+  }
+ ],
+ "books": [
+  {
+   "slug": "prayerbook",
+   "title": "A Little Prayer Book",
+   "sections": [
+    {
+     "slug": "pb-duties",
+     "title": "Christian Duties and Virtues",
+     "blurb": "A short catechism of duties, virtues and the rules of fasting."
+    },
+    {
+     "slug": "pb-morning",
+     "title": "Morning Prayer",
+     "blurb": "A short form of morning prayer, for use alone."
+    },
+    {
+     "slug": "pb-noon",
+     "title": "Noon Time Prayers",
+     "blurb": "A short form for the middle of the day."
+    },
+    {
+     "slug": "pb-evening",
+     "title": "Evening Prayers",
+     "blurb": "A short form for the close of the day."
+    },
+    {
+     "slug": "pb-general",
+     "title": "General Prayers",
+     "blurb": "A gathering of further prayers."
+    }
+   ]
+  },
+  {
+   "slug": "st-peter-missal",
+   "title": "The St. Peter Pew Missal",
+   "sections": [
+    {
+     "slug": "spm-before-mass",
+     "title": "Prayers Before Mass",
+     "blurb": "Preparing to approach the holy Mysteries."
+    },
+    {
+     "slug": "spm-welcome",
+     "title": "Welcome & the Great Feasts",
+     "blurb": "A word to those visiting, and the Twelve Great Feasts."
+    },
+    {
+     "slug": "spm-mass-essay",
+     "title": "The Western Orthodox Mass",
+     "blurb": "Why the Mass stands at the centre of the Christian life."
+    },
+    {
+     "slug": "spm-angelus",
+     "title": "The Angelus",
+     "blurb": "Said before Mass, in memory of the Incarnation."
+    },
+    {
+     "slug": "spm-regina-caeli",
+     "title": "The Regina Cæli",
+     "blurb": "Said in Eastertide in place of the Angelus."
+    },
+    {
+     "slug": "spm-asperges",
+     "title": "The Asperges Me",
+     "blurb": "The Sunday sprinkling with holy water."
+    },
+    {
+     "slug": "spm-vidi-aquam",
+     "title": "The Vidi Aquam",
+     "blurb": "The sprinkling in Paschaltide, from Pascha to Pentecost."
+    }
+   ]
+  }
+ ],
+ "extras": [
+  {
+   "slug": "western-fasting",
+   "title": "Fasting & Abstinence",
+   "blurb": "The Vicariate’s norms."
+  }
+ ]
+}
