@@ -4,13 +4,38 @@ import SwiftUI
 ///
 /// The contents fold away behind one line, closed by default, so the page opens
 /// on the prayer rather than on a menu. The page turn sits at the foot.
+///
+/// The office is drawn prayer by prayer rather than block by block, because the
+/// prayer is the unit the reader arranges. When an arrangement exists it drives
+/// the order; otherwise the printed order does.
 struct ReadingView: View {
     let slug: String
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var settings: Settings
+    @EnvironmentObject private var arrangements: Arrangements
     @State private var showContents = false
+    @State private var showArrange = false
 
     private var page: Page? { library.page(slug) }
+
+    /// A prayer as drawn on the page. The identity is the arrangement slot, not
+    /// the prayer, so the same prayer can appear twice without the two copies
+    /// colliding as view identities.
+    private struct Drawn: Identifiable {
+        let id: String
+        let unit: PrayerUnit
+    }
+
+    private var drawn: [Drawn] {
+        if let arrangement = arrangements.arrangement(for: slug) {
+            return arrangement.compactMap { slot in
+                library.unit(slot).map { Drawn(id: slot.id.uuidString, unit: $0) }
+            }
+        }
+        return library.units(of: slug).map { Drawn(id: $0.id, unit: $0) }
+    }
+
+    private var isCustomised: Bool { arrangements.isCustomised(slug) }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -18,11 +43,21 @@ struct ReadingView: View {
                 if let page {
                     VStack(spacing: 0) {
                         masthead(page)
-                        if page.sections.count > 1 { contents(page, proxy: proxy) }
-                        ForEach(page.blocks, id: \.stableID) { block in
+                        if drawn.count > 1 { contents(proxy: proxy) }
+
+                        ForEach(library.preamble(of: slug), id: \.stableID) { block in
                             BlockView(block: block)
-                                .id(block.id ?? "")
                         }
+
+                        ForEach(drawn) { item in
+                            VStack(spacing: 0) {
+                                ForEach(Array(item.unit.blocks.enumerated()), id: \.offset) { _, block in
+                                    BlockView(block: block)
+                                }
+                            }
+                            .id(item.id)
+                        }
+
                         pageTurn
                     }
                     .padding(.horizontal, 22)
@@ -40,6 +75,25 @@ struct ReadingView: View {
         // iOS 27. A prayer book should not shove the previous page sideways
         // out of the way; it should dissolve into the next one.
         .navigationTransition(.crossFade)
+        .toolbar {
+            if drawn.count > 1 {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showArrange = true
+                    } label: {
+                        Label("Arrange", systemImage: isCustomised
+                              ? "list.bullet.indent"
+                              : "arrow.up.arrow.down")
+                    }
+                    .accessibilityLabel("Arrange this office")
+                }
+            }
+        }
+        .sheet(isPresented: $showArrange) {
+            NavigationStack {
+                ArrangeView(slug: slug, title: page?.title ?? "")
+            }
+        }
         .onAppear { settings.lastRead = slug }
     }
 
@@ -49,6 +103,10 @@ struct ReadingView: View {
                 .font(Typeface.display(.largeTitle))
                 .multilineTextAlignment(.center)
             GoldRule().padding(.top, 8)
+            if isCustomised {
+                MicroLabel(text: "Your arrangement")
+                    .padding(.top, 6)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 18)
@@ -57,17 +115,17 @@ struct ReadingView: View {
 
     /// One quiet line, closed by default. DisclosureGroup rather than a custom
     /// control so VoiceOver announces the expanded state for free.
-    private func contents(_ page: Page, proxy: ScrollViewProxy) -> some View {
+    private func contents(proxy: ScrollViewProxy) -> some View {
         DisclosureGroup(isExpanded: $showContents) {
             VStack(spacing: 0) {
-                ForEach(page.sections, id: \.stableID) { section in
+                ForEach(drawn) { item in
                     Button {
                         withAnimation {
-                            proxy.scrollTo(section.id ?? "", anchor: .top)
+                            proxy.scrollTo(item.id, anchor: .top)
                             showContents = false
                         }
                     } label: {
-                        Text(section.plain)
+                        Text(item.unit.title)
                             .font(Typeface.prayer(.callout))
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)

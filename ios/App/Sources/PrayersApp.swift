@@ -4,6 +4,7 @@ import SwiftUI
 struct PrayersApp: App {
     @StateObject private var library = Library.shared
     @StateObject private var settings = Settings.shared
+    @StateObject private var arrangements = Arrangements.shared
     /// Where a cross-reference inside a prayer sends the reader.
     @State private var deepLink: String?
 
@@ -12,6 +13,7 @@ struct PrayersApp: App {
             RootView(deepLink: $deepLink)
                 .environmentObject(library)
                 .environmentObject(settings)
+                .environmentObject(arrangements)
                 // Sanctuary is dark by construction, not by preference.
                 .preferredColorScheme(.dark)
                 // the single accent: the system tints every stock control with it

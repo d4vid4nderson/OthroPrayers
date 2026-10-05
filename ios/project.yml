@@ -69,3 +69,29 @@ targets:
         # nobody drew. Set this to "1,2" only alongside a real iPad layout.
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+
+  PrayersUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: Tests/UI
+    dependencies:
+      - target: Prayers
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.orthoprayers.western.uitests
+        TEST_TARGET_NAME: Prayers
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  Prayers:
+    build:
+      targets:
+        Prayers: all
+        PrayersUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - PrayersUITests
