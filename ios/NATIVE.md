@@ -82,7 +82,7 @@ Already handled in the project:
 What you still have to do:
 
 1. Create the app record in App Store Connect with bundle ID
-   `com.othroprayers.western` (change it in `project.yml` if you want another).
+   `com.orthoprayers.western` (change it in `project.yml` if you want another).
 2. **Product › Archive**, then **Distribute App › TestFlight**.
 3. Internal testers (your own team, up to 100) need no review. **External
    testers require Beta App Review**, which is lighter than full App Store
