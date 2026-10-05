@@ -2,14 +2,20 @@ import AVFoundation
 import MediaPlayer
 import SwiftUI
 
-// The worship recordings: the All-Merciful Saviour Monastery chant, bundled
-// with the app and played from disk. Like the prayers, nothing here touches
-// the network — the whole collection is on the device.
+// The worship recordings, bundled with the app and played from disk. Like the
+// prayers, nothing here touches the network — everything is on the device.
+//
+// What is on the shelf is whatever export_music.py found in hymns/: folders of
+// recordings become albums with a page each, loose files become singles.
 
 struct Track: Codable, Hashable, Identifiable {
     let file: String
     let title: String
     let seconds: Int
+    /// Who recorded it, for the now-playing bar. An album's tracks are
+    /// attributed to the album; a single carries whatever its own tags said,
+    /// and may say nothing.
+    let source: String?
 
     var id: String { file }
 
@@ -23,15 +29,32 @@ struct Track: Codable, Hashable, Identifiable {
     }
 }
 
-private struct MusicFile: Codable {
-    let collection: String
+/// A folder of recordings — named `Album` rather than `Collection` so it does
+/// not shadow the standard library's protocol of that name.
+struct Album: Codable, Hashable, Identifiable {
+    let name: String
     let tracks: [Track]
+
+    var id: String { name }
+
+    /// What the row under the title says: how much there is to hear.
+    var summary: String {
+        let minutes = tracks.reduce(0) { $0 + $1.seconds } / 60
+        return "\(tracks.count) recordings · \(minutes) min"
+    }
+}
+
+private struct MusicFile: Codable {
+    let singles: [Track]
+    let collections: [Album]
 }
 
 enum Chant {
     private static let file: MusicFile = Bundle.main.decode("music.json")
-    static var collection: String { file.collection }
-    static var tracks: [Track] { file.tracks }
+    /// Loose recordings, which sit on the worship screen itself.
+    static var singles: [Track] { file.singles }
+    /// Folders of recordings, each of which opens its own page.
+    static var albums: [Album] { file.collections }
 }
 
 /// One player for the whole app, so the now-playing bar and the track list
@@ -188,13 +211,18 @@ final class Player: NSObject, ObservableObject {
 
     private func updateNowPlaying() {
         guard let current, let audio else { return }
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+        var info: [String: Any] = [
             MPMediaItemPropertyTitle: current.title,
-            MPMediaItemPropertyArtist: Chant.collection,
             MPMediaItemPropertyPlaybackDuration: audio.duration,
             MPNowPlayingInfoPropertyElapsedPlaybackTime: audio.currentTime,
             MPNowPlayingInfoPropertyPlaybackRate: audio.isPlaying ? 1.0 : 0.0,
         ]
+        // Left out rather than blank when the recording does not say: the lock
+        // screen lays itself out around the fields that are actually there.
+        if let source = current.source {
+            info[MPMediaItemPropertyArtist] = source
+        }
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 }
 

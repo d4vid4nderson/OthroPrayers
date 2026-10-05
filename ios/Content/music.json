@@ -1,100 +1,131 @@
 {
- "collection": "All-Merciful Saviour Monastery",
- "tracks": [
+ "singles": [
   {
-   "file": "dogmatic-theotokion-tone-i.mp3",
-   "title": "Dogmatic Theotokion Tone I",
-   "seconds": 151
-  },
+   "file": "mary-we-hail-thee-salve-regina-simple-tone-in-english.mp3",
+   "title": "Mary, We Hail Thee (Salve Regina), Simple Tone in English",
+   "seconds": 126,
+   "source": "Orthodox West Music"
+  }
+ ],
+ "collections": [
   {
-   "file": "dogmatic-theotokion-tone-ii.mp3",
-   "title": "Dogmatic Theotokion Tone II",
-   "seconds": 106
-  },
-  {
-   "file": "dogmatic-theotokion-tone-iii.mp3",
-   "title": "Dogmatic Theotokion Tone III",
-   "seconds": 138
-  },
-  {
-   "file": "dogmatic-theotokion-tone-iv.mp3",
-   "title": "Dogmatic Theotokion Tone IV",
-   "seconds": 196
-  },
-  {
-   "file": "dogmatic-theotokion-tone-v.mp3",
-   "title": "Dogmatic Theotokion Tone V",
-   "seconds": 142
-  },
-  {
-   "file": "dogmatic-theotokion-tone-vi.mp3",
-   "title": "Dogmatic Theotokion Tone VI",
-   "seconds": 110
-  },
-  {
-   "file": "dogmatic-theotokion-tone-vii.mp3",
-   "title": "Dogmatic Theotokion Tone VII",
-   "seconds": 93
-  },
-  {
-   "file": "dogmatic-theotokion-tone-viii.mp3",
-   "title": "Dogmatic Theotokion Tone VIII",
-   "seconds": 170
-  },
-  {
-   "file": "dogmatic-theotokion-for-the-dormition-of-the-mother-of-god.mp3",
-   "title": "Dogmatic Theotokion for the Dormition of the Mother of God",
-   "seconds": 249
-  },
-  {
-   "file": "great-compline-hymnody-for-the-close-of-the-day.mp3",
-   "title": "Great Compline Hymnody for the Close of the Day",
-   "seconds": 115
-  },
-  {
-   "file": "irmoi-of-the-paschal-canon-based-on-byzantine-chant-tone-v.mp3",
-   "title": "Irmoi of the Paschal Canon Based on Byzantine Chant, Tone V",
-   "seconds": 252
-  },
-  {
-   "file": "it-is-truly-meet-joy-of-the-heavenly-hosts-melody.mp3",
-   "title": "It Is Truly Meet 'Joy of the Heavenly Hosts' Melody",
-   "seconds": 82
-  },
-  {
-   "file": "o-queen-of-all-creation.mp3",
-   "title": "O Queen of All Creation",
-   "seconds": 201
-  },
-  {
-   "file": "the-cherubikon.mp3",
-   "title": "The Cherubikon",
-   "seconds": 255
-  },
-  {
-   "file": "the-first-antiphon-psalm-102.mp3",
-   "title": "The First Antiphon - Psalm 102",
-   "seconds": 253
-  },
-  {
-   "file": "the-great-doxology.mp3",
-   "title": "The Great Doxology",
-   "seconds": 289
-  },
-  {
-   "file": "the-hymn-of-st-justinian-only-begotten-son.mp3",
-   "title": "The Hymn of St Justinian 'Only Begotten Son...'",
-   "seconds": 88
-  },
-  {
-   "file": "the-hymns-of-thanksgiving-after-holy-communion.mp3",
-   "title": "The Hymns of Thanksgiving After Holy Communion",
-   "seconds": 113
-  },
-  {
-   "file": "the-second-antiphon-psalm-145.mp3",
-   "title": "The Second Antiphon - Psalm 145",
-   "seconds": 126
+   "name": "All-Merciful Saviour Monastery",
+   "tracks": [
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-i.mp3",
+     "title": "Dogmatic Theotokion Tone I",
+     "seconds": 151,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-ii.mp3",
+     "title": "Dogmatic Theotokion Tone II",
+     "seconds": 106,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-iii.mp3",
+     "title": "Dogmatic Theotokion Tone III",
+     "seconds": 138,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-iv.mp3",
+     "title": "Dogmatic Theotokion Tone IV",
+     "seconds": 196,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-v.mp3",
+     "title": "Dogmatic Theotokion Tone V",
+     "seconds": 142,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-vi.mp3",
+     "title": "Dogmatic Theotokion Tone VI",
+     "seconds": 110,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-vii.mp3",
+     "title": "Dogmatic Theotokion Tone VII",
+     "seconds": 93,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-tone-viii.mp3",
+     "title": "Dogmatic Theotokion Tone VIII",
+     "seconds": 170,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--dogmatic-theotokion-for-the-dormition-of-the-mother-of-god.mp3",
+     "title": "Dogmatic Theotokion for the Dormition of the Mother of God",
+     "seconds": 249,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--great-compline-hymnody-for-the-close-of-the-day.mp3",
+     "title": "Great Compline Hymnody for the Close of the Day",
+     "seconds": 115,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--irmoi-of-the-paschal-canon-based-on-byzantine-chant-tone-v.mp3",
+     "title": "Irmoi of the Paschal Canon Based on Byzantine Chant, Tone V",
+     "seconds": 252,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--it-is-truly-meet-joy-of-the-heavenly-hosts-melody.mp3",
+     "title": "It Is Truly Meet 'Joy of the Heavenly Hosts' Melody",
+     "seconds": 82,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--o-queen-of-all-creation.mp3",
+     "title": "O Queen of All Creation",
+     "seconds": 201,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--the-cherubikon.mp3",
+     "title": "The Cherubikon",
+     "seconds": 255,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--the-first-antiphon-psalm-102.mp3",
+     "title": "The First Antiphon - Psalm 102",
+     "seconds": 253,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--the-great-doxology.mp3",
+     "title": "The Great Doxology",
+     "seconds": 289,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--the-hymn-of-st-justinian-only-begotten-son.mp3",
+     "title": "The Hymn of St Justinian 'Only Begotten Son...'",
+     "seconds": 88,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--the-hymns-of-thanksgiving-after-holy-communion.mp3",
+     "title": "The Hymns of Thanksgiving After Holy Communion",
+     "seconds": 113,
+     "source": "All-Merciful Saviour Monastery"
+    },
+    {
+     "file": "all-merciful-saviour-monastery--the-second-antiphon-psalm-145.mp3",
+     "title": "The Second Antiphon - Psalm 145",
+     "seconds": 126,
+     "source": "All-Merciful Saviour Monastery"
+    }
+   ]
   }
  ]
 }
