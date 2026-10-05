@@ -36,6 +36,7 @@ struct TodayView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
+        .scrollEdgeEffectStyle(.soft, for: .top)
         .background(Color.sanctuaryGround)
         .navigationTitle("Western Rite")
         .navigationDestination(for: String.self) { ReadingView(slug: $0) }
@@ -73,13 +74,12 @@ private struct HeroCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(22)
-        // NOTE: on iOS 26+ this can become `.glassEffect(.regular.tint(...), in:
-        // .rect(cornerRadius: 20))` for true Liquid Glass. A material is used
-        // here because it is the API I could not compile-check from Linux —
-        // swap it on the Mac once the project builds.
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20)
-            .stroke(Color.sanctuaryGold.opacity(0.26), lineWidth: 1))
+        // Liquid Glass, tinted with the one warm light in the palette. The
+        // system draws the specular edge, the blur and the motion. The
+        // hand-drawn gold hairline that used to sit here is gone on purpose:
+        // it fought the material's own edge rather than reinforcing it.
+        .glassEffect(.regular.tint(Color.sanctuaryGold.opacity(0.18)),
+                     in: .rect(cornerRadius: 20))
         .shadow(color: Color.sanctuaryGold.opacity(0.10), radius: 22)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(hour.title), due now, \(hour.when)")

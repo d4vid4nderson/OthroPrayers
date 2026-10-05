@@ -13,19 +13,23 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            Section("Reading") {
+            Section {
                 Toggle("Dyslexia-friendly text", isOn: $settings.dyslexicFont)
                 LabeledContent("Text size") {
                     Text("Follows your phone")
                         .foregroundStyle(.secondary)
                 }
+            } header: {
+                Text("Reading")
             } footer: {
                 Text("Text size, bold text and contrast all follow iOS. "
                      + "Change them in Settings › Display & Brightness, or Accessibility.")
             }
 
-            Section("The hours") {
+            Section {
                 Toggle("Remind me at each hour", isOn: $settings.hourReminders)
+            } header: {
+                Text("The hours")
             } footer: {
                 Text("A quiet notification when each office falls due. "
                      + "Nothing leaves the phone: the reminders are scheduled locally.")

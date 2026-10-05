@@ -7,18 +7,20 @@
 #
 name: Prayers
 options:
-  bundleIdPrefix: com.othroprayers
+  bundleIdPrefix: com.orthoprayers
   deploymentTarget:
-    iOS: "26.0"          # Liquid Glass; drop to 18.0 if you need older devices
+    iOS: "27.0"          # iOS 27: second-iteration Liquid Glass, .crossFade
+                         # navigation. Drop to 26.0 to reach last year's phones
+                         # (then the crossFade call needs an #available gate).
   createIntermediateGroups: true
   groupSortPosition: top
 
 settings:
   base:
     MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    CURRENT_PROJECT_VERSION: "2"
     SWIFT_VERSION: "6.0"
-    DEVELOPMENT_TEAM: ""        # set this in Xcode, or put your Team ID here
+    DEVELOPMENT_TEAM: RN599658F9   # David Anderson (personal team)
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal   # tighten once it builds clean
@@ -55,10 +57,15 @@ targets:
           - OpenDyslexic-Bold.ttf
           - OpenDyslexic-Italic.ttf
         CFBundleURLTypes:
-          - CFBundleURLName: com.othroprayers.western
+          - CFBundleURLName: com.orthoprayers.western
             CFBundleURLSchemes: [prayers]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.othroprayers.western
+        PRODUCT_BUNDLE_IDENTIFIER: com.orthoprayers.western
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # iPhone only. The design is portrait and dark by construction, and
+        # App Store validation requires an iPad-capable build to offer all four
+        # orientations for multitasking — which would mean shipping a layout
+        # nobody drew. Set this to "1,2" only alongside a real iPad layout.
+        TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES

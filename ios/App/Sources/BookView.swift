@@ -46,6 +46,7 @@ struct BookView: View {
             .padding(.horizontal, 22)
             .padding(.bottom, 24)
         }
+        .scrollEdgeEffectStyle(.soft, for: .top)
         .background(Color.sanctuaryGround)
         .navigationTitle(book.title)
         .navigationDestination(for: String.self) { ReadingView(slug: $0) }

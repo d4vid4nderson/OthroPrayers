@@ -33,9 +33,13 @@ struct ReadingView: View {
                 }
             }
         }
+        .scrollEdgeEffectStyle(.soft, for: .top)
         .background(Color.sanctuaryGround)
         .navigationTitle(page?.title ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        // iOS 27. A prayer book should not shove the previous page sideways
+        // out of the way; it should dissolve into the next one.
+        .navigationTransition(.crossFade)
         .onAppear { settings.lastRead = slug }
     }
 

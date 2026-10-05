@@ -27,32 +27,33 @@ struct PrayersApp: App {
 struct RootView: View {
     @Binding var deepLink: String?
     @EnvironmentObject private var library: Library
-    @State private var tab = Tab.today
+    @State private var pane = Pane.today
 
-    enum Tab: Hashable { case today, prayers, missal, settings }
+    /// Named `Pane` rather than `Tab`: SwiftUI's own `Tab` builder is used
+    /// below, and a nested type called `Tab` would shadow it.
+    enum Pane: Hashable { case today, prayers, missal, settings }
 
     var body: some View {
-        // The classic tabItem form rather than the iOS 18 `Tab` builder: it has
-        // been stable for a decade, it takes conditionals without complaint, and
-        // on iOS 26+ the system still gives the bar Liquid Glass. Once the
-        // project builds, the newer builder is a drop-in upgrade.
-        TabView(selection: $tab) {
-            NavigationStack { TodayView() }
-                .tabItem { Label("Today", systemImage: "sun.horizon") }
-                .tag(Tab.today)
-
-            NavigationStack { bookView(slug: "prayerbook", fallback: "Prayers") }
-                .tabItem { Label("Prayers", systemImage: "book.closed") }
-                .tag(Tab.prayers)
-
-            NavigationStack { bookView(slug: "st-peter-missal", fallback: "Missal") }
-                .tabItem { Label("Missal", systemImage: "book.pages") }
-                .tag(Tab.missal)
-
-            NavigationStack { SettingsView() }
-                .tabItem { Label("Settings", systemImage: "gearshape") }
-                .tag(Tab.settings)
+        // The iOS 18+ `Tab` builder, which is what the newer bar behaviours —
+        // minimising, the glass morph between bar and content — are written
+        // against. The old `.tabItem` form still compiles but opts out of them.
+        TabView(selection: $pane) {
+            Tab("Today", systemImage: "sun.horizon", value: Pane.today) {
+                NavigationStack { TodayView() }
+            }
+            Tab("Prayers", systemImage: "book.closed", value: Pane.prayers) {
+                NavigationStack { bookView(slug: "prayerbook", fallback: "Prayers") }
+            }
+            Tab("Missal", systemImage: "book.pages", value: Pane.missal) {
+                NavigationStack { bookView(slug: "st-peter-missal", fallback: "Missal") }
+            }
+            Tab("Settings", systemImage: "gearshape", value: Pane.settings) {
+                NavigationStack { SettingsView() }
+            }
         }
+        // The bar collapses to a pill as the reader scrolls down into a prayer
+        // and returns on the way back up: more page, and no gesture to learn.
+        .tabBarMinimizeBehavior(.onScrollDown)
         .sheet(item: linkedPage) { linked in
             NavigationStack { ReadingView(slug: linked.slug) }
         }
