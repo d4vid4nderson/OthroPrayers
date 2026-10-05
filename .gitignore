@@ -26,3 +26,8 @@ ios/App/Info.plist
 *.cer
 *.p12
 *.mobileprovision
+
+# worship recordings — the monastery's published work. Bundled into the app
+# for personal use, deliberately never committed: this repository is public.
+All-Merciful Savior Monistery/
+ios/Music/

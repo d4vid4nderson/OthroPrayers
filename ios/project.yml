@@ -18,7 +18,7 @@ options:
 settings:
   base:
     MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "2"
+    CURRENT_PROJECT_VERSION: "3"
     SWIFT_VERSION: "6.0"
     DEVELOPMENT_TEAM: RN599658F9   # David Anderson (personal team)
     CODE_SIGN_STYLE: Automatic
@@ -38,6 +38,11 @@ targets:
       # the generated content model, referenced where build.py writes it and
       # never copied, so the app cannot drift from the site
       - path: Content
+      # the monastery recordings, as a folder reference so they arrive in the
+      # bundle under Music/ rather than as 19 loose files at its root
+      - path: Music
+        type: folder
+        buildPhase: resources
     info:
       path: App/Info.plist
       properties:
@@ -52,6 +57,9 @@ targets:
         # no encryption beyond what iOS itself provides: this stops App Store
         # Connect asking about export compliance on every single upload
         ITSAppUsesNonExemptEncryption: false
+        # chant should not stop when the screen does
+        UIBackgroundModes:
+          - audio
         UIAppFonts:
           - OpenDyslexic-Regular.ttf
           - OpenDyslexic-Bold.ttf
@@ -95,3 +103,6 @@ schemes:
       config: Debug
       targets:
         - PrayersUITests
+    # explicit, so a TestFlight build cannot quietly become a Debug one
+    archive:
+      config: Release

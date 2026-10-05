@@ -5,6 +5,7 @@ struct PrayersApp: App {
     @StateObject private var library = Library.shared
     @StateObject private var settings = Settings.shared
     @StateObject private var arrangements = Arrangements.shared
+    @StateObject private var player = Player.shared
     /// Where a cross-reference inside a prayer sends the reader.
     @State private var deepLink: String?
 
@@ -14,6 +15,7 @@ struct PrayersApp: App {
                 .environmentObject(library)
                 .environmentObject(settings)
                 .environmentObject(arrangements)
+                .environmentObject(player)
                 // Sanctuary is dark by construction, not by preference.
                 .preferredColorScheme(.dark)
                 // the single accent: the system tints every stock control with it
@@ -29,25 +31,25 @@ struct PrayersApp: App {
 struct RootView: View {
     @Binding var deepLink: String?
     @EnvironmentObject private var library: Library
-    @State private var pane = Pane.today
+    @State private var pane = Pane.prayers
 
     /// Named `Pane` rather than `Tab`: SwiftUI's own `Tab` builder is used
     /// below, and a nested type called `Tab` would shadow it.
-    enum Pane: Hashable { case today, prayers, missal, settings }
+    enum Pane: Hashable { case prayers, missal, worship, settings }
 
     var body: some View {
         // The iOS 18+ `Tab` builder, which is what the newer bar behaviours —
         // minimising, the glass morph between bar and content — are written
         // against. The old `.tabItem` form still compiles but opts out of them.
         TabView(selection: $pane) {
-            Tab("Today", systemImage: "sun.horizon", value: Pane.today) {
+            Tab("Prayers", systemImage: "sun.horizon", value: Pane.prayers) {
                 NavigationStack { TodayView() }
-            }
-            Tab("Prayers", systemImage: "book.closed", value: Pane.prayers) {
-                NavigationStack { bookView(slug: "prayerbook", fallback: "Prayers") }
             }
             Tab("Missal", systemImage: "book.pages", value: Pane.missal) {
                 NavigationStack { bookView(slug: "st-peter-missal", fallback: "Missal") }
+            }
+            Tab("Worship", systemImage: "music.note.list", value: Pane.worship) {
+                NavigationStack { WorshipView() }
             }
             Tab("Settings", systemImage: "gearshape", value: Pane.settings) {
                 NavigationStack { SettingsView() }
