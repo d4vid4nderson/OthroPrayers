@@ -1,19 +1,20 @@
 import SwiftUI
 import UserNotifications
 
-/// Few controls, on purpose.
+/// Few controls, on purpose — but the style is one of them: the app carries
+/// all four, and which one a reader wants is theirs to say.
 ///
 /// Text size is gone: the app follows the phone's own Dynamic Type setting, so
 /// there is no bespoke three-step control that nothing else on the device knows
-/// about. The accent palettes and background temperature the website carries
-/// are gone too — each style here pins its own accent. The style itself stays:
-/// the app has all four, and which one a reader wants is theirs to say.
+/// about. Theme is gone: Sanctuary is dark by construction. The accent palettes
+/// and background temperature the web version carried are gone too — one
+/// designed system cannot honour them.
 struct SettingsView: View {
     @EnvironmentObject private var settings: Settings
 
     var body: some View {
         Form {
-            Section("Style") {
+            Section {
                 Picker("Style", selection: $settings.theme) {
                     ForEach(Theme.allCases) { theme in
                         Text(theme.name).tag(theme)
@@ -21,24 +22,30 @@ struct SettingsView: View {
                 }
                 .pickerStyle(.inline)
                 .labelsHidden()
+            } header: {
+                Text("Style")
             } footer: {
                 Text(settings.theme.detail
                      + " Dyslexia-friendly text overrides whichever you pick.")
             }
 
-            Section("Reading") {
+            Section {
                 Toggle("Dyslexia-friendly text", isOn: $settings.dyslexicFont)
                 LabeledContent("Text size") {
                     Text("Follows your phone")
                         .foregroundStyle(.secondary)
                 }
+            } header: {
+                Text("Reading")
             } footer: {
                 Text("Text size, bold text and contrast all follow iOS. "
                      + "Change them in Settings › Display & Brightness, or Accessibility.")
             }
 
-            Section("The hours") {
+            Section {
                 Toggle("Remind me at each hour", isOn: $settings.hourReminders)
+            } header: {
+                Text("The hours")
             } footer: {
                 Text("A quiet notification when each office falls due. "
                      + "Nothing leaves the phone: the reminders are scheduled locally.")
