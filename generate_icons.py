@@ -121,8 +121,10 @@ def ico(pngs, sizes, path):
 
 
 IOS_SET = "ios/AppIcon.appiconset"
-# where `npx cap add ios` puts the real catalog, once it has been run on a Mac
-IOS_XCODE = "ios/App/App/Assets.xcassets/AppIcon.appiconset"
+# the catalog the native target actually compiles. This used to point at the
+# Capacitor layout (ios/App/App/...), which no longer exists — so the copy
+# silently did nothing and the app kept shipping whatever was already here.
+IOS_XCODE = "ios/App/Resources/Assets.xcassets/AppIcon.appiconset"
 
 
 def ios_icons(dest=IOS_SET):
