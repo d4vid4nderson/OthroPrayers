@@ -3077,8 +3077,25 @@ _pb_page("pb-general",
     'powers. Take from us all fear of death, and all despair or undue love of life, that with glad '
     'hearts at rest in thee we may await thy will concerning us; through Jesus Christ our Lord. '
     'Amen.</p>',
-    '<p class="res-foot">The booklet&rsquo;s General Prayers run on for a few more pages &mdash; '
-    'the rest, beginning with the Prayer to St. Michael, are still to be added.</p>')
+    '<h2 class="subhead">Prayer to St. Michael</h2>',
+    '<p>Holy Michael Archangel, defend us in the day of battle; be our safeguard against the '
+    'wickedness and snares of the devil. May God rebuke him, we humbly pray; and do thou, Prince '
+    'of the heavenly host, by the power of God, thrust down to hell Satan and all wicked spirits '
+    'who wander through the world for the ruin of souls. Amen.</p>',
+    '<h2 class="subhead">Prayer to a Guardian Angel</h2>',
+    '<p>O holy guardian angel, to whose care God, in his mercy, hath committed me, stand by me now '
+    'and at my last hour; protect me against all the powers of darkness; defend me from all my '
+    'enemies, and conduct my soul to the mansions of bliss. Amen.</p>',
+    '<h2 class="subhead">Prayer to the Holy Spirit</h2>',
+    '<p>O Heavenly King, O Comforter, the Spirit of truth, who art in all places and fillest all '
+    'things, treasury of good things and giver of life, come and dwell in us, cleanse us from '
+    'every stain, and save our souls, O gracious Lord. Amen.</p>',
+    '<h2 class="subhead">Prayer for Single Persons</h2>',
+    '<p>O Blessed Lord, who hast set up for us an example of ideal purity, strengthen me, I '
+    'beseech thee, when temptation besets me, and when strong passions seek to overwhelm me, that '
+    'I may remain constant in virtue and innocent in thought, word, and deed, doing such things '
+    'only as are well pleasing unto thee; grant me growth in wisdom and understanding, that I may '
+    'serve thee all the days of my life; through Jesus Christ our Lord. Amen.</p>')
 
 
 def prayerbook_hub():
