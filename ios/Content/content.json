@@ -901,10 +901,70 @@
      ]
     },
     {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Prayer to St. Michael"
+      }
+     ],
+     "id": "j16"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "The booklet’s General Prayers run on for a few more pages — the rest, beginning with the Prayer to St. Michael, are still to be added."
+       "t": "Holy Michael Archangel, defend us in the day of battle; be our safeguard against the wickedness and snares of the devil. May God rebuke him, we humbly pray; and do thou, Prince of the heavenly host, by the power of God, thrust down to hell Satan and all wicked spirits who wander through the world for the ruin of souls. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Prayer to a Guardian Angel"
+      }
+     ],
+     "id": "j17"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O holy guardian angel, to whose care God, in his mercy, hath committed me, stand by me now and at my last hour; protect me against all the powers of darkness; defend me from all my enemies, and conduct my soul to the mansions of bliss. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Prayer to the Holy Spirit"
+      }
+     ],
+     "id": "j18"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Heavenly King, O Comforter, the Spirit of truth, who art in all places and fillest all things, treasury of good things and giver of life, come and dwell in us, cleanse us from every stain, and save our souls, O gracious Lord. Amen."
+      }
+     ]
+    },
+    {
+     "type": "heading",
+     "runs": [
+      {
+       "t": "Prayer for Single Persons"
+      }
+     ],
+     "id": "j19"
+    },
+    {
+     "type": "paragraph",
+     "runs": [
+      {
+       "t": "O Blessed Lord, who hast set up for us an example of ideal purity, strengthen me, I beseech thee, when temptation besets me, and when strong passions seek to overwhelm me, that I may remain constant in virtue and innocent in thought, word, and deed, doing such things only as are well pleasing unto thee; grant me growth in wisdom and understanding, that I may serve thee all the days of my life; through Jesus Christ our Lord. Amen."
       }
      ]
     }
