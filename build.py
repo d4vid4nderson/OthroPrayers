@@ -353,6 +353,7 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
       <button id="style-paper" type="button" aria-pressed="true">Paper</button>
       <button id="style-manuscript" type="button" aria-pressed="false">Manuscript</button>
       <button id="style-sanctuary" type="button" aria-pressed="false">Sanctuary</button>
+      <button id="style-terminal" type="button" aria-pressed="false">Terminal</button>
     </span>
   </div>
   <p class="menu-note">Paper is the printed booklet. Manuscript is vellum and an
@@ -384,10 +385,15 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
 </div>'''
 
 
-def _western_chrome(tmpl):
-    """The app build's chrome: three tabs instead of five, and a Settings panel
-    with nothing on it that the bundled app can't do. Derived from the web
-    template rather than duplicated, so the two never drift apart."""
+def _western_chrome(tmpl, app=False):
+    """Trim the chrome to what the build can actually honour.
+
+    Two different trims, and conflating them cost the website its theme picker
+    once already: a single-rite *site* still wants its style choice and its
+    offline switch, while the bundled app wants neither. So the content-scope
+    removals happen for both, and the rest only for the app.
+    """
+    # --- content scope: one rite, and the Eastern pages are not built --------
     tabs = ('  <a class="tab{h_act}" href="index.html" aria-label="Today">'
             '<span class="tab-i">{HOME}</span><span class="tab-l">Today</span></a>\n'
             '  <a class="tab{p_act}" href="prayerbook.html" aria-label="Prayer book">'
@@ -398,35 +404,38 @@ def _western_chrome(tmpl):
     end = tmpl.index('  <button class="tab" id="settings-btn"')
     tmpl = tmpl[:start] + tabs + tmpl[end:]
 
-    # no rite to switch: this build is the Western one
+    # no rite to switch between
     rite = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Rite</span>')
     after = tmpl.index('  <div class="menu-row">', rite + 20)
     tmpl = tmpl[:rite] + tmpl[after:]
 
-    # everything ships inside the app, so there is no offline switch to throw.
-    # The Church calendar stays — fast days matter in a prayer book — but its
-    # note points at a subscribe page this build doesn't carry.
-    # Sanctuary is one designed system, not a themeable one: the background
-    # temperature and the accent palettes would only let it be broken, and the
-    # manuscript style belongs to the web build
+    # the calendar stays — fast days matter in a prayer book — but its note
+    # points at a subscribe page no longer built
+    note = tmpl.index('  <p class="menu-note">Reminders appear')
+    tmpl = (tmpl[:note]
+            + '  <p class="menu-note">Reminders appear when you open the app.</p>\n'
+            + tmpl[tmpl.rindex("</div>"):])
+
+    if not app:
+        return tmpl
+
+    # --- the bundled app only ------------------------------------------------
+    # Sanctuary is the app's one designed system, so the style choice, the
+    # background temperature and the accent palettes come off; and everything
+    # ships inside the binary, so there is no offline switch to throw.
     bgrow = tmpl.index('  <div class="menu-row" id="row-temp">')
     dys = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Dyslexia-friendly</span>')
     tmpl = tmpl[:bgrow] + tmpl[dys:]
     mss = tmpl.index('  <div class="menu-col" id="row-style">')
     after_note = tmpl.index('</p>', tmpl.index('<p class="menu-note">', mss)) + len('</p>\n')
     tmpl = tmpl[:mss] + tmpl[after_note:]
-
     off = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Available offline</span>')
     cal = tmpl.index('  <div class="drawer-heading">Church calendar</div>')
-    tmpl = tmpl[:off] + tmpl[cal:]
-    note = tmpl.index('  <p class="menu-note">Reminders appear')
-    return (tmpl[:note]
-            + '  <p class="menu-note">Reminders appear when you open the app.</p>\n'
-            + tmpl[tmpl.rindex("</div>"):])
+    return tmpl[:off] + tmpl[cal:]
 
 
 if WESTERN_ONLY:
-    TABBAR_TMPL = _western_chrome(TABBAR_TMPL)
+    TABBAR_TMPL = _western_chrome(TABBAR_TMPL, app=APP_BUILD)
 
 
 def tabbar(active="", current=""):
@@ -1721,8 +1730,8 @@ var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary";
-var bg=ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
+var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary",tm=r.dataset.style==="terminal";
+var bg=tm?"#070A07":ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
 r.style.backgroundColor=bg;
@@ -1773,8 +1782,10 @@ CONTROL_JS = '''<script>
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary";
-    var bg = ap?"#0C0D10"
+    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary",
+        tm=r.dataset.style==="terminal";
+    var bg = tm?"#070A07"
+            :ap?"#0C0D10"
             :ms?(dark?"#1c1811":"#f0e4c8")
               :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
     if(tc) tc.setAttribute("content", bg);
@@ -1831,7 +1842,8 @@ CONTROL_JS = '''<script>
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
   // the three skins sit on one axis: paper (the default), manuscript, sanctuary
-  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],["sanctuary","style-sanctuary"]];
+  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],
+                ["sanctuary","style-sanctuary"],["terminal","style-terminal"]];
   function paintMss(){ var v=r.dataset.style||"paper";
     styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
       if(btn) btn.setAttribute("aria-pressed", pr[0]===v?"true":"false"); }); }
@@ -2042,6 +2054,7 @@ HEAD_TMPL = '''<!doctype html>
 {early}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="sanctuary.css">
+<link rel="stylesheet" href="terminal.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -2116,6 +2129,7 @@ GATE_TMPL = '''<!doctype html>
 {early}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="sanctuary.css">
+<link rel="stylesheet" href="terminal.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -3378,7 +3392,7 @@ if APP_BUILD:
     # copy the static files the built pages actually reference. No service
     # worker: a bundled app is already offline, and there is nothing to update.
     import shutil
-    for _f in ["styles.css", "sanctuary.css", "calendar.js"]:
+    for _f in ["styles.css", "sanctuary.css", "terminal.css", "calendar.js"]:
         shutil.copy2(_f, _out(_f))
     shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
     # only the artwork the built pages actually reference
@@ -3395,6 +3409,40 @@ if APP_BUILD:
               for _r, _ds, fs in os.walk(OUT_DIR) for f in fs)
     print(f"western-only build -> {OUT_DIR}: {_n} files, {_sz / 1e6:.1f} MB")
     raise SystemExit(0)
+
+# ---- structure for the native app -----------------------------------------
+# The hours and their time windows, and each book's section order, live here in
+# Python. A native UI needs them as data, and must not get a second, drifting
+# copy — so they are exported beside the content model (see export_content.py).
+if WESTERN_ONLY:
+    import html as _html
+
+    def _plain(t):
+        return _html.unescape(re.sub(r"<[^>]+>", "", t)).strip()
+
+    _structure = {
+        "hours": [
+            {"slug": s_, "title": _plain(t), "blurb": _plain(b),
+             "when": _plain(w), "from": h0, "until": h1}
+            for s_, t, b, _emb, w, h0, h1 in WESTERN_CYCLE
+        ],
+        "books": [],
+    }
+    for _bslug, _btitle, _sections, _content in (
+            ("prayerbook", "A Little Prayer Book", PB_SECTIONS, PB_CONTENT),
+            ("st-peter-missal", "The St. Peter Pew Missal", SPM_SECTIONS, SPM_CONTENT)):
+        _items = [{"slug": s_, "title": _plain(t), "blurb": _plain(b)}
+                  for s_, t, b, *_rest in _sections if s_ in _content]
+        if _items:
+            _structure["books"].append({"slug": _bslug, "title": _plain(_btitle),
+                                        "sections": _items})
+    _structure["extras"] = [{"slug": "western-fasting", "title": "Fasting & Abstinence",
+                             "blurb": "The Vicariate\u2019s norms."}]
+    os.makedirs("ios/Content", exist_ok=True)
+    with open("ios/Content/structure.json", "w") as _f:
+        json.dump(_structure, _f, ensure_ascii=False, indent=1)
+    print("wrote ios/Content/structure.json",
+          len(_structure["hours"]), "hours,", len(_structure["books"]), "books")
 
 # ---- service worker: precache the whole app for offline use ----------------
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,

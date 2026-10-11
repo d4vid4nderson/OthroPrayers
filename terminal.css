@@ -1,0 +1,212 @@
+/* ==== Terminal (html[data-style="terminal"]) ==============================
+   A green-phosphor console, set entirely in JetBrains Mono.
+
+   The conceit is carried by type and colour, not by gimmicks: no scanline
+   overlay heavy enough to fight the words, no fake CRT curvature. What makes
+   it read as a terminal is the monospace grid, the flush-left ragged-right
+   setting, the two-phosphor palette — green body, amber for anything the
+   printed book set in red — and the sigils that stand in for the ornaments.
+
+   Prayer text still has to be readable at length, so the green is tempered
+   well below #0F0 and the measure is a little tighter than the serif themes'. */
+
+@font-face{
+  font-family:"JetBrains Mono";
+  font-style:normal; font-weight:400; font-display:swap;
+  src:url(fonts/jetbrains-mono.woff2) format("woff2");
+}
+@font-face{
+  font-family:"JetBrains Mono";
+  font-style:normal; font-weight:700; font-display:swap;
+  src:url(fonts/jetbrains-mono-bold.woff2) format("woff2");
+}
+@font-face{
+  font-family:"JetBrains Mono";
+  font-style:italic; font-weight:400; font-display:swap;
+  src:url(fonts/jetbrains-mono-italic.woff2) format("woff2");
+}
+
+html[data-style="terminal"]{
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --term-bg:#070A07;
+  --term-fg:#9BE89B;          /* tempered phosphor — #0F0 is unreadable at length */
+  --term-dim:#4E8A5A;
+  --term-amber:#FFB454;       /* the second phosphor: what the book set in red */
+  --term-line:rgba(155,232,155,.16);
+
+  --paper:var(--term-bg);
+  --surface:#0C120C;
+  --surface-sunk:#050705;
+  --desk:#030503;
+  --ink:var(--term-fg);
+  --ink-soft:var(--term-dim);
+  --rubric:var(--term-amber);
+  --rubric-deep:#D98F2E;
+  --on-rubric:#070A07;
+  --gold:var(--term-amber);
+  --on-gold:#070A07;
+  --lapis:#5AC8FA;
+  --link:#5AC8FA;
+  --hairline:var(--term-line);
+  --hairline-strong:rgba(155,232,155,.3);
+  --serif:var(--mono);
+  --display:var(--mono);
+  --sans:var(--mono);
+  --elev-1:none; --elev-2:none; --elev-3:none;
+}
+
+html[data-style="terminal"] body{
+  background:var(--term-bg);
+  color:var(--term-fg);
+  font-family:var(--mono);
+  font-feature-settings:"liga" 0, "calt" 0;   /* no ligatures in running prose */
+  -webkit-font-smoothing:antialiased;
+}
+
+/* the console is a flat grid: no cards, no shadows, no rounded surfaces */
+html[data-style="terminal"] .book{
+  background:none; border:0; box-shadow:none; max-width:40rem;
+}
+html[data-style="terminal"] .app-list,
+html[data-style="terminal"] .now-card{
+  background:none; border:1px solid var(--term-line); border-radius:0; box-shadow:none;
+}
+
+/* monospace does not justify — a terminal is always ragged right, and
+   justifying a fixed-pitch face opens rivers you could row a boat down */
+html[data-style="terminal"] p,
+html[data-style="terminal"] .verse,
+html[data-style="terminal"] .book p{
+  text-align:left; text-indent:0; hyphens:none;
+  font-size:.92rem; line-height:1.62;
+}
+
+/* a page title is a command echoed back */
+html[data-style="terminal"] .divider h1{
+  font-family:var(--mono); font-weight:700; text-transform:none;
+  letter-spacing:0; font-size:clamp(1.15rem, 4.6vw, 1.5rem);
+  color:var(--term-fg);
+}
+html[data-style="terminal"] .divider h1::before{
+  content:"$ "; color:var(--term-amber);
+}
+html[data-style="terminal"] .divider::after{
+  content:""; display:block; height:1px; width:100%;
+  background:repeating-linear-gradient(to right,
+     var(--term-line) 0 6px, transparent 6px 10px);
+  margin:14px 0 0;
+}
+
+/* section heads as comments */
+html[data-style="terminal"] h2.subhead{
+  font-family:var(--mono); font-weight:700; font-size:.78rem; letter-spacing:.06em;
+  color:var(--term-dim); text-transform:uppercase; text-align:left;
+}
+html[data-style="terminal"] h2.subhead::before{ content:"## "; }
+html[data-style="terminal"] h2.subhead::after{ display:none; }
+
+/* rubrics are directions, not prayer — the terminal sets them as comments
+   in the second phosphor */
+html[data-style="terminal"] p.rubric,
+html[data-style="terminal"] p.rubric .r{
+  font-family:var(--mono); font-style:normal; font-size:.82rem;
+  color:var(--term-amber); text-align:left; letter-spacing:0;
+}
+html[data-style="terminal"] p.rubric::before{ content:"# "; opacity:.7; }
+
+/* no illuminated initial on a console */
+html[data-style="terminal"] .dropcap{
+  float:none; font-size:inherit; font-family:var(--mono); font-weight:700;
+  color:var(--term-amber); margin:0; padding:0; background:none; border:0;
+  line-height:inherit; display:inline; width:auto; height:auto; box-shadow:none;
+}
+
+/* the cross-mark keeps its meaning, in amber */
+html[data-style="terminal"] .signum{ color:var(--term-amber); }
+
+/* hymn lines are already one-per-line; number them like a listing */
+html[data-style="terminal"] p.verse.hymn{ color:var(--term-fg); }
+
+/* chrome */
+html[data-style="terminal"] .tabbar{
+  background:#050705; border-top:1px solid var(--term-line);
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+}
+html[data-style="terminal"] .tab{ color:var(--term-dim); }
+html[data-style="terminal"] .tab.active{ color:var(--term-amber); }
+html[data-style="terminal"] .tab-l{
+  font-family:var(--mono); font-variant-caps:normal; text-transform:lowercase;
+  letter-spacing:0;
+}
+html[data-style="terminal"] .tab.active .tab-l::before{ content:"["; }
+html[data-style="terminal"] .tab.active .tab-l::after{ content:"]"; }
+
+html[data-style="terminal"] .drawer{ background:#0C120C; border-top:1px solid var(--term-line); }
+html[data-style="terminal"] .seg{ background:rgba(155,232,155,.07); border-radius:0; }
+html[data-style="terminal"] .seg button{ border-radius:0; font-family:var(--mono); }
+html[data-style="terminal"] .seg button[aria-pressed="true"]{
+  background:var(--term-amber); color:#070A07;
+}
+html[data-style="terminal"] .switch{ border-radius:0; background:rgba(155,232,155,.16); }
+html[data-style="terminal"] .switch .knob{ border-radius:0; }
+html[data-style="terminal"] .switch[aria-checked="true"]{ background:var(--term-amber); }
+html[data-style="terminal"] .grab{ background:var(--term-line); border-radius:0; }
+
+/* the page turn: bracketed, like a pager */
+html[data-style="terminal"] .seq{
+  border:1px solid var(--term-line); border-radius:0; background:none;
+}
+html[data-style="terminal"] .seq-k{
+  font-family:var(--mono); font-variant-caps:normal; color:var(--term-dim);
+}
+html[data-style="terminal"] .seq-t{ font-family:var(--mono); color:var(--term-fg); }
+
+/* the folded contents read as a directory listing */
+html[data-style="terminal"] .page-contents summary{ font-family:var(--mono); color:var(--term-dim); }
+html[data-style="terminal"] .page-contents summary::before{ content:"> "; }
+html[data-style="terminal"] .page-contents nav a{
+  font-family:var(--mono); font-size:.86rem; color:var(--term-fg);
+  border-top:1px solid var(--term-line);
+}
+html[data-style="terminal"] .page-contents nav a::before{ content:"- "; color:var(--term-dim); }
+
+/* a block cursor, blinking at the foot of the page — the one flourish */
+html[data-style="terminal"] .book > section:last-of-type::after,
+html[data-style="terminal"] .book > .seqnav + *::after{
+  content:"\2588";
+  color:var(--term-fg);
+  animation:term-blink 1.1s step-end infinite;
+  margin-left:.1em;
+}
+@keyframes term-blink{ 50%{ opacity:0; } }
+@media (prefers-reduced-motion:reduce){
+  html[data-style="terminal"] .book > section:last-of-type::after{ animation:none; }
+}
+
+/* the dyslexia-friendly setting outranks the console, as it outranks
+   everything else */
+html[data-style="terminal"][data-font="dyslexic"],
+html[data-style="terminal"][data-font="dyslexic"] body{
+  --mono:"OpenDyslexic", var(--serif);
+}
+html[data-style="terminal"][data-font="dyslexic"] .divider h1::before,
+html[data-style="terminal"][data-font="dyslexic"] h2.subhead::before,
+html[data-style="terminal"][data-font="dyslexic"] p.rubric::before{ content:none; }
+
+/* the engraved ornaments belong to the printed book; the console says the same
+   thing with a prompt and a dashed rule */
+html[data-style="terminal"] .divider svg,
+html[data-style="terminal"] .art,
+html[data-style="terminal"] figure.art-rule{ display:none; }
+
+/* the back link is a path, not a button */
+html[data-style="terminal"] .res-back,
+html[data-style="terminal"] .page-back{
+  background:none; border:0; box-shadow:none; border-radius:0; padding:.2rem 0;
+  font-family:var(--mono); font-variant-caps:normal; text-transform:lowercase;
+  letter-spacing:0; font-size:.78rem; color:var(--term-dim);
+}
+html[data-style="terminal"] .res-back span{ color:inherit; }
+html[data-style="terminal"] .res-back::before{ content:"cd "; opacity:.7; }
+html[data-style="terminal"] .res-back svg{ display:none; }
