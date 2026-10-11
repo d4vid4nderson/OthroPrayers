@@ -33,7 +33,7 @@ struct ReadingView: View {
                 }
             }
         }
-        .background(Color.sanctuaryGround)
+        .background(palette.ground)
         .navigationTitle(page?.title ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { settings.lastRead = slug }
@@ -44,7 +44,7 @@ struct ReadingView: View {
             Text(page.title)
                 .font(Typeface.display(.largeTitle))
                 .multilineTextAlignment(.center)
-            GoldRule().padding(.top, 8)
+            AccentRule().padding(.top, 8)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 18)
@@ -125,7 +125,7 @@ struct ReadingView: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 16)
             // pills, never squares
-            .background(Color.sanctuarySurface, in: Capsule())
+            .background(palette.surface, in: Capsule())
             .overlay(Capsule().stroke(.separator, lineWidth: 1))
             .contentShape(Capsule())
         }

@@ -12,10 +12,10 @@ struct PrayersApp: App {
             RootView(deepLink: $deepLink)
                 .environmentObject(library)
                 .environmentObject(settings)
-                // Sanctuary is dark by construction, not by preference.
-                .preferredColorScheme(.dark)
+                // dark themes get a dark interface; the system does the rest
+                .preferredColorScheme(settings.theme.colorScheme)
                 // the single accent: the system tints every stock control with it
-                .tint(.sanctuaryGold)
+                .tint(settings.theme.palette.accent)
                 .onOpenURL { url in
                     guard url.scheme == "prayers", url.host == "page" else { return }
                     deepLink = url.lastPathComponent

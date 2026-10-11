@@ -7,6 +7,7 @@ import SwiftUI
 /// no icons, no tinted containers — only text, set well.
 struct BlockView: View {
     let block: Block
+    @EnvironmentObject private var settings: Settings
     /// Tapping a cross-reference opens that page.
     var onLink: (String) -> Void = { _ in }
 
@@ -14,7 +15,7 @@ struct BlockView: View {
         switch block.type {
         case .heading:
             VStack(spacing: 10) {
-                MicroLabel(text: block.plain)
+                MicroLabel(text: settings.theme.sigil(for: block.type) + block.plain)
                     .multilineTextAlignment(.center)
                 Rectangle()
                     .fill(.quaternary)
@@ -31,11 +32,15 @@ struct BlockView: View {
                 .padding(.top, 14)
 
         case .rubric:
-            // the direction, not the prayer: italic, centred, stepped back
-            Text(attributed)
-                .font(Typeface.prayer(.callout).italic())
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+            // the direction, not the prayer. A console sets it as a comment,
+            // flush left in the second phosphor; the other three italicise and
+            // centre it, as the printed book does.
+            Text(AttributedString(settings.theme.sigil(for: .rubric)) + attributed)
+                .font(settings.theme == .terminal
+                      ? Typeface.prayer(.callout)
+                      : Typeface.prayer(.callout).italic())
+                .foregroundStyle(settings.theme == .terminal ? palette.accent : palette.inkSoft)
+                .multilineTextAlignment(settings.theme == .terminal ? .leading : .center)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
 
@@ -73,7 +78,7 @@ struct BlockView: View {
         case .definition:
             Text(attributed)
                 .font(Typeface.label(.caption))
-                .foregroundStyle(Color.sanctuaryGold)
+                .foregroundStyle(palette.accent)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, 8)
         }
@@ -91,11 +96,11 @@ struct BlockView: View {
             var piece = AttributedString(run.t.replacingOccurrences(of: "\n", with: " "))
             switch run.mark {
             case .rubric:
-                piece.foregroundColor = .secondary
+                piece.foregroundColor = palette.inkSoft
             case .signum:
-                piece.foregroundColor = .sanctuaryGold
+                piece.foregroundColor = palette.accent
             case .dropcap, .versal:
-                piece.foregroundColor = .sanctuaryGold
+                piece.foregroundColor = palette.accent
                 piece.font = Typeface.display(.title)
             case .italic:
                 piece.font = Typeface.prayer().italic()
@@ -109,7 +114,7 @@ struct BlockView: View {
                 break
             }
             if let href = run.href {
-                piece.foregroundColor = .sanctuaryGold
+                piece.foregroundColor = palette.accent
                 piece.underlineStyle = .single
                 piece.link = URL(string: "prayers://page/\(href)")
             }

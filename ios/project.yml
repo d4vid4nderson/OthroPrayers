@@ -54,6 +54,11 @@ targets:
           - OpenDyslexic-Regular.ttf
           - OpenDyslexic-Bold.ttf
           - OpenDyslexic-Italic.ttf
+          - JetBrainsMono-Regular.ttf
+          - JetBrainsMono-Bold.ttf
+          - JetBrainsMono-Italic.ttf
+          - UncialAntiqua-Regular.ttf
+          - IMFellEnglishSC-Regular.ttf
         CFBundleURLTypes:
           - CFBundleURLName: com.othroprayers.western
             CFBundleURLSchemes: [prayers]

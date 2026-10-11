@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// The app's preferences. Deliberately few: Sanctuary is one designed system,
-/// not a themeable one, so there is no accent picker and no background
-/// temperature — those existed on the web and could only be used to break it.
+/// The app's preferences. Few, on purpose — but the style is one of them: the
+/// app carries all four, and which one a reader wants is theirs to say.
 ///
 /// Backed by UserDefaults directly rather than @AppStorage: @AppStorage is
 /// built for use inside a View, and does not drive objectWillChange when it
@@ -12,6 +11,7 @@ import SwiftUI
 final class Settings: ObservableObject {
     static let shared = Settings()
 
+    @Published var theme: Theme { didSet { store.set(theme.rawValue, forKey: Key.theme) } }
     @Published var dyslexicFont: Bool { didSet { store.set(dyslexicFont, forKey: Key.dyslexic) } }
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
     @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
@@ -19,12 +19,14 @@ final class Settings: ObservableObject {
     private let store = UserDefaults.standard
 
     private enum Key {
+        static let theme = "theme"
         static let dyslexic = "dyslexicFont"
         static let reminders = "hourReminders"
         static let lastRead = "lastRead"
     }
 
     private init() {
+        theme = Theme(rawValue: store.string(forKey: Key.theme) ?? "") ?? .sanctuary
         dyslexicFont = store.bool(forKey: Key.dyslexic)
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""
