@@ -210,3 +210,10 @@ html[data-style="terminal"] .page-back{
 html[data-style="terminal"] .res-back span{ color:inherit; }
 html[data-style="terminal"] .res-back::before{ content:"cd "; opacity:.7; }
 html[data-style="terminal"] .res-back svg{ display:none; }
+
+/* the accent palettes and the background temperature cannot do anything here —
+   the console pins its own two phosphors — so they come off the panel rather
+   than sitting there inert */
+html[data-style="terminal"] #row-temp,
+html[data-style="terminal"] #row-primary,
+html[data-style="terminal"] #row-secondary{ display:none; }

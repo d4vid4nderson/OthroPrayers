@@ -420,15 +420,12 @@ def _western_chrome(tmpl, app=False):
         return tmpl
 
     # --- the bundled app only ------------------------------------------------
-    # Sanctuary is the app's one designed system, so the style choice, the
-    # background temperature and the accent palettes come off; and everything
-    # ships inside the binary, so there is no offline switch to throw.
-    bgrow = tmpl.index('  <div class="menu-row" id="row-temp">')
-    dys = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Dyslexia-friendly</span>')
-    tmpl = tmpl[:bgrow] + tmpl[dys:]
-    mss = tmpl.index('  <div class="menu-col" id="row-style">')
-    after_note = tmpl.index('</p>', tmpl.index('<p class="menu-note">', mss)) + len('</p>\n')
-    tmpl = tmpl[:mss] + tmpl[after_note:]
+    # Only the offline switch comes off: everything already ships inside the
+    # binary, so there is nothing for it to do. The style choice stays — the
+    # app carries all four, and which one a reader wants is theirs to say, not
+    # the design's. The background temperature and the accent palettes stay in
+    # the markup too; sanctuary.css and terminal.css hide them under the styles
+    # that pin their own accent, so they appear only where they do something.
     off = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Available offline</span>')
     cal = tmpl.index('  <div class="drawer-heading">Church calendar</div>')
     return tmpl[:off] + tmpl[cal:]

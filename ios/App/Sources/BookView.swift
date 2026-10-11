@@ -4,6 +4,8 @@ import SwiftUI
 struct BookView: View {
     let book: Book
     @EnvironmentObject private var library: Library
+    // observed so a theme change re-renders this screen
+    @EnvironmentObject private var settings: Settings
 
     private static let numerals = ["I", "II", "III", "IV", "V", "VI", "VII",
                                    "VIII", "IX", "X", "XI", "XII"]
@@ -46,7 +48,7 @@ struct BookView: View {
             .padding(.horizontal, 22)
             .padding(.bottom, 24)
         }
-        .background(Color.sanctuaryGround)
+        .background(palette.ground)
         .navigationTitle(book.title)
         .navigationDestination(for: String.self) { ReadingView(slug: $0) }
     }

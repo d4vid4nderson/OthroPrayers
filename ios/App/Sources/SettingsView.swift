@@ -5,14 +5,27 @@ import UserNotifications
 ///
 /// Text size is gone: the app follows the phone's own Dynamic Type setting, so
 /// there is no bespoke three-step control that nothing else on the device knows
-/// about. Theme is gone: Sanctuary is dark by construction. The accent palettes
-/// and background temperature the web version carried are gone too — one
-/// designed system cannot honour them.
+/// about. The accent palettes and background temperature the website carries
+/// are gone too — each style here pins its own accent. The style itself stays:
+/// the app has all four, and which one a reader wants is theirs to say.
 struct SettingsView: View {
     @EnvironmentObject private var settings: Settings
 
     var body: some View {
         Form {
+            Section("Style") {
+                Picker("Style", selection: $settings.theme) {
+                    ForEach(Theme.allCases) { theme in
+                        Text(theme.name).tag(theme)
+                    }
+                }
+                .pickerStyle(.inline)
+                .labelsHidden()
+            } footer: {
+                Text(settings.theme.detail
+                     + " Dyslexia-friendly text overrides whichever you pick.")
+            }
+
             Section("Reading") {
                 Toggle("Dyslexia-friendly text", isOn: $settings.dyslexicFont)
                 LabeledContent("Text size") {

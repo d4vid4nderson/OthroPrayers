@@ -1,54 +1,38 @@
 import SwiftUI
 import UIKit
 
-// Sanctuary, natively.
+// The design layer, driven by the chosen Theme.
 //
-// The deliberate choice here is to use stock SwiftUI components — TabView,
-// NavigationStack, .toolbar, Form — rather than hand-painting surfaces. On
-// iOS 26 and later the system gives those components Liquid Glass for free,
-// and gets the specular highlights, blur and motion right in ways a hand-rolled
-// material cannot. What the app supplies is the palette, the type and the
-// restraint; the material is Apple's.
+// Stock SwiftUI components do the heavy lifting — TabView, NavigationStack,
+// .toolbar, Form — so the system supplies Liquid Glass and gets the specular
+// highlights, blur and motion right in ways a hand-rolled material cannot.
+// What this file supplies is the palette, the type and the restraint.
 
-extension Color {
-    /// The single warm light source. Everything else on screen recedes behind it.
-    static let sanctuaryGold = Color(red: 0xD9 / 255, green: 0xB3 / 255, blue: 0x6C / 255)
-    /// Ink on a gold fill.
-    static let onGold = Color(red: 0x1A / 255, green: 0x15 / 255, blue: 0x08 / 255)
-    /// The ground. Darker than the system's dark background on purpose: this is
-    /// an app for before light and after it.
-    static let sanctuaryGround = Color(red: 0x0C / 255, green: 0x0D / 255, blue: 0x10 / 255)
-    static let sanctuarySurface = Color(red: 0x15 / 255, green: 0x17 / 255, blue: 0x1C / 255)
-}
+/// The palette in force. A free function rather than an environment value so
+/// that leaf views need not all be rewritten to carry it; Settings is a
+/// MainActor singleton and publishes on change, so any view observing it
+/// re-renders with the new colours.
+@MainActor
+var palette: Palette { Settings.shared.theme.palette }
 
-/// How prayer text is set. Serif for anything you read at length — New York,
-/// which carries Dynamic Type properly — and the system face for UI.
-///
-/// Every size below is a *semantic* text style, never a point size, so the
-/// whole app follows the reader's Dynamic Type setting. That is the real
-/// accessibility win over the web version, where the text size control was a
-/// bespoke three-step thing that nothing else on the phone knew about.
 @MainActor
 enum Typeface {
+    private static var theme: Theme { Settings.shared.theme }
+    private static var dyslexic: Bool { Settings.shared.dyslexicFont }
+
+    /// Anything read at length.
     static func prayer(_ style: Font.TextStyle = .body) -> Font {
-        if Settings.shared.dyslexicFont, let name = OpenDyslexic.familyName {
-            return .custom(name, size: UIFont.preferredFont(forTextStyle: style.uiStyle).pointSize,
-                           relativeTo: style)
-        }
-        return .system(style, design: .serif)
+        theme.bodyFont(style, dyslexic: dyslexic)
     }
 
+    /// Titles.
     static func display(_ style: Font.TextStyle = .largeTitle) -> Font {
-        if Settings.shared.dyslexicFont, let name = OpenDyslexic.familyName {
-            return .custom(name, size: UIFont.preferredFont(forTextStyle: style.uiStyle).pointSize,
-                           relativeTo: style)
-        }
-        return .system(style, design: .serif).weight(.semibold)
+        theme.displayFont(style, dyslexic: dyslexic)
     }
 
-    /// Small caps labels — "On rising", "The Lord's Prayer".
+    /// Interface labels — "On rising", "The Lord's Prayer".
     static func label(_ style: Font.TextStyle = .caption) -> Font {
-        .system(style, design: .default).weight(.semibold)
+        theme.uiFont(style, dyslexic: dyslexic)
     }
 }
 
@@ -70,32 +54,24 @@ extension Font.TextStyle {
     }
 }
 
-/// OpenDyslexic is bundled rather than relied upon: iOS has no system
-/// equivalent, and the reader this app was built for needs it.
-enum OpenDyslexic {
-    static let familyName: String? = {
-        UIFont.familyNames.first { $0.localizedCaseInsensitiveContains("dyslexic") }
-    }()
-}
-
-/// A label set in small caps with wide tracking — the app's quiet voice.
+/// A label in the app's quiet voice: wide tracking, small, secondary.
 struct MicroLabel: View {
     let text: String
     var body: some View {
         Text(text.uppercased())
             .font(Typeface.label(.caption2))
             .tracking(1.6)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(palette.inkFaint)
     }
 }
 
-/// The short gold rule that sits under a page title and does the work the
-/// printed ornament used to.
-struct GoldRule: View {
+/// The short accent rule under a page title, doing the work the printed
+/// ornament used to.
+struct AccentRule: View {
     var width: CGFloat = 28
     var body: some View {
         Capsule()
-            .fill(Color.sanctuaryGold)
+            .fill(palette.accent)
             .frame(width: width, height: 1.5)
             .accessibilityHidden(true)
     }
