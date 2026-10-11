@@ -353,6 +353,7 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
       <button id="style-paper" type="button" aria-pressed="true">Paper</button>
       <button id="style-manuscript" type="button" aria-pressed="false">Manuscript</button>
       <button id="style-sanctuary" type="button" aria-pressed="false">Sanctuary</button>
+      <button id="style-terminal" type="button" aria-pressed="false">Terminal</button>
     </span>
   </div>
   <p class="menu-note">Paper is the printed booklet. Manuscript is vellum and an
@@ -1729,8 +1730,8 @@ var cool=L.getItem("temp")==="cool";if(cool)r.dataset.temp="cool";
 var pc=L.getItem("primary");if(pc)r.dataset.primary=pc;
 var sc=L.getItem("secondary");if(sc)r.dataset.secondary=sc;
 var dk=r.dataset.theme==="dark";
-var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary";
-var bg=ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
+var ms=r.dataset.style==="manuscript",ap=r.dataset.style==="sanctuary",tm=r.dataset.style==="terminal";
+var bg=tm?"#070A07":ap?"#0C0D10":ms?(dk?"#1c1811":"#f0e4c8"):(dk?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
 // paint the root now, so the very first frame of a navigation is the
 // right colour even before styles.css has been parsed
 r.style.backgroundColor=bg;
@@ -1781,8 +1782,10 @@ CONTROL_JS = '''<script>
 
   var tl=d.getElementById("theme-light"), td=d.getElementById("theme-dark"), tc=d.getElementById("tc");
   function paintTC(){ var dark=r.dataset.theme==="dark", cool=r.dataset.temp==="cool";
-    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary";
-    var bg = ap?"#0C0D10"
+    var ms=r.dataset.style==="manuscript", ap=r.dataset.style==="sanctuary",
+        tm=r.dataset.style==="terminal";
+    var bg = tm?"#070A07"
+            :ap?"#0C0D10"
             :ms?(dark?"#1c1811":"#f0e4c8")
               :(dark?(cool?"#121317":"#161518"):(cool?"#f4f5f7":"#faf6ee"));
     if(tc) tc.setAttribute("content", bg);
@@ -1839,7 +1842,8 @@ CONTROL_JS = '''<script>
     else { r.dataset.font="dyslexic"; L.setItem("font","dyslexic"); } paintDys(); };
 
   // the three skins sit on one axis: paper (the default), manuscript, sanctuary
-  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],["sanctuary","style-sanctuary"]];
+  var styleMap=[["paper","style-paper"],["manuscript","style-manuscript"],
+                ["sanctuary","style-sanctuary"],["terminal","style-terminal"]];
   function paintMss(){ var v=r.dataset.style||"paper";
     styleMap.forEach(function(pr){ var btn=d.getElementById(pr[1]);
       if(btn) btn.setAttribute("aria-pressed", pr[0]===v?"true":"false"); }); }
@@ -2050,6 +2054,7 @@ HEAD_TMPL = '''<!doctype html>
 {early}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="sanctuary.css">
+<link rel="stylesheet" href="terminal.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -2124,6 +2129,7 @@ GATE_TMPL = '''<!doctype html>
 {early}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="sanctuary.css">
+<link rel="stylesheet" href="terminal.css">
 <link rel="stylesheet" href="themes.css?v=1">
 </head>
 <body>
@@ -3386,7 +3392,7 @@ if APP_BUILD:
     # copy the static files the built pages actually reference. No service
     # worker: a bundled app is already offline, and there is nothing to update.
     import shutil
-    for _f in ["styles.css", "sanctuary.css", "calendar.js"]:
+    for _f in ["styles.css", "sanctuary.css", "terminal.css", "calendar.js"]:
         shutil.copy2(_f, _out(_f))
     shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
     # only the artwork the built pages actually reference

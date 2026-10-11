@@ -20,6 +20,26 @@
   src:url(fonts/inter.woff2) format("woff2");
 }
 
+/* The Today screen, the app lists, the folded contents and the page-turn pills
+   are app shell — every style shows them, not just this one. They were written
+   against Sanctuary's own tokens, which exist only under its selector, so under
+   any other style their var() lookups went invalid: backgrounds vanished and
+   colour fell back to the browser's link blue. The home screen's main call to
+   action was unreadable in Paper and Manuscript for exactly that reason.
+
+   So the tokens get defaults here, mapped onto the palette every style defines.
+   Sanctuary and Terminal override them below. */
+:root{
+  --sanct-gold:var(--gold);
+  --bg:var(--paper);
+  --text:var(--ink);
+  --text-2:var(--ink-soft);
+  --text-3:color-mix(in srgb, var(--ink) 52%, transparent);
+  --hair:var(--hairline);
+  --r-card:var(--r-lg);
+  --sans:system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
 html[data-style="sanctuary"]{
   --sans:"Inter", system-ui, -apple-system, sans-serif;
   --bg:#0C0D10;
@@ -66,6 +86,9 @@ html[data-style="sanctuary"] .book{
 /* the one lit object on the screen */
 .now-card{
   display:block; text-decoration:none; margin-top:22px; padding:22px 22px 20px;
+  /* it is an <a>, so without this it keeps the browser's link colour; every
+     child happens to set its own today, which only hides the problem */
+  color:var(--text);
   border-radius:var(--r-card); position:relative; overflow:hidden;
   background:
     radial-gradient(120% 130% at 12% 0%, rgba(217,179,108,.22), transparent 62%),
@@ -278,6 +301,6 @@ html[data-style="sanctuary"] #row-temp,
 html[data-style="sanctuary"] #row-primary,
 html[data-style="sanctuary"] #row-secondary{ display:none; }
 
-/* three choices need more room than two */
-.seg-3{ display:flex; width:100%; margin-top:.5rem; }
-.seg-3 button{ flex:1 1 0; min-width:0; }
+/* four choices do not fit on one row at phone width */
+.seg-3{ display:grid; grid-template-columns:1fr 1fr; width:100%; margin-top:.5rem; }
+.seg-3 button{ min-width:0; }
