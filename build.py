@@ -384,10 +384,15 @@ TABBAR_TMPL = '''<nav class="tabbar" aria-label="Primary">
 </div>'''
 
 
-def _western_chrome(tmpl):
-    """The app build's chrome: three tabs instead of five, and a Settings panel
-    with nothing on it that the bundled app can't do. Derived from the web
-    template rather than duplicated, so the two never drift apart."""
+def _western_chrome(tmpl, app=False):
+    """Trim the chrome to what the build can actually honour.
+
+    Two different trims, and conflating them cost the website its theme picker
+    once already: a single-rite *site* still wants its style choice and its
+    offline switch, while the bundled app wants neither. So the content-scope
+    removals happen for both, and the rest only for the app.
+    """
+    # --- content scope: one rite, and the Eastern pages are not built --------
     tabs = ('  <a class="tab{h_act}" href="index.html" aria-label="Today">'
             '<span class="tab-i">{HOME}</span><span class="tab-l">Today</span></a>\n'
             '  <a class="tab{p_act}" href="prayerbook.html" aria-label="Prayer book">'
@@ -398,35 +403,38 @@ def _western_chrome(tmpl):
     end = tmpl.index('  <button class="tab" id="settings-btn"')
     tmpl = tmpl[:start] + tabs + tmpl[end:]
 
-    # no rite to switch: this build is the Western one
+    # no rite to switch between
     rite = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Rite</span>')
     after = tmpl.index('  <div class="menu-row">', rite + 20)
     tmpl = tmpl[:rite] + tmpl[after:]
 
-    # everything ships inside the app, so there is no offline switch to throw.
-    # The Church calendar stays — fast days matter in a prayer book — but its
-    # note points at a subscribe page this build doesn't carry.
-    # Sanctuary is one designed system, not a themeable one: the background
-    # temperature and the accent palettes would only let it be broken, and the
-    # manuscript style belongs to the web build
+    # the calendar stays — fast days matter in a prayer book — but its note
+    # points at a subscribe page no longer built
+    note = tmpl.index('  <p class="menu-note">Reminders appear')
+    tmpl = (tmpl[:note]
+            + '  <p class="menu-note">Reminders appear when you open the app.</p>\n'
+            + tmpl[tmpl.rindex("</div>"):])
+
+    if not app:
+        return tmpl
+
+    # --- the bundled app only ------------------------------------------------
+    # Sanctuary is the app's one designed system, so the style choice, the
+    # background temperature and the accent palettes come off; and everything
+    # ships inside the binary, so there is no offline switch to throw.
     bgrow = tmpl.index('  <div class="menu-row" id="row-temp">')
     dys = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Dyslexia-friendly</span>')
     tmpl = tmpl[:bgrow] + tmpl[dys:]
     mss = tmpl.index('  <div class="menu-col" id="row-style">')
     after_note = tmpl.index('</p>', tmpl.index('<p class="menu-note">', mss)) + len('</p>\n')
     tmpl = tmpl[:mss] + tmpl[after_note:]
-
     off = tmpl.index('  <div class="menu-row">\n    <span class="menu-label">Available offline</span>')
     cal = tmpl.index('  <div class="drawer-heading">Church calendar</div>')
-    tmpl = tmpl[:off] + tmpl[cal:]
-    note = tmpl.index('  <p class="menu-note">Reminders appear')
-    return (tmpl[:note]
-            + '  <p class="menu-note">Reminders appear when you open the app.</p>\n'
-            + tmpl[tmpl.rindex("</div>"):])
+    return tmpl[:off] + tmpl[cal:]
 
 
 if WESTERN_ONLY:
-    TABBAR_TMPL = _western_chrome(TABBAR_TMPL)
+    TABBAR_TMPL = _western_chrome(TABBAR_TMPL, app=APP_BUILD)
 
 
 def tabbar(active="", current=""):
