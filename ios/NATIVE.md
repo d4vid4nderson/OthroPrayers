@@ -89,16 +89,19 @@ What you still have to do:
    review but is still a review — and a prayer book that is entirely offline
    content is a much easier case to make than a thin web wrapper.
 
-### The one thing worth fixing first
+### The app icon
 
-The app icon masters are **356px, cut from a screenshot**, so the 1024px icons
-are a ~2.9× upscale. That was tolerable for sideloading; on TestFlight the icon
-is the first thing a tester sees, and App Store Connect renders it large. If you
-can find the original artwork at full size, drop it in and re-run:
+Vector. `assets/icons/app-icon.svg` is the master, with the lettering converted
+to outlines so it carries no font dependency and renders identically anywhere.
+Nothing is upscaled at any size, which matters on TestFlight: the icon is the
+first thing a tester sees and App Store Connect renders it large.
 
 ```sh
 python3 generate_icons.py --ios
 ```
+
+That writes the web icons, the favicons and the Xcode catalog with all three
+iOS appearances, and copies the catalog into the project.
 
 ## Still to do
 
@@ -106,7 +109,4 @@ python3 generate_icons.py --ios
   work, not a plugin.
 - **The Capacitor app is still here** (`ios/www`, `capacitor.config.json`,
   `package.json`). It still works, and is the fallback until this one builds.
-  Delete it once you are happy.The icon is vector: `assets/icons/app-icon.svg` is the master, with the
-lettering converted to outlines so it carries no font dependency. Nothing is
-upscaled, at any size. Regenerate with `generate_icons.py --ios`, which also
-copies the catalog into the Xcode project.
+  Delete it once you are happy.
