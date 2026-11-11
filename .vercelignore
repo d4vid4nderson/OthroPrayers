@@ -9,8 +9,7 @@ prayers.content.html
 ancient.content.html
 README.md
 .gitignore
-assets/icons/app-icon.png
-assets/icons/app-icon-dark.png
+assets/icons/app-icon.svg
 generate_icons.py
 voice/
 DESIGN.md

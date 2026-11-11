@@ -1,106 +1,150 @@
 """App-icon generator.
 
-Cuts the two IC XC NIKA medallion icons — bronze for light mode, steel for
-dark — out of the supplied mock-up, masks them to the iOS squircle so the
-corners come away clean, and writes every size the app needs.
+Draws the IC XC NIKA mark as vector art and renders every size the app needs:
+the web favicons and PWA icons, and the Xcode asset catalog with all three
+iOS appearances.
 
-Nothing here runs at page-build time; the icons are committed. Re-run it only
-when the artwork changes, with Pillow available:
+The mark is a pattée cross with the nomina sacra in Uncial Antiqua — the same
+hand the Manuscript style uses — flanking the arms, with titlo bars over IC and
+XC. The lettering is converted to outlines here, so the SVG master carries no
+font dependency and renders identically anywhere.
 
-    python3 -m venv /tmp/venv && /tmp/venv/bin/pip install pillow
-    /tmp/venv/bin/python generate_icons.py
+This replaces a pipeline that cut the icon out of a 356px screenshot, which
+meant every size above that was an upscale. Nothing is upscaled now.
 
-Sources are the two masters in assets/icons (app-icon.png / app-icon-dark.png).
-Pass the original mock-up as an argument to re-cut them:
+    python3 -m venv /tmp/venv
+    /tmp/venv/bin/pip install fonttools brotli
+    /tmp/venv/bin/python generate_icons.py          # web icons
+    /tmp/venv/bin/python generate_icons.py --ios    # + the Xcode catalog
 
-    ... generate_icons.py path/to/mockup.png
+Rasterising uses Playwright's Chromium (PLAYWRIGHT_BROWSERS_PATH).
 """
-import io
 import json
 import os
-import shutil
 import struct
+import subprocess
 import sys
-
-from PIL import Image, ImageFilter
+import tempfile
 
 OUT = "assets/icons"
-MASTER_LIGHT = f"{OUT}/app-icon.png"
-MASTER_DARK = f"{OUT}/app-icon-dark.png"
+SVG_MASTER = f"{OUT}/app-icon.svg"
+IOS_SET = "ios/AppIcon.appiconset"
+IOS_XCODE = "ios/App/Resources/Assets.xcassets/AppIcon.appiconset"
+FONT = "fonts/uncial-antiqua.woff2"
 
-# where the two icons sit in the supplied 1024x1024 mock-up (left = light mode,
-# right = dark); both are 356px square
-CUTS = {MASTER_LIGHT: (84, 322, 440, 678), MASTER_DARK: (592, 322, 948, 678)}
+# ---- palettes, taken from the stylesheets so the icon cannot drift ---------
+DARK = ("#0C0D10", "#D9B36C")      # Sanctuary ground, Sanctuary gold
+LIGHT = ("#FAF6EE", "#8A6B16")     # Paper stock, a deeper gold that holds on it
+TINTED = ("#1C1C1E", "#C9C9CE")    # greyscale; iOS recolours it
 
-SS = 4          # supersampling for the mask edge
-EXP = 5.0       # superellipse exponent — the iOS "squircle"
-INSET = 1.5     # px trimmed off the edge, so no background fringe survives
+# ---- geometry -------------------------------------------------------------
+# A pattée cross on a 1024 canvas: narrow at the waist, flaring to a slightly
+# concave tip.
+CROSS = ("M 486 486 "
+         "Q 486 356, 450 312 Q 512 326, 574 312 Q 538 356, 538 486 "
+         "Q 668 486, 712 450 Q 698 512, 712 574 Q 668 538, 538 538 "
+         "Q 538 668, 574 712 Q 512 698, 450 712 Q 486 668, 486 538 "
+         "Q 356 538, 312 574 Q 326 512, 312 450 Q 356 486, 486 486 Z")
 
-
-def squircle(size, inset=INSET):
-    """An anti-aliased iOS-style rounded-square alpha mask."""
-    n = size * SS
-    half = n / 2.0
-    r = half - inset * SS
-    mask = Image.new("L", (n, n), 0)
-    px = mask.load()
-    for y in range(n):
-        dy = abs((y + 0.5) - half) / r
-        if dy > 1:
-            continue
-        # x where |x/r|^EXP + dy^EXP = 1
-        rem = 1.0 - dy ** EXP
-        dx = rem ** (1.0 / EXP)
-        x0 = int(half - dx * r)
-        x1 = int(half + dx * r)
-        for x in range(max(0, x0), min(n, x1)):
-            px[x, y] = 255
-    return mask.resize((size, size), Image.LANCZOS)
+# "Tighter": the words flank the arms rather than sitting out in the corners.
+DX, DY_TOP, DY_BOT, LETTER = 258, 330, 762, 150
+# the bar sits clear above the letters: at 104 it touched their cap line,
+# which reads as a mistake rather than a scribal mark
+TITLO_HALF, TITLO_DROP, TITLO_W = 88, 122, 9
 
 
-def cut(mockup):
-    """Re-cut both masters out of the mock-up."""
-    src = Image.open(mockup).convert("RGB")
-    for path, box in CUTS.items():
-        icon = src.crop(box)
-        icon.putalpha(squircle(icon.width))
-        icon.save(path)
-        print("cut", path, icon.size)
+def letter_paths(text, size, cx, baseline):
+    """The glyph outlines for `text`, centred on `cx`, as one SVG group.
+
+    Converting to outlines is what makes the master self-contained: no
+    @font-face, no font file at render time, and no chance of a substituted
+    face quietly changing the mark.
+    """
+    from fontTools.ttLib import TTFont
+    from fontTools.pens.svgPathPen import SVGPathPen
+
+    font = TTFont(FONT)
+    upem = font["head"].unitsPerEm
+    cmap = font.getBestCmap()
+    glyphs = font.getGlyphSet()
+    hmtx = font["hmtx"]
+    scale = size / upem
+
+    commands, advance = [], 0
+    for ch in text:
+        name = cmap.get(ord(ch))
+        if name is None:
+            sys.exit(f"{ch!r} is not in {FONT}")
+        pen = SVGPathPen(glyphs)
+        glyphs[name].draw(pen)
+        d = pen.getCommands()
+        if d:
+            commands.append(f'<path d="{d}" transform="translate({advance} 0)"/>')
+        advance += hmtx[name][0]
+
+    width = advance * scale
+    x = cx - width / 2
+    # font space is y-up, SVG is y-down, hence the negative vertical scale
+    return (f'<g transform="translate({x:.2f} {baseline:.2f}) '
+            f'scale({scale:.6f} {-scale:.6f})">' + "".join(commands) + "</g>")
 
 
-def edge_colour(im):
-    """The icon's own border tone — what a flattened icon's background is
-    filled with, so the squircle sits on something that belongs to it."""
-    w = im.width
-    ring = []
-    for t in range(6):
-        ring += [im.getpixel((x, w // 2 + t - 3)) for x in (t, w - 1 - t)]
-        ring += [im.getpixel((w // 2 + t - 3, y)) for y in (t, w - 1 - t)]
-    ring = [p for p in ring if p[3] > 200]
-    n = len(ring)
-    return tuple(sum(p[i] for p in ring) // n for i in range(3)) + (255,)
+def mark(ground, ink, *, letters=True, scale=1.0):
+    """The whole icon as SVG, in a given palette."""
+    art = [f'<path d="{CROSS}"/>']
+    if letters:
+        left, right = 512 - DX, 512 + DX
+        for cx, baseline, text in ((left, DY_TOP, "IC"), (right, DY_TOP, "XC"),
+                                   (left, DY_BOT, "NI"), (right, DY_BOT, "KA")):
+            art.append(letter_paths(text, LETTER, cx, baseline))
+        # the titlo: the bar marking a contracted holy name. Not decoration.
+        y = DY_TOP - TITLO_DROP
+        for cx in (left, right):
+            art.append(f'<rect x="{cx - TITLO_HALF}" y="{y - TITLO_W / 2}" '
+                       f'width="{TITLO_HALF * 2}" height="{TITLO_W}" rx="{TITLO_W / 2}"/>')
+    inner = "".join(art)
+    if scale != 1.0:
+        inner = (f'<g transform="translate(512 512) scale({scale}) '
+                 f'translate(-512 -512)">{inner}</g>')
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" '
+            'width="1024" height="1024">'
+            f'<rect width="1024" height="1024" fill="{ground}"/>'
+            f'<g fill="{ink}">{inner}</g></svg>')
 
 
-def render(master, size, scale=1.0, opaque=False, backdrop=False):
-    """One icon at one size. `opaque` flattens onto the icon's own border tone;
-    `backdrop` instead fills behind it with a blown-up, blurred copy of the same
-    metal, so a shrunken icon doesn't read as a plaque sitting on flat mud."""
-    im = Image.open(master).convert("RGBA")
-    inner = max(1, round(size * scale))
-    art = im.resize((inner, inner), Image.LANCZOS)
-    if backdrop:
-        # the 1.35x blow-up is centre-cropped, so only the middle of the master
-        # survives — well inside the squircle, and clear of its masked corners
-        big = round(size * 1.35)
-        out = im.resize((big, big), Image.LANCZOS).convert("RGB")
-        crop = (big - size) // 2
-        out = out.crop((crop, crop, crop + size, crop + size))
-        out = out.filter(ImageFilter.GaussianBlur(size / 22.0)).convert("RGBA")
-    else:
-        out = Image.new("RGBA", (size, size), edge_colour(im) if opaque else (0, 0, 0, 0))
-    off = (size - inner) // 2
-    out.paste(art, (off, off), art)
-    return out
+# ---- rasterising ----------------------------------------------------------
+RENDER_JS = r"""
+import { chromium } from "/opt/node22/lib/node_modules/playwright/index.mjs";
+import { readFileSync, writeFileSync } from "node:fs";
+const jobs = JSON.parse(readFileSync(process.argv[2], "utf8"));
+const b = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
+const page = await b.newPage();
+for (const job of jobs) {
+  await page.setViewportSize({ width: job.size, height: job.size });
+  await page.setContent(`<!doctype html><style>html,body{margin:0}
+    svg{display:block;width:${job.size}px;height:${job.size}px}</style>${job.svg}`);
+  writeFileSync(job.out, await page.screenshot({ omitBackground: false }));
+}
+await b.close();
+console.log("rendered " + jobs.length);
+"""
+
+
+def render(jobs):
+    """Rasterise a batch of {svg, size, out} in one browser session."""
+    for job in jobs:
+        os.makedirs(os.path.dirname(job["out"]) or ".", exist_ok=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        spec = os.path.join(tmp, "jobs.json")
+        script = os.path.join(tmp, "render.mjs")
+        with open(spec, "w") as f:
+            json.dump(jobs, f)
+        with open(script, "w") as f:
+            f.write(RENDER_JS)
+        r = subprocess.run(["/opt/node22/bin/node", script, spec],
+                           capture_output=True, text=True)
+        if r.returncode:
+            sys.exit("render failed:\n" + r.stdout + r.stderr)
 
 
 def ico(pngs, sizes, path):
@@ -117,90 +161,73 @@ def ico(pngs, sizes, path):
         f.write(bytes(head))
         for blob in pngs:
             f.write(blob)
-    print("wrote", path, "/".join(str(s) for s in sizes))
-
-
-IOS_SET = "ios/AppIcon.appiconset"
-# where `npx cap add ios` puts the real catalog, once it has been run on a Mac
-IOS_XCODE = "ios/App/App/Assets.xcassets/AppIcon.appiconset"
-
-
-def ios_icons(dest=IOS_SET):
-    """The Xcode asset catalog: one 1024px square per appearance.
-
-    iOS masks the corners itself and rejects alpha, so these are flattened and
-    full-bleed — the squircle's own corners are filled with a blurred blow-up of
-    the same metal. Light and dark are the two masters; tinted is a greyscale
-    the system recolours with the user's chosen tint.
-    """
-    os.makedirs(dest, exist_ok=True)
-    variants = [
-        ("AppIcon-1024.png", MASTER_LIGHT, None),
-        ("AppIcon-1024-dark.png", MASTER_DARK, "dark"),
-        ("AppIcon-1024-tinted.png", MASTER_DARK, "tinted"),
-    ]
-    images = []
-    for name, master, appearance in variants:
-        im = render(master, 1024, scale=1.0, backdrop=True).convert("RGB")
-        # the masters are only 356px, so 1024 is a 2.9x upscale — a touch of
-        # unsharp masking puts back the edge the resampling costs
-        im = im.filter(ImageFilter.UnsharpMask(radius=3, percent=90, threshold=2))
-        if appearance == "tinted":
-            im = im.convert("L").convert("RGB")
-        im.save(f"{dest}/{name}")
-        entry = {"filename": name, "idiom": "universal", "platform": "ios", "size": "1024x1024"}
-        if appearance:
-            entry["appearances"] = [{"appearance": "luminosity", "value": appearance}]
-        images.append(entry)
-        print("wrote", f"{dest}/{name}", appearance or "light")
-    with open(f"{dest}/Contents.json", "w") as f:
-        json.dump({"images": images, "info": {"author": "xcode", "version": 1}}, f, indent=2)
-    print("wrote", f"{dest}/Contents.json")
-
-    # if the Xcode project already exists, drop them straight in
-    if os.path.isdir(os.path.dirname(IOS_XCODE)) and dest != IOS_XCODE:
-        os.makedirs(IOS_XCODE, exist_ok=True)
-        for f in os.listdir(dest):
-            shutil.copy2(os.path.join(dest, f), os.path.join(IOS_XCODE, f))
-        print("copied into", IOS_XCODE)
+    print(f"  favicon.ico  {'/'.join(str(s) for s in sizes)}")
 
 
 def main():
-    if "--ios" in sys.argv:
-        ios_icons()
-        return
-    if len(sys.argv) > 1:
-        cut(sys.argv[1])
-    for m in (MASTER_LIGHT, MASTER_DARK):
-        if not os.path.exists(m):
-            sys.exit(f"missing {m} — pass the mock-up to re-cut the masters")
+    want_ios = "--ios" in sys.argv
 
-    # the installed-app icons. A manifest cannot switch on colour scheme, so
-    # these are the light (bronze) set; the dark artwork is used for the
-    # browser tab, where prefers-color-scheme does work.
-    for size in (512, 192):
-        render(MASTER_LIGHT, size).save(f"{OUT}/icon-{size}.png")
-        # maskable: the launcher crops to a circle 80% across, so the medallion
-        # is pulled inside that and the icon's own border tone fills the rest
-        render(MASTER_LIGHT, size, scale=0.9, backdrop=True).save(f"{OUT}/icon-{size}-maskable.png")
-        print("wrote", size, "any / maskable")
+    dark = mark(*DARK)
+    # at favicon sizes the lettering is mud, so the cross carries it alone
+    dark_cross = mark(*DARK, letters=False, scale=1.08)
+    light_cross = mark(*LIGHT, letters=False, scale=1.08)
 
-    # iOS applies its own mask and ignores alpha, so this one is flattened
-    render(MASTER_LIGHT, 180, opaque=True).save(f"{OUT}/apple-touch-icon.png")
-    print("wrote apple-touch-icon.png 180")
+    os.makedirs(OUT, exist_ok=True)
+    with open(SVG_MASTER, "w") as f:
+        f.write(dark + "\n")
 
-    for size in (32, 16):
-        render(MASTER_LIGHT, size).save(f"{OUT}/favicon-{size}.png")
-        render(MASTER_DARK, size).save(f"{OUT}/favicon-{size}-dark.png")
-        print("wrote favicon", size, "light / dark")
+    jobs = [
+        {"svg": dark, "size": 512, "out": f"{OUT}/icon-512.png"},
+        {"svg": dark, "size": 192, "out": f"{OUT}/icon-192.png"},
+        # maskable: the launcher crops to a circle 80% across, so the art is
+        # pulled inside it and the ground fills the rest
+        {"svg": mark(*DARK, scale=0.74), "size": 512, "out": f"{OUT}/icon-512-maskable.png"},
+        {"svg": mark(*DARK, scale=0.74), "size": 192, "out": f"{OUT}/icon-192-maskable.png"},
+        {"svg": dark, "size": 180, "out": f"{OUT}/apple-touch-icon.png"},
+        # favicons: light browser chrome gets the paper ground, dark gets the
+        # app's own
+        {"svg": light_cross, "size": 32, "out": f"{OUT}/favicon-32.png"},
+        {"svg": light_cross, "size": 16, "out": f"{OUT}/favicon-16.png"},
+        {"svg": dark_cross, "size": 32, "out": f"{OUT}/favicon-32-dark.png"},
+        {"svg": dark_cross, "size": 16, "out": f"{OUT}/favicon-16-dark.png"},
+    ]
+    if want_ios:
+        jobs += [
+            {"svg": dark, "size": 1024, "out": f"{IOS_SET}/AppIcon-1024.png"},
+            {"svg": mark(*DARK), "size": 1024, "out": f"{IOS_SET}/AppIcon-1024-dark.png"},
+            {"svg": mark(*TINTED), "size": 1024, "out": f"{IOS_SET}/AppIcon-1024-tinted.png"},
+        ]
+    render(jobs)
+    print(f"  {SVG_MASTER}  (self-contained: the lettering is outlines)")
+    for job in jobs:
+        print(f"  {job['out']}  {job['size']}px")
 
-    sizes = (48, 32, 16)
-    blobs = []
-    for s in sizes:
-        buf = io.BytesIO()
-        render(MASTER_LIGHT, s).save(buf, "PNG")
-        blobs.append(buf.getvalue())
-    ico(blobs, sizes, "favicon.ico")
+    with tempfile.TemporaryDirectory() as tmp:
+        sizes = (48, 32, 16)
+        ico_jobs = [{"svg": dark_cross, "size": s,
+                     "out": os.path.join(tmp, f"{s}.png")} for s in sizes]
+        render(ico_jobs)
+        ico([open(j["out"], "rb").read() for j in ico_jobs], sizes, "favicon.ico")
+
+    if want_ios:
+        contents = {"images": [
+            {"filename": "AppIcon-1024.png", "idiom": "universal",
+             "platform": "ios", "size": "1024x1024"},
+            {"appearances": [{"appearance": "luminosity", "value": "dark"}],
+             "filename": "AppIcon-1024-dark.png", "idiom": "universal",
+             "platform": "ios", "size": "1024x1024"},
+            {"appearances": [{"appearance": "luminosity", "value": "tinted"}],
+             "filename": "AppIcon-1024-tinted.png", "idiom": "universal",
+             "platform": "ios", "size": "1024x1024"},
+        ], "info": {"author": "xcode", "version": 1}}
+        with open(f"{IOS_SET}/Contents.json", "w") as f:
+            json.dump(contents, f, indent=2)
+        if os.path.isdir(os.path.dirname(IOS_XCODE)):
+            import shutil
+            os.makedirs(IOS_XCODE, exist_ok=True)
+            for name in os.listdir(IOS_SET):
+                shutil.copy2(os.path.join(IOS_SET, name), os.path.join(IOS_XCODE, name))
+            print(f"  copied the catalog into {IOS_XCODE}")
 
 
 if __name__ == "__main__":

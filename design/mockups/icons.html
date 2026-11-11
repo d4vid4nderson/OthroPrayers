@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>App icon — vector directions</title>
+<style>
+@font-face{font-family:"Uncial Antiqua";src:url(../../fonts/uncial-antiqua.woff2) format("woff2");font-display:block}
+@font-face{font-family:"IM Fell SC";src:url(../../fonts/imfell-sc.woff2) format("woff2");font-display:block}
+@font-face{font-family:"Cormorant";src:url(../../fonts/cormorant.woff2) format("woff2");font-weight:400 700;font-display:block}
+body{margin:0;background:#4A4D55;font-family:system-ui,sans-serif;padding:40px;color:#fff}
+.row{display:flex;gap:36px;align-items:flex-start;margin-bottom:44px}
+.col{text-align:center}
+.lab{font-size:13px;font-weight:600;letter-spacing:.05em;margin-top:12px;opacity:.9}
+.sub{font-size:11px;opacity:.6;margin-top:3px;max-width:230px}
+.big{width:230px;height:230px;border-radius:50px;overflow:hidden;display:block}
+.sizes{display:flex;gap:14px;align-items:flex-end;justify-content:center;margin-top:14px}
+.sizes div{border-radius:22%;overflow:hidden}
+svg{display:block}
+</style>
+</head>
+<body>
+
+<!-- ============ shared geometry =====================================
+     A pattée cross drawn as a path: narrow at the waist, flaring to a
+     slightly concave tip. Centre 512,512. Pure vector, so it is exact at
+     any size — which is the whole point of moving off the photograph. -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <path id="patee" d="M 486 486
+      Q 486 356, 450 312 Q 512 326, 574 312 Q 538 356, 538 486
+      Q 668 486, 712 450 Q 698 512, 712 574 Q 668 538, 538 538
+      Q 538 668, 574 712 Q 512 698, 450 712 Q 486 668, 486 538
+      Q 356 538, 312 574 Q 326 512, 312 450 Q 356 486, 486 486 Z"/>
+    <!-- a slimmer Latin cross for the minimal direction -->
+    <path id="latin" d="M 478 236 h68 v196 h150 v68 h-150 v356 h-68 v-356 h-150 v-68 h150 z"/>
+  </defs>
+</svg>
+
+<div class="row">
+
+  <!-- ===== A — Uncial ===== -->
+  <div class="col">
+    <svg class="big" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#0C0D10"/>
+      <use href="#patee" fill="#D9B36C"/>
+      <g fill="#D9B36C" font-family="Uncial Antiqua" font-size="150" text-anchor="middle">
+        <text x="180" y="300">IC</text>
+        <text x="844" y="300">XC</text>
+        <text x="180" y="800">NI</text>
+        <text x="844" y="800">KA</text>
+      </g>
+      <g stroke="#D9B36C" stroke-width="9" stroke-linecap="round">
+        <line x1="92" y1="196" x2="268" y2="196"/>
+        <line x1="756" y1="196" x2="932" y2="196"/>
+      </g>
+    </svg>
+    <div class="lab">A — Uncial</div>
+    <div class="sub">The manuscript hand the app already carries, cut sharp. Titlo bars over the nomina sacra.</div>
+    <div class="sizes" id="sa"></div>
+  </div>
+
+  <!-- ===== B — Inscribed ===== -->
+  <div class="col">
+    <svg class="big" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#0C0D10"/>
+      <circle cx="512" cy="512" r="396" fill="none" stroke="#D9B36C" stroke-width="10" opacity=".55"/>
+      <circle cx="512" cy="512" r="372" fill="none" stroke="#D9B36C" stroke-width="3" opacity=".35"/>
+      <g transform="translate(512 512) scale(.78) translate(-512 -512)">
+        <use href="#patee" fill="none" stroke="#D9B36C" stroke-width="16"/>
+      </g>
+      <g fill="#D9B36C" font-family="IM Fell SC" font-size="112" text-anchor="middle">
+        <text x="300" y="400">IC</text>
+        <text x="724" y="400">XC</text>
+        <text x="300" y="690">NI</text>
+        <text x="724" y="690">KA</text>
+      </g>
+    </svg>
+    <div class="lab">B — Inscribed</div>
+    <div class="sub">An engraved roundel: outlined cross, ruled circle, Fell small caps. Lighter, more like a seal.</div>
+    <div class="sizes" id="sb"></div>
+  </div>
+
+  <!-- ===== C — Minimal ===== -->
+  <div class="col">
+    <svg class="big" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#0C0D10"/>
+      <use href="#latin" fill="#D9B36C"/>
+      <text x="512" y="150" fill="#D9B36C" font-family="Cormorant" font-weight="600"
+            font-size="104" text-anchor="middle" letter-spacing="10">IC XC</text>
+      <text x="512" y="952" fill="#D9B36C" font-family="Cormorant" font-weight="600"
+            font-size="104" text-anchor="middle" letter-spacing="10">NIKA</text>
+    </svg>
+    <div class="lab">C — Minimal</div>
+    <div class="sub">One clean cross, the words set above and below in the display face. Reads at any size.</div>
+    <div class="sizes" id="sc"></div>
+  </div>
+
+</div>
+
+<script>
+// the real test of an app icon is the home screen, not a hero shot
+const sizes = [120, 80, 54];
+document.querySelectorAll(".col").forEach((col, i) => {
+  const target = col.querySelector(".sizes");
+  const svg = col.querySelector("svg.big");
+  sizes.forEach(s => {
+    const d = document.createElement("div");
+    d.style.width = d.style.height = s + "px";
+    const clone = svg.cloneNode(true);
+    clone.removeAttribute("class");
+    clone.setAttribute("width", s); clone.setAttribute("height", s);
+    d.appendChild(clone);
+    target.appendChild(d);
+  });
+});
+</script>
+</body>
+</html>

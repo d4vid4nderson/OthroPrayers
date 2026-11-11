@@ -3445,7 +3445,7 @@ if WESTERN_ONLY:
 # build inputs that are NOT deployed (see .vercelignore) — must never be listed,
 # or cache.addAll() would 404 and the whole offline install would fail
 _NODEPLOY = {"prayers.content.html", "ancient.content.html",
-             "assets/icons/app-icon.png", "assets/icons/app-icon-dark.png"}
+             "assets/icons/app-icon.svg"}
 _assets = {"./"}
 _pages = sorted(set(glob.glob("*.html")) - _NODEPLOY)
 _assets.update(_pages)
