@@ -106,4 +106,7 @@ python3 generate_icons.py --ios
   work, not a plugin.
 - **The Capacitor app is still here** (`ios/www`, `capacitor.config.json`,
   `package.json`). It still works, and is the fallback until this one builds.
-  Delete it once you are happy.
+  Delete it once you are happy.The icon is vector: `assets/icons/app-icon.svg` is the master, with the
+lettering converted to outlines so it carries no font dependency. Nothing is
+upscaled, at any size. Regenerate with `generate_icons.py --ios`, which also
+copies the catalog into the Xcode project.
