@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>App icon — on the home screen</title>
+<style>
+@font-face{font-family:"Uncial Antiqua";src:url(../../fonts/uncial-antiqua.woff2) format("woff2");font-display:block}
+@font-face{font-family:"IM Fell SC";src:url(../../fonts/imfell-sc.woff2) format("woff2");font-display:block}
+@font-face{font-family:"Cormorant";src:url(../../fonts/cormorant.woff2) format("woff2");font-weight:400 700;font-display:block}
+
+*{box-sizing:border-box}
+body{margin:0;background:#2E3036;font-family:system-ui,-apple-system,sans-serif;color:#fff;padding:34px}
+h2{font-size:15px;font-weight:650;letter-spacing:.04em;margin:0 0 16px;opacity:.85}
+.row{display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap;margin-bottom:38px}
+.phone{width:300px;height:620px;border-radius:40px;overflow:hidden;position:relative;
+  box-shadow:0 22px 50px rgba(0,0,0,.45);flex:none}
+.wall-dark{background:linear-gradient(165deg,#1C2230,#0E1117 55%,#191320)}
+.wall-light{background:linear-gradient(165deg,#CFE0F2,#EDE3D6 55%,#F6EDE0)}
+.status{height:34px;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 22px 4px;font-size:11px;font-weight:650}
+.wall-light .status{color:#1b1b1b}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;padding:14px 16px}
+.app{text-align:center}
+/* the iOS squircle, near enough: a superellipse reads as ~22.4% radius */
+.tile{width:56px;height:56px;border-radius:13px;margin:0 auto;overflow:hidden;display:block;
+  box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.name{font-size:9.5px;margin-top:5px;letter-spacing:.01em;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.wall-light .name{color:#1b1b1b;text-shadow:0 1px 2px rgba(255,255,255,.5)}
+.dock{position:absolute;left:12px;right:12px;bottom:14px;height:78px;border-radius:26px;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(18px);
+  display:grid;grid-template-columns:repeat(4,1fr);align-items:center;padding:0 10px}
+.wall-light .dock{background:rgba(255,255,255,.45)}
+.cap{font-size:12px;opacity:.75;margin-top:10px;text-align:center}
+.trio{display:flex;gap:18px;align-items:flex-end}
+.trio .t{text-align:center}
+.trio .tile{width:88px;height:88px;border-radius:20px}
+.trio .lab{font-size:11px;opacity:.75;margin-top:7px}
+svg{display:block}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <path id="patee" d="M 486 486
+    Q 486 356, 450 312 Q 512 326, 574 312 Q 538 356, 538 486
+    Q 668 486, 712 450 Q 698 512, 712 574 Q 668 538, 538 538
+    Q 538 668, 574 712 Q 512 698, 450 712 Q 486 668, 486 538
+    Q 356 538, 312 574 Q 326 512, 312 450 Q 356 486, 486 486 Z"/>
+  <path id="latin" d="M 478 236 h68 v196 h150 v68 h-150 v356 h-68 v-356 h-150 v-68 h150 z"/>
+</defs></svg>
+
+<script>
+// ---- the three candidates, as functions of (ground, mark) ---------------
+function iconA(bg, fg){ return `
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%">
+    <rect width="1024" height="1024" fill="${bg}"/>
+    <use href="#patee" fill="${fg}"/>
+    <g fill="${fg}" font-family="Uncial Antiqua" font-size="150" text-anchor="middle">
+      <text x="180" y="300">IC</text><text x="844" y="300">XC</text>
+      <text x="180" y="800">NI</text><text x="844" y="800">KA</text>
+    </g>
+    <g stroke="${fg}" stroke-width="9" stroke-linecap="round">
+      <line x1="92" y1="196" x2="268" y2="196"/><line x1="756" y1="196" x2="932" y2="196"/>
+    </g>
+  </svg>`; }
+
+function iconB(bg, fg){ return `
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%">
+    <rect width="1024" height="1024" fill="${bg}"/>
+    <circle cx="512" cy="512" r="396" fill="none" stroke="${fg}" stroke-width="10" opacity=".55"/>
+    <circle cx="512" cy="512" r="372" fill="none" stroke="${fg}" stroke-width="3" opacity=".35"/>
+    <g transform="translate(512 512) scale(.78) translate(-512 -512)">
+      <use href="#patee" fill="none" stroke="${fg}" stroke-width="16"/></g>
+    <g fill="${fg}" font-family="IM Fell SC" font-size="112" text-anchor="middle">
+      <text x="300" y="400">IC</text><text x="724" y="400">XC</text>
+      <text x="300" y="690">NI</text><text x="724" y="690">KA</text>
+    </g>
+  </svg>`; }
+
+function iconC(bg, fg){ return `
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%">
+    <rect width="1024" height="1024" fill="${bg}"/>
+    <use href="#latin" fill="${fg}"/>
+    <text x="512" y="150" fill="${fg}" font-family="Cormorant" font-weight="600"
+          font-size="104" text-anchor="middle" letter-spacing="10">IC XC</text>
+    <text x="512" y="952" fill="${fg}" font-family="Cormorant" font-weight="600"
+          font-size="104" text-anchor="middle" letter-spacing="10">NIKA</text>
+  </svg>`; }
+
+const ICONS = {A: iconA, B: iconB, C: iconC};
+const GOLD = "#D9B36C", GROUND = "#0C0D10", CREAM = "#FAF6EE", INK = "#8A6B16";
+
+// ---- plausible neighbours, drawn rather than borrowed -------------------
+const NEIGHBOURS = [
+  ["Clock",    "#F2F2F7", "#111", `<circle cx="512" cy="512" r="400" fill="none" stroke="#111" stroke-width="34"/><path d="M512 250v280l190 110" stroke="#111" stroke-width="46" fill="none" stroke-linecap="round"/>`],
+  ["Mail",     "#2A8CF0", "#fff", `<rect x="190" y="300" width="644" height="424" rx="56" fill="none" stroke="#fff" stroke-width="48"/><path d="M200 330l312 240 312-240" fill="none" stroke="#fff" stroke-width="48" stroke-linejoin="round"/>`],
+  ["Photos",   "#FFFFFF", "#111", `<g><circle cx="512" cy="512" r="150" fill="#FF9500"/><circle cx="512" cy="300" r="120" fill="#FF3B30" opacity=".85"/><circle cx="696" cy="406" r="120" fill="#FFCC00" opacity=".85"/><circle cx="696" cy="618" r="120" fill="#34C759" opacity=".85"/><circle cx="512" cy="724" r="120" fill="#007AFF" opacity=".85"/><circle cx="328" cy="618" r="120" fill="#5856D6" opacity=".85"/><circle cx="328" cy="406" r="120" fill="#FF2D55" opacity=".85"/></g>`],
+  ["Weather",  "#1C7FE8", "#fff", `<circle cx="400" cy="390" r="130" fill="#FFD60A"/><path d="M330 640a150 150 0 0 1 300 0h40a110 110 0 0 1 0 220H330a110 110 0 0 1 0-220z" fill="#fff"/>`],
+  ["Notes",    "#FFD60A", "#111", `<rect x="220" y="220" width="584" height="584" rx="70" fill="#fff"/><g stroke="#C9A227" stroke-width="34" stroke-linecap="round"><path d="M320 400h384M320 520h384M320 640h240"/></g>`],
+  ["Maps",     "#E8F3E8", "#111", `<path d="M160 760l220-520 280 300 204-200v560z" fill="#79C879"/><path d="M160 700l250-120 230 140 224-110" stroke="#fff" stroke-width="40" fill="none"/>`],
+  ["Settings", "#8E8E93", "#fff", `<circle cx="512" cy="512" r="150" fill="none" stroke="#fff" stroke-width="54"/><g stroke="#fff" stroke-width="54" stroke-linecap="round"><path d="M512 180v90M512 754v90M180 512h90M754 512h90M278 278l64 64M682 682l64 64M746 278l-64 64M342 682l-64 64"/></g>`],
+  ["Music",    "#FA2B56", "#fff", `<path d="M420 700V300l300-70v400" fill="none" stroke="#fff" stroke-width="54" stroke-linejoin="round"/><circle cx="360" cy="706" r="92" fill="#fff"/><circle cx="660" cy="636" r="92" fill="#fff"/>`],
+];
+
+function tile(inner){ return `<span class="tile">${inner}</span>`; }
+function neighbour(n){
+  const [name,bg,,glyph] = n;
+  return `<div class="app">${tile(`<svg viewBox="0 0 1024 1024" width="100%" height="100%"><rect width="1024" height="1024" fill="${bg}"/>${glyph}</svg>`)}<div class="name">${name}</div></div>`;
+}
+
+function phone(which, mode){
+  const dark = mode === "dark";
+  const icon = ICONS[which](dark ? GROUND : CREAM, dark ? GOLD : INK);
+  // ours sits in the second row, where the eye lands
+  const apps = [];
+  NEIGHBOURS.slice(0,4).forEach(n => apps.push(neighbour(n)));
+  apps.push(`<div class="app">${tile(icon)}<div class="name">Prayers</div></div>`);
+  NEIGHBOURS.slice(4,7).forEach(n => apps.push(neighbour(n)));
+  return `<div class="phone wall-${mode}">
+    <div class="status"><span>9:41</span><span>▮▮▮</span></div>
+    <div class="grid">${apps.join("")}</div>
+    <div class="dock">
+      ${NEIGHBOURS.slice(0,3).map(n=>`<div class="app">${tile(`<svg viewBox="0 0 1024 1024" width="100%" height="100%"><rect width="1024" height="1024" fill="${n[1]}"/>${n[3]}</svg>`)}</div>`).join("")}
+      <div class="app">${tile(icon)}</div>
+    </div>
+  </div>`;
+}
+
+document.write(`
+  <h2>DARK HOME SCREEN</h2>
+  <div class="row">
+    <div><div>${phone("A","dark")}</div><div class="cap">A — Uncial</div></div>
+    <div><div>${phone("B","dark")}</div><div class="cap">B — Inscribed</div></div>
+    <div><div>${phone("C","dark")}</div><div class="cap">C — Minimal</div></div>
+  </div>
+  <h2>LIGHT HOME SCREEN</h2>
+  <div class="row">
+    <div><div>${phone("A","light")}</div><div class="cap">A — Uncial</div></div>
+    <div><div>${phone("B","light")}</div><div class="cap">B — Inscribed</div></div>
+    <div><div>${phone("C","light")}</div><div class="cap">C — Minimal</div></div>
+  </div>
+  <h2>THE THREE iOS APPEARANCES — A</h2>
+  <div class="row"><div class="trio">
+    <div class="t">${tile(iconA(GROUND, GOLD))}<div class="lab">Default</div></div>
+    <div class="t">${tile(iconA("#0A0B0D", "#B8945A"))}<div class="lab">Dark</div></div>
+    <div class="t">${tile(iconA("#1C1C1E", "#C9C9CE"))}<div class="lab">Tinted</div></div>
+    <div class="t">${tile(iconA(CREAM, INK))}<div class="lab">Light ground</div></div>
+  </div></div>
+`);
+</script>
+</body>
+</html>
