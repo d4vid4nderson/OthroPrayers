@@ -7,6 +7,12 @@ import SwiftUI
 struct ArrangeView: View {
     let slug: String
     let title: String
+    // The palette reads Settings.shared directly, which SwiftUI cannot see, so
+    // a theme change would not redraw this screen without an observer. This is
+    // the singleton rather than @EnvironmentObject because the view is
+    // presented in a sheet, and a missing environment object is a crash rather
+    // than a compile error — which CI would not catch.
+    @ObservedObject private var settings = Settings.shared
 
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var arrangements: Arrangements
@@ -138,7 +144,7 @@ struct PaletteView: View {
                                 Spacer(minLength: 8)
                                 Image(systemName: "plus")
                                     .font(.footnote.weight(.semibold))
-                                    .foregroundStyle(Color.sanctuaryGold)
+                                    .foregroundStyle(palette.accent)
                             }
                         }
                     }

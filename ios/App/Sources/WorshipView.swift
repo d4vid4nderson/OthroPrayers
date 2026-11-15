@@ -8,6 +8,9 @@ import SwiftUI
 /// is whatever is sounding.
 struct WorshipView: View {
     @EnvironmentObject private var player: Player
+    // observed so a theme change re-renders this screen: `palette` reads
+    // Settings.shared directly, which SwiftUI cannot see on its own
+    @EnvironmentObject private var settings: Settings
 
     private let albums = Chant.albums
     private let singles = Chant.singles
@@ -38,7 +41,7 @@ struct WorshipView: View {
             .padding(.bottom, 24)
         }
         .scrollEdgeEffectStyle(.soft, for: .top)
-        .background(Color.sanctuaryGround)
+        .background(palette.ground)
         .navigationTitle("Worship")
         .navigationDestination(for: Album.self) { AlbumView(album: $0) }
         .nowPlayingBar()
@@ -61,7 +64,7 @@ struct WorshipView: View {
                 if sounding {
                     Image(systemName: player.isPlaying ? "waveform" : "pause.fill")
                         .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.sanctuaryGold)
+                        .foregroundStyle(palette.accent)
                         .symbolEffect(.variableColor, isActive: player.isPlaying)
                 } else {
                     Image(systemName: "music.note.list")
@@ -74,7 +77,7 @@ struct WorshipView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(album.name)
                     .font(Typeface.display(.body))
-                    .foregroundStyle(sounding ? Color.sanctuaryGold : .primary)
+                    .foregroundStyle(sounding ? palette.accent : .primary)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                 Text(album.summary)
@@ -100,6 +103,8 @@ struct WorshipView: View {
 /// One album's page: the whole of it, in the order it is sung.
 struct AlbumView: View {
     let album: Album
+    // see WorshipView: the palette is not observable by itself
+    @EnvironmentObject private var settings: Settings
 
     var body: some View {
         ScrollView {
@@ -111,7 +116,7 @@ struct AlbumView: View {
             .padding(.bottom, 24)
         }
         .scrollEdgeEffectStyle(.soft, for: .top)
-        .background(Color.sanctuaryGround)
+        .background(palette.ground)
         // The name is set as a masthead rather than left to the navigation bar,
         // which truncates anything as long as a monastery's. The bar keeps it
         // too, inline, for where the reader is once the masthead scrolls away.
@@ -125,7 +130,7 @@ struct AlbumView: View {
             Text(album.name)
                 .font(Typeface.display(.largeTitle))
                 .multilineTextAlignment(.center)
-            GoldRule().padding(.top, 8)
+            AccentRule().padding(.top, 8)
             MicroLabel(text: album.summary).padding(.top, 6)
         }
         .frame(maxWidth: .infinity)
@@ -165,7 +170,7 @@ struct TrackList: View {
                 if sounding {
                     Image(systemName: player.isPlaying ? "waveform" : "pause.fill")
                         .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.sanctuaryGold)
+                        .foregroundStyle(palette.accent)
                         .symbolEffect(.variableColor, isActive: player.isPlaying)
                 } else {
                     Circle().fill(.tertiary).frame(width: 7, height: 7)
@@ -175,7 +180,7 @@ struct TrackList: View {
 
             Text(track.title)
                 .font(Typeface.display(.body))
-                .foregroundStyle(sounding ? Color.sanctuaryGold : .primary)
+                .foregroundStyle(sounding ? palette.accent : .primary)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -198,7 +203,7 @@ private extension View {
     /// The one card shape both lists sit on.
     func card() -> some View {
         self
-            .background(Color.sanctuarySurface, in: RoundedRectangle(cornerRadius: 20))
+            .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
             .overlay(RoundedRectangle(cornerRadius: 20).stroke(.separator, lineWidth: 1))
     }
 }
@@ -227,7 +232,7 @@ private struct NowPlaying: View {
         VStack(spacing: 0) {
             ProgressView(value: player.progress)
                 .progressViewStyle(.linear)
-                .tint(Color.sanctuaryGold)
+                .tint(palette.accent)
                 .scaleEffect(x: 1, y: 0.6, anchor: .center)
 
             HStack(spacing: 16) {
@@ -253,11 +258,11 @@ private struct NowPlaying: View {
                 }
                 .accessibilityLabel("Next")
             }
-            .tint(Color.sanctuaryGold)
+            .tint(palette.accent)
             .padding(.horizontal, 18)
             .padding(.vertical, 12)
         }
-        .glassEffect(.regular.tint(Color.sanctuaryGold.opacity(0.12)),
+        .glassEffect(.regular.tint(palette.accent.opacity(0.12)),
                      in: .rect(cornerRadius: 20))
         .padding(.horizontal, 12)
         .padding(.bottom, 6)
