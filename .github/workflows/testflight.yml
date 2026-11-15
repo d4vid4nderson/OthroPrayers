@@ -168,7 +168,22 @@ jobs:
           mkdir -p "$dest"
           cp "$d/profile.mobileprovision" "$dest/$uuid.mobileprovision"
           echo "profile: $name ($uuid)"
-          echo "expires: $(plutil -extract ExpirationDate raw -o - "$d/profile.plist")"
+
+          # The certificate and profile expire, and renewing them is a manual
+          # trip through the browser because this account's API key cannot
+          # reach the portal (see NATIVE.md). Nothing else would announce that
+          # until an upload failed, so it is announced here, early.
+          exp="$(plutil -extract ExpirationDate raw -o - "$d/profile.plist")"
+          echo "expires: $exp"
+          left=$(( ( $(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$exp" +%s 2>/dev/null \
+                       || date -d "$exp" +%s) - $(date +%s) ) / 86400 ))
+          echo "days remaining: $left"
+          if [ "$left" -lt 0 ]; then
+            echo "::error::the provisioning profile expired $(( -left )) days ago — see NATIVE.md to renew"
+            exit 1
+          elif [ "$left" -lt 30 ]; then
+            echo "::warning::the provisioning profile expires in $left days — renewing is manual, see NATIVE.md"
+          fi
 
           echo "PROFILE_NAME=$name" >> "$GITHUB_ENV"
           echo "KEYCHAIN=$kc"       >> "$GITHUB_ENV"

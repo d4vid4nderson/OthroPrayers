@@ -52,16 +52,32 @@ jobs:
       - name: Generate the project
         run: cd ios && xcodegen generate
 
+      # Which simulator exists varies with the runner's Xcode, so it is asked
+      # for rather than named. A hardcoded "iPhone 17" breaks silently the day
+      # the image changes.
+      - name: Pick a simulator
+        id: sim
+        run: |
+          name="$(xcrun simctl list devices available --json | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; print(next((x["name"] for r,v in d.items() if "iOS" in r for x in v if x["name"].startswith("iPhone")), ""))')"
+          [ -n "$name" ] || { echo '::error::no iPhone simulator on this runner'; exit 1; }
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "using: $name"
+
       # No signing: this proves the code compiles, which is the thing that
       # cannot be checked anywhere else. Signing belongs to the release job.
-      - name: Build
+      #
+      # `test`, not `build`: compiling proves the Swift is well-formed, and
+      # nothing more. It cannot tell you the app launches. Every runtime bug
+      # this project has hit — a palette that never redrew, rows that did
+      # nothing when tapped — was invisible to the compiler.
+      - name: Build and test
         run: |
           cd ios
           set -o pipefail
-          xcodebuild build \
+          xcodebuild test \
             -project Prayers.xcodeproj \
             -scheme Prayers \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
             CODE_SIGNING_ALLOWED=NO \
             | tee /tmp/build.log
 
