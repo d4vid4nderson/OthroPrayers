@@ -1,0 +1,7 @@
+The worship recordings live here, and are deliberately not committed:
+they are other people's published work and this repository is public.
+
+This file exists so the directory does, because project.yml references
+Music as a folder and Xcode's copy phase fails if the path is missing.
+
+Run export_music.py on a machine that has the recordings in hymns/.
