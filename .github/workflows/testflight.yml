@@ -124,6 +124,15 @@ jobs:
             echo "NOT FOUND: the key cannot see $want — either the app record is on another team, or the key is scoped elsewhere"
           fi
 
+      # What did Xcode actually resolve? The archive error names what it could
+      # not find; this names what it was looking for.
+      - name: Resolved signing settings
+        continue-on-error: true
+        run: |
+          cd ios
+          xcodebuild -showBuildSettings -scheme Prayers -configuration Release 2>/dev/null \
+            | grep -iE "CODE_SIGN|DEVELOPMENT_TEAM|PROVISIONING|PRODUCT_BUNDLE" | sort -u
+
       - name: Archive
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -131,6 +140,11 @@ jobs:
         run: |
           cd ios
           set -o pipefail
+          # CODE_SIGN_IDENTITY is forced to distribution. Automatic signing is
+          # supposed to pick that for an archive by itself, but the failing run
+          # went looking for "iOS App Development" profiles instead, so it was
+          # not doing so here. An App Store archive can only be signed with a
+          # distribution identity.
           xcodebuild archive \
             -project Prayers.xcodeproj \
             -scheme Prayers \
@@ -142,6 +156,8 @@ jobs:
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             CURRENT_PROJECT_VERSION=${{ steps.ver.outputs.build }} \
+            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
             | tee "$RUNNER_TEMP/archive.log"
 
       - name: Export and upload
