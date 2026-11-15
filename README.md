@@ -1,89 +1,90 @@
-# Prayers for Morning, Day & Night — web edition
+# Western Rite Prayers
 
-A faithful web reproduction of the booklet **_Prayers for Morning, Day &
-Night_** (St. Tikhon's Monastery Press, 2019; made available by the Orthodox
-Church in America at
-[oca.org](https://www.oca.org/files/PDF/Music/Daily/morning-evening-prayers.pdf)).
+A Western Rite Orthodox prayer book as a native iOS app: the four hours of the
+day, *A Little Prayer Book*, the St. Peter Pew Missal and the Vicariate's
+fasting norms.
 
-The page is a single, self-contained static site (`index.html` + `styles.css`
-+ images) that mirrors the printed booklet: white pages, classical serif type,
-red rubrics, drop-caps, the illuminated initial, the three red line-icons, the
-priest/layman table at meals, and the tapering colophon at the end.
+Everything is held on the device. **The app makes no network requests at all** —
+it works in a basement, on a plane, and in church. It is built for personal use
+on your own phone, not for the App Store.
+
+The app is the SwiftUI one in [`ios/`](ios/) — see
+[`ios/NATIVE.md`](ios/NATIVE.md) for building, signing and TestFlight.
+
+## How the prayers get into the app
+
+The text is never retyped. It is generated from the source booklet and carried
+through to the app by two scripts, so the app cannot drift from the source:
 
 ```
-open index.html        # or serve the folder with any static host
+source.pdf
+  → generate.py          → prayers.content.html   (the text, committed)
+  → build.py             → build/*.html           (intermediate, gitignored)
+  → export_content.py    → ios/Content/content.json
 ```
 
-## How it's built
-
-Rather than retyping the prayers (and risking transcription errors), the page
-is **generated directly from the source PDF**, so the wording, the red/black
-styling, the drop-caps and the small-caps lead-ins are taken from the document
-itself.
-
-| file | purpose |
-|------|---------|
-| `source.pdf` | the original OCA / St. Tikhon's booklet (build input) |
-| `generate.py` | parses `source.pdf` → `prayers.content.html` (structure + styling derived from the PDF's fonts, colours and geometry) |
-| `build.py` | wraps the content fragment in the cover + page shell → `index.html` |
-| `styles.css` | typography and layout matching the booklet |
-| `prayers.content.html` | generated body fragment (checked in so the site works without a build step) |
-| `assets/img/` | the three red icons + the illuminated “T”, extracted from the PDF |
-
-To rebuild after changing anything:
-
-```bash
-pip install PyMuPDF pillow
-python3 generate.py     # PDF  -> prayers.content.html
-python3 build.py        # cover + content -> index.html
+```sh
+python3 build.py && python3 export_content.py
 ```
 
-### How the generator works (notes)
+Only the two ends of that chain are committed: `prayers.content.html` and the
+JSON the app reads. The HTML in `build/` is an intermediate step and is served
+to nobody.
 
-- **Drop-caps** are the Arno Pro *Display* glyphs; the small-caps lead-in after
-  them (e.g. `R`+`ising`) is reconstructed from the source layout.
-- **Rubrics / red text** are detected by colour (`#e54e62`); body ink is
-  `#231f20`; the cover links are the PDF's blue `#1e5e9e`.
-- **Running heads and folios** are dropped by position; **paragraphs** are
-  recovered from first-line indents; **wrapped words** are de-hyphenated using a
-  whitelist of genuine compounds harvested from the document.
-- The **priest / layman** instructions are a two-column table in the PDF; the
-  generator re-assembles the interleaved rows into hanging label + response.
-- The ornamental **“Through the prayers…” initial** has no text glyph in the
-  PDF (it's drawn), so it is extracted as a transparent PNG and re-placed.
+It is worth knowing *why* the HTML is still in the middle. The pages are the
+form the prayers were proof-read in, and they are what the safety checks compare
+against:
 
-## Fonts
+- `export_content.py` refuses to drop markup it does not recognise, rather than
+  silently losing a line of a prayer.
+- It counts the ✠ cross-marks in the pages and in the model and fails if the two
+  disagree. This has caught all ten of them vanishing once already.
+- It refuses to write an empty model if the build directory is missing.
 
-The booklet is set in **Adobe Arno Pro**, a *licensed* typeface that cannot be
-redistributed for the web. This edition therefore uses **EB Garamond** (SIL
-Open Font License) — the closest freely-licensed Aldine/Garalde serif — loaded
-from Google Fonts.
+`build.py` also writes `ios/Content/structure.json` — the four hours with their
+time windows, and each book's section order — so the native UI gets them as data
+instead of a second, drifting copy.
 
-If you own an Arno Pro web licence, drop the font files in a `fonts/` folder,
-add an `@font-face`, and put `"Arno Pro"` at the front of the `--serif`
-variable in `styles.css`; the page will use it automatically.
+## What's here
 
-### Reader settings
+| | |
+|---|---|
+| `ios/` | the SwiftUI app — see [`ios/NATIVE.md`](ios/NATIVE.md) |
+| `source.pdf`, `generate.py` | the booklet, and the script that reads it |
+| `prayers.content.html` | the prayer text, generated from the PDF |
+| `build.py` | assembles the pages (intermediate, into `build/`) |
+| `export_content.py` | pages → `ios/Content/content.json` |
+| `export_music.py` | recordings → `ios/Content/music.json` |
+| `generate_icons.py` | the app icon, from `assets/icons/app-icon.svg` |
 
-The top-bar gear (⚙) opens a settings menu with **text size**, **light / dark
-theme** (sun & moon icons; dark is a dark-gray page with light + red text), and
-a **dyslexia-friendly** reading mode that switches to **OpenDyslexic** with
-left-aligned, loosened spacing. Choices persist in `localStorage` and the theme
-follows the OS setting by default. Both EB Garamond and OpenDyslexic are
-self-hosted under the SIL Open Font License (`fonts/OFL.txt`,
-`fonts/OpenDyslexic-LICENSE.txt`) — no third-party font requests.
+`build.py` still carries a `WESTERN_ONLY` switch from when this was also a
+website covering both rites. It defaults to on, and the Eastern content it
+would need is no longer in the repository, so `WESTERN_ONLY=0` will not build.
 
-## Attribution & copyright
+## The app icon
 
-These prayers are excerpted from **_Orthodox Christian Prayers_**, edited by
-Priest John Mikitish & Hieromonk Herman (Majkrzak) (South Canaan, Penn.:
-**St. Tikhon's Monastery Press**, 2019). **© 2019 St. Tikhon's Monastery
-Press. All rights reserved.** The original booklet states that permission is
-granted for the document to be made available on www.oca.org for those who wish
-to use these prayers in their homes.
+Vector. `assets/icons/app-icon.svg` is the master, with the lettering converted
+to outlines so it carries no font dependency and renders identically at any
+size.
 
-The translation, the iconographic line-art, and the typesetting are the
-property of St. Tikhon's Monastery Press / OCA. This repository reproduces them
-for personal/devotional use with attribution preserved. **Review these terms
-before publishing this site publicly**, and consider contacting St. Tikhon's
-Monastery Press for any use beyond the permission above.
+```sh
+python3 generate_icons.py --ios
+```
+
+Needs `fontTools` and a rasterizer, and writes the Xcode asset catalog with all
+three iOS appearances. It still emits a few web favicons alongside them, left
+over from the website; they are harmless and uncommitted.
+
+## The worship recordings
+
+`ios/Music/` and `hymns/` are deliberately **not** in this repository — the
+recordings are other people's published work and this repo is public. A fresh
+clone has the Worship screen's manifest and none of its audio. To restore them
+on a machine that has the files, put them in `hymns/` and run `python3
+export_music.py`.
+
+## Provenance
+
+The prayers are from the Western Rite Vicariate's booklets. The text is
+reproduced from the source document rather than transcribed, so the wording and
+the rubrics are the booklet's own.

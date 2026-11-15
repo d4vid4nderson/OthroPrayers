@@ -6,6 +6,7 @@ prayers either. So this reads the generated pages and emits one JSON file of
 semantic blocks — headings, rubrics, verses and their inline marks — that
 SwiftUI can render directly.
 
+The pages are an intermediate product in build/ — nothing is served anywhere.
 Run after build.py:
 
     python3 build.py && python3 export_content.py
@@ -22,6 +23,7 @@ import sys
 from html.parser import HTMLParser
 
 OUT = "ios/Content/content.json"
+SRC = os.environ.get("OUT_DIR", "build")   # where build.py put the pages
 SIGNUM_CHAR = "\u2720"   # ✠ — the mark the printed booklet uses
 
 # whole subtrees that are page chrome, not content: the native app provides
@@ -226,7 +228,7 @@ def page_content(path):
 def main():
     import glob
     pages, unknown = [], set()
-    for f in sorted(glob.glob("*.html")):
+    for f in sorted(glob.glob(os.path.join(SRC, "*.html"))):
         if ".content." in f:
             continue
         got = page_content(f)
@@ -239,6 +241,10 @@ def main():
     if unknown:
         sys.exit("unrecognised markup — refusing to drop content silently:\n  "
                  + "\n  ".join(sorted(unknown)))
+    # An empty or missing build directory must not quietly produce an empty
+    # model — that would ship an app with no prayers in it.
+    if not pages:
+        sys.exit(f"no pages found in {SRC}/ — run `python3 build.py` first")
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     doc = {"generated": True, "pages": pages}
     with open(OUT, "w") as f:
@@ -247,7 +253,8 @@ def main():
     # all ten cross-marks being dropped once already.
     import glob as _glob
     html_signa = sum(open(f).read().count('class="signum"')
-                     for f in _glob.glob("*.html") if ".content." not in f)
+                     for f in _glob.glob(os.path.join(SRC, "*.html"))
+                     if ".content." not in f)
     json_signa = sum(r["t"].count(SIGNUM_CHAR)
                      for p in pages for b in p["blocks"] for r in b["runs"])
     if html_signa != json_signa:
