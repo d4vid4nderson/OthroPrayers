@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
-"""Assemble index.html (the prayer booklet) and resources.html (the Resources
-area, incl. the Early Church Fathers reading checklist) from a shared shell.
+"""Assemble the prayer pages from prayers.content.html.
+
+These pages are an *intermediate* build product, not a deliverable. The app is
+the SwiftUI one in ios/; this script exists because the pages are the form the
+prayer text is proof-read and verified in, and export_content.py turns them
+into the content model the app actually reads:
+
+    prayers.content.html -> build.py -> build/*.html -> export_content.py
+                                                     -> ios/Content/content.json
+
+So nothing here is served to anyone. The output goes to build/, which is
+gitignored; only content.json and structure.json are committed.
+
 Run `python3 generate.py` first to (re)produce prayers.content.html."""
 
 import glob
-import hashlib
 import json
 import os
 import re
 from urllib.parse import quote, urlparse
 
-import generate_calendars as gc
-
 # ---- build modes -----------------------------------------------------------
-# The normal build writes the whole site — both rites — into the repo root,
-# which is what Vercel deploys. APP_BUILD=1 with OUT_DIR writes the same pages
-# for bundling into the iOS app instead: no favicon, manifest or service worker
-# (everything ships inside the app, so there is nothing to cache).
-# Two independent switches, deliberately:
-#   WESTERN_ONLY — content scope. On by default: the site is a Western Rite
-#     prayer book. WESTERN_ONLY=0 brings the Eastern side back.
-#   APP_BUILD    — the bundled-app target. No favicon, manifest or service
-#     worker (a WebView needs none), and the assets are copied to OUT_DIR.
+# WESTERN_ONLY — content scope. On by default: this is a Western Rite prayer
+#   book. WESTERN_ONLY=0 brings the Eastern side back.
 WESTERN_ONLY = os.environ.get("WESTERN_ONLY", "1") != "0"
-APP_BUILD = os.environ.get("APP_BUILD") == "1"
-OUT_DIR = os.environ.get("OUT_DIR", ".")
+OUT_DIR = os.environ.get("OUT_DIR", "build")
 
 # the only pages the Western-only build emits; the hub becomes index.html
 WESTERN_KEEP = {"western.html", "western-compline.html", "western-fasting.html",
@@ -432,7 +432,9 @@ def _western_chrome(tmpl, app=False):
 
 
 if WESTERN_ONLY:
-    TABBAR_TMPL = _western_chrome(TABBAR_TMPL, app=APP_BUILD)
+    # app=True: there is no service worker any more, so the offline switch the
+    # web build carried would point at nothing.
+    TABBAR_TMPL = _western_chrome(TABBAR_TMPL, app=True)
 
 
 def tabbar(active="", current=""):
@@ -1444,10 +1446,7 @@ document.querySelectorAll('a.cal-btn.sub'),function(a){
 a.href="webcal://"+h+"/calendars/"+a.getAttribute("data-sub");});})();
 </script>'''
 
-GREEK_JS = '<script src="greek-tool.js?v=8" defer></script>'
-BIBLE_JS = ('<script src="bible-index.js?v=1" defer></script>\n'
-            '<script src="bible-plan-data.js?v=1" defer></script>\n'
-            '<script src="bible.js?v=2" defer></script>')
+
 
 
 # ---- the People's Responses at the services (laity's parts) ----------------
@@ -1553,163 +1552,6 @@ def services_page():
     o.append(art("chirho", foot=True))
     o.append('</section>')
     return "\n".join(o)
-
-
-def bible_page():
-    return "\n".join([
-        '<section class="resources bible-page" id="top">',
-        _divider("Holy Scripture"),
-        '<p class="res-intro">The Old Testament in Brenton&rsquo;s Septuagint (1851), with the '
-        'deuterocanon, and the New Testament in the World English Bible &mdash; public domain.</p>',
-        '<div id="bible" class="bible"><p class="bible-loading">Opening the Scriptures&hellip;</p></div>',
-        '</section>'])
-
-
-# ---- Bible in a Year: a cover-to-cover daily reading plan -------------------
-# Built from the app's own canon data (bible-index.js), so it always matches
-# what's actually in the reader. The whole canon, in its existing OT->NT order,
-# is flattened to one chapter per entry and cut into 365 contiguous, evenly
-# sized slices — a straight read-through plan, not a lectionary.
-_bidx_raw = open("bible-index.js", encoding="utf-8").read().strip()
-BIBLE_CANON = json.loads(_bidx_raw[len("window.BIBLE="):].rstrip(";"))
-
-_MONTHS = ["January", "February", "March", "April", "May", "June",
-           "July", "August", "September", "October", "November", "December"]
-_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-
-def _build_bible_plan():
-    flat = []
-    for b in BIBLE_CANON["books"]:
-        for c in range(1, b["ch"] + 1):
-            flat.append((b["id"], b["n"], b["ch"], c))
-    total = len(flat)
-    cal = [(mi, dd) for mi, nd in enumerate(_MONTH_DAYS) for dd in range(1, nd + 1)]
-    plan, prev = [], 0
-    for day in range(1, 366):
-        end = total if day == 365 else round(total * day / 365)
-        groups = []
-        for bid, name, tot, ch in flat[prev:end]:
-            if groups and groups[-1][0] == bid:
-                groups[-1][3] = ch      # extend the current book's range
-            else:
-                groups.append([bid, name, ch, ch, tot])   # bid, name, start, end, total-ch
-        prev = end
-        mi, dd = cal[day - 1]
-        plan.append({"day": day, "month": mi, "label": f"{_MONTHS[mi][:3]} {dd}", "groups": groups})
-    return plan
-
-
-BIBLE_PLAN = _build_bible_plan()
-
-# a compact day -> [[bookId, startChapter, endChapter], ...] table so bible.js
-# can render a whole day's reading (which may span several books) as one page,
-# without duplicating the plan's chapter math client-side
-_plan_days = [[[g[0], g[2], g[3]] for g in d["groups"]] for d in BIBLE_PLAN]
-open("bible-plan-data.js", "w").write(
-    "window.BIBLE_DAYS=" + json.dumps(_plan_days, ensure_ascii=False, separators=(",", ":")) + ";\n")
-print("wrote bible-plan-data.js", len(_plan_days), "days")
-
-
-def _byr_ref(groups):
-    parts = []
-    for bid, name, start, end, tot in groups:
-        if tot == 1:
-            parts.append(name)                         # a one-chapter book is cited without a number
-        elif start == end:
-            parts.append(f"{name} {start}")
-        else:
-            parts.append(f"{name} {start}–{end}")
-    return " · ".join(parts)
-
-
-_BYR_READ_I = ('<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" '
-               'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-               '<path d="M2 5h8a3 3 0 0 1 3 3v11a2.5 2.5 0 0 0-2.5-2.5H2z"/>'
-               '<path d="M22 5h-8a3 3 0 0 0-3 3v11a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>')
-
-# highlights today's row (a 365-day table, so a leap day shares Feb 28's reading)
-# and drives the "Jump to today" button
-BYR_JS = ('<script>(function(){'
-          'function leap(y){return (y%4===0&&y%100!==0)||y%400===0;}'
-          'var now=new Date(),day=Math.floor((now-new Date(now.getFullYear(),0,1))/86400000)+1;'
-          'if(leap(now.getFullYear())&&day>59)day--; if(day>365)day=365;'
-          'var el=document.querySelector(\'.byr-item[data-day="\'+day+\'"]\');'
-          'if(el)el.classList.add("byr--today");'
-          'var jump=document.getElementById("byr-today");'
-          'if(jump)jump.addEventListener("click",function(e){e.preventDefault();'
-          'if(el)el.scrollIntoView({block:"center",behavior:"smooth"});});'
-          '})();</script>')
-
-
-def bible_plan_page():
-    o = ['<section class="resources byr-page" id="top">', BACK, _divider("Bible in a Year")]
-    o.append('<p class="res-intro">The whole canon, cover to cover &mdash; the Old Testament in '
-              'Brenton&rsquo;s Septuagint with the deuterocanon, and the New Testament in the World '
-              'English Bible &mdash; paced evenly across 365 days. Tick off each day as you go; your '
-              'progress is saved on this device.</p>')
-    o.append('<p class="byr-jump"><a class="cf-chip" id="byr-today" href="#">Jump to today</a></p>')
-    o.append('<div class="cf-progress-wrap"><div class="cf-progress-row">'
-              '<span id="byr-progress">0 read</span></div>'
-              '<span class="cf-track"><span id="byr-bar" class="cf-fill"></span></span></div>')
-    cur_month = -1
-    for d in BIBLE_PLAN:
-        if d["month"] != cur_month:
-            if cur_month != -1:
-                o.append('</ul></section>')
-            cur_month = d["month"]
-            o.append(f'<section class="cf-era"><h3 class="cf-era-h">{_MONTHS[cur_month]}</h3><ul class="cf-list">')
-        o.append(f'<li class="cf-item byr-item" data-day="{d["day"]}">'
-                  f'<label class="cf-check"><input type="checkbox" data-byr="{d["day"]}">'
-                  f'<span class="cf-title">{d["label"]}<span class="office-now">Today</span></span></label>'
-                  f'<div class="cf-meta"><span class="cf-by">{_byr_ref(d["groups"])}</span></div>'
-                  f'<div class="cf-chips"><a class="cf-chip" href="scripture.html#day/{d["day"]}">'
-                  f'{_BYR_READ_I}<span>Read</span></a></div></li>')
-    o.append('</ul></section>')
-    o.append('<p class="res-foot">A straight read-through, not a lectionary &mdash; for the '
-              'Church&rsquo;s appointed daily Scripture readings, follow your parish calendar.</p>')
-    o.append(art("gospel", foot=True))
-    o.append('</section>')
-    return "\n".join(o)
-
-
-def greek_page():
-    return "\n".join([
-        '<section class="resources" id="top">', BACK, _divider("Greek Photo Translator"),
-        '<p class="topic-intro">Take or choose a photo of Greek text and this will read it and '
-        'translate it. It <strong>needs an internet connection</strong>, and works best on '
-        '<strong>clear, straight-on, well-lit printed Greek</strong>. Stylised icon lettering, '
-        'calligraphy and heavy accents are often misread — when that happens, correct the text in '
-        'the box and translate again, or open it in Google Translate for the best result.</p>',
-        '<div class="gk">',
-        # capture zone — doubles as the empty state
-        f'<label class="gk-drop" for="gk-file"><span class="gk-drop-i" aria-hidden="true">{CAMERA}</span>'
-        '<span class="gk-drop-t">Take or choose a photo</span>'
-        '<span class="gk-drop-d">Clear, straight-on, well-lit printed Greek works best</span></label>',
-        '<input id="gk-file" type="file" accept="image/*" hidden>',
-        '<img id="gk-img" class="gk-img" alt="Your photo" hidden>',
-        '<div class="gk-status-row"><span id="gk-spin" class="gk-spin" aria-hidden="true" hidden></span>'
-        '<p id="gk-status" class="gk-status" aria-live="polite"></p></div>',
-        # result cards
-        '<div class="gk-card gk-card-greek">'
-        '<div class="gk-card-h">Greek <span class="gk-hint">(correct it if the reading is off)</span></div>'
-        '<textarea id="gk-greek" class="gk-greek" rows="3" dir="auto" '
-        'placeholder="Greek text appears here — or type it in"></textarea>'
-        '<button id="gk-go" class="gk-mini" type="button">Translate again</button></div>',
-        '<div class="gk-card gk-card-translit">'
-        '<div class="gk-card-h">Transliteration</div>'
-        '<p id="gk-translit" class="gk-translit"></p></div>',
-        '<div class="gk-card gk-card-en">'
-        '<div class="gk-card-h">English <span class="gk-hint">(rough)</span></div>'
-        '<p id="gk-en" class="gk-en"></p>'
-        '<a id="gk-gt" class="gk-cta" target="_blank" rel="noopener" hidden>Open in Google Translate</a></div>',
-        '</div>',
-        '<p class="res-foot">Text recognition runs in your browser (open-source); the rough '
-        'translation uses a free public service, and the button above hands the text to Google '
-        'Translate for a much better rendering. None is perfect — for careful study, compare with a '
-        'printed translation. This is the one part of the app that reaches the internet.</p>',
-        art("gospel", foot=True),
-        '</section>'])
 
 
 # ---- scripts ---------------------------------------------------------------
@@ -1887,29 +1729,7 @@ CONTROL_JS = '''<script>
     } else { L.setItem("fastnotify","0"); paintFn(); }
   };
 
-  // available offline (registers a service worker that caches the whole app)
-  var swOk=("serviceWorker" in navigator);
-  var offBtn=d.getElementById("offline"), offNote=d.getElementById("offline-note");
-  function paintOff(){ if(offBtn) offBtn.setAttribute("aria-checked", L.getItem("offline")==="1"?"true":"false"); }
-  function clearCaches(){ if(window.caches) caches.keys().then(function(ks){
-    ks.forEach(function(k){ if(k.indexOf("ortho-")===0) caches.delete(k); }); }); }
-  if(offBtn){
-    if(!swOk){ offBtn.setAttribute("disabled","true"); if(offNote) offNote.textContent="Offline use isn’t supported by this browser."; }
-    offBtn.onclick=function(){
-      if(!swOk) return;
-      if(L.getItem("offline")==="1"){
-        L.setItem("offline","0"); paintOff();
-        navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); });
-        clearCaches();
-      } else {
-        L.setItem("offline","1"); paintOff();
-        navigator.serviceWorker.register("sw.js");
-      }
-    };
-  }
-  if(swOk && L.getItem("offline")==="1") navigator.serviceWorker.register("sw.js");
-
-  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintMss(); paintCal(); paintFn(); paintOff(); paintRite();
+  paintTheme(); paintTemp(); paintSwatches(); paintDys(); paintMss(); paintCal(); paintFn(); paintRite();
 
   // The tab bar is plain navigation: each tab is an <a> that loads its page,
   // and CSS marks the active one (a filled highlight behind the icon). No JS.
@@ -1919,35 +1739,8 @@ CONTROL_JS = '''<script>
 # service worker: precache the whole app for offline use (opt-in via Settings).
 # __VERSION__ / __ASSETS__ are filled at build time. Cross-origin (external
 # links) are left to the network; same-origin is cache-first.
-SW_TMPL = '''const CACHE="ortho-__VERSION__";
-const ASSETS=__ASSETS__;
-self.addEventListener("install", function(e){
-  e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(ASSETS); })
-    .then(function(){ return self.skipWaiting(); }));
-});
-self.addEventListener("activate", function(e){
-  e.waitUntil(caches.keys().then(function(keys){
-    return Promise.all(keys.map(function(k){ if(k!==CACHE && k.indexOf("ortho-")===0) return caches.delete(k); }));
-  }).then(function(){ return self.clients.claim(); }));
-});
-self.addEventListener("fetch", function(e){
-  var req=e.request;
-  if(req.method!=="GET") return;
-  if(new URL(req.url).origin!==location.origin) return;   // external links use the network
-  e.respondWith(caches.match(req, {ignoreSearch:true}).then(function(hit){
-    if(hit) return hit;
-    return fetch(req).then(function(res){
-      if(res && res.status===200 && res.type==="basic"){
-        var copy=res.clone(); caches.open(CACHE).then(function(c){ c.put(req, copy); });
-      }
-      return res;
-    }).catch(function(){
-      if(req.mode==="navigate") return caches.match("index.html");
-      return Response.error();
-    });
-  }));
-});
-'''
+
+
 
 # ---- user theming: Tailwind palette for primary/secondary colour pickers ----
 # shades used: 400/500 (dark accents + swatch dots), 600 (secondary light),
@@ -2070,10 +1863,10 @@ HEAD_TMPL = '''<!doctype html>
 '''
 
 
-if APP_BUILD:
-    # a bundled WebView has no browser tab, no home-screen shortcut and no
-    # manifest — the app icon comes from the Xcode asset catalog instead
-    _WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
+# The pages are an intermediate build product now, not a site: no browser tab,
+# no home-screen shortcut, no manifest. The app icon comes from the Xcode asset
+# catalog instead (see generate_icons.py --ios).
+_WEB_ICON_LINKS = """<link rel="icon" href="favicon.ico?v=8" sizes="32x32">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=8" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=8" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32-dark.png?v=8" media="(prefers-color-scheme: dark)">
@@ -2081,7 +1874,7 @@ if APP_BUILD:
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=8">
 <link rel="manifest" href="site.webmanifest?v=9">
 """
-    HEAD_TMPL = HEAD_TMPL.replace(_WEB_ICON_LINKS, "")
+HEAD_TMPL = HEAD_TMPL.replace(_WEB_ICON_LINKS, "")
 
 
 def page(path, title, desc, body, active="", scripts=""):
@@ -3343,30 +3136,6 @@ page("calendar.html", "The Church Calendar — Daily Prayers",
      "Calendar, Outlook and Apple Calendar — feasts, fasts and the Paschal cycle.",
      calendar_page(), active="resources", scripts=CAL_JS)
 
-page("greek.html", "Greek Photo Translator — Daily Prayers",
-     "Photograph Greek text and read it in English — on-device recognition with transliteration "
-     "and translation. Online tool; results are approximate.",
-     greek_page(), active="resources", scripts=GREEK_JS)
-
-# the People's Responses at the Divine Services (linked from the Prayers hub)
-page("services.html", "The People's Responses — Daily Prayers",
-     "The words the faithful say and sing at Vespers and the Divine Liturgy — the laity's "
-     "responses, to follow along at the services.",
-     services_page(), active="prayers")
-
-# the in-app Bible reader (Brenton LXX OT + WEB NT; data in bible/*.json).
-# NB: the canon *article* owns bible.html; the reader is scripture.html
-page("scripture.html", "Holy Scripture — Daily Prayers",
-     "Read the Bible: the Old Testament in Brenton's Septuagint (with the deuterocanon) and the "
-     "New Testament in the World English Bible — public domain, available offline.",
-     bible_page(), active="read", scripts=BIBLE_JS)
-
-# a day-by-day cover-to-cover plan generated from the same canon (bible-index.js)
-page("bible-plan.html", "Bible in a Year — Daily Prayers",
-     "A day-by-day plan to read the whole Bible in a year — the Old Testament in Brenton's "
-     "Septuagint with the deuterocanon, and the New Testament in the World English Bible — "
-     "linking straight into the in-app reader.",
-     bible_plan_page(), active="resources", scripts=BYR_JS)
 
 # in-depth articles (Councils, the Bible & its canon)
 for _a in ARTICLES:
@@ -3380,49 +3149,6 @@ REF_ORN = {"The Creeds": "chirho",
 for ref in REF_SECTIONS:
     page(f'{REF_SLUGS[ref["name"]]}.html', f'{ref["name"]} — Daily Prayers',
          ref.get("blurb", "") or ref["name"], ref_page(ref, REF_ORN[ref["name"]]), active="resources")
-
-# feast data for the client-side "This Week" panel + fast reminder (single source
-# of truth: the lists in generate_calendars.py)
-_caldata = {
-    "fixed": [[m, dd, name, great] for (m, dd, name, great) in gc.FIXED],
-    "moveable": [[off, name, great] for (off, name, great) in gc.MOVEABLE],
-    "offset": gc.JULIAN_OFFSET,
-}
-open(_out("calendar-data.js"), "w").write("window.OC=" + json.dumps(_caldata, ensure_ascii=False) + ";\n")
-print("wrote calendar-data.js", len(gc.FIXED), "fixed +", len(gc.MOVEABLE), "moveable")
-
-# generated theming stylesheet (background temperature + Tailwind primary/secondary)
-open(_out("themes.css"), "w").write(themes_css())
-print("wrote themes.css", len(TW_ORDER), "colour families")
-
-# recolourable masks for the red woodcut icons (so they follow the primary colour).
-# These write back into the repo's own assets, so only the web build runs them;
-# the app build copies the results.
-if not APP_BUILD:
-    gen_icon_masks()
-    gen_photo_masks()
-
-if APP_BUILD:
-    # copy the static files the built pages actually reference. No service
-    # worker: a bundled app is already offline, and there is nothing to update.
-    import shutil
-    for _f in ["styles.css", "sanctuary.css", "terminal.css", "calendar.js"]:
-        shutil.copy2(_f, _out(_f))
-    shutil.copytree("fonts", os.path.join(OUT_DIR, "fonts"), dirs_exist_ok=True)
-    # only the artwork the built pages actually reference
-    _refs = set()
-    for _html in glob.glob(os.path.join(OUT_DIR, "*.html")):
-        _refs.update(re.findall(r'(assets/[A-Za-z0-9_./-]+?\.(?:png|jpg|jpeg|svg|webp))',
-                                open(_html).read()))
-    for _a in sorted(_refs):
-        if os.path.exists(_a):
-            shutil.copy2(_a, _out(_a))
-    print("copied", len(_refs), "artwork files")
-    _n = sum(len(fs) for _r, _ds, fs in os.walk(OUT_DIR))
-    _sz = sum(os.path.getsize(os.path.join(_r, f))
-              for _r, _ds, fs in os.walk(OUT_DIR) for f in fs)
-    print(f"western-only build -> {OUT_DIR}: {_n} files, {_sz / 1e6:.1f} MB")
-    raise SystemExit(0)
 
 # ---- structure for the native app -----------------------------------------
 # The hours and their time windows, and each book's section order, live here in
@@ -3457,43 +3183,3 @@ if WESTERN_ONLY:
         json.dump(_structure, _f, ensure_ascii=False, indent=1)
     print("wrote ios/Content/structure.json",
           len(_structure["hours"]), "hours,", len(_structure["books"]), "books")
-
-# ---- service worker: precache the whole app for offline use ----------------
-# build inputs that are NOT deployed (see .vercelignore) — must never be listed,
-# or cache.addAll() would 404 and the whole offline install would fail
-_NODEPLOY = {"prayers.content.html", "ancient.content.html",
-             "assets/icons/app-icon.svg"}
-_assets = {"./"}
-_pages = sorted(set(glob.glob("*.html")) - _NODEPLOY)
-_assets.update(_pages)
-# precache only what the built pages actually pull in. Deriving this from the
-# output rather than a hand-kept list means trimming the site's scope can never
-# leave a dead entry behind — one 404 fails cache.addAll() and the whole
-# offline install with it.
-_referenced = set()
-for _p in _pages:
-    _referenced.update(re.findall(r'(?:src|href)="([^"]+?\.(?:js|css|webmanifest|ico))(?:\?[^"]*)?"',
-                                  open(_p).read()))
-for _p in sorted(_referenced) + ["favicon.ico"]:
-    if os.path.exists(_p):
-        _assets.add(_p)
-# note: the per-book bible/*.json (~5MB) are never precached — they are cached
-# at runtime as chapters are read, to keep the offline install lean
-for _pat in ["fonts/*.woff2", "assets/img/*", "assets/icons/*"]:
-    _assets.update(glob.glob(_pat))
-if not WESTERN_ONLY:
-    _assets.update(glob.glob("calendars/*.ics"))
-_assets = sorted(a for a in _assets if a not in _NODEPLOY)
-# cache version = hash of the cached files' contents, so a new deploy busts it
-_h = hashlib.sha1()
-for _p in _assets:
-    if _p == "./":
-        continue
-    try:
-        _h.update(open(_p, "rb").read())
-    except OSError:
-        pass
-_sw = SW_TMPL.replace("__VERSION__", _h.hexdigest()[:10]) \
-             .replace("__ASSETS__", json.dumps(_assets))
-open("sw.js", "w").write(_sw)
-print("wrote sw.js", len(_assets), "assets, cache", _h.hexdigest()[:10])

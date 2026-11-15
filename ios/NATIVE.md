@@ -1,11 +1,14 @@
 # The native app
 
-A SwiftUI app — no WebView — built from the same content as the site.
+A SwiftUI app — no WebView. This is the app; there is no longer a website
+beside it.
 
-> **None of the Swift in here has ever been compiled.** It was written on Linux,
-> where there is no Swift toolchain and no iOS SDK, so nothing could be
-> type-checked. Expect the first build to need fixes. Everything *generated* —
-> the content model, the structure, the fonts, the icons — has been verified.
+> **Most of this has compiled on a Mac, but not all of it.** The Swift is
+> written on Linux, where there is no Swift toolchain and no iOS SDK, so
+> nothing can be type-checked here. The core built and ran; anything added
+> since may still need fixes on the first build. Everything *generated* — the
+> content model, the structure, the fonts, the icons — is verified on every
+> change.
 
 ## How the content gets here
 
@@ -13,9 +16,12 @@ A SwiftUI app — no WebView — built from the same content as the site.
 generators turn it into data the app reads at launch:
 
 ```sh
-python3 build.py            # writes the pages, and ios/Content/structure.json
+python3 build.py            # writes build/*.html, and ios/Content/structure.json
 python3 export_content.py   # writes ios/Content/content.json
 ```
+
+The pages in `build/` are an intermediate step and are gitignored — nothing is
+served anywhere. See the root [README](../README.md) for the whole chain.
 
 - **`structure.json`** — the four hours with their time windows, each book's
   section order, and the extras.
@@ -40,9 +46,10 @@ cd ios && xcodegen generate && open Prayers.xcodeproj
 Then set your team under **Signing & Capabilities** (or put the Team ID in
 `project.yml` under `DEVELOPMENT_TEAM`).
 
-Deployment target is **iOS 26.0**, for Liquid Glass. Drop it to 18.0 in
-`project.yml` if you need older devices; the app uses stock components, so it
-degrades to the pre-Liquid-Glass look rather than breaking.
+Deployment target is **iOS 27.0**, for second-iteration Liquid Glass and
+`.crossFade`. Drop it to 18.0 in `project.yml` if you need older devices; the
+app uses stock components, so it degrades to the pre-Liquid-Glass look rather
+than breaking.
 
 ## How it adopts iOS 27
 
@@ -57,15 +64,16 @@ One place is marked for you to upgrade on the Mac: the hero card on Today uses
 without a compiler. There is a comment in `TodayView.swift` showing the
 `.glassEffect(…)` form to try once it builds.
 
-## What the native version gains over the WebView
+## What going native bought
 
 - **Real Dynamic Type.** Every size is a semantic text style, so the app follows
-  the phone's own text-size, bold-text and contrast settings. The web version's
-  bespoke three-step control is gone — nothing else on the device knew about it.
+  the phone's own text-size, bold-text and contrast settings. The bespoke
+  three-step control the web version carried is gone — nothing else on the
+  device knew about it.
 - **Local notifications** for each hour. No server, nothing leaves the phone.
 - **VoiceOver** that reads a prayer as one passage, with the contents disclosure
   announcing its own state.
-- **The app icon follows the phone's appearance** — bronze, steel, tinted.
+- **The app icon follows the phone's appearance** — light, dark, tinted.
 
 ## TestFlight
 
@@ -119,13 +127,14 @@ first thing a tester sees and App Store Connect renders it large.
 python3 generate_icons.py --ios
 ```
 
-That writes the web icons, the favicons and the Xcode catalog with all three
-iOS appearances, and copies the catalog into the project.
+That writes the Xcode catalog with all three iOS appearances and copies it into
+the project. It still emits a few web favicons alongside them, left over from
+the website; they are harmless and uncommitted.
 
 ## Still to do
 
 - **Widgets** — today's office on the Lock Screen or Home Screen. Real Swift
   work, not a plugin.
-- **The Capacitor app is still here** (`ios/www`, `capacitor.config.json`,
-  `package.json`). It still works, and is the fallback until this one builds.
-  Delete it once you are happy.
+
+The Capacitor fallback (`ios/www`, `capacitor.config.json`, `package.json`) is
+gone, along with the website it wrapped. This app is the only one now.
