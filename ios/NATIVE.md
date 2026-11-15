@@ -89,6 +89,25 @@ What you still have to do:
    review but is still a review — and a prayer book that is entirely offline
    content is a much easier case to make than a thin web wrapper.
 
+### The worship recordings
+
+`project.yml` lists `Music` as a source, but **`ios/Music/` is not in this
+repository** and neither is `hymns/`: the recordings are other people's
+published work and this repo is public. A fresh clone therefore has the
+Worship screen's manifest but none of its audio.
+
+To restore them on a machine that has the files, put them in `hymns/` — a
+folder of recordings becomes a collection with its own page, a loose file
+beside the folders becomes a single — and run:
+
+```sh
+python3 export_music.py
+```
+
+That normalises the names, reads each duration, stages the audio into
+`ios/Music/` where `project.yml` picks it up as a folder reference, and
+rewrites `ios/Content/music.json`.
+
 ### The app icon
 
 Vector. `assets/icons/app-icon.svg` is the master, with the lettering converted
