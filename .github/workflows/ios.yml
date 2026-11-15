@@ -1,0 +1,74 @@
+name: iOS
+
+# A Mac that exists for ten minutes at a time. The Swift in this repository is
+# written on Linux, where there is no Swift toolchain and no iOS SDK, so this
+# workflow is the only thing that actually type-checks it.
+#
+# macOS runners are free for public repositories.
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Printed before anything else: the deployment target is iOS 27, and if
+      # the runner's Xcode has no iOS 27 SDK the build failure below is about
+      # the toolchain, not the code. This makes that obvious in one glance.
+      - name: Toolchain
+        run: |
+          sw_vers
+          echo "--- Xcodes installed ---"
+          ls /Applications | grep -i '^Xcode' || true
+          echo "--- selected ---"
+          xcodebuild -version
+          echo "--- iOS SDKs ---"
+          xcodebuild -showsdks | grep -i iphone || true
+
+      # The content model is generated, and committed. If these two disagree,
+      # the app would ship prayers that no longer match their source.
+      - name: Content model is in sync with its generators
+        run: |
+          python3 build.py
+          python3 export_content.py
+          git diff --exit-code ios/Content/ \
+            || { echo "::error::ios/Content is stale — run build.py && export_content.py and commit"; exit 1; }
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate the project
+        run: cd ios && xcodegen generate
+
+      # No signing: this proves the code compiles, which is the thing that
+      # cannot be checked anywhere else. Signing belongs to the release job.
+      - name: Build
+        run: |
+          cd ios
+          set -o pipefail
+          xcodebuild build \
+            -project Prayers.xcodeproj \
+            -scheme Prayers \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee /tmp/build.log
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: /tmp/build.log
+          if-no-files-found: ignore

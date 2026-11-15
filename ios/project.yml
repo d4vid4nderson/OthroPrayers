@@ -39,10 +39,14 @@ targets:
       # never copied, so the app cannot drift from the site
       - path: Content
       # the monastery recordings, as a folder reference so they arrive in the
-      # bundle under Music/ rather than as 19 loose files at its root
+      # bundle under Music/ rather than as 19 loose files at its root.
+      # optional: the recordings are gitignored (other people's published work,
+      # public repo), so a fresh clone — and CI — has no Music/ at all and must
+      # still be able to generate and build.
       - path: Music
         type: folder
         buildPhase: resources
+        optional: true
     info:
       path: App/Info.plist
       properties:
