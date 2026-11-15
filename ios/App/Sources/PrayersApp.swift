@@ -48,8 +48,13 @@ struct RootView: View {
             Tab("Missal", systemImage: "book.pages", value: Pane.missal) {
                 NavigationStack { bookView(slug: "st-peter-missal", fallback: "Missal") }
             }
-            Tab("Worship", systemImage: "music.note.list", value: Pane.worship) {
-                NavigationStack { WorshipView() }
+            // Only when there is something to hear. A build made from a clean
+            // checkout has the manifest but none of the audio, and a tab full
+            // of rows that do nothing when tapped is worse than no tab.
+            if Chant.hasAudio {
+                Tab("Worship", systemImage: "music.note.list", value: Pane.worship) {
+                    NavigationStack { WorshipView() }
+                }
             }
             Tab("Settings", systemImage: "gearshape", value: Pane.settings) {
                 NavigationStack { SettingsView() }

@@ -155,6 +155,10 @@ struct TrackList: View {
                     row(track)
                 }
                 .buttonStyle(.plain)
+                // A recording whose file is not in this build cannot play, so
+                // the row says so rather than ignoring the tap in silence.
+                .disabled(track.url == nil)
+                .opacity(track.url == nil ? 0.4 : 1)
                 if track.id != tracks.last?.id {
                     Divider().padding(.leading, 18)
                 }

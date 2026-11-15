@@ -23,7 +23,10 @@ settings:
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "7"
     SWIFT_VERSION: "6.0"
-    DEVELOPMENT_TEAM: RN599658F9   # David Anderson (personal team)
+    DEVELOPMENT_TEAM: RN599658F9   # David Anderson — the paid team;
+                                   # "personal team" was a misnomer, and sent
+                                   # me looking for a signing bug that was not
+                                   # there
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal   # tighten once it builds clean

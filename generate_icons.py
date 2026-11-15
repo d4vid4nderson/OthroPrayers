@@ -193,7 +193,11 @@ def main():
     ]
     if want_ios:
         jobs += [
-            {"svg": dark, "size": 1024, "out": f"{IOS_SET}/AppIcon-1024.png"},
+            # The untagged entry is what iOS shows in light mode, so it takes
+            # the LIGHT palette. It used to be `dark`, which made it a
+            # byte-identical copy of the dark icon below and put the dark tile
+            # on a light home screen. LIGHT was defined and never used.
+            {"svg": mark(*LIGHT), "size": 1024, "out": f"{IOS_SET}/AppIcon-1024.png"},
             {"svg": mark(*DARK), "size": 1024, "out": f"{IOS_SET}/AppIcon-1024-dark.png"},
             {"svg": mark(*TINTED), "size": 1024, "out": f"{IOS_SET}/AppIcon-1024-tinted.png"},
         ]

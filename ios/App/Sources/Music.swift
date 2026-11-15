@@ -55,6 +55,18 @@ enum Chant {
     static var singles: [Track] { file.singles }
     /// Folders of recordings, each of which opens its own page.
     static var albums: [Album] { file.collections }
+
+    /// Whether any recording is actually in this build.
+    ///
+    /// The manifest is committed but the audio is not — the recordings are
+    /// other people's published work and the repository is public — so a build
+    /// made from a clean checkout lists tracks it cannot play. Rather than
+    /// offer rows that silently do nothing when tapped, the Worship tab is
+    /// hidden entirely when nothing is there to hear.
+    static var hasAudio: Bool {
+        singles.contains { $0.url != nil }
+            || albums.contains { $0.tracks.contains { $0.url != nil } }
+    }
 }
 
 /// One player for the whole app, so the now-playing bar and the track list
