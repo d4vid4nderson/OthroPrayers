@@ -66,14 +66,35 @@ jobs:
         env:
           ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
-          if [ -z "$ASC_PRIVATE_KEY" ] || [ -z "$ASC_KEY_ID" ]; then
-            echo "::error::ASC_* secrets are missing. See the header of this workflow."
+          # Say which ones are missing, not just that something is. Secret
+          # values can never be printed, but presence and shape can, and that
+          # is enough to tell "not set" from "set to the wrong thing".
+          missing=0
+          for n in ASC_KEY_ID ASC_ISSUER_ID ASC_PRIVATE_KEY; do
+            v="${!n}"
+            if [ -z "$v" ]; then
+              echo "::error::secret $n is not set (or is empty)"
+              missing=1
+            else
+              echo "$n: present, ${#v} characters"
+            fi
+          done
+          if [ "$missing" = 1 ]; then
+            echo "::error::Add them under Settings > Secrets and variables > Actions > Repository secrets. Environment and Dependabot secrets are separate stores and are not visible here."
             exit 1
           fi
+          # A .p8 that lost its newlines, or had the BEGIN/END lines stripped,
+          # fails much later inside xcodebuild with an opaque message.
+          case "$ASC_PRIVATE_KEY" in
+            *"BEGIN PRIVATE KEY"*) ;;
+            *) echo "::error::ASC_PRIVATE_KEY does not contain a BEGIN PRIVATE KEY line — paste the whole .p8 file, including its first and last lines"; exit 1 ;;
+          esac
           mkdir -p ~/private_keys
           printf '%s\n' "$ASC_PRIVATE_KEY" > ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
           chmod 600 ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          echo "wrote AuthKey_${ASC_KEY_ID}.p8 ($(wc -l < ~/private_keys/AuthKey_${ASC_KEY_ID}.p8) lines)"
 
       - name: Archive
         env:
