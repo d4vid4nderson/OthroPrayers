@@ -108,11 +108,21 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
           echo "DEVELOPMENT_TEAM in project.yml: $(grep -E '^[[:space:]]*DEVELOPMENT_TEAM:' ios/project.yml | head -1 | sed -E 's/.*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/')"
-          echo "--- apps this key can see ---"
+          want="$(grep -E '^[[:space:]]*PRODUCT_BUNDLE_IDENTIFIER:' ios/project.yml | head -1 | sed -E 's/.*:[[:space:]]*//')"
+          echo "looking for: $want"
           xcrun altool --list-apps \
             --apiKey "$ASC_KEY_ID" \
-            --apiIssuer "$ASC_ISSUER_ID" 2>&1 | head -40 \
-            || echo "(altool could not list apps — see the message above)"
+            --apiIssuer "$ASC_ISSUER_ID" > /tmp/apps.txt 2>&1 || true
+          echo "--- apps this key can see ---"
+          # names and bundle ids only: the full records are long, and an earlier
+          # head -40 truncated the list mid-entry and made it useless
+          grep -E "Name:|Bundle ID:|ERROR|error" /tmp/apps.txt | head -100 || true
+          echo "---"
+          if grep -q "$want" /tmp/apps.txt; then
+            echo "FOUND: the key can see $want, so the key and the app record are on the same team"
+          else
+            echo "NOT FOUND: the key cannot see $want — either the app record is on another team, or the key is scoped elsewhere"
+          fi
 
       - name: Archive
         env:
