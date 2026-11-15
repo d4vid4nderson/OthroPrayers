@@ -1221,32 +1221,8 @@
      "type": "rubric",
      "runs": [
       {
-       "t": "You may add any other prayers from this book, say one of the litanies, or read a passage of Scripture and make a simple meditation. Then finish with:",
+       "t": "You may add any other prayers from this book, say one of the litanies, or read a passage of Scripture and make a simple meditation.",
        "mark": "rubric"
-      }
-     ]
-    },
-    {
-     "type": "heading",
-     "runs": [
-      {
-       "t": "The Grace"
-      }
-     ],
-     "id": "j10"
-    },
-    {
-     "type": "paragraph",
-     "runs": [
-      {
-       "t": "The grace of our Lord Jesus Christ, "
-      },
-      {
-       "t": "✠",
-       "mark": "signum"
-      },
-      {
-       "t": "and the love of God, and the fellowship of the Holy Spirit, be with us all evermore. Amen."
       }
      ]
     }

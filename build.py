@@ -2725,16 +2725,16 @@ _pb_page("pb-morning",
     'thou each sinful fire,<br>And banish every wrong desire.</p>',
     '<p class="verse hymn">Father, that we ask be done,<br>Through Jesus Christ, thine only Son,<br>Who with the Holy '
     'Ghost and thee,<br>Doth live and reign eternally. Amen.</p>',
+    # Morning Prayer ends with the hymn. The Grace was here, after this rubric,
+    # and is removed at the reader's request; it remains at the end of Evening
+    # Prayers, which is the office that keeps it.
+    #
+    # The rubric used to finish "...make a simple meditation. Then finish
+    # with:", which introduced the Grace. With the Grace gone that clause
+    # pointed at nothing, so it ends at the meditation instead.
     '<p class="rubric"><span class="r">You may add any other prayers from this book, say one of '
-    'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
-    'with:</span></p>',
-    # The Grace concludes the office; it is not part of the hymn. Evening
-    # Prayers already headed it this way, and Morning did not, so the Grace was
-    # being swallowed into "Hymn — Now that Daylight Fills the Sky" — listed
-    # under it in the contents, and carried around with it by the arranger.
-    '<h2 class="subhead">The Grace</h2>',
-    '<p>The grace of our Lord Jesus Christ, ' + SIGNUM + 'and the love of God, and the fellowship of '
-    'the Holy Spirit, be with us all evermore. Amen.</p>')
+    'the litanies, or read a passage of Scripture and make a simple '
+    'meditation.</span></p>')
 
 _pb_page("pb-noon",
     _divider("Noon Time Prayers"),
