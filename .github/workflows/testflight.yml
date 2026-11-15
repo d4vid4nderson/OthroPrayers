@@ -143,43 +143,11 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
-          python3 -m pip install --quiet --disable-pip-version-check "pyjwt[crypto]" || true
-          python3 - <<'PY'
-          import json, os, time, urllib.request, urllib.error
-          import jwt
-          kid = os.environ["ASC_KEY_ID"]; iss = os.environ["ASC_ISSUER_ID"]
-          key = open(os.path.expanduser(f"~/private_keys/AuthKey_{kid}.p8")).read()
-          tok = jwt.encode({"iss": iss, "iat": int(time.time()),
-                            "exp": int(time.time()) + 600, "aud": "appstoreconnect-v1"},
-                           key, algorithm="ES256", headers={"kid": kid, "typ": "JWT"})
-
-          def get(path):
-              req = urllib.request.Request("https://api.appstoreconnect.apple.com" + path,
-                                           headers={"Authorization": "Bearer " + tok})
-              try:
-                  with urllib.request.urlopen(req) as r:
-                      return r.status, json.load(r)
-              except urllib.error.HTTPError as e:
-                  return e.code, json.load(e)
-
-          for label, path in [
-              ("certificates", "/v1/certificates?limit=200"),
-              ("bundle id",    "/v1/bundleIds?filter[identifier]=com.orthoprayers.western"),
-              ("profiles",     "/v1/profiles?limit=200"),
-          ]:
-              code, body = get(path)
-              print(f"\n=== {label}: HTTP {code} ===")
-              if code != 200:
-                  for err in body.get("errors", [])[:3]:
-                      print("  ", err.get("title"), "-", err.get("detail"))
-                  continue
-              rows = body.get("data", [])
-              print(f"   {len(rows)} returned")
-              for d in rows[:25]:
-                  a = d.get("attributes", {})
-                  print("   ", a.get("certificateType") or a.get("profileType") or a.get("identifier"),
-                        "|", a.get("name") or a.get("displayName") or "", "|", a.get("status") or "")
-          PY
+          bundle="$(grep -E '^[[:space:]]*PRODUCT_BUNDLE_IDENTIFIER:' ios/project.yml | head -1 | sed -E 's/.*:[[:space:]]*//')"
+          python3 .github/asc_probe.py \
+            "$ASC_KEY_ID" "$ASC_ISSUER_ID" \
+            ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
+            "$bundle"
 
       - name: Archive
         env:
