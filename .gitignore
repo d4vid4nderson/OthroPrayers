@@ -25,5 +25,11 @@ ios/App/Info.plist
 
 # worship recordings — other people's published work. Bundled into the app
 # for personal use, deliberately never committed: this repository is public.
+#
+# The *directory* is kept (via .gitkeep) even though its contents are not:
+# project.yml references Music as a folder, and Xcode's copy phase fails the
+# whole build if the path does not exist. Marking the source `optional` is not
+# enough — XcodeGen still writes the reference into the project.
 hymns/
-ios/Music/
+ios/Music/*
+!ios/Music/.gitkeep

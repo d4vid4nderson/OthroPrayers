@@ -1,0 +1,143 @@
+name: TestFlight
+
+# Archive and upload to App Store Connect from a rented Mac.
+#
+# Deliberately manual: every run burns a build number and puts a build in front
+# of testers, so it should be a decision, not a side effect of pushing.
+#
+# Needs three repository secrets, all obtainable from a browser:
+#   ASC_KEY_ID       — App Store Connect API key ID
+#   ASC_ISSUER_ID    — the issuer ID shown above the key list
+#   ASC_PRIVATE_KEY  — the whole contents of the AuthKey_XXXXXXXX.p8 file,
+#                      including the BEGIN/END PRIVATE KEY lines
+#
+# The key needs the App Manager role: it creates the distribution certificate
+# and provisioning profile on the runner, which is the part usually assumed to
+# require a Mac of your own.
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: "Build number (blank = UTC timestamp, always increasing)"
+        required: false
+        default: ""
+
+jobs:
+  upload:
+    runs-on: macos-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks | grep -i iphoneos || true
+
+      # The same guard the build workflow runs: never ship an app whose
+      # prayers no longer match the source they were generated from.
+      - name: Content model is in sync with its generators
+        run: |
+          python3 build.py
+          python3 export_content.py
+          git diff --exit-code ios/Content/ \
+            || { echo "::error::ios/Content is stale"; exit 1; }
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate the project
+        run: cd ios && xcodegen generate
+
+      # App Store Connect rejects a build number it has already seen. A UTC
+      # timestamp cannot collide and always sorts forward, which a run number
+      # cannot promise across workflow renames or re-runs.
+      - name: Choose a build number
+        id: ver
+        run: |
+          n="${{ inputs.build_number }}"
+          [ -n "$n" ] || n="$(date -u +%y%m%d%H%M)"
+          echo "build=$n" >> "$GITHUB_OUTPUT"
+          echo "Uploading as build $n"
+
+      - name: Write the API key
+        env:
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          if [ -z "$ASC_PRIVATE_KEY" ] || [ -z "$ASC_KEY_ID" ]; then
+            echo "::error::ASC_* secrets are missing. See the header of this workflow."
+            exit 1
+          fi
+          mkdir -p ~/private_keys
+          printf '%s\n' "$ASC_PRIVATE_KEY" > ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          chmod 600 ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+
+      - name: Archive
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          cd ios
+          set -o pipefail
+          xcodebuild archive \
+            -project Prayers.xcodeproj \
+            -scheme Prayers \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/Prayers.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            CURRENT_PROJECT_VERSION=${{ steps.ver.outputs.build }} \
+            | tee "$RUNNER_TEMP/archive.log"
+
+      - name: Export and upload
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          # teamID is read from project.yml so there is one source of truth
+          team="$(grep -E '^[[:space:]]*DEVELOPMENT_TEAM:' ios/project.yml \
+                  | head -1 | sed -E 's/.*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/')"
+          echo "team: $team"
+          cat > "$RUNNER_TEMP/export.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>${team}</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          set -o pipefail
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Prayers.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/export.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            | tee "$RUNNER_TEMP/export.log"
+
+      - name: Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testflight-logs
+          path: |
+            ${{ runner.temp }}/archive.log
+            ${{ runner.temp }}/export.log
+          if-no-files-found: ignore
+
+      - name: Always remove the key
+        if: always()
+        run: rm -rf ~/private_keys

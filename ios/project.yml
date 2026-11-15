@@ -9,9 +9,12 @@ name: Prayers
 options:
   bundleIdPrefix: com.orthoprayers
   deploymentTarget:
-    iOS: "27.0"          # iOS 27: second-iteration Liquid Glass, .crossFade
-                         # navigation. Drop to 26.0 to reach last year's phones
-                         # (then the crossFade call needs an #available gate).
+    # 26.0, not 27.0. An app cannot target an SDK newer than the one building
+    # it, and the newest Xcode on GitHub's macOS runners is 26.6 (iOS SDK
+    # 26.5). Targeting 27.0 there is only a warning for a simulator build but
+    # cannot produce a valid archive, which is what TestFlight needs.
+    # Raise this once the runners ship Xcode 27.
+    iOS: "26.0"
   createIntermediateGroups: true
   groupSortPosition: top
 
@@ -39,7 +42,10 @@ targets:
       # never copied, so the app cannot drift from the site
       - path: Content
       # the monastery recordings, as a folder reference so they arrive in the
-      # bundle under Music/ rather than as 19 loose files at its root
+      # bundle under Music/ rather than as 19 loose files at its root.
+      # The audio is gitignored but the directory is kept (ios/Music/.gitkeep):
+      # `optional` only silences XcodeGen, which still writes the reference, so
+      # a missing directory fails the copy phase and the whole build.
       - path: Music
         type: folder
         buildPhase: resources
