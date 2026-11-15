@@ -72,9 +72,12 @@ struct ReadingView: View {
         .background(palette.ground)
         .navigationTitle(page?.title ?? "")
         .navigationBarTitleDisplayMode(.inline)
-        // iOS 27. A prayer book should not shove the previous page sideways
-        // out of the way; it should dissolve into the next one.
-        .navigationTransition(.crossFade)
+        // A prayer book should not shove the previous page sideways out of the
+        // way; it should dissolve into the next one. That is
+        // `.navigationTransition(.crossFade)`, and it is iOS 27 only — the
+        // symbol does not exist in the iOS 26 SDK, so an #available gate
+        // cannot bring it back: the compiler needs it to exist to compile the
+        // gate at all. Restore the line when the build runs on Xcode 27.
         .toolbar {
             if drawn.count > 1 {
                 ToolbarItem(placement: .topBarTrailing) {
