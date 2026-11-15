@@ -96,6 +96,24 @@ jobs:
           chmod 600 ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
           echo "wrote AuthKey_${ASC_KEY_ID}.p8 ($(wc -l < ~/private_keys/AuthKey_${ASC_KEY_ID}.p8) lines)"
 
+      # Ask Apple whether the key works, before asking Xcode to sign with it.
+      # Xcode's signing errors describe what it could not find, not why, so a
+      # bad key, a key with too little access and a team mismatch all arrive
+      # looking identical. This separates them: if the key can list the app,
+      # the credentials are sound and the problem is the team.
+      - name: Check the key against App Store Connect
+        continue-on-error: true
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          echo "DEVELOPMENT_TEAM in project.yml: $(grep -E '^[[:space:]]*DEVELOPMENT_TEAM:' ios/project.yml | head -1 | sed -E 's/.*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/')"
+          echo "--- apps this key can see ---"
+          xcrun altool --list-apps \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID" 2>&1 | head -40 \
+            || echo "(altool could not list apps — see the message above)"
+
       - name: Archive
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
