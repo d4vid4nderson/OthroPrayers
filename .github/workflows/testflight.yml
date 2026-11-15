@@ -96,58 +96,79 @@ jobs:
           chmod 600 ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
           echo "wrote AuthKey_${ASC_KEY_ID}.p8 ($(wc -l < ~/private_keys/AuthKey_${ASC_KEY_ID}.p8) lines)"
 
-      # Ask Apple whether the key works, before asking Xcode to sign with it.
-      # Xcode's signing errors describe what it could not find, not why, so a
-      # bad key, a key with too little access and a team mismatch all arrive
-      # looking identical. This separates them: if the key can list the app,
-      # the credentials are sound and the problem is the team.
-      - name: Check the key against App Store Connect
-        continue-on-error: true
+      # Manual signing. Automatic signing cannot work here: this account's API
+      # key is refused by the Developer portal — /v1/certificates, /v1/bundleIds
+      # and /v1/profiles all answer 403 "Unable to find a team with the given
+      # Content Provider ID to which you belong" — so Xcode can never obtain a
+      # distribution identity on its own. The certificate and profile are made
+      # by hand in the browser instead and handed to the runner.
+      #
+      # Uploading still uses the API key, because App Store Connect accepts it
+      # happily; it was only the portal that did not.
+      - name: Install the signing identity
         env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_CERT: ${{ secrets.SIGNING_CERT }}
+          SIGNING_PROFILE: ${{ secrets.SIGNING_PROFILE }}
         run: |
-          echo "DEVELOPMENT_TEAM in project.yml: $(grep -E '^[[:space:]]*DEVELOPMENT_TEAM:' ios/project.yml | head -1 | sed -E 's/.*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/')"
-          want="$(grep -E '^[[:space:]]*PRODUCT_BUNDLE_IDENTIFIER:' ios/project.yml | head -1 | sed -E 's/.*:[[:space:]]*//')"
-          echo "looking for: $want"
-          xcrun altool --list-apps \
-            --apiKey "$ASC_KEY_ID" \
-            --apiIssuer "$ASC_ISSUER_ID" > /tmp/apps.txt 2>&1 || true
-          echo "--- apps this key can see ---"
-          # names and bundle ids only: the full records are long, and an earlier
-          # head -40 truncated the list mid-entry and made it useless
-          grep -E "Name:|Bundle ID:|ERROR|error" /tmp/apps.txt | head -100 || true
-          echo "---"
-          if grep -q "$want" /tmp/apps.txt; then
-            echo "FOUND: the key can see $want, so the key and the app record are on the same team"
-          else
-            echo "NOT FOUND: the key cannot see $want — either the app record is on another team, or the key is scoped elsewhere"
-          fi
+          for n in SIGNING_KEY SIGNING_CERT SIGNING_PROFILE; do
+            [ -n "${!n}" ] || { echo "::error::secret $n is not set"; exit 1; }
+          done
+          d="$RUNNER_TEMP/signing"; mkdir -p "$d"
 
-      # What did Xcode actually resolve? The archive error names what it could
-      # not find; this names what it was looking for.
-      - name: Resolved signing settings
-        continue-on-error: true
-        run: |
-          cd ios
-          xcodebuild -showBuildSettings -scheme Prayers -configuration Release 2>/dev/null \
-            | grep -iE "CODE_SIGN|DEVELOPMENT_TEAM|PROVISIONING|PRODUCT_BUNDLE" | sort -u
+          printf '%s\n' "$SIGNING_KEY" > "$d/key.pem"
+          echo "$SIGNING_CERT" | base64 --decode > "$d/cert.cer"
+          echo "$SIGNING_PROFILE" | base64 --decode > "$d/profile.mobileprovision"
 
-      # Can this key reach the Developer portal at all? altool proved it can
-      # read App Store Connect, which is a different service. Certificates and
-      # profiles are what automatic signing needs, and what it keeps failing to
-      # obtain. These are read-only GETs: nothing is created.
-      - name: Probe the provisioning endpoints
-        continue-on-error: true
-        env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-        run: |
-          bundle="$(grep -E '^[[:space:]]*PRODUCT_BUNDLE_IDENTIFIER:' ios/project.yml | head -1 | sed -E 's/.*:[[:space:]]*//')"
-          python3 .github/asc_probe.py \
-            "$ASC_KEY_ID" "$ASC_ISSUER_ID" \
-            ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
-            "$bundle"
+          # Apple hands out a DER certificate; openssl wants PEM to pair it
+          # with the key.
+          openssl x509 -inform DER -in "$d/cert.cer" -out "$d/cert.pem"
+          echo "certificate: $(openssl x509 -in "$d/cert.pem" -noout -subject -enddate)"
+
+          # The key and the certificate must actually be a pair. If they are
+          # not, codesign fails much later with a far vaguer message.
+          kmod="$(openssl rsa  -in "$d/key.pem"  -noout -modulus | openssl md5)"
+          cmod="$(openssl x509 -in "$d/cert.pem" -noout -modulus | openssl md5)"
+          [ "$kmod" = "$cmod" ] || { echo "::error::the certificate does not match the private key"; exit 1; }
+          echo "key and certificate match"
+
+          pw="$(uuidgen)"
+          openssl pkcs12 -export -legacy \
+            -inkey "$d/key.pem" -in "$d/cert.pem" \
+            -out "$d/identity.p12" -passout "pass:$pw" \
+            || openssl pkcs12 -export \
+                 -inkey "$d/key.pem" -in "$d/cert.pem" \
+                 -out "$d/identity.p12" -passout "pass:$pw"
+
+          # A throwaway keychain, so nothing touches the runner's login one.
+          kc="$RUNNER_TEMP/build.keychain"; kcpw="$(uuidgen)"
+          security create-keychain -p "$kcpw" "$kc"
+          security set-keychain-settings -lut 3600 "$kc"
+          security unlock-keychain -p "$kcpw" "$kc"
+          security import "$d/identity.p12" -k "$kc" -P "$pw" \
+            -T /usr/bin/codesign -T /usr/bin/security
+          # Without this, codesign blocks on a UI prompt that no one can answer.
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -s -k "$kcpw" "$kc" >/dev/null
+          security list-keychains -d user -s "$kc" $(security list-keychains -d user | tr -d '"')
+
+          echo "--- identities now available ---"
+          security find-identity -v -p codesigning "$kc"
+
+          # Profiles are looked up by UUID on disk, but referenced by name in
+          # the build, so both are read straight out of the profile itself
+          # rather than typed in twice.
+          plist="$(security cms -D -i "$d/profile.mobileprovision")"
+          uuid="$(printf '%s' "$plist" | plutil -extract UUID raw -)"
+          name="$(printf '%s' "$plist" | plutil -extract Name raw -)"
+          dest="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$dest"
+          cp "$d/profile.mobileprovision" "$dest/$uuid.mobileprovision"
+          echo "profile: $name ($uuid)"
+          echo "expires: $(printf '%s' "$plist" | plutil -extract ExpirationDate raw -)"
+
+          echo "PROFILE_NAME=$name" >> "$GITHUB_ENV"
+          echo "KEYCHAIN=$kc"       >> "$GITHUB_ENV"
 
       - name: Archive
         env:
@@ -156,25 +177,20 @@ jobs:
         run: |
           cd ios
           set -o pipefail
-          # No CODE_SIGN_IDENTITY override. Forcing "Apple Distribution" while
-          # automatic signing has settled on development produces a conflict
-          # error that hides the real one underneath it:
-          #   "automatically signed for development, but a conflicting code
-          #    signing identity Apple Distribution has been manually specified"
-          # The underlying problem is that automatic signing never obtains a
-          # distribution team from the key, and that error is the one worth
-          # seeing.
+          # Manual signing throughout: no -allowProvisioningUpdates, because
+          # there is nothing for it to update — the portal refuses this key.
+          # Everything it would have fetched is already installed.
           xcodebuild archive \
             -project Prayers.xcodeproj \
             -scheme Prayers \
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/Prayers.xcarchive" \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             CURRENT_PROJECT_VERSION=${{ steps.ver.outputs.build }} \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="$PROFILE_NAME" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN" \
             | tee "$RUNNER_TEMP/archive.log"
 
       - name: Export and upload
@@ -186,6 +202,10 @@ jobs:
           team="$(grep -E '^[[:space:]]*DEVELOPMENT_TEAM:' ios/project.yml \
                   | head -1 | sed -E 's/.*DEVELOPMENT_TEAM:[[:space:]]*([A-Z0-9]+).*/\1/')"
           echo "team: $team"
+          bundle="$(grep -E '^[[:space:]]*PRODUCT_BUNDLE_IDENTIFIER:' ios/project.yml | head -1 | sed -E 's/.*:[[:space:]]*//')"
+          # signingStyle manual, and the profile named per bundle id: with
+          # automatic here, export would go back to the portal that refuses
+          # this key and undo the whole point of signing by hand.
           cat > "$RUNNER_TEMP/export.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -194,17 +214,21 @@ jobs:
             <key>method</key><string>app-store-connect</string>
             <key>destination</key><string>upload</string>
             <key>teamID</key><string>${team}</string>
-            <key>signingStyle</key><string>automatic</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>${bundle}</key><string>${PROFILE_NAME}</string>
+            </dict>
             <key>uploadSymbols</key><true/>
           </dict>
           </plist>
           PLIST
+          echo "--- export options ---"; cat "$RUNNER_TEMP/export.plist"
           set -o pipefail
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/Prayers.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/export.plist" \
             -exportPath "$RUNNER_TEMP/export" \
-            -allowProvisioningUpdates \
             -authenticationKeyPath ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
