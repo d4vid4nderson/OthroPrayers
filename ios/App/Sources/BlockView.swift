@@ -70,6 +70,51 @@ struct BlockView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 6)
 
+        // The versicle: the celebrant's line, set like a direction rather than
+        // like the prayer, so the reader can see at a glance which words are
+        // theirs to say. The web build said it this way too — "the celebrant's
+        // prompt, set like a rubric direction; the people's words in ink".
+        case .cue:
+            Text(attributed)
+                .font(Typeface.prayer(.callout).italic())
+                .foregroundStyle(palette.inkSoft)
+                .lineSpacing(3)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
+
+        // The response: the people's words, in full ink directly beneath.
+        case .response:
+            Text(attributed)
+                .font(Typeface.prayer())
+                .lineSpacing(5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 8)
+
+        case .terms:
+            Text(attributed)
+                .font(Typeface.display(.callout))
+                .foregroundStyle(palette.accent)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+
+        case .opening:
+            Text(attributed)
+                .font(Typeface.prayer(.title3))
+                .lineSpacing(5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 8)
+
+        case .colophon:
+            VStack(alignment: .leading, spacing: 0) {
+                Divider().padding(.bottom, 14)
+                Text(attributed)
+                    .font(.footnote.italic())
+                    .foregroundStyle(.secondary)
+                    .lineSpacing(3)
+            }
+            .padding(.top, 20)
+
         case .term:
             Text(attributed)
                 .font(Typeface.prayer(.callout))

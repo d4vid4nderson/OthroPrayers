@@ -58,6 +58,12 @@ struct ReadingView: View {
                             .id(item.id)
                         }
 
+                        // after the prayers, whatever the office is reordered
+                        // into: a credit belongs to the page, not to a prayer
+                        ForEach(library.colophon(of: slug), id: \.stableID) { block in
+                            BlockView(block: block)
+                        }
+
                         pageTurn
                     }
                     .padding(.horizontal, 22)

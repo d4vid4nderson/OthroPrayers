@@ -2728,6 +2728,11 @@ _pb_page("pb-morning",
     '<p class="rubric"><span class="r">You may add any other prayers from this book, say one of '
     'the litanies, or read a passage of Scripture and make a simple meditation. Then finish '
     'with:</span></p>',
+    # The Grace concludes the office; it is not part of the hymn. Evening
+    # Prayers already headed it this way, and Morning did not, so the Grace was
+    # being swallowed into "Hymn — Now that Daylight Fills the Sky" — listed
+    # under it in the contents, and carried around with it by the arranger.
+    '<h2 class="subhead">The Grace</h2>',
     '<p>The grace of our Lord Jesus Christ, ' + SIGNUM + 'and the love of God, and the fellowship of '
     'the Holy Spirit, be with us all evermore. Amen.</p>')
 
