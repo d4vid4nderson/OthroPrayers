@@ -108,20 +108,24 @@ jobs:
       - name: Install the signing identity
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_CERT: ${{ secrets.SIGNING_CERT }}
           SIGNING_PROFILE: ${{ secrets.SIGNING_PROFILE }}
         run: |
-          for n in SIGNING_KEY SIGNING_CERT SIGNING_PROFILE; do
+          for n in SIGNING_KEY SIGNING_PROFILE; do
             [ -n "${!n}" ] || { echo "::error::secret $n is not set"; exit 1; }
           done
           d="$RUNNER_TEMP/signing"; mkdir -p "$d"
 
           printf '%s\n' "$SIGNING_KEY" > "$d/key.pem"
-          echo "$SIGNING_CERT" | base64 --decode > "$d/cert.cer"
           echo "$SIGNING_PROFILE" | base64 --decode > "$d/profile.mobileprovision"
 
-          # Apple hands out a DER certificate; openssl wants PEM to pair it
-          # with the key.
+          # The profile already carries the signing certificate, so there is no
+          # separate secret for it: one artifact, one source of truth, and no
+          # way for a certificate and a profile to be uploaded out of step with
+          # each other.
+          security cms -D -i "$d/profile.mobileprovision" > "$d/profile.plist"
+          plutil -extract DeveloperCertificates.0 raw -o - "$d/profile.plist" \
+            | base64 --decode > "$d/cert.cer"
+          # Apple's certificate is DER; openssl wants PEM to pair it with the key.
           openssl x509 -inform DER -in "$d/cert.cer" -out "$d/cert.pem"
           echo "certificate: $(openssl x509 -in "$d/cert.pem" -noout -subject -enddate)"
 
@@ -158,14 +162,13 @@ jobs:
           # Profiles are looked up by UUID on disk, but referenced by name in
           # the build, so both are read straight out of the profile itself
           # rather than typed in twice.
-          plist="$(security cms -D -i "$d/profile.mobileprovision")"
-          uuid="$(printf '%s' "$plist" | plutil -extract UUID raw -)"
-          name="$(printf '%s' "$plist" | plutil -extract Name raw -)"
+          uuid="$(plutil -extract UUID raw -o - "$d/profile.plist")"
+          name="$(plutil -extract Name raw -o - "$d/profile.plist")"
           dest="$HOME/Library/MobileDevice/Provisioning Profiles"
           mkdir -p "$dest"
           cp "$d/profile.mobileprovision" "$dest/$uuid.mobileprovision"
           echo "profile: $name ($uuid)"
-          echo "expires: $(printf '%s' "$plist" | plutil -extract ExpirationDate raw -)"
+          echo "expires: $(plutil -extract ExpirationDate raw -o - "$d/profile.plist")"
 
           echo "PROFILE_NAME=$name" >> "$GITHUB_ENV"
           echo "KEYCHAIN=$kc"       >> "$GITHUB_ENV"
