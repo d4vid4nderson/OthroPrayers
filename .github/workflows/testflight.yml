@@ -133,6 +133,54 @@ jobs:
           xcodebuild -showBuildSettings -scheme Prayers -configuration Release 2>/dev/null \
             | grep -iE "CODE_SIGN|DEVELOPMENT_TEAM|PROVISIONING|PRODUCT_BUNDLE" | sort -u
 
+      # Can this key reach the Developer portal at all? altool proved it can
+      # read App Store Connect, which is a different service. Certificates and
+      # profiles are what automatic signing needs, and what it keeps failing to
+      # obtain. These are read-only GETs: nothing is created.
+      - name: Probe the provisioning endpoints
+        continue-on-error: true
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          python3 -m pip install --quiet --disable-pip-version-check "pyjwt[crypto]" || true
+          python3 - <<'PY'
+          import json, os, time, urllib.request, urllib.error
+          import jwt
+          kid = os.environ["ASC_KEY_ID"]; iss = os.environ["ASC_ISSUER_ID"]
+          key = open(os.path.expanduser(f"~/private_keys/AuthKey_{kid}.p8")).read()
+          tok = jwt.encode({"iss": iss, "iat": int(time.time()),
+                            "exp": int(time.time()) + 600, "aud": "appstoreconnect-v1"},
+                           key, algorithm="ES256", headers={"kid": kid, "typ": "JWT"})
+
+          def get(path):
+              req = urllib.request.Request("https://api.appstoreconnect.apple.com" + path,
+                                           headers={"Authorization": "Bearer " + tok})
+              try:
+                  with urllib.request.urlopen(req) as r:
+                      return r.status, json.load(r)
+              except urllib.error.HTTPError as e:
+                  return e.code, json.load(e)
+
+          for label, path in [
+              ("certificates", "/v1/certificates?limit=200"),
+              ("bundle id",    "/v1/bundleIds?filter[identifier]=com.orthoprayers.western"),
+              ("profiles",     "/v1/profiles?limit=200"),
+          ]:
+              code, body = get(path)
+              print(f"\n=== {label}: HTTP {code} ===")
+              if code != 200:
+                  for err in body.get("errors", [])[:3]:
+                      print("  ", err.get("title"), "-", err.get("detail"))
+                  continue
+              rows = body.get("data", [])
+              print(f"   {len(rows)} returned")
+              for d in rows[:25]:
+                  a = d.get("attributes", {})
+                  print("   ", a.get("certificateType") or a.get("profileType") or a.get("identifier"),
+                        "|", a.get("name") or a.get("displayName") or "", "|", a.get("status") or "")
+          PY
+
       - name: Archive
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -140,11 +188,14 @@ jobs:
         run: |
           cd ios
           set -o pipefail
-          # CODE_SIGN_IDENTITY is forced to distribution. Automatic signing is
-          # supposed to pick that for an archive by itself, but the failing run
-          # went looking for "iOS App Development" profiles instead, so it was
-          # not doing so here. An App Store archive can only be signed with a
-          # distribution identity.
+          # No CODE_SIGN_IDENTITY override. Forcing "Apple Distribution" while
+          # automatic signing has settled on development produces a conflict
+          # error that hides the real one underneath it:
+          #   "automatically signed for development, but a conflicting code
+          #    signing identity Apple Distribution has been manually specified"
+          # The underlying problem is that automatic signing never obtains a
+          # distribution team from the key, and that error is the one worth
+          # seeing.
           xcodebuild archive \
             -project Prayers.xcodeproj \
             -scheme Prayers \
@@ -156,8 +207,6 @@ jobs:
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             CURRENT_PROJECT_VERSION=${{ steps.ver.outputs.build }} \
-            CODE_SIGN_STYLE=Automatic \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
             | tee "$RUNNER_TEMP/archive.log"
 
       - name: Export and upload
