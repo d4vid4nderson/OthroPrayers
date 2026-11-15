@@ -82,12 +82,31 @@ Already handled in the project:
 What you still have to do:
 
 1. Create the app record in App Store Connect with bundle ID
-   `com.othroprayers.western` (change it in `project.yml` if you want another).
+   `com.orthoprayers.western` (change it in `project.yml` if you want another).
 2. **Product › Archive**, then **Distribute App › TestFlight**.
 3. Internal testers (your own team, up to 100) need no review. **External
    testers require Beta App Review**, which is lighter than full App Store
    review but is still a review — and a prayer book that is entirely offline
    content is a much easier case to make than a thin web wrapper.
+
+### The worship recordings
+
+`project.yml` lists `Music` as a source, but **`ios/Music/` is not in this
+repository** and neither is `hymns/`: the recordings are other people's
+published work and this repo is public. A fresh clone therefore has the
+Worship screen's manifest but none of its audio.
+
+To restore them on a machine that has the files, put them in `hymns/` — a
+folder of recordings becomes a collection with its own page, a loose file
+beside the folders becomes a single — and run:
+
+```sh
+python3 export_music.py
+```
+
+That normalises the names, reads each duration, stages the audio into
+`ios/Music/` where `project.yml` picks it up as a folder reference, and
+rewrites `ios/Content/music.json`.
 
 ### The app icon
 
