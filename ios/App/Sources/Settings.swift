@@ -75,15 +75,27 @@ final class Settings: ObservableObject {
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
     @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
 
-    /// The home-screen icon's colour. `nil` means the default icon, which is
-    /// the only one that carries light, dark and tinted appearances.
-    @Published var iconColour: IconColour {
-        didSet { store.set(iconColour.rawValue, forKey: Key.iconColour) }
+    /// The home-screen icon, in three parts that do not constrain each other:
+    /// what it shows, what it stands on, and what colour it is drawn in.
+    ///
+    /// They used to be two, with the ground and the figure locked together —
+    /// "Crimson on black" was one choice, and a black figure on a gradient
+    /// could not be asked for at all. Every combination now exists, including
+    /// the ones that are a poor idea; the picker draws each tile from the
+    /// icon it would actually set, so a bad pairing is visible before it is
+    /// chosen rather than after.
+    @Published var iconGround: IconGround {
+        didSet { store.set(iconGround.rawValue, forKey: Key.iconGround) }
     }
 
     /// What the icon shows.
     @Published var iconStyle: IconStyle {
         didSet { store.set(iconStyle.rawValue, forKey: Key.iconStyle) }
+    }
+
+    /// The colour the figure itself is drawn in.
+    @Published var iconMark: IconMark {
+        didSet { store.set(iconMark.rawValue, forKey: Key.iconMark) }
     }
 
     enum IconStyle: String, CaseIterable, Identifiable {
@@ -122,84 +134,77 @@ final class Settings: ObservableObject {
         }
     }
 
-    enum IconColour: String, CaseIterable, Identifiable {
-        case automatic, sanctuary, paper, manuscript, terminal, ivory, crimson,
-             amber, silver, sapphire, violet,
-             // gradients, built from the hues above
+    enum IconGround: String, CaseIterable, Identifiable {
+        case automatic, black, slate, paper, vellum,
+             // gradients, run corner to corner
              aurora, nebula, vespers, sunrise
         var id: String { rawValue }
 
         var name: String {
             switch self {
-            case .automatic:  return "Follow appearance"
-            case .sanctuary:  return "Gold"
-            case .paper:      return "Cinnabar"
-            case .manuscript: return "Manuscript"
-            case .terminal:   return "Phosphor"
-            case .ivory:      return "Ivory"
-            case .crimson:    return "Crimson on black"
-            case .amber:      return "Amber on black"
-            case .silver:     return "Silver on black"
-            case .sapphire:   return "Sapphire on black"
-            case .violet:     return "Violet on black"
-            case .aurora:     return "Aurora — emerald to sapphire"
-            case .nebula:     return "Nebula — sapphire to violet"
-            case .vespers:    return "Vespers — violet to crimson"
-            case .sunrise:    return "Sunrise — amber to crimson"
+            case .automatic: return "Follow appearance"
+            case .black:     return "Black"
+            case .slate:     return "Slate"
+            case .paper:     return "Paper"
+            case .vellum:    return "Vellum"
+            case .aurora:    return "Aurora — emerald to sapphire"
+            case .nebula:    return "Nebula — sapphire to violet"
+            case .vespers:   return "Vespers — violet to crimson"
+            case .sunrise:   return "Sunrise — amber to crimson"
             }
         }
 
         /// What fits under a 60pt tile.
         var shortName: String {
+            self == .automatic ? "Auto" : name.components(separatedBy: " —")[0]
+        }
+
+        /// The ground an icon is really drawn on.
+        ///
+        /// "Follow appearance" names no ground of its own: it means the
+        /// default icon, which carries three. Paired with anything the
+        /// default is not, it has to fall back to something, and black is
+        /// what the default itself is drawn on.
+        var drawn: String { self == .automatic ? "black" : rawValue }
+    }
+
+    enum IconMark: String, CaseIterable, Identifiable {
+        case gold, ivory, black, phosphor
+        var id: String { rawValue }
+
+        var name: String {
             switch self {
-            case .automatic:  return "Auto"
-            case .sanctuary:  return "Gold"
-            case .paper:      return "Cinnabar"
-            case .manuscript: return "Vellum"
-            case .terminal:   return "Phosphor"
-            case .ivory:      return "Ivory"
-            case .crimson:    return "Crimson"
-            case .amber:      return "Amber"
-            case .silver:     return "Silver"
-            case .sapphire:   return "Sapphire"
-            case .violet:     return "Violet"
-            case .aurora:     return "Aurora"
-            case .nebula:     return "Nebula"
-            case .vespers:    return "Vespers"
-            case .sunrise:    return "Sunrise"
+            case .gold:     return "Gold"
+            case .ivory:    return "Ivory"
+            case .black:    return "Black"
+            case .phosphor: return "Phosphor"
             }
         }
+
+        var shortName: String { name }
     }
 
-    /// The asset name iOS should be asked for, or nil for the default.
+    /// The icon iOS should be asked for, or nil for the default.
     ///
-    /// "Follow appearance" with the lettering is the default icon, and the
-    /// default is the only one that changes with light and dark mode — an
-    /// alternate is a single image, so choosing one trades that away. The
-    /// cross-alone form of it is a real alternate like any other.
+    /// The default is gold lettering on black that follows the phone between
+    /// light, dark and tinted. Ask for those three together and you are
+    /// describing the default, so it is returned — keeping the appearance
+    /// switching, which no alternate has, since an alternate is one image.
     var alternateIconName: String? {
-        Self.assetName(colour: iconColour, style: iconStyle)
+        iconGround == .automatic && iconStyle == .mark && iconMark == .gold
+            ? nil
+            : Self.iconName(ground: iconGround, style: iconStyle, mark: iconMark)
     }
 
-    /// The alternate's asset name for any pairing, or nil for the default.
-    /// Static because the picker has to name icons other than the chosen one.
-    static func assetName(colour: IconColour, style: IconStyle) -> String? {
-        if colour == .automatic && style == .mark { return nil }
-        // "Follow appearance" has no alternate of its own for the other
-        // styles, so it falls back to the palette the default is drawn in.
-        let c = colour == .automatic ? "sanctuary" : colour.rawValue
-        return "AppIcon" + cap(c) + cap(style.rawValue)
-    }
-
-    /// The preview image for a pairing. Always a real name — the default has
-    /// no alternate, but it still has to be shown in the picker.
-    static func previewName(colour: IconColour, style: IconStyle) -> String {
-        let c = colour == .automatic ? "sanctuary" : colour.rawValue
-        return "Preview" + cap(c) + cap(style.rawValue)
-    }
-
-    private static func cap(_ s: String) -> String {
-        s.prefix(1).uppercased() + s.dropFirst()
+    /// The image name for any trio — always a real one.
+    ///
+    /// Serves both ends: it is what `setAlternateIconName` is given, and what
+    /// the picker draws its tiles from. The icons ship as loose files rather
+    /// than asset-catalog entries, so `UIImage(named:)` finds the very image
+    /// iOS will put on the home screen. There is no second set of previews to
+    /// fall out of step with them.
+    static func iconName(ground: IconGround, style: IconStyle, mark: IconMark) -> String {
+        "alt-\(ground.drawn)-\(style.rawValue)-\(mark.rawValue)"
     }
 
     /// When each office's reminder fires, as minutes after midnight, keyed by
@@ -309,8 +314,43 @@ final class Settings: ObservableObject {
         static let reminderTimes = "reminderTimes"
         static let reminderOff = "reminderOff"
         static let pane = "pane"
-        static let iconColour = "iconColour"
+        static let iconGround = "iconGround"
         static let iconStyle = "iconStyle"
+        static let iconMark = "iconMark"
+        /// The pre-three-axis key, read once on upgrade. See `init`.
+        static let iconColour = "iconColour"
+    }
+
+    /// The stored ground and mark, carrying forward a choice made before the
+    /// two were separable.
+    ///
+    /// The old setting named a pairing — "Crimson on black", "Manuscript" —
+    /// so splitting it cannot be exact: five of the old inks (crimson, amber,
+    /// silver, sapphire, violet) are not among the four marks, and the nearest
+    /// of those four is what they get. The alternative was to drop the
+    /// preference on upgrade and move someone's home-screen icon without
+    /// asking, which is worse than moving it a shade.
+    private static func storedIcon(_ store: UserDefaults) -> (IconGround, IconMark) {
+        if let raw = store.string(forKey: Key.iconGround),
+           let ground = IconGround(rawValue: raw) {
+            let mark = IconMark(rawValue: store.string(forKey: Key.iconMark) ?? "") ?? .gold
+            return (ground, mark)
+        }
+        switch store.string(forKey: Key.iconColour) {
+        case "sanctuary":   return (.black, .gold)
+        case "paper":       return (.paper, .black)
+        case "manuscript":  return (.vellum, .gold)
+        case "terminal":    return (.black, .phosphor)
+        case "ivory":       return (.black, .ivory)
+        // the inks that no longer exist: all of them were on black
+        case "crimson", "amber", "silver", "sapphire", "violet":
+            return (.black, .gold)
+        case "aurora":      return (.aurora, .ivory)
+        case "nebula":      return (.nebula, .ivory)
+        case "vespers":     return (.vespers, .ivory)
+        case "sunrise":     return (.sunrise, .black)
+        default:            return (.automatic, .gold)
+        }
     }
 
     private init() {
@@ -328,8 +368,10 @@ final class Settings: ObservableObject {
         reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]
         reminderOff = Set(store.stringArray(forKey: Key.reminderOff) ?? [])
         pane = store.string(forKey: Key.pane) ?? "prayers"
-        iconColour = IconColour(rawValue: store.string(forKey: Key.iconColour) ?? "") ?? .automatic
         iconStyle = IconStyle(rawValue: store.string(forKey: Key.iconStyle) ?? "") ?? .mark
+        let (g, m) = Self.storedIcon(store)
+        iconGround = g
+        iconMark = m
         // bool(forKey:) is false for a key that was never written, and the
         // default here is *on*, so the absence of the key has to be asked
         // about rather than read.

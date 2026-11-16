@@ -78,28 +78,38 @@ struct SettingsView: View {
             }
 
             Section {
-                // Two rows of real icons rather than two lists of words. Each
-                // row previews the axis it changes against the current value
-                // of the other, so the tiles show what tapping them will
-                // actually do.
+                // Three rows of real icons rather than three lists of words.
+                // Each row previews the axis it changes against the current
+                // value of the other two, so every tile shows exactly what
+                // tapping it will put on the home screen — including the
+                // pairings that work badly, which is the honest way to offer
+                // axes that do not constrain each other.
                 iconRow(title: "Style", items: Settings.IconStyle.allCases,
                         label: \.shortName, selected: settings.iconStyle) { st in
-                    Settings.previewName(colour: settings.iconColour, style: st)
+                    Settings.iconName(ground: settings.iconGround, style: st,
+                                      mark: settings.iconMark)
                 } pick: { settings.iconStyle = $0 }
 
-                iconRow(title: "Colour", items: Settings.IconColour.allCases,
-                        label: \.shortName, selected: settings.iconColour) { c in
-                    Settings.previewName(colour: c, style: settings.iconStyle)
-                } pick: { settings.iconColour = $0 }
+                iconRow(title: "Background", items: Settings.IconGround.allCases,
+                        label: \.shortName, selected: settings.iconGround) { g in
+                    Settings.iconName(ground: g, style: settings.iconStyle,
+                                      mark: settings.iconMark)
+                } pick: { settings.iconGround = $0 }
+
+                iconRow(title: "Colour", items: Settings.IconMark.allCases,
+                        label: \.shortName, selected: settings.iconMark) { m in
+                    Settings.iconName(ground: settings.iconGround,
+                                      style: settings.iconStyle, mark: m)
+                } pick: { settings.iconMark = $0 }
             } header: {
                 Text("App icon")
             } footer: {
-                Text(settings.iconColour == .automatic && settings.iconStyle == .mark
+                Text(settings.alternateIconName == nil
                      ? "The default icon follows the phone between light, dark and "
                        + "tinted. Choosing anything else fixes it."
                      : "A chosen icon is one image, so it no longer changes with "
-                       + "light and dark mode. Set it back to Follow appearance "
-                       + "and IC XC NIKA to have it do so again.")
+                       + "light and dark mode. Follow appearance, IC XC NIKA and "
+                       + "Gold together are the default, and it does so again.")
             }
 
             Section {
@@ -162,8 +172,9 @@ struct SettingsView: View {
         .onChange(of: settings.reminderOff) { _, _ in
             reschedule(enabled: settings.hourReminders)
         }
-        .onChange(of: settings.iconColour) { _, _ in applyIcon() }
+        .onChange(of: settings.iconGround) { _, _ in applyIcon() }
         .onChange(of: settings.iconStyle) { _, _ in applyIcon() }
+        .onChange(of: settings.iconMark) { _, _ in applyIcon() }
     }
 
     /// iOS shows its own "you have changed the icon" alert, which cannot be
@@ -346,19 +357,29 @@ private struct IconTile: View {
     var body: some View {
         Button(action: tap) {
             VStack(spacing: 6) {
-                // A missing asset must show, not vanish: the first version of
+                // A missing image must show, not vanish: the first version of
                 // this picker drew nothing at all because the imagesets were
                 // written with an unfilled 2x/3x, and blank tiles look like a
                 // layout bug rather than a missing file.
-                Image(preview)
-                    .resizable()
-                    .frame(width: side, height: side)
-                    .background(
+                //
+                // Loaded through UIImage rather than Image(_:), because these
+                // are loose files at the bundle root rather than asset
+                // catalogue entries, and UIImage(named:) is the lookup that
+                // is documented to fall back to them. It also makes the
+                // placeholder below a real branch instead of a guess about
+                // what SwiftUI does with a name it cannot resolve.
+                Group {
+                    if let art = UIImage(named: preview) {
+                        Image(uiImage: art).resizable()
+                    } else {
                         ZStack {
                             Color.secondary.opacity(0.18)
                             Image(systemName: "questionmark")
                                 .font(.caption).foregroundStyle(palette.inkSoft)
-                        })
+                        }
+                    }
+                }
+                    .frame(width: side, height: side)
                     .clipShape(shape)
                     .overlay(shape.stroke(selected ? palette.accent : .clear,
                                           lineWidth: 2.5))

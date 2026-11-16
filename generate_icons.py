@@ -237,20 +237,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-# ---- alternate icons -------------------------------------------------------
-# The icons a reader can switch to, in two axes: a colour from each of the
-# app's four themes, and the full IC XC NIKA mark or the cross on its own.
-#
-# These were first produced by recolouring the SVG master directly, because
-# this script needs fontTools and a rasterizer and the machine they were made
-# on had neither. The colours are lifted from Theme.swift so the icon and the
-# app cannot drift apart.
-ALTERNATES = {
-    "Sanctuary":  ("#0C0D10", "#D9B36C"),
-    "Paper":      ("#FAF6EE", "#B3322A"),
-    "Manuscript": ("#F0E4C8", "#A32A1E"),
-    "Terminal":   ("#070A07", "#9BE89B"),
-}
-# the cross alone is scaled up to fill the plate the lettering leaves behind
-ALTERNATE_CROSS_SCALE = 1.42

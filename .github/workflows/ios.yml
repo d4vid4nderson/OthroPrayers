@@ -88,6 +88,37 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             | tee /tmp/build.log
 
+      # The alternates are declared in the target's Info.plist, while the
+      # default icon comes from the asset catalogue — and the catalogue
+      # compiler writes a CFBundleIcons of its own, which the build merges
+      # into the same key. If that merge replaced the key rather than adding
+      # to it, every alternate would be gone and nothing would say so: the
+      # app would build, install, and simply refuse to change its icon.
+      #
+      # So the built bundle is asked directly, which is the only place the
+      # answer exists.
+      - name: The built app really declares its alternate icons
+        run: |
+          app="$(find ~/Library/Developer/Xcode/DerivedData -type d \
+                 -name 'Prayers.app' -path '*iphonesimulator*' | head -1)"
+          [ -n "$app" ] || { echo '::error::no built Prayers.app found'; exit 1; }
+          echo "inspecting $app/Info.plist"
+          plutil -convert json -o /tmp/info.json "$app/Info.plist"
+          declared="$(python3 -c 'import json;print(len(json.load(open("/tmp/info.json")).get("CFBundleIcons",{}).get("CFBundleAlternateIcons",{})))')"
+          want="$(grep -c 'CFBundleIconFiles' ios/alticons.yml)"
+          echo "alticons.yml declares $want; the bundle has $declared"
+          [ "$declared" = "$want" ] || {
+            echo "::error::the built Info.plist has $declared alternate icons, expected $want"
+            python3 -c 'import json;print(json.dumps(json.load(open("/tmp/info.json")).get("CFBundleIcons"),indent=1)[:2000])'
+            exit 1; }
+          # and the images themselves have to be at the bundle root, where
+          # CFBundleIconFiles looks for them and nowhere else
+          png="$(ls "$app" | grep -c '^alt-.*@3x\.png$' || true)"
+          echo "loose @3x icons at the bundle root: $png"
+          [ "$png" = "$want" ] || {
+            echo "::error::$png icon files at the bundle root, expected $want"
+            exit 1; }
+
       - name: Upload build log
         if: always()
         uses: actions/upload-artifact@v4
