@@ -38,7 +38,10 @@ final class Settings: ObservableObject {
     /// window opens at four in the morning, and Compline's at nine at night.
     /// Reminders fired at the window's edge, so Morning Prayer was waking
     /// people at 4am. These are civil hours inside each window instead.
-    static func defaultMinutes(for hour: Hour) -> Int {
+    /// nonisolated: this is arithmetic on an Hour and touches no state, and
+    /// the scheduler needs it from outside the main actor. Settings being
+    /// @MainActor would otherwise make even a pure function unreachable there.
+    nonisolated static func defaultMinutes(for hour: Hour) -> Int {
         switch hour.slug {
         case "pb-morning":       return 7 * 60            // 07:00
         case "pb-noon":          return 12 * 60           // 12:00
@@ -66,10 +69,17 @@ final class Settings: ObservableObject {
         didSet { store.set(Self.index(of: textSize), forKey: Key.textSize) }
     }
 
-    /// What the app should actually apply: nothing while following the phone,
-    /// which leaves the system setting in charge.
-    var textSizeOverride: DynamicTypeSize? {
-        followSystemTextSize ? nil : textSize
+    /// What the app applies, as a range, always.
+    ///
+    /// Expressed as a range so the *same* modifier can be attached whatever
+    /// the setting is. The obvious shape — attach `.dynamicTypeSize(size)`
+    /// when unlinked and nothing when following — changes the view's type
+    /// when the toggle flips, and SwiftUI then rebuilds everything beneath it:
+    /// the navigation stack is torn down and the reader is thrown out of
+    /// Settings back to the root. Clamping to a single value pins the size;
+    /// clamping to the whole range is a no-op that leaves iOS in charge.
+    var textSizeRange: ClosedRange<DynamicTypeSize> {
+        followSystemTextSize ? .xSmall ... .accessibility5 : textSize ... textSize
     }
 
     /// The sizes offered. The accessibility sizes above xxxLarge are reachable

@@ -20,10 +20,14 @@ struct PrayersApp: App {
                 .preferredColorScheme(settings.theme.colorScheme)
                 // Applied at the root so the whole app scales together —
                 // prayer text, tab bar, settings — rather than the prayers
-                // growing out of step with the chrome around them. Nothing is
-                // applied while following the phone, which leaves the system
-                // setting genuinely in charge rather than echoing it.
-                .modifier(TextSizeOverride(size: settings.textSizeOverride))
+                // growing out of step with the chrome around them.
+                //
+                // Always this one modifier, never a conditional one: see
+                // Settings.textSizeRange. Attaching it only when unlinked
+                // changed the view's type as the toggle flipped, which tore
+                // down the navigation stack and bounced the reader out of
+                // Settings every time they touched it.
+                .dynamicTypeSize(settings.textSizeRange)
                 // the single accent: the system tints every stock control with it
                 .tint(settings.theme.palette.accent)
                 .onOpenURL { url in
@@ -95,19 +99,4 @@ struct LinkedPage: Identifiable {
     var id: String { slug }
 }
 
-/// Applies a text size, or leaves the system's alone.
-///
-/// `.dynamicTypeSize(_:)` has no "no opinion" value, so the choice has to be
-/// whether the modifier is attached at all.
-private struct TextSizeOverride: ViewModifier {
-    let size: DynamicTypeSize?
 
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if let size {
-            content.dynamicTypeSize(size)
-        } else {
-            content
-        }
-    }
-}
