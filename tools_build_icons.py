@@ -76,21 +76,54 @@ def rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def ground_plate(ground):
-    """A solid colour, or a diagonal gradient when given a pair."""
-    if isinstance(ground, str):
-        return Image.new("RGB", (SIZE, SIZE), rgb(ground))
-    a, b = rgb(ground[0]), rgb(ground[1])
-    # built at a quarter size and scaled: a diagonal ramp is smooth enough
-    # that the interpolation costs nothing visible and the loop is 16x cheaper
-    n = SIZE // 4
+def shade(h, f):
+    """Lighten (f > 0) or darken (f < 0) a hex colour."""
+    r, g, b = rgb(h)
+    if f >= 0:
+        r, g, b = (round(c + (255 - c) * f) for c in (r, g, b))
+    else:
+        r, g, b = (round(c * (1 + f)) for c in (r, g, b))
+    return f"#{r:02X}{g:02X}{b:02X}"
+
+
+def ink_pair(ink):
+    """The mark's own gradient: a sheen, light at the top-left.
+
+    A flat mark on a gradient ground reads as a sticker laid on top. Giving
+    the mark its own ramp — running the opposite way to the ground's — makes
+    it sit in the plate rather than on it, and on gold it reads as gilt.
+    """
+    return shade(ink, 0.28), shade(ink, -0.18)
+
+
+def ramp(a, b, size=None):
+    """A diagonal two-colour image."""
+    size = size or SIZE
+    ca, cb = rgb(a), rgb(b)
+    n = max(8, size // 4)
     g = Image.new("RGB", (n, n))
     px = g.load()
     for y in range(n):
         for x in range(n):
             f = (x + y) / (2 * n - 2)
-            px[x, y] = tuple(round(a[i] + (b[i] - a[i]) * f) for i in range(3))
-    return g.resize((SIZE, SIZE), Image.BILINEAR)
+            px[x, y] = tuple(round(ca[i] + (cb[i] - ca[i]) * f) for i in range(3))
+    return g.resize((size, size), Image.BILINEAR)
+
+
+def ground_plate(ground):
+    """A solid colour, or a diagonal gradient when given a pair."""
+    if isinstance(ground, str):
+        return Image.new("RGB", (SIZE, SIZE), rgb(ground))
+    return ramp(ground[0], ground[1])
+
+
+def svg_ink(ink):
+    """The mark's gradient, as SVG defs plus the fill to use."""
+    lo, hi = ink_pair(ink)
+    return ('<defs><linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">'
+            f'<stop offset="0%" stop-color="{lo}"/>'
+            f'<stop offset="100%" stop-color="{hi}"/>'
+            '</linearGradient></defs>')
 
 
 def svg_ground(ground):
@@ -151,7 +184,7 @@ def from_mask(src, ground, ink, margin):
         # a flat colour: the plate takes the ink and the figure is cut out of
         # it in the ground, which is the reverse of the drawn styles
         plate = glow_plate(ink, ground)
-        figure = rgb(ground)
+        figure_hex = ground
     else:
         # a gradient already *is* the coloured field, so there is nothing to
         # invert. The figure still wants to be dark on it, though: a pale
@@ -159,8 +192,9 @@ def from_mask(src, ground, ink, margin):
         # the flat colours are inverted at all. The drawn styles keep their
         # own ink, which is why this is here and not in the colour table.
         plate = glow_plate(ground, ink)
-        figure = rgb(ENGRAVING_ON_GRADIENT)
-    plate.paste(Image.new("RGB", alpha.size, figure),
+        figure_hex = ENGRAVING_ON_GRADIENT
+    lo, hi = ink_pair(figure_hex)
+    plate.paste(ramp(lo, hi, max(alpha.size)).resize(alpha.size, Image.LANCZOS),
                 ((SIZE - alpha.size[0]) // 2, (SIZE - alpha.size[1]) // 2), alpha)
     return plate
 
@@ -209,7 +243,9 @@ def main():
             art = svg.replace("__GLOW__", svg_glow(ink))
             # the ground rect is replaced wholesale, so a pair becomes a ramp
             art = re.sub(r'<rect width="1024" height="1024" fill="__G__"/>',
-                         svg_ground(ground), art, count=1)
+                         svg_ground(ground) + svg_ink(ink), art, count=1)
+            # every fill that was the flat ink now takes the ramp
+            art = art.replace('fill="__I__"', 'fill="url(#ink)"')
             tmp = scratch / f"_{cname}{sname}.svg"
             tmp.write_text(art)
             d = out / f"AppIcon{cname}{sname}.appiconset"
