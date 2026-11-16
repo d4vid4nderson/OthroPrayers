@@ -25,7 +25,7 @@ struct WorshipView: View {
                                 NavigationLink(value: album) { row(album) }
                                     .buttonStyle(.plain)
                                 if album.id != albums.last?.id {
-                                    Divider().padding(.leading, 18)
+                                    ThemedRule().padding(.leading, 18)
                                 }
                             }
                         }
@@ -69,7 +69,7 @@ struct WorshipView: View {
                 } else {
                     Image(systemName: "music.note.list")
                         .font(.footnote)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(palette.inkFaint)
                 }
             }
             .frame(width: 18)
@@ -82,14 +82,14 @@ struct WorshipView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Text(album.summary)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(palette.inkSoft)
             }
 
             Spacer(minLength: 10)
 
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(palette.inkFaint)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 18)
@@ -160,7 +160,7 @@ struct TrackList: View {
                 .disabled(track.url == nil)
                 .opacity(track.url == nil ? 0.4 : 1)
                 if track.id != tracks.last?.id {
-                    Divider().padding(.leading, 18)
+                    ThemedRule().padding(.leading, 18)
                 }
             }
         }
@@ -177,7 +177,7 @@ struct TrackList: View {
                         .foregroundStyle(palette.accent)
                         .symbolEffect(.variableColor, isActive: player.isPlaying)
                 } else {
-                    Circle().fill(.tertiary).frame(width: 7, height: 7)
+                    Circle().fill(palette.inkFaint).frame(width: 7, height: 7)
                 }
             }
             .frame(width: 18)
@@ -192,7 +192,7 @@ struct TrackList: View {
 
             Text(track.length)
                 .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 18)
@@ -208,7 +208,7 @@ private extension View {
     func card() -> some View {
         self
             .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(.separator, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 20).stroke(palette.hairline, lineWidth: 1))
     }
 }
 

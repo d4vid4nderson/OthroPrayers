@@ -91,7 +91,7 @@ struct ArrangeView: View {
                 if unit.pageSlug != slug, let from = library.page(unit.pageSlug)?.title {
                     Text(from)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(palette.inkSoft)
                 }
             }
             .padding(.vertical, 2)
@@ -103,7 +103,7 @@ struct ArrangeView: View {
             // The content was regenerated and this heading is gone.
             Label("No longer in this edition", systemImage: "exclamationmark.triangle")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
         }
     }
 }
@@ -140,7 +140,7 @@ struct PaletteView: View {
                             HStack {
                                 Text(unit.title)
                                     .font(Typeface.display(.body))
-                                    .foregroundStyle(.primary)
+                                    .foregroundStyle(palette.ink)
                                 Spacer(minLength: 8)
                                 Image(systemName: "plus")
                                     .font(.footnote.weight(.semibold))

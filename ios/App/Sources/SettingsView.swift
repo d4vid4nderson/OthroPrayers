@@ -131,6 +131,13 @@ struct SettingsView: View {
                      + "the app makes no network requests.")
             }
         }
+        // A Form paints the system's grouped background and row fills, which
+        // follow light/dark but not the theme — so Settings stayed system grey
+        // while every other screen turned. Hidden, and repainted from the
+        // palette.
+        .scrollContentBackground(.hidden)
+        .background(palette.ground)
+        .listRowBackground(palette.surface)
         .navigationTitle("Settings")
         .onChange(of: settings.hourReminders) { _, on in
             reschedule(enabled: on)
@@ -236,7 +243,7 @@ struct SettingsView: View {
                 .font(.caption2.weight(.semibold))
                 .tracking(1.4)
                 .textCase(.uppercase)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(palette.inkFaint)
 
             Text("Stand, and make the sign of the cross.")
                 .font(Typeface.prayer(.callout).italic())
@@ -338,12 +345,12 @@ private struct IconTile: View {
                         ZStack {
                             Color.secondary.opacity(0.18)
                             Image(systemName: "questionmark")
-                                .font(.caption).foregroundStyle(.secondary)
+                                .font(.caption).foregroundStyle(palette.inkSoft)
                         })
                     .clipShape(shape)
                     .overlay(shape.stroke(selected ? palette.accent : .clear,
                                           lineWidth: 2.5))
-                    .overlay(shape.stroke(.separator, lineWidth: 0.5))
+                    .overlay(shape.stroke(palette.hairline, lineWidth: 0.5))
                 Text(label)
                     .font(.caption2)
                     .lineLimit(1)

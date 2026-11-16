@@ -16,7 +16,7 @@ struct BookView: View {
                 if let summary = library.page(book.slug)?.summary, !summary.isEmpty {
                     Text(summary)
                         .font(Typeface.prayer(.callout).italic())
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(palette.inkSoft)
                         .padding(.top, 6)
                         .padding(.bottom, 22)
                 }
@@ -25,14 +25,14 @@ struct BookView: View {
                         HStack(alignment: .firstTextBaseline, spacing: 15) {
                             Text(Self.numerals[safe: i] ?? "\(i + 1)")
                                 .font(Typeface.display(.callout))
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(palette.inkFaint)
                                 .frame(width: 26, alignment: .leading)
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(section.title).font(Typeface.display(.title3))
                                 if !section.blurb.isEmpty {
                                     Text(section.blurb)
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(palette.inkSoft)
                                         .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
@@ -42,7 +42,7 @@ struct BookView: View {
                         .contentShape(.rect)
                     }
                     .buttonStyle(.plain)
-                    Divider()
+                    ThemedRule()
                 }
             }
             .padding(.horizontal, 22)

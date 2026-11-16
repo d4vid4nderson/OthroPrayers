@@ -60,10 +60,10 @@ private struct HeroCard: View {
                 .textCase(.uppercase)
             Text(hour.title)
                 .font(Typeface.display(.title))
-                .foregroundStyle(.primary)
+                .foregroundStyle(palette.ink)
             Text(hour.blurb)
                 .font(Typeface.prayer(.callout).italic())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
                 .fixedSize(horizontal: false, vertical: true)
             Label("Begin", systemImage: "chevron.right")
                 .labelStyle(.titleAndIcon)
@@ -97,7 +97,7 @@ private struct HourList: View {
             ForEach(hours) { hour in
                 NavigationLink(value: hour.slug) {
                     HStack(spacing: 14) {
-                        Circle().fill(.tertiary).frame(width: 7, height: 7)
+                        Circle().fill(palette.inkFaint).frame(width: 7, height: 7)
                         Text(hour.title).font(Typeface.display(.title3))
                         Spacer(minLength: 12)
                         MicroLabel(text: hour.when)
@@ -107,11 +107,11 @@ private struct HourList: View {
                     .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
-                if hour.id != hours.last?.id { Divider().padding(.leading, 18) }
+                if hour.id != hours.last?.id { ThemedRule().padding(.leading, 18) }
             }
         }
         .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(.separator, lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(palette.hairline, lineWidth: 1))
     }
 }
 
@@ -127,18 +127,18 @@ private struct BookList: View {
                         symbol: book.slug == "prayerbook" ? "book.closed" : "book.pages")
                 }
                 .buttonStyle(.plain)
-                Divider().padding(.leading, 70)
+                ThemedRule().padding(.leading, 70)
             }
             ForEach(Array(library.extras.enumerated()), id: \.element.id) { i, extra in
                 NavigationLink(value: extra.slug) {
                     row(title: extra.title, detail: extra.blurb, symbol: "cross")
                 }
                 .buttonStyle(.plain)
-                if i < library.extras.count - 1 { Divider().padding(.leading, 70) }
+                if i < library.extras.count - 1 { ThemedRule().padding(.leading, 70) }
             }
         }
         .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(.separator, lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(palette.hairline, lineWidth: 1))
     }
 
     private func row(title: String, detail: String, symbol: String) -> some View {
@@ -152,12 +152,12 @@ private struct BookList: View {
                     .stroke(palette.accent.opacity(0.18), lineWidth: 1))
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(Typeface.display(.title3))
-                Text(detail).font(.caption).foregroundStyle(.secondary)
+                Text(detail).font(.caption).foregroundStyle(palette.inkSoft)
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
             Image(systemName: "chevron.right").font(.footnote.weight(.semibold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(palette.inkFaint)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 18)

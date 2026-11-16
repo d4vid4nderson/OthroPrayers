@@ -18,7 +18,7 @@ struct BlockView: View {
                 MicroLabel(text: settings.theme.sigil(for: block.type) + block.plain)
                     .multilineTextAlignment(.center)
                 Rectangle()
-                    .fill(.quaternary)
+                    .fill(palette.inkFaint.opacity(0.4))
                     .frame(width: 16, height: 1)
             }
             .frame(maxWidth: .infinity)
@@ -47,7 +47,7 @@ struct BlockView: View {
         case .lead:
             Text(attributed)
                 .font(Typeface.prayer(.callout).italic())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 8)
@@ -107,10 +107,10 @@ struct BlockView: View {
 
         case .colophon:
             VStack(alignment: .leading, spacing: 0) {
-                Divider().padding(.bottom, 14)
+                ThemedRule().padding(.bottom, 14)
                 Text(attributed)
                     .font(.footnote.italic())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(palette.inkSoft)
                     .lineSpacing(3)
             }
             .padding(.top, 20)

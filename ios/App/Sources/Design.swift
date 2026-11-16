@@ -76,3 +76,16 @@ struct AccentRule: View {
             .accessibilityHidden(true)
     }
 }
+
+/// A hairline in the theme's own colour.
+///
+/// SwiftUI's `Divider` draws the system separator, which knows about light and
+/// dark but nothing about which theme is on — so on Terminal it was a grey
+/// line through green text.
+struct ThemedRule: View {
+    var body: some View {
+        Rectangle()
+            .fill(palette.hairline)
+            .frame(height: 1)
+    }
+}
