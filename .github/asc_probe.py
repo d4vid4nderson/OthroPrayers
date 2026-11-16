@@ -78,19 +78,24 @@ def get(tok: str, path: str):
             return e.code, {}
 
 
-def builds(tok, bundle):
+def builds(tok, bundle, want=None):
     """What App Store Connect thinks of the builds we have uploaded.
 
     An upload succeeding only means Apple accepted the bytes. The build then
     has to process, and can sit in PROCESSING, come back INVALID, or be held
     waiting on export compliance — none of which the upload step can see.
+
+    With `want`, returns that build's processing state, or None if Apple has
+    no record of it yet. That is the difference between "we sent it" and
+    "they have it", and it is the whole reason a green upload can be followed
+    by an empty TestFlight.
     """
     code, body = get(tok, f"/v1/apps?filter[bundleId]={bundle}")
     if code != 200 or not body.get("data"):
         print(f"\n=== app lookup: HTTP {code} ===")
         for e in body.get("errors", [])[:2]:
             print("   ", e.get("title"), "-", e.get("detail"))
-        return
+        return None
     app = body["data"][0]
     print(f"\n=== {app['attributes']['name']} ({app['id']}) ===")
 
@@ -102,20 +107,59 @@ def builds(tok, bundle):
         print(f"   builds: HTTP {code}")
         for e in body.get("errors", [])[:2]:
             print("   ", e.get("title"), "-", e.get("detail"))
-        return
+        return None
     rows = body.get("data", [])
     print(f"   {len(rows)} builds\n")
     print(f"   {'build':<14} {'state':<12} {'expired':<8} {'encryption':<11} uploaded")
+    found = None
     for b in rows:
         a = b["attributes"]
-        print(f"   {a.get('version',''):<14} {a.get('processingState',''):<12} "
+        here = str(a.get("version", ""))
+        print(f"   {here:<14} {a.get('processingState',''):<12} "
               f"{str(a.get('expired','')):<8} {str(a.get('usesNonExemptEncryption','')):<11} "
-              f"{a.get('uploadedDate','')}")
+              f"{a.get('uploadedDate','')}"
+              f"{'   <- this run' if want and here == str(want) else ''}")
+        if want and here == str(want):
+            found = a.get("processingState", "UNKNOWN")
+    return found
+
+
+def await_build(key_id, issuer, p8, bundle, want, tries=20, gap=30):
+    """Wait until App Store Connect actually has the build.
+
+    Polled rather than assumed. Apple processes asynchronously, so a build
+    that will end up INVALID is VALID-looking for a while and then simply
+    never appears in TestFlight — with nothing in this log to say so.
+    """
+    for i in range(1, tries + 1):
+        state = builds(token(key_id, issuer, p8), bundle, want)
+        if state in ("VALID", "PROCESSING"):
+            print(f"\nApple has build {want}: {state}")
+            # PROCESSING is a fine place to stop waiting: the build is on
+            # their side and will appear in TestFlight when it finishes.
+            return 0
+        if state in ("INVALID", "FAILED"):
+            print(f"\n::error::build {want} came back {state} — check the "
+                  "email App Store Connect sent the account owner")
+            return 1
+        print(f"\n   not there yet ({i}/{tries}); waiting {gap}s")
+        time.sleep(gap)
+    print(f"\n::error::App Store Connect never showed build {want}. The upload "
+          "reported success, so the binary was accepted for delivery and "
+          "then dropped during processing — the reason is in the email Apple "
+          "sent the account owner.")
+    return 1
 
 
 def main():
     key_id, issuer, p8 = sys.argv[1], sys.argv[2], sys.argv[3]
-    bundle = sys.argv[4] if len(sys.argv) > 4 else "com.orthoprayers.western"
+    # positional, but only if it is one: otherwise `--await 123` would be
+    # read as the bundle id and every lookup would quietly find no app
+    bundle = (sys.argv[4] if len(sys.argv) > 4 and not sys.argv[4].startswith("--")
+              else "com.orthoprayers.western")
+    if "--await" in sys.argv:
+        want = sys.argv[sys.argv.index("--await") + 1]
+        sys.exit(await_build(key_id, issuer, p8, bundle, want))
     tok = token(key_id, issuer, p8)
     if "--builds" in sys.argv:
         builds(tok, bundle)

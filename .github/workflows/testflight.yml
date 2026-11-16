@@ -252,6 +252,24 @@ jobs:
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             | tee "$RUNNER_TEMP/export.log"
 
+      # Uploading is not arriving.
+      #
+      # `-exportArchive ... destination upload` reports success once Apple
+      # accepts the bytes for delivery. Processing happens afterwards, on
+      # their side, and a build that fails it never reaches TestFlight while
+      # this workflow stays green — the only notice is an email to the
+      # account owner. That is the exact shape of a passing pipeline and an
+      # empty TestFlight, and it is worth one more minute to rule out.
+      - name: App Store Connect actually has the build
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          python3 .github/asc_probe.py \
+            "$ASC_KEY_ID" "$ASC_ISSUER_ID" \
+            ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
+            --await "${{ steps.ver.outputs.build }}"
+
       - name: Logs
         if: always()
         uses: actions/upload-artifact@v4
