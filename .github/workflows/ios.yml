@@ -105,7 +105,9 @@ jobs:
           echo "inspecting $app/Info.plist"
           plutil -convert json -o /tmp/info.json "$app/Info.plist"
           declared="$(python3 -c 'import json;print(len(json.load(open("/tmp/info.json")).get("CFBundleIcons",{}).get("CFBundleAlternateIcons",{})))')"
-          want="$(grep -c 'CFBundleIconFiles' ios/alticons.yml)"
+          # anchored: the file's own header comment mentions the key too, and
+          # counting that line made this fail against a bundle that was right
+          want="$(grep -c '^ \{14\}CFBundleIconFiles:' ios/alticons.yml)"
           echo "alticons.yml declares $want; the bundle has $declared"
           [ "$declared" = "$want" ] || {
             echo "::error::the built Info.plist has $declared alternate icons, expected $want"

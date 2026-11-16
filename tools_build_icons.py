@@ -6,32 +6,37 @@
 
 The three axes are free of each other, which is the point: a black mark on the
 Sunrise gradient is a combination, not a palette someone had to think of in
-advance. 5 x 8 x 4 = 160 icons.
+advance. 3 x 8 x 4 = 96 icons.
+
+Three styles, all of them vector. There were two more — a block-print icon of
+the Mother of God and the Christ medallion cut from its centre — and they are
+gone, which is worth saying plainly: they were raster engravings, they were
+the only part of this that could not be rebuilt from the repository, and at
+60pt they asked a lot of a home screen. Everything here now comes from the
+two SVGs in assets/icons, so a clean checkout can regenerate the whole set.
 
 They ship as loose 120px and 180px files rather than 1024px asset-catalog
 entries. A home-screen icon is never drawn above 180px — 1024 is for the App
 Store listing, which only the default icon needs — so the large versions were
-costing about 40MB to show detail no one ever sees. At these sizes the whole
-set is a few megabytes.
+costing tens of megabytes to show detail no one ever sees.
 
 The same files serve the picker's thumbnails, because UIImage(named:) finds a
 loose bundle file by name. There is no second copy of anything.
 
-Needs Pillow and node with playwright (for the SVG styles).
+Needs Pillow and node with playwright.
 """
 import pathlib
 import subprocess
 import sys
 
-from PIL import Image, ImageFilter
+from PIL import Image
 
 MASTER = "assets/icons/app-icon.svg"
 ORTHODOX = "assets/icons/orthodox-cross.svg"
 
-# what iOS actually draws on a home screen: 60pt at @2x and @3x
+# what iOS actually draws on a home screen: 60pt at @2x and @3x. Rendered at
+# 1024 and downsampled, so the edges stay clean.
 SCALES = {2: 120, 3: 180}
-# rendered at this size and downsampled, so the edges stay clean
-RENDER = 360
 
 BACKGROUNDS = {
     "black":   "#000000",
@@ -51,11 +56,10 @@ MARKS = {
     "phosphor": "#9BE89B",
 }
 
-STYLES = ["mark", "cross", "orthodox", "icon", "medallion"]
+STYLES = ["mark", "cross", "orthodox"]
 
 GLOW = 0.22          # the radial wash behind the mark
 TILT = 0.10          # lit from above
-THICKEN, THICKEN_BLEND = 3, 0.65   # block prints read as solids, not hatching
 
 
 def rgb(h):
@@ -84,29 +88,68 @@ def ground_lum(background):
     return (lum(background[0]) + lum(background[1])) / 2
 
 
-def ink_pair(ink, bg, engraved=False):
-    """The mark's own sheen — and which way it runs.
+def shade_to(h, target):
+    """Move a colour to a target lightness, keeping its hue.
 
-    Lighting it from the top-left looks like metal, which is why gold reads
-    the way it does. But a fixed direction only works on a dark ground: on
-    cream or on a mid gradient the lit end of the ramp is the same lightness
-    as what is behind it, and the figure dissolves. That is what made the two
-    engraved styles unreadable everywhere but black.
-
-    So the sheen runs away from the ground: it lightens over a dark one and
-    darkens over a light one, and the mark keeps its hue either way.
-
-    The engraved styles get a narrower, harder swing. They are fine hatching
-    rather than a solid figure, so half a line at the ground's own lightness
-    is not a highlight, it is a gap — and at 180px the gaps are most of the
-    drawing. Keeping the whole ramp to one side of the ground costs them some
-    modelling and buys them being legible at all.
+    Exact rather than iterative: `shade` scales every channel by the same
+    factor, and luminance is a weighted sum of the channels, so it moves the
+    luminance by that factor too.
     """
-    if ground_lum(bg) > 0.5:
-        return (shade(ink, -0.25), shade(ink, -0.68)) if engraved \
-            else (shade(ink, 0.10), shade(ink, -0.58))
-    return (shade(ink, 0.70), shade(ink, 0.20)) if engraved \
-        else (shade(ink, 0.55), shade(ink, -0.25))
+    i = lum(h)
+    t = min(0.97, max(0.03, target))
+    f = (t - i) / max(1e-3, 1 - i) if t > i else t / max(1e-3, i) - 1
+    return shade(h, max(-0.95, min(0.95, f)))
+
+
+# How far, in lightness, a figure has to stand off its ground to be read at
+# 60pt, and how wide its own ramp is under that.
+CLEAR, SPAN = 0.30, 0.26
+
+
+def ink_pair(ink, bg):
+    """The mark's sheen: which way it runs, and how far it has to go.
+
+    A fixed light-to-dark ramp reads as metal on black and dissolves on
+    cream, so the sheen runs away from the ground. But "away" is not enough
+    on its own. The grounds that failed hardest were the mid-lightness
+    gradients — nebula and sunrise sit right at the middle, where gold and
+    ivory and phosphor all live, and a ramp that merely leans away still
+    straddles them.
+
+    So the figure is moved until it clears the ground by a fixed margin,
+    and no further. Two things fall out of saying it that way. A mark that
+    is already clear is left exactly as it was: black on cream, and black on
+    any of the gradients, do not move at all — which matters, because that
+    pairing is the reason the axes were separated. And when a mark does have
+    to move, it moves whichever way is nearer, so gold on nebula pales
+    rather than turning to bronze. The hue is the choice; the lightness is
+    what it costs to still see it.
+    """
+    g, i = ground_lum(bg), lum(ink)
+    clear, span = CLEAR, SPAN
+
+    def pair(lighter, darker):
+        return shade_to(ink, lighter), shade_to(ink, darker)
+
+    if abs(i - g) >= clear:
+        # Already clear of its ground, so the mark does not move at all: the
+        # ramp simply straddles the lightness it was chosen as. Extending it
+        # away from the ground instead would push an already-bright mark off
+        # the end — gold on black came out white, which is not gold.
+        if i > g:
+            return pair(min(0.97, i + span * 0.55),
+                        max(i - span * 0.45, g + clear))
+        return pair(min(i + span * 0.55, g - clear),
+                    max(0.03, i - span * 0.45))
+
+    # Too close to its ground to be read, so it has to move — whichever way
+    # is nearer, and only as far as it must. Going up from a mid gradient
+    # pales gold; going down would turn it to bronze, which is further from
+    # what was asked for.
+    up, down = min(0.97, g + clear), max(0.03, g - clear)
+    if up - g >= clear - 1e-6 and (g - down < clear - 1e-6 or up - i <= i - down):
+        return pair(min(0.97, up + span), up)
+    return pair(down, max(0.03, down - span))
 
 
 def glow_strength(ink, bg):
@@ -114,27 +157,23 @@ def glow_strength(ink, bg):
 
     The halo is the mark's own colour, which lifts a gold cross off black.
     Paint the same halo under ivory on vellum and it fills the gap between
-    figure and ground with more of the colour they already share.
+    figure and ground with more of the colour they already share. Measured
+    from the ink as drawn, not as chosen, since that is what is on the plate.
     """
-    return GLOW * min(1.0, abs(lum(ink) - ground_lum(bg)) * 2.2)
+    drawn = ink_pair(ink, bg)
+    near = min(abs(lum(c) - ground_lum(bg)) for c in drawn)
+    return GLOW * min(1.0, near * 2.2)
 
 
-def ramp(a, b, size, flip=False):
-    """A diagonal two-stop gradient. `flip` runs it the other diagonal.
-
-    The ground runs top-left to bottom-right; the mark runs bottom-left to
-    top-right, against it. Parallel was the quiet mistake: the figure's light
-    end landed on the ground's light end and its dark end on the ground's
-    dark end, so the one place the two gradients could have separated was the
-    one place they matched.
-    """
+def ramp(a, b, size):
+    """A diagonal two-stop gradient, top-left to bottom-right."""
     ca, cb = rgb(a), rgb(b)
     n = max(8, size // 2)
     g = Image.new("RGB", (n, n))
     px = g.load()
     for y in range(n):
         for x in range(n):
-            f = (x + (n - 1 - y if flip else y)) / (2 * n - 2)
+            f = (x + y) / (2 * n - 2)
             px[x, y] = tuple(round(ca[i] + (cb[i] - ca[i]) * f) for i in range(3))
     return g.resize((size, size), Image.BILINEAR)
 
@@ -158,23 +197,6 @@ def plate(background, mark, size):
     return base
 
 
-def engraved(src, background, mark, margin_frac, size):
-    art = Image.open(src).convert("L")
-    alpha = Image.eval(art, lambda v: 255 - v)
-    alpha = Image.blend(alpha, alpha.filter(ImageFilter.MaxFilter(THICKEN)),
-                        THICKEN_BLEND)
-    margin = round(size * margin_frac)
-    box = size - 2 * margin
-    w, h = alpha.size
-    s = min(box / w, box / h)
-    alpha = alpha.resize((max(1, round(w * s)), max(1, round(h * s))), Image.LANCZOS)
-    out = plate(background, mark, size)
-    lo, hi = ink_pair(mark, background, engraved=True)
-    out.paste(ramp(lo, hi, max(alpha.size), flip=True).resize(alpha.size, Image.LANCZOS),
-              ((size - alpha.size[0]) // 2, (size - alpha.size[1]) // 2), alpha)
-    return out
-
-
 def svg_defs(background, mark):
     lo, hi = ink_pair(mark, background)
     g = glow_strength(mark, background)
@@ -194,6 +216,11 @@ def svg_defs(background, mark):
         f'<stop offset="0%" stop-color="{mark}" stop-opacity="{g:.3f}"/>'
         f'<stop offset="55%" stop-color="{mark}" stop-opacity="{g*0.3:.3f}"/>'
         f'<stop offset="100%" stop-color="{mark}" stop-opacity="0"/></radialGradient>'
+        # bottom-left to top-right, against the ground's top-left to
+        # bottom-right. Parallel was the quiet mistake: the figure's light end
+        # landed on the ground's light end and its dark end on the ground's
+        # dark end, so the one place the two could have separated was the one
+        # place they matched.
         f'<linearGradient id="ink" x1="0" y1="1" x2="1" y2="0">'
         f'<stop offset="0%" stop-color="{lo}"/>'
         f'<stop offset="100%" stop-color="{hi}"/></linearGradient></defs>'
@@ -230,28 +257,20 @@ def main():
         "orthodox": ortho.replace('<rect width="1024" height="1024" fill="__G__"/>',
                                   "__DEFS__").replace('fill="__I__"', 'fill="url(#ink)"'),
     }
-    engravings = {
-        "icon": (scratch / "recovered/icon_p1.png", 0.05),
-        "medallion": (scratch / "medallion.png", 0.06),
-    }
 
     made = []
     for bg_name, bg in BACKGROUNDS.items():
         for mk_name, mk in MARKS.items():
             for style in STYLES:
                 stem = name(bg_name, style, mk_name)
-                if style in svgs:
-                    art = svgs[style].replace("__DEFS__", svg_defs(bg, mk))
-                    tmp = scratch / f"_{stem}.svg"
-                    tmp.write_text(art)
-                    big = scratch / f"_{stem}.png"
-                    subprocess.run(["node", str(renderer), str(tmp), str(big),
-                                    bg if isinstance(bg, str) else bg[0], mk],
-                                   check=True)
-                    full = Image.open(big).convert("RGB")
-                else:
-                    src, margin = engravings[style]
-                    full = engraved(src, bg, mk, margin, RENDER)
+                art = svgs[style].replace("__DEFS__", svg_defs(bg, mk))
+                tmp = scratch / f"_{stem}.svg"
+                tmp.write_text(art)
+                big = scratch / f"_{stem}.png"
+                subprocess.run(["node", str(renderer), str(tmp), str(big),
+                                bg if isinstance(bg, str) else bg[0], mk],
+                               check=True)
+                full = Image.open(big).convert("RGB")
                 for scale, px in SCALES.items():
                     full.resize((px, px), Image.LANCZOS).save(
                         out / f"{stem}@{scale}x.png", optimize=True)

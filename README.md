@@ -56,7 +56,7 @@ instead of a second, drifting copy.
 | `export_content.py` | pages → `ios/Content/content.json` |
 | `export_music.py` | recordings → `ios/Content/music.json` |
 | `generate_icons.py` | the default app icon, from `assets/icons/app-icon.svg` |
-| `tools_build_icons.py` | the 160 alternate icons, and their Info.plist entries |
+| `tools_build_icons.py` | the 96 alternate icons, and their Info.plist entries |
 
 `build.py` still carries a `WESTERN_ONLY` switch from when this was also a
 website covering both rites. It defaults to on, and the Eastern content it
@@ -80,7 +80,7 @@ over from the website; they are harmless and uncommitted.
 
 The reader can rebuild the icon from three axes that do not constrain each
 other — what it shows, what it stands on, and what colour it is drawn in — so
-there are 5 × 8 × 4 = 160 of them.
+there are 3 × 8 × 4 = 96 of them.
 
 ```sh
 python3 tools_build_icons.py <scratch> ios/App/Resources/AltIcons ios/alticons.yml
@@ -91,12 +91,17 @@ Needs Pillow and `node` with Playwright. It writes both the images and
 an icon with no declaration cannot be chosen, and a declaration with no icon
 is a blank square on a home screen.
 
+Every style is vector, drawn from the two SVGs in `assets/icons`, so a clean
+checkout can rebuild the whole set. Two raster styles — a block print of the
+Mother of God and the Christ medallion from its centre — were dropped: they
+were the only part of this that could not be regenerated from the repository,
+and a plate of fine hatching asks a lot of a 60pt square.
+
 They are loose 120 and 180px PNGs rather than asset-catalog appiconsets. An
 appiconset holds one 1024px image — the size the App Store listing wants, and
-about eight times what a home screen ever draws — which came to roughly 40MB
-for a set this size. At these sizes the whole set is 6MB, and the same files
-are what the picker in Settings draws its tiles from, so the preview is
-literally the icon.
+about eight times what a home screen ever draws. The whole set is 2.5MB, less
+than a seventh of what 70 appiconsets cost, and the same files are what the
+picker in Settings draws its tiles from, so the preview is literally the icon.
 
 Only `AppIcon` stays in the catalog: it is the default, so it is the one the
 listing is cut from, and the only one that can carry separate light, dark and

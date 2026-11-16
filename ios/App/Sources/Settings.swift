@@ -98,38 +98,40 @@ final class Settings: ObservableObject {
         didSet { store.set(iconMark.rawValue, forKey: Key.iconMark) }
     }
 
+    /// All three are vector.
+    ///
+    /// There were two more — a block print of the Mother of God "of the Sign"
+    /// and the Christ medallion cut from its centre. They were raster
+    /// engravings, which made them the one part of the icon set that could
+    /// not be rebuilt from the repository, and a plate of fine hatching asks
+    /// a great deal of a 60pt square. Dropping them took the set from 6.2MB
+    /// to 2.5MB.
     enum IconStyle: String, CaseIterable, Identifiable {
-        case mark, cross, orthodox, icon, medallion
+        case mark, cross, orthodox
         var id: String { rawValue }
 
         var name: String {
             switch self {
-            case .mark:      return "IC XC NIKA"
-            case .cross:     return "Cross"
-            case .orthodox:  return "Orthodox cross"
-            case .icon:      return "Icon"
-            case .medallion: return "Medallion"
+            case .mark:     return "IC XC NIKA"
+            case .cross:    return "Cross"
+            case .orthodox: return "Orthodox cross"
             }
         }
 
         /// What fits under a 60pt tile.
         var shortName: String {
             switch self {
-            case .mark:      return "IC XC"
-            case .cross:     return "Cross"
-            case .orthodox:  return "Orthodox"
-            case .icon:      return "Icon"
-            case .medallion: return "Medallion"
+            case .mark:     return "IC XC"
+            case .cross:    return "Cross"
+            case .orthodox: return "Orthodox"
             }
         }
 
         var detail: String {
             switch self {
-            case .mark:      return "The mark the app opens on."
-            case .cross:     return "The pattée cross alone."
-            case .orthodox:  return "The three-bar cross."
-            case .icon:      return "The Mother of God “of the Sign”. Richly drawn, so it reads best on a large icon."
-            case .medallion: return "The Christ medallion from the centre of that icon. The clearest of these when the icon is small."
+            case .mark:     return "The mark the app opens on."
+            case .cross:    return "The pattée cross alone."
+            case .orthodox: return "The three-bar cross."
             }
         }
     }
