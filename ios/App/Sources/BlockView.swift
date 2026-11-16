@@ -180,7 +180,12 @@ struct BlockView: View {
                 let glyph = run.t.trimmingCharacters(in: .whitespaces)
                 piece = AttributedString((i == 0 ? "" : " ") + glyph + " ")
                 piece.foregroundColor = palette.accent
-                piece.font = Typeface.prayer(.title3)
+                // .title against body text — roughly two steps up from the
+                // prayer it sits in. This does open the line it falls on,
+                // because a line is as tall as its tallest glyph; that is the
+                // price of the mark being visible at a glance, which is the
+                // point of it.
+                piece.font = Typeface.prayer(.title)
             case .dropcap, .versal:
                 piece.foregroundColor = palette.accent
                 piece.font = Typeface.display(.title)
