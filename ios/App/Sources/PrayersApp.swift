@@ -29,7 +29,16 @@ struct PrayersApp: App {
                 // Settings every time they touched it.
                 .dynamicTypeSize(settings.textSizeRange)
                 // the single accent: the system tints every stock control with it
-                .tint(settings.effectiveTheme.palette.accent)
+                .tint(settings.effectiveTheme.palette(phosphor: settings.terminalPhosphor).accent)
+                // The default colour for any text that does not name one.
+                //
+                // Replacing every explicit .primary with palette.ink was not
+                // enough: most prayer text never set a colour at all, so it
+                // fell through to the system default — white in dark mode,
+                // which is why Terminal had green headings over white prayers.
+                // Setting it here catches the ones that say nothing, and
+                // anything that names its own colour still wins.
+                .foregroundStyle(settings.effectiveTheme.palette(phosphor: settings.terminalPhosphor).ink)
                 .onOpenURL { url in
                     guard url.scheme == "prayers", url.host == "page" else { return }
                     deepLink = url.lastPathComponent

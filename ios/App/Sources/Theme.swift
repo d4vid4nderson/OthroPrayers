@@ -38,6 +38,68 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
         }
     }
 
+    /// Which phosphor the Terminal theme glows in.
+    ///
+    /// A real terminal is one colour on black, and which colour was a property
+    /// of the tube — P1 green, P3 amber — or, later, of the scheme someone
+    /// chose. So it is a choice here too rather than one hardcoded green.
+    enum Phosphor: String, CaseIterable, Identifiable {
+        case green, teal, cyan, amber
+        var id: String { rawValue }
+
+        var name: String {
+            switch self {
+            case .green: return "Green"
+            case .teal:  return "Teal"
+            case .cyan:  return "Cyan"
+            case .amber: return "Amber"
+            }
+        }
+
+        var ink: Color {
+            switch self {
+            case .green: .hex(0x9BE89B)
+            case .teal:  .hex(0x5EE6D0)
+            case .cyan:  .hex(0x6BD5F5)
+            case .amber: .hex(0xFFC777)
+            }
+        }
+
+        var inkSoft: Color {
+            switch self {
+            case .green: .hex(0x6FAE78)
+            case .teal:  .hex(0x46A89A)
+            case .cyan:  .hex(0x4C9DB8)
+            case .amber: .hex(0xC2975A)
+            }
+        }
+
+        var inkFaint: Color {
+            switch self {
+            case .green: .hex(0x4E8A5A)
+            case .teal:  .hex(0x357F75)
+            case .cyan:  .hex(0x3A788C)
+            case .amber: .hex(0x8F6F43)
+            }
+        }
+
+        /// The second phosphor, for whatever the printed book set in red.
+        /// Amber against the cool ones, green against amber itself.
+        var accent: Color {
+            self == .amber ? .hex(0x9BE89B) : .hex(0xFFB454)
+        }
+    }
+
+    /// The palette, with the Terminal theme's phosphor supplied.
+    func palette(phosphor: Phosphor) -> Palette {
+        guard case .terminal = self else { return palette }
+        return Palette(ground: .hex(0x070A07), surface: .hex(0x0C120C),
+                       ink: phosphor.ink, inkSoft: phosphor.inkSoft,
+                       inkFaint: phosphor.inkFaint,
+                       accent: phosphor.accent, onAccent: .hex(0x070A07),
+                       hairline: phosphor.ink.opacity(0.16))
+    }
+
     var palette: Palette {
         switch self {
         case .paper:

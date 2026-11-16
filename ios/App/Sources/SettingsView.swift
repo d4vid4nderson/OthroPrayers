@@ -32,6 +32,18 @@ struct SettingsView: View {
                     .pickerStyle(.inline)
                     .labelsHidden()
                 }
+                // Only when Terminal is what will actually be drawn — under
+                // "match phone appearance" that depends on which side the
+                // phone is on, so it asks effectiveTheme rather than theme.
+                if settings.effectiveTheme == .terminal
+                    || settings.lightTheme == .terminal
+                    || settings.darkTheme == .terminal {
+                    Picker("Phosphor", selection: $settings.terminalPhosphor) {
+                        ForEach(Theme.Phosphor.allCases) { p in
+                            Text(p.name).tag(p)
+                        }
+                    }
+                }
             } header: {
                 Text("Style")
             } footer: {

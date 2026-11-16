@@ -23,6 +23,11 @@ final class Settings: ObservableObject {
         didSet { store.set(followSystemAppearance, forKey: Key.followAppearance) }
     }
 
+    /// Which phosphor the Terminal theme glows in.
+    @Published var terminalPhosphor: Theme.Phosphor {
+        didSet { store.set(terminalPhosphor.rawValue, forKey: Key.phosphor) }
+    }
+
     /// Which theme to use in each appearance while following the phone.
     @Published var lightTheme: Theme {
         didSet { store.set(lightTheme.rawValue, forKey: Key.lightTheme) }
@@ -295,6 +300,7 @@ final class Settings: ObservableObject {
         static let followAppearance = "followSystemAppearance"
         static let lightTheme = "lightTheme"
         static let darkTheme = "darkTheme"
+        static let phosphor = "terminalPhosphor"
         static let dyslexic = "dyslexicFont"
         static let reminders = "hourReminders"
         static let lastRead = "lastRead"
@@ -315,6 +321,7 @@ final class Settings: ObservableObject {
             : store.bool(forKey: Key.followAppearance)
         lightTheme = Theme(rawValue: store.string(forKey: Key.lightTheme) ?? "") ?? .paper
         darkTheme = Theme(rawValue: store.string(forKey: Key.darkTheme) ?? "") ?? .sanctuary
+        terminalPhosphor = Theme.Phosphor(rawValue: store.string(forKey: Key.phosphor) ?? "") ?? .green
         dyslexicFont = store.bool(forKey: Key.dyslexic)
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""

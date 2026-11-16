@@ -13,7 +13,9 @@ import UIKit
 /// MainActor singleton and publishes on change, so any view observing it
 /// re-renders with the new colours.
 @MainActor
-var palette: Palette { Settings.shared.effectiveTheme.palette }
+var palette: Palette {
+    Settings.shared.effectiveTheme.palette(phosphor: Settings.shared.terminalPhosphor)
+}
 
 @MainActor
 enum Typeface {

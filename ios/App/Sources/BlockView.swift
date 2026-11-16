@@ -66,6 +66,7 @@ struct BlockView: View {
         case .verse, .paragraph, .item:
             Text(attributed)
                 .font(Typeface.prayer())
+                .foregroundStyle(palette.ink)
                 .lineSpacing(5)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 6)

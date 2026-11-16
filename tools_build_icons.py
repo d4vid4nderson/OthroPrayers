@@ -93,7 +93,9 @@ def ink_pair(ink):
     the mark its own ramp — running the opposite way to the ground's — makes
     it sit in the plate rather than on it, and on gold it reads as gilt.
     """
-    return shade(ink, 0.28), shade(ink, -0.18)
+    # 28/-18 was too slight to read as a gradient at all. At 55/-40 the
+    # fall is plainly visible and gold reads as metal rather than paint.
+    return shade(ink, 0.55), shade(ink, -0.40)
 
 
 def ramp(a, b, size=None):
