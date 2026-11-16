@@ -16,6 +16,41 @@ final class Settings: ObservableObject {
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
     @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
 
+    /// When each office's reminder fires, as minutes after midnight, keyed by
+    /// the office's slug. Only offices the reader has moved appear here;
+    /// anything absent uses `defaultMinutes(for:)`.
+    @Published var reminderTimes: [String: Int] {
+        didSet { store.set(reminderTimes, forKey: Key.reminderTimes) }
+    }
+
+    func reminderMinutes(for hour: Hour) -> Int {
+        reminderTimes[hour.slug] ?? Self.defaultMinutes(for: hour)
+    }
+
+    func setReminderMinutes(_ minutes: Int, for hour: Hour) {
+        reminderTimes[hour.slug] = max(0, min(minutes, 24 * 60 - 1))
+    }
+
+    /// When to remind, for an office the reader has not set a time for.
+    ///
+    /// Deliberately not `hour.from`, which is when the office's *window*
+    /// opens, not when anyone wants to be told about it: Morning Prayer's
+    /// window opens at four in the morning, and Compline's at nine at night.
+    /// Reminders fired at the window's edge, so Morning Prayer was waking
+    /// people at 4am. These are civil hours inside each window instead.
+    static func defaultMinutes(for hour: Hour) -> Int {
+        switch hour.slug {
+        case "pb-morning":       return 7 * 60            // 07:00
+        case "pb-noon":          return 12 * 60           // 12:00
+        case "pb-evening":       return 18 * 60           // 18:00
+        case "western-compline": return 21 * 60 + 30      // 21:30
+        default:
+            // An office this build does not know about: the window's start,
+            // but never before seven.
+            return max(hour.from, 7) * 60
+        }
+    }
+
     /// Whether the app follows the phone's own text size.
     ///
     /// On by default, and the right answer for most people: the setting is
@@ -58,6 +93,7 @@ final class Settings: ObservableObject {
         static let lastRead = "lastRead"
         static let followTextSize = "followSystemTextSize"
         static let textSize = "textSize"
+        static let reminderTimes = "reminderTimes"
     }
 
     private init() {
@@ -65,6 +101,7 @@ final class Settings: ObservableObject {
         dyslexicFont = store.bool(forKey: Key.dyslexic)
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""
+        reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]
         // bool(forKey:) is false for a key that was never written, and the
         // default here is *on*, so the absence of the key has to be asked
         // about rather than read.

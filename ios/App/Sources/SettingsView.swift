@@ -11,6 +11,7 @@ import UserNotifications
 /// designed system cannot honour them.
 struct SettingsView: View {
     @EnvironmentObject private var settings: Settings
+    @EnvironmentObject private var library: Library
 
     var body: some View {
         Form {
@@ -52,6 +53,13 @@ struct SettingsView: View {
 
             Section {
                 Toggle("Remind me at each hour", isOn: $settings.hourReminders)
+                if settings.hourReminders {
+                    ForEach(library.hours) { hour in
+                        DatePicker(hour.title,
+                                   selection: time(for: hour),
+                                   displayedComponents: .hourAndMinute)
+                    }
+                }
             } header: {
                 Text("The hours")
             } footer: {
@@ -69,8 +77,41 @@ struct SettingsView: View {
         }
         .navigationTitle("Settings")
         .onChange(of: settings.hourReminders) { _, on in
-            Task { await Reminders.apply(enabled: on, hours: Library.shared.hours) }
+            reschedule(enabled: on)
         }
+        // Moving a time has to re-arm the notifications, or the picker would
+        // change and nothing behind it would.
+        .onChange(of: settings.reminderTimes) { _, _ in
+            reschedule(enabled: settings.hourReminders)
+        }
+    }
+
+    /// The times are read here, on the main actor, and handed over as plain
+    /// data. Passing `settings` into the task instead would drag an actor
+    /// across the boundary for the sake of four integers.
+    private func reschedule(enabled: Bool) {
+        let hours = library.hours
+        let times = Dictionary(uniqueKeysWithValues:
+            hours.map { ($0.slug, settings.reminderMinutes(for: $0)) })
+        Task { await Reminders.apply(enabled: enabled, hours: hours, times: times) }
+    }
+
+    /// A DatePicker wants a Date; a reminder is a time of day. The date part
+    /// is thrown away on the way back in, so only hour and minute survive —
+    /// the trigger repeats daily and has no use for a day.
+    private func time(for hour: Hour) -> Binding<Date> {
+        Binding(
+            get: {
+                let m = settings.reminderMinutes(for: hour)
+                return Calendar.current.date(
+                    bySettingHour: m / 60, minute: m % 60, second: 0,
+                    of: Date.now) ?? Date.now
+            },
+            set: { new in
+                let c = Calendar.current.dateComponents([.hour, .minute], from: new)
+                settings.setReminderMinutes((c.hour ?? 0) * 60 + (c.minute ?? 0),
+                                            for: hour)
+            })
     }
 
     /// A few lines of a real page, set exactly as a page sets them.
@@ -133,16 +174,20 @@ struct SettingsView: View {
 /// Local notifications for the hours — the thing a web app could not do without
 /// a server. These are scheduled on the device and send nothing anywhere.
 enum Reminders {
-    static func apply(enabled: Bool, hours: [Hour]) async {
+    /// `times` gives each office's reminder as minutes after midnight, keyed
+    /// by slug. It used to be `hour.from`, which is when the office's *window*
+    /// opens — so Morning Prayer's reminder fired at four in the morning.
+    static func apply(enabled: Bool, hours: [Hour], times: [String: Int]) async {
         let centre = UNUserNotificationCenter.current()
         centre.removeAllPendingNotificationRequests()
         guard enabled else { return }
         guard let granted = try? await centre.requestAuthorization(options: [.alert, .sound]),
               granted else { return }
         for hour in hours {
+            let m = times[hour.slug] ?? Settings.defaultMinutes(for: hour)
             var when = DateComponents()
-            when.hour = hour.from
-            when.minute = 0
+            when.hour = m / 60
+            when.minute = m % 60
             let content = UNMutableNotificationContent()
             content.title = hour.title
             content.body = hour.blurb
