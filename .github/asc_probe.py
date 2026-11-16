@@ -161,11 +161,44 @@ def testers(tok, app_id, newest):
                           "&fields[betaGroups]=name")
     named = [g["attributes"].get("name", "") for g in body.get("data", [])] \
         if code == 200 else []
-    print(f"\n   build {ver} is assigned to: "
-          + (", ".join(named) if named else "no group"))
-    if not named:
-        print("   -> this is why it is not in the TestFlight app. The build "
-              "is fine; it has simply not been given to anybody.")
+    # Not a verdict. An internal group with hasAccessToAllBuilds gets every
+    # build implicitly, and Apple records no explicit link for it — so an
+    # empty list here is the normal reading of a perfectly distributed build,
+    # and treating it as the fault sends you looking in the wrong place.
+    print(f"\n   build {ver} explicitly assigned to: "
+          + (", ".join(named) if named else "no group (implicit for an "
+                                           "all-builds internal group)"))
+
+    # This is the field that actually answers it. READY_FOR_BETA_TESTING
+    # means the build is sitting there available; IN_BETA_TESTING means
+    # testers have it; the rest name what is holding it up.
+    code, body = get(tok, f"/v1/builds/{newest['id']}/buildBetaDetail"
+                          "?fields[buildBetaDetails]=internalBuildState,"
+                          "externalBuildState,autoNotifyEnabled")
+    if code != 200:
+        print(f"   build beta detail: HTTP {code}")
+        return
+    a = (body.get("data") or {}).get("attributes", {})
+    print(f"   internal state: {a.get('internalBuildState')}")
+    print(f"   external state: {a.get('externalBuildState')}")
+    print(f"   auto-notify:    {a.get('autoNotifyEnabled')}")
+
+    # Tester states only — counts, never names or addresses. These logs are
+    # public, and whose phone this is is nobody else's business.
+    for g in groups:
+        if not g["attributes"].get("isInternalGroup"):
+            continue
+        code, b2 = get(tok, f"/v1/betaGroups/{g['id']}/betaTesters?limit=200"
+                             "&fields[betaTesters]=state")
+        if code != 200:
+            continue
+        tally = {}
+        for t in b2.get("data", []):
+            s = t.get("attributes", {}).get("state") or "UNKNOWN"
+            tally[s] = tally.get(s, 0) + 1
+        print(f"   {g['attributes'].get('name','')}: "
+              + (", ".join(f"{v} {k}" for k, v in sorted(tally.items()))
+                 or "no testers"))
 
 
 def await_build(key_id, issuer, p8, bundle, want, tries=20, gap=30):
