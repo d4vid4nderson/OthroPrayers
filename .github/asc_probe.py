@@ -121,7 +121,51 @@ def builds(tok, bundle, want=None):
               f"{'   <- this run' if want and here == str(want) else ''}")
         if want and here == str(want):
             found = a.get("processingState", "UNKNOWN")
+    if rows:
+        testers(tok, app["id"], rows[0])
     return found
+
+
+def testers(tok, app_id, newest):
+    """Who, if anyone, the newest build has actually been given to.
+
+    A VALID build is not a delivered build. It sits in App Store Connect
+    until it is assigned to a group that has testers in it, and nothing
+    about the upload says whether that ever happened — so ten green uploads
+    and an empty TestFlight app is a perfectly consistent state.
+    """
+    code, body = get(tok, f"/v1/apps/{app_id}/betaGroups?limit=50"
+                          "&fields[betaGroups]=name,isInternalGroup,"
+                          "hasAccessToAllBuilds")
+    if code != 200:
+        print(f"\n   beta groups: HTTP {code}")
+        return
+    groups = body.get("data", [])
+    print(f"\n   {len(groups)} testing groups")
+    if not groups:
+        print("   -> nothing to hand a build to. Every build will stay in "
+              "App Store Connect and reach no one.")
+        return
+    print(f"\n   {'group':<28} {'kind':<10} {'all builds':<11} testers")
+    for g in groups:
+        a = g["attributes"]
+        code, b2 = get(tok, f"/v1/betaGroups/{g['id']}/betaTesters?limit=1")
+        n = b2.get("meta", {}).get("paging", {}).get("total", "?") \
+            if code == 200 else "?"
+        print(f"   {a.get('name',''):<28} "
+              f"{'internal' if a.get('isInternalGroup') else 'external':<10} "
+              f"{str(a.get('hasAccessToAllBuilds','')):<11} {n}")
+
+    ver = newest["attributes"].get("version", "")
+    code, body = get(tok, f"/v1/builds/{newest['id']}/betaGroups?limit=50"
+                          "&fields[betaGroups]=name")
+    named = [g["attributes"].get("name", "") for g in body.get("data", [])] \
+        if code == 200 else []
+    print(f"\n   build {ver} is assigned to: "
+          + (", ".join(named) if named else "no group"))
+    if not named:
+        print("   -> this is why it is not in the TestFlight app. The build "
+              "is fine; it has simply not been given to anybody.")
 
 
 def await_build(key_id, issuer, p8, bundle, want, tries=20, gap=30):
