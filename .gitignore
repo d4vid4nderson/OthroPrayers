@@ -4,8 +4,13 @@
 build/
 
 # build / dev artifacts
-preview*.png
-preview*.pdf
+# anchored to the repo root on purpose: these are stray render artifacts from
+# the web era. Unanchored, "preview*.png" also matched every
+# Assets.xcassets/Preview*.imageset/preview.png, so the icon picker shipped
+# with imagesets whose Contents.json pointed at a file that was never
+# committed — and drew nothing.
+/preview*.png
+/preview*.pdf
 render/
 *.pyc
 __pycache__/

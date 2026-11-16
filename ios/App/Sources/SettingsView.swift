@@ -93,18 +93,27 @@ struct SettingsView: View {
             Section {
                 Toggle("Remind me at each hour", isOn: $settings.hourReminders)
                 if settings.hourReminders {
+                    // One row per office: its name, its time, its switch.
+                    // A toggle row plus a separate indented "at" row turned
+                    // four offices into eight rows and read as a mess.
                     ForEach(library.hours) { hour in
-                        // Each office rings on its own. One switch for all
-                        // four meant a reader who wanted only Compline had to
-                        // take all of them or none.
-                        Toggle(hour.title, isOn: Binding(
-                            get: { settings.reminds(hour) },
-                            set: { settings.setReminds($0, for: hour) }))
-                        if settings.reminds(hour) {
-                            DatePicker("at", selection: time(for: hour),
+                        HStack(spacing: 12) {
+                            Text(hour.title)
+                                .lineLimit(1)
+                                .layoutPriority(1)
+                            Spacer(minLength: 4)
+                            DatePicker("", selection: time(for: hour),
                                        displayedComponents: .hourAndMinute)
-                                .padding(.leading, 18)
+                                .labelsHidden()
+                                .disabled(!settings.reminds(hour))
+                                .opacity(settings.reminds(hour) ? 1 : 0.4)
+                            Toggle("", isOn: Binding(
+                                get: { settings.reminds(hour) },
+                                set: { settings.setReminds($0, for: hour) }))
+                                .labelsHidden()
                         }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityLabel(hour.title)
                     }
                 }
             } header: {

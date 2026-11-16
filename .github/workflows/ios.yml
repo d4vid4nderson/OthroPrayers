@@ -46,6 +46,10 @@ jobs:
           git diff --exit-code ios/Content/ \
             || { echo "::error::ios/Content is stale — run build.py && export_content.py and commit"; exit 1; }
 
+      # A file an asset catalog names but git does not carry ships as nothing.
+      - name: Assets are present and tracked
+        run: python3 .github/check_assets.py
+
       - name: Install XcodeGen
         run: brew install xcodegen
 
