@@ -58,16 +58,23 @@ struct SettingsView: View {
                         Text(c.name).tag(c)
                     }
                 }
-                Toggle("Cross alone", isOn: $settings.iconCross)
+                Picker("Style", selection: $settings.iconStyle) {
+                    ForEach(Settings.IconStyle.allCases) { st in
+                        Text(st.name).tag(st)
+                    }
+                }
+                Text(settings.iconStyle.detail)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             } header: {
                 Text("App icon")
             } footer: {
-                Text(settings.iconColour == .automatic && !settings.iconCross
+                Text(settings.iconColour == .automatic && settings.iconStyle == .mark
                      ? "The default icon follows the phone between light, dark and "
-                       + "tinted. Choosing a colour fixes it to that one."
+                       + "tinted. Choosing anything else fixes it."
                      : "A chosen icon is one image, so it no longer changes with "
-                       + "light and dark mode. Set the colour back to Follow "
-                       + "appearance to have it do so again.")
+                       + "light and dark mode. Set it back to Follow appearance "
+                       + "and IC XC NIKA to have it do so again.")
             }
 
             Section {
@@ -104,7 +111,7 @@ struct SettingsView: View {
             reschedule(enabled: settings.hourReminders)
         }
         .onChange(of: settings.iconColour) { _, _ in applyIcon() }
-        .onChange(of: settings.iconCross) { _, _ in applyIcon() }
+        .onChange(of: settings.iconStyle) { _, _ in applyIcon() }
     }
 
     /// iOS shows its own "you have changed the icon" alert, which cannot be

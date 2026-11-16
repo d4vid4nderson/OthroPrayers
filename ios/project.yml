@@ -90,10 +90,19 @@ targets:
         # its own. AppIcon itself stays the default, and is the only one with
         # light/dark/tinted appearances — an alternate is a single image.
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: >-
-          AppIconSanctuaryFull AppIconSanctuaryCross
-          AppIconPaperFull AppIconPaperCross
-          AppIconManuscriptFull AppIconManuscriptCross
-          AppIconTerminalFull AppIconTerminalCross
+          AppIconIvoryCross AppIconIvoryIcon
+          AppIconIvoryMark AppIconIvoryMedallion
+          AppIconIvoryOrthodox AppIconManuscriptCross
+          AppIconManuscriptIcon AppIconManuscriptMark
+          AppIconManuscriptMedallion AppIconManuscriptOrthodox
+          AppIconPaperCross AppIconPaperIcon
+          AppIconPaperMark AppIconPaperMedallion
+          AppIconPaperOrthodox AppIconSanctuaryCross
+          AppIconSanctuaryIcon AppIconSanctuaryMark
+          AppIconSanctuaryMedallion AppIconSanctuaryOrthodox
+          AppIconTerminalCross AppIconTerminalIcon
+          AppIconTerminalMark AppIconTerminalMedallion
+          AppIconTerminalOrthodox
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         # iPhone only. The design is portrait and dark by construction, and
         # App Store validation requires an iPad-capable build to offer all four

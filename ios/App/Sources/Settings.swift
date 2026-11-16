@@ -22,13 +22,38 @@ final class Settings: ObservableObject {
         didSet { store.set(iconColour.rawValue, forKey: Key.iconColour) }
     }
 
-    /// Whether the icon carries the lettering or the cross alone.
-    @Published var iconCross: Bool {
-        didSet { store.set(iconCross, forKey: Key.iconCross) }
+    /// What the icon shows.
+    @Published var iconStyle: IconStyle {
+        didSet { store.set(iconStyle.rawValue, forKey: Key.iconStyle) }
+    }
+
+    enum IconStyle: String, CaseIterable, Identifiable {
+        case mark, cross, orthodox, icon, medallion
+        var id: String { rawValue }
+
+        var name: String {
+            switch self {
+            case .mark:      return "IC XC NIKA"
+            case .cross:     return "Cross"
+            case .orthodox:  return "Orthodox cross"
+            case .icon:      return "Icon"
+            case .medallion: return "Medallion"
+            }
+        }
+
+        var detail: String {
+            switch self {
+            case .mark:      return "The mark the app opens on."
+            case .cross:     return "The pattée cross alone."
+            case .orthodox:  return "The three-bar cross."
+            case .icon:      return "The Mother of God “of the Sign”. Richly drawn, so it reads best on a large icon."
+            case .medallion: return "The Christ medallion from the centre of that icon. The clearest of these when the icon is small."
+            }
+        }
     }
 
     enum IconColour: String, CaseIterable, Identifiable {
-        case automatic, sanctuary, paper, manuscript, terminal
+        case automatic, sanctuary, paper, manuscript, terminal, ivory
         var id: String { rawValue }
 
         var name: String {
@@ -38,6 +63,7 @@ final class Settings: ObservableObject {
             case .paper:      return "Cinnabar"
             case .manuscript: return "Manuscript"
             case .terminal:   return "Phosphor"
+            case .ivory:      return "Ivory"
             }
         }
     }
@@ -50,13 +76,21 @@ final class Settings: ObservableObject {
     /// cross-alone form of it is a real alternate like any other.
     var alternateIconName: String? {
         switch iconColour {
-        case .automatic:
-            return iconCross ? "AppIconSanctuaryCross" : nil
+        case .automatic where iconStyle == .mark:
+            return nil
         default:
-            let colour = iconColour.rawValue.prefix(1).uppercased()
-                + iconColour.rawValue.dropFirst()
-            return "AppIcon\(colour)\(iconCross ? "Cross" : "Full")"
+            // "Follow appearance" has no alternate of its own for the other
+            // styles, so it falls back to the palette the default is drawn in.
+            let c = iconColour == .automatic ? "Sanctuary" : capitalised(iconColour.rawValue)
+            return "AppIcon\(c)\(capitalised(iconStyle.rawValue))"
         }
+    }
+
+    /// The asset names are CamelCase and the raw values are lower-case, so the
+    /// two are bridged here rather than by keeping a second list of names that
+    /// could fall out of step with the enum.
+    private func capitalised(_ s: String) -> String {
+        s.prefix(1).uppercased() + s.dropFirst()
     }
 
     /// When each office's reminder fires, as minutes after midnight, keyed by
@@ -148,7 +182,7 @@ final class Settings: ObservableObject {
         static let textSize = "textSize"
         static let reminderTimes = "reminderTimes"
         static let iconColour = "iconColour"
-        static let iconCross = "iconCross"
+        static let iconStyle = "iconStyle"
     }
 
     private init() {
@@ -158,7 +192,7 @@ final class Settings: ObservableObject {
         lastRead = store.string(forKey: Key.lastRead) ?? ""
         reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]
         iconColour = IconColour(rawValue: store.string(forKey: Key.iconColour) ?? "") ?? .automatic
-        iconCross = store.bool(forKey: Key.iconCross)
+        iconStyle = IconStyle(rawValue: store.string(forKey: Key.iconStyle) ?? "") ?? .mark
         // bool(forKey:) is false for a key that was never written, and the
         // default here is *on*, so the absence of the key has to be asked
         // about rather than read.
