@@ -75,6 +75,17 @@ final class Settings: ObservableObject {
             }
         }
 
+        /// What fits under a 60pt tile.
+        var shortName: String {
+            switch self {
+            case .mark:      return "IC XC"
+            case .cross:     return "Cross"
+            case .orthodox:  return "Orthodox"
+            case .icon:      return "Icon"
+            case .medallion: return "Medallion"
+            }
+        }
+
         var detail: String {
             switch self {
             case .mark:      return "The mark the app opens on."
@@ -102,6 +113,20 @@ final class Settings: ObservableObject {
             case .emerald:    return "Emerald on black"
             }
         }
+
+        /// What fits under a 60pt tile.
+        var shortName: String {
+            switch self {
+            case .automatic:  return "Auto"
+            case .sanctuary:  return "Gold"
+            case .paper:      return "Cinnabar"
+            case .manuscript: return "Vellum"
+            case .terminal:   return "Phosphor"
+            case .ivory:      return "Ivory"
+            case .crimson:    return "Crimson"
+            case .emerald:    return "Emerald"
+            }
+        }
     }
 
     /// The asset name iOS should be asked for, or nil for the default.
@@ -111,21 +136,27 @@ final class Settings: ObservableObject {
     /// alternate is a single image, so choosing one trades that away. The
     /// cross-alone form of it is a real alternate like any other.
     var alternateIconName: String? {
-        switch iconColour {
-        case .automatic where iconStyle == .mark:
-            return nil
-        default:
-            // "Follow appearance" has no alternate of its own for the other
-            // styles, so it falls back to the palette the default is drawn in.
-            let c = iconColour == .automatic ? "Sanctuary" : capitalised(iconColour.rawValue)
-            return "AppIcon\(c)\(capitalised(iconStyle.rawValue))"
-        }
+        Self.assetName(colour: iconColour, style: iconStyle)
     }
 
-    /// The asset names are CamelCase and the raw values are lower-case, so the
-    /// two are bridged here rather than by keeping a second list of names that
-    /// could fall out of step with the enum.
-    private func capitalised(_ s: String) -> String {
+    /// The alternate's asset name for any pairing, or nil for the default.
+    /// Static because the picker has to name icons other than the chosen one.
+    static func assetName(colour: IconColour, style: IconStyle) -> String? {
+        if colour == .automatic && style == .mark { return nil }
+        // "Follow appearance" has no alternate of its own for the other
+        // styles, so it falls back to the palette the default is drawn in.
+        let c = colour == .automatic ? "sanctuary" : colour.rawValue
+        return "AppIcon" + cap(c) + cap(style.rawValue)
+    }
+
+    /// The preview image for a pairing. Always a real name — the default has
+    /// no alternate, but it still has to be shown in the picker.
+    static func previewName(colour: IconColour, style: IconStyle) -> String {
+        let c = colour == .automatic ? "sanctuary" : colour.rawValue
+        return "Preview" + cap(c) + cap(style.rawValue)
+    }
+
+    private static func cap(_ s: String) -> String {
         s.prefix(1).uppercased() + s.dropFirst()
     }
 

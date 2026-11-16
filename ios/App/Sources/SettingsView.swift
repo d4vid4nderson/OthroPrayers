@@ -66,19 +66,19 @@ struct SettingsView: View {
             }
 
             Section {
-                Picker("Colour", selection: $settings.iconColour) {
-                    ForEach(Settings.IconColour.allCases) { c in
-                        Text(c.name).tag(c)
-                    }
-                }
-                Picker("Style", selection: $settings.iconStyle) {
-                    ForEach(Settings.IconStyle.allCases) { st in
-                        Text(st.name).tag(st)
-                    }
-                }
-                Text(settings.iconStyle.detail)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                // Two rows of real icons rather than two lists of words. Each
+                // row previews the axis it changes against the current value
+                // of the other, so the tiles show what tapping them will
+                // actually do.
+                iconRow(title: "Style", items: Settings.IconStyle.allCases,
+                        label: \.shortName, selected: settings.iconStyle) { st in
+                    Settings.previewName(colour: settings.iconColour, style: st)
+                } pick: { settings.iconStyle = $0 }
+
+                iconRow(title: "Colour", items: Settings.IconColour.allCases,
+                        label: \.shortName, selected: settings.iconColour) { c in
+                    Settings.previewName(colour: c, style: settings.iconStyle)
+                } pick: { settings.iconColour = $0 }
             } header: {
                 Text("App icon")
             } footer: {
@@ -152,6 +152,34 @@ struct SettingsView: View {
         let times = Dictionary(uniqueKeysWithValues:
             hours.map { ($0.slug, settings.reminderMinutes(for: $0)) })
         Task { await Reminders.apply(enabled: enabled, hours: hours, times: times) }
+    }
+
+    /// One row of the icon picker: a horizontal strip of tiles.
+    @ViewBuilder
+    private func iconRow<T: Hashable & Identifiable>(
+        title: String,
+        items: [T],
+        label: KeyPath<T, String>,
+        selected: T,
+        preview: @escaping (T) -> String,
+        pick: @escaping (T) -> Void
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            MicroLabel(text: title)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 14) {
+                    ForEach(items) { item in
+                        IconTile(preview: preview(item),
+                                 label: item[keyPath: label],
+                                 selected: item == selected) { pick(item) }
+                    }
+                }
+                .padding(.horizontal, 2)
+                .padding(.bottom, 2)
+            }
+        }
+        .padding(.vertical, 6)
+        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 0))
     }
 
     /// A DatePicker wants a Date; a reminder is a time of day. The date part
@@ -256,5 +284,43 @@ enum Reminders {
                 trigger: UNCalendarNotificationTrigger(dateMatching: when, repeats: true))
             try? await centre.add(request)
         }
+    }
+}
+
+/// One icon in the picker: the artwork itself, masked to the shape iOS will
+/// mask it to, with the chosen one ringed.
+private struct IconTile: View {
+    let preview: String
+    let label: String
+    let selected: Bool
+    let tap: () -> Void
+
+    private let side: CGFloat = 60
+    // iOS draws app icons as a squircle; a plain rounded rect at this radius
+    // is close enough at this size and does not need a custom shape.
+    private var shape: some InsettableShape {
+        RoundedRectangle(cornerRadius: side * 0.225, style: .continuous)
+    }
+
+    var body: some View {
+        Button(action: tap) {
+            VStack(spacing: 6) {
+                Image(preview)
+                    .resizable()
+                    .frame(width: side, height: side)
+                    .clipShape(shape)
+                    .overlay(shape.stroke(selected ? palette.accent : .clear,
+                                          lineWidth: 2.5))
+                    .overlay(shape.stroke(.separator, lineWidth: 0.5))
+                Text(label)
+                    .font(.caption2)
+                    .lineLimit(1)
+                    .foregroundStyle(selected ? palette.accent : .secondary)
+            }
+            .frame(width: 74)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
     }
 }
