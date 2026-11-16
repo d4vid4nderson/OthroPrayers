@@ -22,6 +22,14 @@ on:
         description: "Build number (blank = UTC timestamp, always increasing)"
         required: false
         default: ""
+      # Because "did the upload arrive?" is a question worth being able to ask
+      # on its own. Uploading again to find out would burn a build number and
+      # put another build in front of testers to answer it.
+      probe_only:
+        description: "Only ask App Store Connect what it has. Uploads nothing."
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   upload:
@@ -106,6 +114,7 @@ jobs:
       # Uploading still uses the API key, because App Store Connect accepts it
       # happily; it was only the portal that did not.
       - name: Install the signing identity
+        if: ${{ !inputs.probe_only }}
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PROFILE: ${{ secrets.SIGNING_PROFILE }}
@@ -189,6 +198,7 @@ jobs:
           echo "KEYCHAIN=$kc"       >> "$GITHUB_ENV"
 
       - name: Archive
+        if: ${{ !inputs.probe_only }}
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
@@ -212,6 +222,7 @@ jobs:
             | tee "$RUNNER_TEMP/archive.log"
 
       - name: Export and upload
+        if: ${{ !inputs.probe_only }}
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
@@ -265,10 +276,17 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
-          python3 .github/asc_probe.py \
-            "$ASC_KEY_ID" "$ASC_ISSUER_ID" \
-            ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 \
-            --await "${{ steps.ver.outputs.build }}"
+          key=~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          if [ "${{ inputs.probe_only }}" = "true" ]; then
+            # nothing was uploaded, so there is nothing to wait for: just
+            # print what Apple has, which is the whole point of this mode
+            python3 .github/asc_probe.py \
+              "$ASC_KEY_ID" "$ASC_ISSUER_ID" "$key" --builds
+          else
+            python3 .github/asc_probe.py \
+              "$ASC_KEY_ID" "$ASC_ISSUER_ID" "$key" \
+              --await "${{ steps.ver.outputs.build }}"
+          fi
 
       - name: Logs
         if: always()
