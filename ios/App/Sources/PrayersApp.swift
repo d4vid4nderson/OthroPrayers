@@ -18,6 +18,12 @@ struct PrayersApp: App {
                 .environmentObject(player)
                 // dark themes get a dark interface; the system does the rest
                 .preferredColorScheme(settings.theme.colorScheme)
+                // Applied at the root so the whole app scales together —
+                // prayer text, tab bar, settings — rather than the prayers
+                // growing out of step with the chrome around them. Nothing is
+                // applied while following the phone, which leaves the system
+                // setting genuinely in charge rather than echoing it.
+                .modifier(TextSizeOverride(size: settings.textSizeOverride))
                 // the single accent: the system tints every stock control with it
                 .tint(settings.theme.palette.accent)
                 .onOpenURL { url in
@@ -87,4 +93,21 @@ struct RootView: View {
 struct LinkedPage: Identifiable {
     let slug: String
     var id: String { slug }
+}
+
+/// Applies a text size, or leaves the system's alone.
+///
+/// `.dynamicTypeSize(_:)` has no "no opinion" value, so the choice has to be
+/// whether the modifier is attached at all.
+private struct TextSizeOverride: ViewModifier {
+    let size: DynamicTypeSize?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let size {
+            content.dynamicTypeSize(size)
+        } else {
+            content
+        }
+    }
 }

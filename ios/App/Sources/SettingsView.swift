@@ -31,15 +31,28 @@ struct SettingsView: View {
 
             Section {
                 Toggle("Dyslexia-friendly text", isOn: $settings.dyslexicFont)
-                LabeledContent("Text size") {
-                    Text("Follows your phone")
+                Toggle("Match phone text size", isOn: $settings.followSystemTextSize)
+                if !settings.followSystemTextSize {
+                    Picker("Text size", selection: $settings.textSize) {
+                        ForEach(Settings.offeredSizes, id: \.self) { size in
+                            Text(Self.name(for: size)).tag(size)
+                        }
+                    }
+                    // A sample in the chosen size, so the setting can be judged
+                    // by eye rather than by the name of a size.
+                    Text("Our Father, who art in heaven")
+                        .font(Typeface.prayer())
+                        .dynamicTypeSize(settings.textSize)
                         .foregroundStyle(.secondary)
                 }
             } header: {
                 Text("Reading")
             } footer: {
-                Text("Text size, bold text and contrast all follow iOS. "
-                     + "Change them in Settings › Display & Brightness, or Accessibility.")
+                Text(settings.followSystemTextSize
+                     ? "Text size follows iOS. Change it in Settings › Display & "
+                       + "Brightness, or Accessibility, and every app follows together."
+                     : "This app only. Bold text and contrast still follow iOS. "
+                       + "The very largest accessibility sizes are set in iOS itself.")
             }
 
             Section {
@@ -62,6 +75,20 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .onChange(of: settings.hourReminders) { _, on in
             Task { await Reminders.apply(enabled: on, hours: Library.shared.hours) }
+        }
+    }
+
+    /// DynamicTypeSize has no display name of its own, and ".xxxLarge" is not
+    /// something to show a reader.
+    private static func name(for size: DynamicTypeSize) -> String {
+        switch size {
+        case .xSmall:  return "Extra small"
+        case .small:   return "Small"
+        case .medium:  return "Medium"
+        case .large:   return "Default"
+        case .xLarge:  return "Large"
+        case .xxLarge: return "Extra large"
+        default:       return "Largest"
         }
     }
 
