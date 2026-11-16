@@ -92,32 +92,39 @@ targets:
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: >-
           AppIconAmberCross AppIconAmberIcon
           AppIconAmberMark AppIconAmberMedallion
-          AppIconAmberOrthodox AppIconCrimsonCross
-          AppIconCrimsonIcon AppIconCrimsonMark
-          AppIconCrimsonMedallion AppIconCrimsonOrthodox
-          AppIconEmeraldCross AppIconEmeraldIcon
-          AppIconEmeraldMark AppIconEmeraldMedallion
-          AppIconEmeraldOrthodox AppIconIvoryCross
+          AppIconAmberOrthodox AppIconAuroraCross
+          AppIconAuroraIcon AppIconAuroraMark
+          AppIconAuroraMedallion AppIconAuroraOrthodox
+          AppIconCrimsonCross AppIconCrimsonIcon
+          AppIconCrimsonMark AppIconCrimsonMedallion
+          AppIconCrimsonOrthodox AppIconIvoryCross
           AppIconIvoryIcon AppIconIvoryMark
           AppIconIvoryMedallion AppIconIvoryOrthodox
           AppIconManuscriptCross AppIconManuscriptIcon
           AppIconManuscriptMark AppIconManuscriptMedallion
-          AppIconManuscriptOrthodox AppIconPaperCross
-          AppIconPaperIcon AppIconPaperMark
-          AppIconPaperMedallion AppIconPaperOrthodox
-          AppIconSanctuaryCross AppIconSanctuaryIcon
-          AppIconSanctuaryMark AppIconSanctuaryMedallion
-          AppIconSanctuaryOrthodox AppIconSapphireCross
-          AppIconSapphireIcon AppIconSapphireMark
-          AppIconSapphireMedallion AppIconSapphireOrthodox
-          AppIconSilverCross AppIconSilverIcon
-          AppIconSilverMark AppIconSilverMedallion
-          AppIconSilverOrthodox AppIconTerminalCross
+          AppIconManuscriptOrthodox AppIconNebulaCross
+          AppIconNebulaIcon AppIconNebulaMark
+          AppIconNebulaMedallion AppIconNebulaOrthodox
+          AppIconPaperCross AppIconPaperIcon
+          AppIconPaperMark AppIconPaperMedallion
+          AppIconPaperOrthodox AppIconSanctuaryCross
+          AppIconSanctuaryIcon AppIconSanctuaryMark
+          AppIconSanctuaryMedallion AppIconSanctuaryOrthodox
+          AppIconSapphireCross AppIconSapphireIcon
+          AppIconSapphireMark AppIconSapphireMedallion
+          AppIconSapphireOrthodox AppIconSilverCross
+          AppIconSilverIcon AppIconSilverMark
+          AppIconSilverMedallion AppIconSilverOrthodox
+          AppIconSunriseCross AppIconSunriseIcon
+          AppIconSunriseMark AppIconSunriseMedallion
+          AppIconSunriseOrthodox AppIconTerminalCross
           AppIconTerminalIcon AppIconTerminalMark
           AppIconTerminalMedallion AppIconTerminalOrthodox
-          AppIconVioletCross AppIconVioletIcon
-          AppIconVioletMark AppIconVioletMedallion
-          AppIconVioletOrthodox
+          AppIconVespersCross AppIconVespersIcon
+          AppIconVespersMark AppIconVespersMedallion
+          AppIconVespersOrthodox AppIconVioletCross
+          AppIconVioletIcon AppIconVioletMark
+          AppIconVioletMedallion AppIconVioletOrthodox
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         # iPhone only. The design is portrait and dark by construction, and
         # App Store validation requires an iPad-capable build to offer all four

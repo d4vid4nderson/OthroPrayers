@@ -17,6 +17,7 @@ unfilled, which is what I did the first time, resolves to nothing on a 2x or
 """
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -30,20 +31,33 @@ TILT = 0.10          # vertical gradient: lit from above
 # the ink thickens the line work towards the solid areas a block print
 # actually has; 0.65 bolds it without flipping it to a solid field.
 THICKEN, THICKEN_BLEND = 3, 0.65
+# what a block print is drawn in when the ground is a gradient
+ENGRAVING_ON_GRADIENT = "#140F0A"
 
-COLOURS = {                        # ground, ink
+# A ground may be one colour or a pair, which is drawn as a diagonal gradient.
+# The gradients are built from the hues the themes already use rather than from
+# new ones, so the icon set stays of a piece with the app.
+GRADIENTS = {
+    "Aurora":  (("#3E8E5A", "#5B8DD9"), "#F5F5F5"),   # emerald -> sapphire
+    "Nebula":  (("#5B8DD9", "#9B7BD4"), "#F5F5F5"),   # sapphire -> violet
+    "Vespers": (("#9B7BD4", "#B3322A"), "#F5F5F5"),   # violet -> crimson
+    "Sunrise": (("#FFB454", "#B3322A"), "#1A1508"),   # amber -> crimson
+}
+
+COLOURS = {                        # ground (colour or pair), ink
     "Sanctuary":  ("#0C0D10", "#D9B36C"),   # gold, the app's own
     "Paper":      ("#FAF6EE", "#B3322A"),
     "Manuscript": ("#F0E4C8", "#A32A1E"),
     "Terminal":   ("#070A07", "#9BE89B"),
     "Ivory":      ("#000000", "#F5F5F5"),
     "Crimson":    ("#000000", "#B3322A"),
-    "Emerald":    ("#000000", "#3E8E5A"),
     "Amber":      ("#000000", "#FFB454"),   # the terminal theme's second phosphor
     "Silver":     ("#000000", "#C9C9CE"),   # the tinted icon's grey
     "Sapphire":   ("#000000", "#5B8DD9"),
     "Violet":     ("#000000", "#9B7BD4"),
 }
+
+COLOURS.update(GRADIENTS)
 
 ICON_CONTENTS = {
     "images": [{"filename": "icon.png", "idiom": "universal",
@@ -62,7 +76,36 @@ def rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def ground_plate(ground):
+    """A solid colour, or a diagonal gradient when given a pair."""
+    if isinstance(ground, str):
+        return Image.new("RGB", (SIZE, SIZE), rgb(ground))
+    a, b = rgb(ground[0]), rgb(ground[1])
+    # built at a quarter size and scaled: a diagonal ramp is smooth enough
+    # that the interpolation costs nothing visible and the loop is 16x cheaper
+    n = SIZE // 4
+    g = Image.new("RGB", (n, n))
+    px = g.load()
+    for y in range(n):
+        for x in range(n):
+            f = (x + y) / (2 * n - 2)
+            px[x, y] = tuple(round(a[i] + (b[i] - a[i]) * f) for i in range(3))
+    return g.resize((SIZE, SIZE), Image.BILINEAR)
+
+
+def svg_ground(ground):
+    """The same, as SVG: a flat fill or a diagonal linearGradient."""
+    if isinstance(ground, str):
+        return f'<rect width="1024" height="1024" fill="{ground}"/>'
+    return ('<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">'
+            f'<stop offset="0%" stop-color="{ground[0]}"/>'
+            f'<stop offset="100%" stop-color="{ground[1]}"/>'
+            '</linearGradient></defs>'
+            '<rect width="1024" height="1024" fill="url(#bg)"/>')
+
+
 def glow_plate(ground, ink):
+    """`ground` may be a colour or a pair; `ink` is always one colour."""
     """The ground, a vertical gradient, and a radial wash of the ink.
 
     Two gradients doing different jobs. The vertical one lifts the top of the
@@ -70,7 +113,7 @@ def glow_plate(ground, ink):
     being lit from above rather than printed. The radial one puts the light
     behind the mark itself.
     """
-    plate = Image.new("RGB", (SIZE, SIZE), rgb(ground))
+    plate = ground_plate(ground)
 
     # vertical: ink over the top, black over the bottom, both weak
     lin = Image.linear_gradient("L").resize((SIZE, SIZE), Image.BILINEAR)
@@ -104,10 +147,20 @@ def from_mask(src, ground, ink, margin):
     w, h = alpha.size
     s = min(box / w, box / h)
     alpha = alpha.resize((round(w * s), round(h * s)), Image.LANCZOS)
-    # the plate takes the colour, and the gradients wash the ground over it —
-    # the reverse of the drawn styles, because the roles are reversed
-    plate = glow_plate(ink, ground)
-    plate.paste(Image.new("RGB", alpha.size, rgb(ground)),
+    if isinstance(ground, str):
+        # a flat colour: the plate takes the ink and the figure is cut out of
+        # it in the ground, which is the reverse of the drawn styles
+        plate = glow_plate(ink, ground)
+        figure = rgb(ground)
+    else:
+        # a gradient already *is* the coloured field, so there is nothing to
+        # invert. The figure still wants to be dark on it, though: a pale
+        # engraving over a mid-tone ramp washes out, which is the same reason
+        # the flat colours are inverted at all. The drawn styles keep their
+        # own ink, which is why this is here and not in the colour table.
+        plate = glow_plate(ground, ink)
+        figure = rgb(ENGRAVING_ON_GRADIENT)
+    plate.paste(Image.new("RGB", alpha.size, figure),
                 ((SIZE - alpha.size[0]) // 2, (SIZE - alpha.size[1]) // 2), alpha)
     return plate
 
@@ -154,12 +207,17 @@ def main():
     for cname, (ground, ink) in COLOURS.items():
         for sname, svg in (("Mark", mark), ("Cross", cross), ("Orthodox", ortho)):
             art = svg.replace("__GLOW__", svg_glow(ink))
+            # the ground rect is replaced wholesale, so a pair becomes a ramp
+            art = re.sub(r'<rect width="1024" height="1024" fill="__G__"/>',
+                         svg_ground(ground), art, count=1)
             tmp = scratch / f"_{cname}{sname}.svg"
             tmp.write_text(art)
             d = out / f"AppIcon{cname}{sname}.appiconset"
             d.mkdir(parents=True, exist_ok=True)
             subprocess.run(["node", str(renderer), str(tmp),
-                            str(d / "icon.png"), ground, ink], check=True)
+                            str(d / "icon.png"),
+                            ground if isinstance(ground, str) else ground[0],
+                            ink], check=True)
             flatten(d / "icon.png")
             (d / "Contents.json").write_text(json.dumps(ICON_CONTENTS, indent=2) + "\n")
             n += 1

@@ -118,8 +118,10 @@ final class Settings: ObservableObject {
     }
 
     enum IconColour: String, CaseIterable, Identifiable {
-        case automatic, sanctuary, paper, manuscript, terminal, ivory, crimson, emerald,
-             amber, silver, sapphire, violet
+        case automatic, sanctuary, paper, manuscript, terminal, ivory, crimson,
+             amber, silver, sapphire, violet,
+             // gradients, built from the hues above
+             aurora, nebula, vespers, sunrise
         var id: String { rawValue }
 
         var name: String {
@@ -131,11 +133,14 @@ final class Settings: ObservableObject {
             case .terminal:   return "Phosphor"
             case .ivory:      return "Ivory"
             case .crimson:    return "Crimson on black"
-            case .emerald:    return "Emerald on black"
             case .amber:      return "Amber on black"
             case .silver:     return "Silver on black"
             case .sapphire:   return "Sapphire on black"
             case .violet:     return "Violet on black"
+            case .aurora:     return "Aurora — emerald to sapphire"
+            case .nebula:     return "Nebula — sapphire to violet"
+            case .vespers:    return "Vespers — violet to crimson"
+            case .sunrise:    return "Sunrise — amber to crimson"
             }
         }
 
@@ -149,11 +154,14 @@ final class Settings: ObservableObject {
             case .terminal:   return "Phosphor"
             case .ivory:      return "Ivory"
             case .crimson:    return "Crimson"
-            case .emerald:    return "Emerald"
             case .amber:      return "Amber"
             case .silver:     return "Silver"
             case .sapphire:   return "Sapphire"
             case .violet:     return "Violet"
+            case .aurora:     return "Aurora"
+            case .nebula:     return "Nebula"
+            case .vespers:    return "Vespers"
+            case .sunrise:    return "Sunrise"
             }
         }
     }
