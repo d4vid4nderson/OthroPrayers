@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import UserNotifications
 
 /// Few controls, on purpose — but the style is one of them: the app carries
@@ -52,6 +53,24 @@ struct SettingsView: View {
             }
 
             Section {
+                Picker("Colour", selection: $settings.iconColour) {
+                    ForEach(Settings.IconColour.allCases) { c in
+                        Text(c.name).tag(c)
+                    }
+                }
+                Toggle("Cross alone", isOn: $settings.iconCross)
+            } header: {
+                Text("App icon")
+            } footer: {
+                Text(settings.iconColour == .automatic && !settings.iconCross
+                     ? "The default icon follows the phone between light, dark and "
+                       + "tinted. Choosing a colour fixes it to that one."
+                     : "A chosen icon is one image, so it no longer changes with "
+                       + "light and dark mode. Set the colour back to Follow "
+                       + "appearance to have it do so again.")
+            }
+
+            Section {
                 Toggle("Remind me at each hour", isOn: $settings.hourReminders)
                 if settings.hourReminders {
                     ForEach(library.hours) { hour in
@@ -83,6 +102,25 @@ struct SettingsView: View {
         // change and nothing behind it would.
         .onChange(of: settings.reminderTimes) { _, _ in
             reschedule(enabled: settings.hourReminders)
+        }
+        .onChange(of: settings.iconColour) { _, _ in applyIcon() }
+        .onChange(of: settings.iconCross) { _, _ in applyIcon() }
+    }
+
+    /// iOS shows its own "you have changed the icon" alert, which cannot be
+    /// suppressed through the public API, so the change is not announced again
+    /// here. Setting the same name twice is a no-op worth avoiding: it would
+    /// put that alert on screen for nothing.
+    private func applyIcon() {
+        let wanted = settings.alternateIconName
+        guard UIApplication.shared.supportsAlternateIcons,
+              UIApplication.shared.alternateIconName != wanted else { return }
+        UIApplication.shared.setAlternateIconName(wanted) { error in
+            if let error {
+                // Nothing a reader can do about it, and nothing worth
+                // interrupting them for; the picker simply will not have taken.
+                print("app icon: \(error.localizedDescription)")
+            }
         }
     }
 

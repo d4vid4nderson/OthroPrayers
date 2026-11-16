@@ -85,6 +85,16 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.orthoprayers.western
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # The icons a reader can switch to, in two axes: the colour of each of
+        # the app's four themes, and the full IC XC NIKA mark or the cross on
+        # its own. AppIcon itself stays the default, and is the only one with
+        # light/dark/tinted appearances — an alternate is a single image.
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: >-
+          AppIconSanctuaryFull AppIconSanctuaryCross
+          AppIconPaperFull AppIconPaperCross
+          AppIconManuscriptFull AppIconManuscriptCross
+          AppIconTerminalFull AppIconTerminalCross
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         # iPhone only. The design is portrait and dark by construction, and
         # App Store validation requires an iPad-capable build to offer all four
         # orientations for multitasking — which would mean shipping a layout

@@ -16,6 +16,49 @@ final class Settings: ObservableObject {
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
     @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
 
+    /// The home-screen icon's colour. `nil` means the default icon, which is
+    /// the only one that carries light, dark and tinted appearances.
+    @Published var iconColour: IconColour {
+        didSet { store.set(iconColour.rawValue, forKey: Key.iconColour) }
+    }
+
+    /// Whether the icon carries the lettering or the cross alone.
+    @Published var iconCross: Bool {
+        didSet { store.set(iconCross, forKey: Key.iconCross) }
+    }
+
+    enum IconColour: String, CaseIterable, Identifiable {
+        case automatic, sanctuary, paper, manuscript, terminal
+        var id: String { rawValue }
+
+        var name: String {
+            switch self {
+            case .automatic:  return "Follow appearance"
+            case .sanctuary:  return "Gold"
+            case .paper:      return "Cinnabar"
+            case .manuscript: return "Manuscript"
+            case .terminal:   return "Phosphor"
+            }
+        }
+    }
+
+    /// The asset name iOS should be asked for, or nil for the default.
+    ///
+    /// "Follow appearance" with the lettering is the default icon, and the
+    /// default is the only one that changes with light and dark mode — an
+    /// alternate is a single image, so choosing one trades that away. The
+    /// cross-alone form of it is a real alternate like any other.
+    var alternateIconName: String? {
+        switch iconColour {
+        case .automatic:
+            return iconCross ? "AppIconSanctuaryCross" : nil
+        default:
+            let colour = iconColour.rawValue.prefix(1).uppercased()
+                + iconColour.rawValue.dropFirst()
+            return "AppIcon\(colour)\(iconCross ? "Cross" : "Full")"
+        }
+    }
+
     /// When each office's reminder fires, as minutes after midnight, keyed by
     /// the office's slug. Only offices the reader has moved appear here;
     /// anything absent uses `defaultMinutes(for:)`.
@@ -104,6 +147,8 @@ final class Settings: ObservableObject {
         static let followTextSize = "followSystemTextSize"
         static let textSize = "textSize"
         static let reminderTimes = "reminderTimes"
+        static let iconColour = "iconColour"
+        static let iconCross = "iconCross"
     }
 
     private init() {
@@ -112,6 +157,8 @@ final class Settings: ObservableObject {
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""
         reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]
+        iconColour = IconColour(rawValue: store.string(forKey: Key.iconColour) ?? "") ?? .automatic
+        iconCross = store.bool(forKey: Key.iconCross)
         // bool(forKey:) is false for a key that was never written, and the
         // default here is *on*, so the absence of the key has to be asked
         // about rather than read.
