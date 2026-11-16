@@ -78,10 +78,48 @@ def get(tok: str, path: str):
             return e.code, {}
 
 
+def builds(tok, bundle):
+    """What App Store Connect thinks of the builds we have uploaded.
+
+    An upload succeeding only means Apple accepted the bytes. The build then
+    has to process, and can sit in PROCESSING, come back INVALID, or be held
+    waiting on export compliance — none of which the upload step can see.
+    """
+    code, body = get(tok, f"/v1/apps?filter[bundleId]={bundle}")
+    if code != 200 or not body.get("data"):
+        print(f"\n=== app lookup: HTTP {code} ===")
+        for e in body.get("errors", [])[:2]:
+            print("   ", e.get("title"), "-", e.get("detail"))
+        return
+    app = body["data"][0]
+    print(f"\n=== {app['attributes']['name']} ({app['id']}) ===")
+
+    code, body = get(tok, f"/v1/builds?filter[app]={app['id']}"
+                          "&limit=10&sort=-uploadedDate"
+                          "&fields[builds]=version,processingState,uploadedDate,"
+                          "expired,usesNonExemptEncryption")
+    if code != 200:
+        print(f"   builds: HTTP {code}")
+        for e in body.get("errors", [])[:2]:
+            print("   ", e.get("title"), "-", e.get("detail"))
+        return
+    rows = body.get("data", [])
+    print(f"   {len(rows)} builds\n")
+    print(f"   {'build':<14} {'state':<12} {'expired':<8} {'encryption':<11} uploaded")
+    for b in rows:
+        a = b["attributes"]
+        print(f"   {a.get('version',''):<14} {a.get('processingState',''):<12} "
+              f"{str(a.get('expired','')):<8} {str(a.get('usesNonExemptEncryption','')):<11} "
+              f"{a.get('uploadedDate','')}")
+
+
 def main():
     key_id, issuer, p8 = sys.argv[1], sys.argv[2], sys.argv[3]
     bundle = sys.argv[4] if len(sys.argv) > 4 else "com.orthoprayers.western"
     tok = token(key_id, issuer, p8)
+    if "--builds" in sys.argv:
+        builds(tok, bundle)
+        return
 
     checks = [
         ("certificates", "/v1/certificates?limit=200"),
