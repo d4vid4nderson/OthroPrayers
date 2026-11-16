@@ -38,13 +38,8 @@ struct SettingsView: View {
                             Text(Self.name(for: size)).tag(size)
                         }
                     }
-                    // A sample in the chosen size, so the setting can be judged
-                    // by eye rather than by the name of a size.
-                    Text("Our Father, who art in heaven")
-                        .font(Typeface.prayer())
-                        .dynamicTypeSize(settings.textSize)
-                        .foregroundStyle(.secondary)
                 }
+                specimen
             } header: {
                 Text("Reading")
             } footer: {
@@ -76,6 +71,42 @@ struct SettingsView: View {
         .onChange(of: settings.hourReminders) { _, on in
             Task { await Reminders.apply(enabled: on, hours: Library.shared.hours) }
         }
+    }
+
+    /// A few lines of a real page, set exactly as a page sets them.
+    ///
+    /// Shown whether or not the size is unlinked, so flipping the toggle shows
+    /// the difference rather than making it something to remember. In the
+    /// reading colours and the reading typeface, not a dimmed sample: legibility
+    /// is the thing being judged, and grey text at the right size would answer
+    /// the wrong question. It carries a rubric and a cross-mark as well as
+    /// prayer text, because a page is all three and they do not scale alike.
+    private var specimen: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Preview")
+                .font(.caption2.weight(.semibold))
+                .tracking(1.4)
+                .textCase(.uppercase)
+                .foregroundStyle(.tertiary)
+
+            Text("Stand, and make the sign of the cross.")
+                .font(Typeface.prayer(.callout).italic())
+                .foregroundStyle(palette.inkSoft)
+
+            (Text("✠ ")
+                .font(Typeface.prayer(.title))
+                .foregroundColor(palette.accent)
+             + Text("In the Name of the Father, and of the Son, and of the Holy Spirit. Amen.")
+                .font(Typeface.prayer()))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 6)
+        // No size modifier here on purpose: the override is applied at the
+        // root of the app, so this screen is already being drawn at the chosen
+        // size and the specimen inherits it. What it adds is the reading
+        // typeface, the rubric and the cross-mark, which the settings chrome
+        // around it does not show.
     }
 
     /// DynamicTypeSize has no display name of its own, and ".xxxLarge" is not
