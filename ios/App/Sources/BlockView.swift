@@ -135,15 +135,52 @@ struct BlockView: View {
 
     /// Inline marks, assembled into one attributed string so the text still
     /// wraps, selects and reads aloud as a single passage.
+    /// The runs with the cross-mark's spacing made even.
+    ///
+    /// The printed book sets ✠ tight against the word that follows it — "✠and
+    /// the love of God" — and relies on whatever space happens to precede it.
+    /// Neither side can be trusted, so both are stripped here and the gap is
+    /// put back by the renderer, the same on each side.
+    private var spacedRuns: [Run] {
+        var rs = block.runs
+        for i in rs.indices where rs[i].mark == .signum {
+            if i > 0 {
+                rs[i - 1] = Run(t: trimmingTrailingSpaces(rs[i - 1].t),
+                                mark: rs[i - 1].mark, href: rs[i - 1].href)
+            }
+            if i + 1 < rs.count {
+                var next = rs[i + 1].t
+                while next.first == " " { next.removeFirst() }
+                rs[i + 1] = Run(t: next, mark: rs[i + 1].mark, href: rs[i + 1].href)
+            }
+        }
+        return rs
+    }
+
+    private func trimmingTrailingSpaces(_ s: String) -> String {
+        var t = s
+        while t.last == " " { t.removeLast() }
+        return t
+    }
+
     private var attributed: AttributedString {
         var out = AttributedString()
-        for run in block.runs {
+        for (i, run) in spacedRuns.enumerated() {
             var piece = AttributedString(run.t.replacingOccurrences(of: "\n", with: " "))
             switch run.mark {
             case .rubric:
                 piece.foregroundColor = palette.inkSoft
             case .signum:
+                // Set larger than the text it sits in: it is an instruction to
+                // make the sign of the cross, and at body size it disappeared
+                // into the line. The spaces are added here rather than trusted
+                // from the source, so the mark is evenly set on both sides —
+                // except at the very start of a block, where a leading space
+                // would indent the line. Each office opens on this mark.
+                let glyph = run.t.trimmingCharacters(in: .whitespaces)
+                piece = AttributedString((i == 0 ? "" : " ") + glyph + " ")
                 piece.foregroundColor = palette.accent
+                piece.font = Typeface.prayer(.title3)
             case .dropcap, .versal:
                 piece.foregroundColor = palette.accent
                 piece.font = Typeface.display(.title)
