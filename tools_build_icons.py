@@ -87,6 +87,15 @@ def glow_plate(ground, ink):
 
 
 def from_mask(src, ground, ink, margin):
+    """A block print: dark figure on a coloured field.
+
+    Inverted from the obvious reading of the source. The engraving is dark
+    lines on white paper, so painting the lines in the ink colour over a dark
+    ground gives thin bright lines on black — which is what a block print is
+    not, and which dies at icon size. Putting the colour on the plate and
+    cutting the figure out of it in the dark is both what the print looks like
+    and far easier to read small.
+    """
     art = Image.open(src).convert("L")
     alpha = Image.eval(art, lambda v: 255 - v)
     alpha = Image.blend(alpha, alpha.filter(ImageFilter.MaxFilter(THICKEN)),
@@ -95,8 +104,10 @@ def from_mask(src, ground, ink, margin):
     w, h = alpha.size
     s = min(box / w, box / h)
     alpha = alpha.resize((round(w * s), round(h * s)), Image.LANCZOS)
-    plate = glow_plate(ground, ink)
-    plate.paste(Image.new("RGB", alpha.size, rgb(ink)),
+    # the plate takes the colour, and the gradients wash the ground over it —
+    # the reverse of the drawn styles, because the roles are reversed
+    plate = glow_plate(ink, ground)
+    plate.paste(Image.new("RGB", alpha.size, rgb(ground)),
                 ((SIZE - alpha.size[0]) // 2, (SIZE - alpha.size[1]) // 2), alpha)
     return plate
 
