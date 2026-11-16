@@ -42,29 +42,25 @@ struct RootView: View {
     @Binding var deepLink: String?
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var settings: Settings
-    /// The phone's appearance. Only a view can see it, and only while nothing
-    /// is forcing a scheme — which is exactly the case when following it.
-    @Environment(\.colorScheme) private var systemScheme
-
-    /// Which tab is open, kept in scene storage rather than in @State.
-    ///
-    /// As @State it was lost whenever anything rebuilt this view, and a theme
-    /// change does: the reader was dropped back on Prayers mid-way through
-    /// changing a setting, which reads as the settings screen closing itself.
-    /// Scene storage outlives the rebuild, so the tab stays put whatever
-    /// SwiftUI decides to do with the view tree.
-    @SceneStorage("pane") private var pane = Pane.prayers
+    @Environment(\.scenePhase) private var phase
 
     /// Named `Pane` rather than `Tab`: SwiftUI's own `Tab` builder is used
-    /// below, and a nested type called `Tab` would shadow it. String-backed so
-    /// it can live in scene storage.
+    /// below, and a nested type called `Tab` would shadow it.
     enum Pane: String, Hashable { case prayers, missal, worship, settings }
+
+    /// Bound through Settings rather than held here. @State and @SceneStorage
+    /// were both lost when a theme change rebuilt this view; the singleton is
+    /// not rebuilt, so the tab survives.
+    private var pane: Binding<Pane> {
+        Binding(get: { Pane(rawValue: settings.pane) ?? .prayers },
+                set: { settings.pane = $0.rawValue })
+    }
 
     var body: some View {
         // The iOS 18+ `Tab` builder, which is what the newer bar behaviours —
         // minimising, the glass morph between bar and content — are written
         // against. The old `.tabItem` form still compiles but opts out of them.
-        TabView(selection: $pane) {
+        TabView(selection: pane) {
             Tab("Prayers", systemImage: "sun.horizon", value: Pane.prayers) {
                 NavigationStack { TodayView() }
             }
@@ -86,9 +82,13 @@ struct RootView: View {
         // The bar collapses to a pill as the reader scrolls down into a prayer
         // and returns on the way back up: more page, and no gesture to learn.
         .tabBarMinimizeBehavior(.onScrollDown)
-        .onAppear { settings.systemIsDark = systemScheme == .dark }
-        .onChange(of: systemScheme) { _, new in
-            settings.systemIsDark = new == .dark
+        // Read from the window scene, not from the environment: the app
+        // forces a colour scheme, and the environment would report that back
+        // rather than the phone's own setting. Refreshed whenever the app
+        // comes forward, which is when a change made in Settings.app lands.
+        .onAppear { settings.systemIsDark = Appearance.systemIsDark }
+        .onChange(of: phase) { _, new in
+            if new == .active { settings.systemIsDark = Appearance.systemIsDark }
         }
         .sheet(item: linkedPage) { linked in
             NavigationStack { ReadingView(slug: linked.slug) }

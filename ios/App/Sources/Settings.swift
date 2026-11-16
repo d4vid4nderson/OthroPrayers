@@ -35,6 +35,15 @@ final class Settings: ObservableObject {
     /// the only place it can be read. Not persisted: it is a fact about now.
     @Published var systemIsDark = false
 
+    /// Which tab is open.
+    ///
+    /// It lived in @State, and then in @SceneStorage, and was lost both times
+    /// when a theme change rebuilt the view — the reader was dropped back on
+    /// Prayers mid-setting, which reads as the settings screen closing itself.
+    /// This object is a singleton that nothing can rebuild, so a selection
+    /// kept here outlives anything SwiftUI does to the views.
+    @Published var pane = "prayers" { didSet { store.set(pane, forKey: Key.pane) } }
+
     /// The theme actually drawn.
     var effectiveTheme: Theme {
         followSystemAppearance ? (systemIsDark ? darkTheme : lightTheme) : theme
@@ -43,8 +52,19 @@ final class Settings: ObservableObject {
     /// What to force on the interface, or nil to leave the phone in charge.
     /// nil is what makes `systemIsDark` meaningful: forcing a scheme would
     /// make the environment report back the value we just set.
+    /// Always the drawn theme's own lightness, never nil.
+    ///
+    /// It used to be nil while following the phone, so that reading
+    /// \.colorScheme back would report the phone rather than our own override.
+    /// That traded away the thing that matters: with no override, iOS supplies
+    /// light-mode system colours — .primary is black, the default background
+    /// is white — while the theme paints dark surfaces underneath. Black text
+    /// on a near-black card, and a cream page behind dark cards.
+    ///
+    /// The phone's appearance is read from the window scene instead (see
+    /// Appearance), which an override on our own views does not touch.
     var preferredScheme: ColorScheme? {
-        followSystemAppearance ? nil : theme.colorScheme
+        effectiveTheme.colorScheme
     }
     @Published var dyslexicFont: Bool { didSet { store.set(dyslexicFont, forKey: Key.dyslexic) } }
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
@@ -274,6 +294,7 @@ final class Settings: ObservableObject {
         static let textSize = "textSize"
         static let reminderTimes = "reminderTimes"
         static let reminderOff = "reminderOff"
+        static let pane = "pane"
         static let iconColour = "iconColour"
         static let iconStyle = "iconStyle"
     }
@@ -291,6 +312,7 @@ final class Settings: ObservableObject {
         lastRead = store.string(forKey: Key.lastRead) ?? ""
         reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]
         reminderOff = Set(store.stringArray(forKey: Key.reminderOff) ?? [])
+        pane = store.string(forKey: Key.pane) ?? "prayers"
         iconColour = IconColour(rawValue: store.string(forKey: Key.iconColour) ?? "") ?? .automatic
         iconStyle = IconStyle(rawValue: store.string(forKey: Key.iconStyle) ?? "") ?? .mark
         // bool(forKey:) is false for a key that was never written, and the
