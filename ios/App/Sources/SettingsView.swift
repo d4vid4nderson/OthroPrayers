@@ -94,9 +94,17 @@ struct SettingsView: View {
                 Toggle("Remind me at each hour", isOn: $settings.hourReminders)
                 if settings.hourReminders {
                     ForEach(library.hours) { hour in
-                        DatePicker(hour.title,
-                                   selection: time(for: hour),
-                                   displayedComponents: .hourAndMinute)
+                        // Each office rings on its own. One switch for all
+                        // four meant a reader who wanted only Compline had to
+                        // take all of them or none.
+                        Toggle(hour.title, isOn: Binding(
+                            get: { settings.reminds(hour) },
+                            set: { settings.setReminds($0, for: hour) }))
+                        if settings.reminds(hour) {
+                            DatePicker("at", selection: time(for: hour),
+                                       displayedComponents: .hourAndMinute)
+                                .padding(.leading, 18)
+                        }
                     }
                 }
             } header: {
@@ -121,6 +129,9 @@ struct SettingsView: View {
         // Moving a time has to re-arm the notifications, or the picker would
         // change and nothing behind it would.
         .onChange(of: settings.reminderTimes) { _, _ in
+            reschedule(enabled: settings.hourReminders)
+        }
+        .onChange(of: settings.reminderOff) { _, _ in
             reschedule(enabled: settings.hourReminders)
         }
         .onChange(of: settings.iconColour) { _, _ in applyIcon() }
@@ -149,9 +160,11 @@ struct SettingsView: View {
     /// across the boundary for the sake of four integers.
     private func reschedule(enabled: Bool) {
         let hours = library.hours
+        // only the offices that ring, and only their times
+        let wanted = hours.filter { settings.reminds($0) }
         let times = Dictionary(uniqueKeysWithValues:
-            hours.map { ($0.slug, settings.reminderMinutes(for: $0)) })
-        Task { await Reminders.apply(enabled: enabled, hours: hours, times: times) }
+            wanted.map { ($0.slug, settings.reminderMinutes(for: $0)) })
+        Task { await Reminders.apply(enabled: enabled, hours: wanted, times: times) }
     }
 
     /// One row of the icon picker: a horizontal strip of tiles.
@@ -305,9 +318,19 @@ private struct IconTile: View {
     var body: some View {
         Button(action: tap) {
             VStack(spacing: 6) {
+                // A missing asset must show, not vanish: the first version of
+                // this picker drew nothing at all because the imagesets were
+                // written with an unfilled 2x/3x, and blank tiles look like a
+                // layout bug rather than a missing file.
                 Image(preview)
                     .resizable()
                     .frame(width: side, height: side)
+                    .background(
+                        ZStack {
+                            Color.secondary.opacity(0.18)
+                            Image(systemName: "questionmark")
+                                .font(.caption).foregroundStyle(.secondary)
+                        })
                     .clipShape(shape)
                     .overlay(shape.stroke(selected ? palette.accent : .clear,
                                           lineWidth: 2.5))

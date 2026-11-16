@@ -98,7 +98,8 @@ final class Settings: ObservableObject {
     }
 
     enum IconColour: String, CaseIterable, Identifiable {
-        case automatic, sanctuary, paper, manuscript, terminal, ivory, crimson, emerald
+        case automatic, sanctuary, paper, manuscript, terminal, ivory, crimson, emerald,
+             amber, silver, sapphire, violet
         var id: String { rawValue }
 
         var name: String {
@@ -111,6 +112,10 @@ final class Settings: ObservableObject {
             case .ivory:      return "Ivory"
             case .crimson:    return "Crimson on black"
             case .emerald:    return "Emerald on black"
+            case .amber:      return "Amber on black"
+            case .silver:     return "Silver on black"
+            case .sapphire:   return "Sapphire on black"
+            case .violet:     return "Violet on black"
             }
         }
 
@@ -125,6 +130,10 @@ final class Settings: ObservableObject {
             case .ivory:      return "Ivory"
             case .crimson:    return "Crimson"
             case .emerald:    return "Emerald"
+            case .amber:      return "Amber"
+            case .silver:     return "Silver"
+            case .sapphire:   return "Sapphire"
+            case .violet:     return "Violet"
             }
         }
     }
@@ -165,6 +174,19 @@ final class Settings: ObservableObject {
     /// anything absent uses `defaultMinutes(for:)`.
     @Published var reminderTimes: [String: Int] {
         didSet { store.set(reminderTimes, forKey: Key.reminderTimes) }
+    }
+
+    /// Which offices ring. One switch for all four was too blunt: a reader
+    /// may want Compline and nothing else. Absent means on, so an office this
+    /// build does not know about still reminds.
+    @Published var reminderOff: Set<String> {
+        didSet { store.set(Array(reminderOff), forKey: Key.reminderOff) }
+    }
+
+    func reminds(_ hour: Hour) -> Bool { !reminderOff.contains(hour.slug) }
+
+    func setReminds(_ on: Bool, for hour: Hour) {
+        if on { reminderOff.remove(hour.slug) } else { reminderOff.insert(hour.slug) }
     }
 
     func reminderMinutes(for hour: Hour) -> Int {
@@ -251,6 +273,7 @@ final class Settings: ObservableObject {
         static let followTextSize = "followSystemTextSize"
         static let textSize = "textSize"
         static let reminderTimes = "reminderTimes"
+        static let reminderOff = "reminderOff"
         static let iconColour = "iconColour"
         static let iconStyle = "iconStyle"
     }
@@ -267,6 +290,7 @@ final class Settings: ObservableObject {
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""
         reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]
+        reminderOff = Set(store.stringArray(forKey: Key.reminderOff) ?? [])
         iconColour = IconColour(rawValue: store.string(forKey: Key.iconColour) ?? "") ?? .automatic
         iconStyle = IconStyle(rawValue: store.string(forKey: Key.iconStyle) ?? "") ?? .mark
         // bool(forKey:) is false for a key that was never written, and the
