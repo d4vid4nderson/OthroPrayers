@@ -6,9 +6,12 @@ name: iOS
 #
 # macOS runners are free for public repositories.
 
+# push only on main, and pull_request for everything else. Both were firing
+# on every commit while a PR was open — two runs of the same work, in
+# different concurrency groups so neither cancelled the other.
 on:
   push:
-    branches: [main, "claude/**"]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
