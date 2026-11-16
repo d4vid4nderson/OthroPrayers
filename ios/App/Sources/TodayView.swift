@@ -81,7 +81,7 @@ private struct HeroCard: View {
         // hand-drawn gold hairline that used to sit here is gone on purpose:
         // it fought the material's own edge rather than reinforcing it.
         .glassEffect(.regular.tint(palette.accent.opacity(0.18)),
-                     in: .rect(cornerRadius: 20))
+                     in: Container.shape())
         .shadow(color: palette.accent.opacity(0.10), radius: 22)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(hour.title), due now, \(hour.when)")
@@ -110,8 +110,8 @@ private struct HourList: View {
                 if hour.id != hours.last?.id { ThemedRule().padding(.leading, 18) }
             }
         }
-        .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(palette.hairline, lineWidth: 1))
+        .background(palette.surface, in: Container.shape())
+        .overlay(Container.shape().stroke(palette.hairline, lineWidth: 1))
     }
 }
 
@@ -137,8 +137,8 @@ private struct BookList: View {
                 if i < library.extras.count - 1 { ThemedRule().padding(.leading, 70) }
             }
         }
-        .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(palette.hairline, lineWidth: 1))
+        .background(palette.surface, in: Container.shape())
+        .overlay(Container.shape().stroke(palette.hairline, lineWidth: 1))
     }
 
     private func row(title: String, detail: String, symbol: String) -> some View {
@@ -147,8 +147,8 @@ private struct BookList: View {
                 .font(.system(size: 18))
                 .foregroundStyle(palette.accent)
                 .frame(width: 38, height: 38)
-                .background(palette.accent.opacity(0.10), in: RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12)
+                .background(palette.accent.opacity(0.10), in: Container.inner())
+                .overlay(Container.inner()
                     .stroke(palette.accent.opacity(0.18), lineWidth: 1))
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(Typeface.display(.title3))

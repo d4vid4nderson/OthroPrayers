@@ -79,6 +79,40 @@ struct AccentRule: View {
     }
 }
 
+/// The app's container corner: a squircle, not a rounded square.
+///
+/// `RoundedRectangle` defaults to `.circular`, which butts a straight edge
+/// against a circular arc. The curvature jumps at that join — from nothing to
+/// all of it at once — and that discontinuity is exactly what the eye reads as
+/// a rounded square. `.continuous` ramps the curvature in over a longer
+/// stretch of the edge, which is the curve iOS itself uses for app icons,
+/// sheets, widgets and alerts.
+///
+/// Defined once, here, because the cards had it one way and the icon picker
+/// the other, and the two sat on the same screen.
+enum Container {
+    /// A card: an office, a chant, a section of the Today page.
+    static let radius: CGFloat = 20
+    /// Something sitting inside a card, which wants a tighter corner.
+    static let innerRadius: CGFloat = 12
+
+    static func shape(_ radius: CGFloat = Self.radius) -> RoundedRectangle {
+        RoundedRectangle(cornerRadius: radius, style: .continuous)
+    }
+
+    /// A well or badge inside a card.
+    static func inner() -> RoundedRectangle { shape(innerRadius) }
+
+    /// The same curve at an app icon's proportion.
+    ///
+    /// iOS masks a home-screen icon at about 22.4% of its side rather than a
+    /// fixed radius, so the picker's tiles have to scale their corner with
+    /// their size to look like what they are previewing.
+    static func icon(side: CGFloat) -> RoundedRectangle {
+        RoundedRectangle(cornerRadius: side * 0.2237, style: .continuous)
+    }
+}
+
 /// A hairline in the theme's own colour.
 ///
 /// SwiftUI's `Divider` draws the system separator, which knows about light and

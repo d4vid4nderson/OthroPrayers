@@ -348,11 +348,7 @@ private struct IconTile: View {
     let tap: () -> Void
 
     private let side: CGFloat = 60
-    // iOS draws app icons as a squircle; a plain rounded rect at this radius
-    // is close enough at this size and does not need a custom shape.
-    private var shape: some InsettableShape {
-        RoundedRectangle(cornerRadius: side * 0.225, style: .continuous)
-    }
+    private var shape: some InsettableShape { Container.icon(side: side) }
 
     var body: some View {
         Button(action: tap) {

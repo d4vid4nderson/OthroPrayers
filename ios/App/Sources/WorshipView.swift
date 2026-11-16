@@ -207,8 +207,8 @@ private extension View {
     /// The one card shape both lists sit on.
     func card() -> some View {
         self
-            .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(palette.hairline, lineWidth: 1))
+            .background(palette.surface, in: Container.shape())
+            .overlay(Container.shape().stroke(palette.hairline, lineWidth: 1))
     }
 }
 
@@ -267,7 +267,7 @@ private struct NowPlaying: View {
             .padding(.vertical, 12)
         }
         .glassEffect(.regular.tint(palette.accent.opacity(0.12)),
-                     in: .rect(cornerRadius: 20))
+                     in: Container.shape())
         .padding(.horizontal, 12)
         .padding(.bottom, 6)
     }
