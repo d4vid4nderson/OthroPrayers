@@ -75,6 +75,16 @@ Needs `fontTools` and a rasterizer, and writes the Xcode asset catalog with all
 three iOS appearances. It still emits a few web favicons alongside them, left
 over from the website; they are harmless and uncommitted.
 
+## Vercel
+
+`vercel.json` disables Vercel's Git integration: no deployment on push, no
+comment on pull requests. It is here because the repository can say that much
+to Vercel, and because this app is not a website.
+
+It does not delete the project. Only its dashboard can do that —
+vercel.com/fullstackvibes/othro-prayers → Settings → Delete Project — and
+until someone does, the project exists with nothing to serve.
+
 ## The worship recordings
 
 `ios/Music/` and `hymns/` are deliberately **not** in this repository — the
