@@ -90,6 +90,11 @@ targets:
         # its own. AppIcon itself stays the default, and is the only one with
         # light/dark/tinted appearances — an alternate is a single image.
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: >-
+          AppIconCrimsonCross AppIconCrimsonIcon
+          AppIconCrimsonMark AppIconCrimsonMedallion
+          AppIconCrimsonOrthodox AppIconEmeraldCross
+          AppIconEmeraldIcon AppIconEmeraldMark
+          AppIconEmeraldMedallion AppIconEmeraldOrthodox
           AppIconIvoryCross AppIconIvoryIcon
           AppIconIvoryMark AppIconIvoryMedallion
           AppIconIvoryOrthodox AppIconManuscriptCross

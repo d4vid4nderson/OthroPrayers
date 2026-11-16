@@ -17,17 +17,30 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section {
-                Picker("Style", selection: $settings.theme) {
-                    ForEach(Theme.allCases) { theme in
-                        Text(theme.name).tag(theme)
+                Toggle("Match phone appearance", isOn: $settings.followSystemAppearance)
+                if settings.followSystemAppearance {
+                    Picker("In light mode", selection: $settings.lightTheme) {
+                        ForEach(Theme.allCases) { Text($0.name).tag($0) }
                     }
+                    Picker("In dark mode", selection: $settings.darkTheme) {
+                        ForEach(Theme.allCases) { Text($0.name).tag($0) }
+                    }
+                } else {
+                    Picker("Style", selection: $settings.theme) {
+                        ForEach(Theme.allCases) { Text($0.name).tag($0) }
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
                 }
-                .pickerStyle(.inline)
-                .labelsHidden()
             } header: {
                 Text("Style")
             } footer: {
-                Text(settings.theme.detail
+                Text(settings.followSystemAppearance
+                     ? "The app turns light and dark with the phone, using the "
+                       + "theme you pick for each. "
+                       + settings.effectiveTheme.detail
+                     : "Fixed to this theme whatever the phone is set to. "
+                       + settings.theme.detail
                      + " Dyslexia-friendly text overrides whichever you pick.")
             }
 

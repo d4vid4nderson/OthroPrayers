@@ -17,7 +17,7 @@ struct PrayersApp: App {
                 .environmentObject(arrangements)
                 .environmentObject(player)
                 // dark themes get a dark interface; the system does the rest
-                .preferredColorScheme(settings.theme.colorScheme)
+                .preferredColorScheme(settings.preferredScheme)
                 // Applied at the root so the whole app scales together —
                 // prayer text, tab bar, settings — rather than the prayers
                 // growing out of step with the chrome around them.
@@ -29,7 +29,7 @@ struct PrayersApp: App {
                 // Settings every time they touched it.
                 .dynamicTypeSize(settings.textSizeRange)
                 // the single accent: the system tints every stock control with it
-                .tint(settings.theme.palette.accent)
+                .tint(settings.effectiveTheme.palette.accent)
                 .onOpenURL { url in
                     guard url.scheme == "prayers", url.host == "page" else { return }
                     deepLink = url.lastPathComponent
@@ -41,11 +41,24 @@ struct PrayersApp: App {
 struct RootView: View {
     @Binding var deepLink: String?
     @EnvironmentObject private var library: Library
-    @State private var pane = Pane.prayers
+    @EnvironmentObject private var settings: Settings
+    /// The phone's appearance. Only a view can see it, and only while nothing
+    /// is forcing a scheme — which is exactly the case when following it.
+    @Environment(\.colorScheme) private var systemScheme
+
+    /// Which tab is open, kept in scene storage rather than in @State.
+    ///
+    /// As @State it was lost whenever anything rebuilt this view, and a theme
+    /// change does: the reader was dropped back on Prayers mid-way through
+    /// changing a setting, which reads as the settings screen closing itself.
+    /// Scene storage outlives the rebuild, so the tab stays put whatever
+    /// SwiftUI decides to do with the view tree.
+    @SceneStorage("pane") private var pane = Pane.prayers
 
     /// Named `Pane` rather than `Tab`: SwiftUI's own `Tab` builder is used
-    /// below, and a nested type called `Tab` would shadow it.
-    enum Pane: Hashable { case prayers, missal, worship, settings }
+    /// below, and a nested type called `Tab` would shadow it. String-backed so
+    /// it can live in scene storage.
+    enum Pane: String, Hashable { case prayers, missal, worship, settings }
 
     var body: some View {
         // The iOS 18+ `Tab` builder, which is what the newer bar behaviours —
@@ -73,6 +86,10 @@ struct RootView: View {
         // The bar collapses to a pill as the reader scrolls down into a prayer
         // and returns on the way back up: more page, and no gesture to learn.
         .tabBarMinimizeBehavior(.onScrollDown)
+        .onAppear { settings.systemIsDark = systemScheme == .dark }
+        .onChange(of: systemScheme) { _, new in
+            settings.systemIsDark = new == .dark
+        }
         .sheet(item: linkedPage) { linked in
             NavigationStack { ReadingView(slug: linked.slug) }
         }

@@ -12,6 +12,40 @@ final class Settings: ObservableObject {
     static let shared = Settings()
 
     @Published var theme: Theme { didSet { store.set(theme.rawValue, forKey: Key.theme) } }
+
+    /// Whether the app takes its light or dark from the phone.
+    ///
+    /// Without this the app simply forced whatever the chosen theme was, so a
+    /// phone in light mode still got a dark app — the theme decided, and the
+    /// phone was never consulted. On by default, which is what most people
+    /// expect of an app they did not configure.
+    @Published var followSystemAppearance: Bool {
+        didSet { store.set(followSystemAppearance, forKey: Key.followAppearance) }
+    }
+
+    /// Which theme to use in each appearance while following the phone.
+    @Published var lightTheme: Theme {
+        didSet { store.set(lightTheme.rawValue, forKey: Key.lightTheme) }
+    }
+    @Published var darkTheme: Theme {
+        didSet { store.set(darkTheme.rawValue, forKey: Key.darkTheme) }
+    }
+
+    /// The phone's current appearance, pushed in from the view tree, which is
+    /// the only place it can be read. Not persisted: it is a fact about now.
+    @Published var systemIsDark = false
+
+    /// The theme actually drawn.
+    var effectiveTheme: Theme {
+        followSystemAppearance ? (systemIsDark ? darkTheme : lightTheme) : theme
+    }
+
+    /// What to force on the interface, or nil to leave the phone in charge.
+    /// nil is what makes `systemIsDark` meaningful: forcing a scheme would
+    /// make the environment report back the value we just set.
+    var preferredScheme: ColorScheme? {
+        followSystemAppearance ? nil : theme.colorScheme
+    }
     @Published var dyslexicFont: Bool { didSet { store.set(dyslexicFont, forKey: Key.dyslexic) } }
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
     @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
@@ -53,7 +87,7 @@ final class Settings: ObservableObject {
     }
 
     enum IconColour: String, CaseIterable, Identifiable {
-        case automatic, sanctuary, paper, manuscript, terminal, ivory
+        case automatic, sanctuary, paper, manuscript, terminal, ivory, crimson, emerald
         var id: String { rawValue }
 
         var name: String {
@@ -64,6 +98,8 @@ final class Settings: ObservableObject {
             case .manuscript: return "Manuscript"
             case .terminal:   return "Phosphor"
             case .ivory:      return "Ivory"
+            case .crimson:    return "Crimson on black"
+            case .emerald:    return "Emerald on black"
             }
         }
     }
@@ -175,6 +211,9 @@ final class Settings: ObservableObject {
 
     private enum Key {
         static let theme = "theme"
+        static let followAppearance = "followSystemAppearance"
+        static let lightTheme = "lightTheme"
+        static let darkTheme = "darkTheme"
         static let dyslexic = "dyslexicFont"
         static let reminders = "hourReminders"
         static let lastRead = "lastRead"
@@ -187,6 +226,12 @@ final class Settings: ObservableObject {
 
     private init() {
         theme = Theme(rawValue: store.string(forKey: Key.theme) ?? "") ?? .sanctuary
+        // default on, and absence of the key is not false here
+        followSystemAppearance = store.object(forKey: Key.followAppearance) == nil
+            ? true
+            : store.bool(forKey: Key.followAppearance)
+        lightTheme = Theme(rawValue: store.string(forKey: Key.lightTheme) ?? "") ?? .paper
+        darkTheme = Theme(rawValue: store.string(forKey: Key.darkTheme) ?? "") ?? .sanctuary
         dyslexicFont = store.bool(forKey: Key.dyslexic)
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""

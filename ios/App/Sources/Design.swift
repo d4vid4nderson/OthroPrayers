@@ -13,11 +13,11 @@ import UIKit
 /// MainActor singleton and publishes on change, so any view observing it
 /// re-renders with the new colours.
 @MainActor
-var palette: Palette { Settings.shared.theme.palette }
+var palette: Palette { Settings.shared.effectiveTheme.palette }
 
 @MainActor
 enum Typeface {
-    private static var theme: Theme { Settings.shared.theme }
+    private static var theme: Theme { Settings.shared.effectiveTheme }
     private static var dyslexic: Bool { Settings.shared.dyslexicFont }
 
     /// Anything read at length.
