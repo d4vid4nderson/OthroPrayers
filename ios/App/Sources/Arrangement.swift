@@ -71,12 +71,23 @@ extension Library {
             if block.type == .heading {
                 flush()
                 current = [block]
+            } else if block.type == .colophon {
+                // A closing credit is not part of the prayer it happens to
+                // follow. Left in, it was listed under that prayer's heading
+                // and carried around by the arranger when the office was
+                // reordered. It is drawn once, at the foot of the page.
+                continue
             } else if !current.isEmpty {
                 current.append(block)
             }
         }
         flush()
         return out
+    }
+
+    /// A page's closing credits, drawn at the foot and never reordered.
+    func colophon(of slug: String) -> [Block] {
+        page(slug)?.blocks.filter { $0.type == .colophon } ?? []
     }
 
     /// Resolve a stored reference back to its prayer. Returns nil when the

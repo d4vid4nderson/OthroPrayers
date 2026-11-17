@@ -77,6 +77,13 @@ without a compiler. There is a comment in `TodayView.swift` showing the
 
 ## TestFlight
 
+Uploads run from GitHub Actions, not from a Mac. Actions → **TestFlight** →
+Run workflow. It is manual on purpose: every run consumes a build number and
+puts a build in front of testers.
+
+Internal testers (your own team, up to 100) need no review. External testers
+require Beta App Review — lighter than App Store review, but still a review.
+
 Already handled in the project:
 
 - `ITSAppUsesNonExemptEncryption: false`, so App Store Connect stops asking
@@ -84,18 +91,74 @@ Already handled in the project:
 - `PrivacyInfo.xcprivacy` declaring no tracking, no collection, and the one
   required-reason API the app touches (UserDefaults, `CA92.1`).
 - A launch screen on the Sanctuary ground, so the first frame is never white.
-- `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` in `project.yml` — bump
-  `CURRENT_PROJECT_VERSION` for every upload; App Store Connect rejects a repeat.
+- The build number is a UTC timestamp, set by the workflow. App Store Connect
+  rejects a repeat, and a run number cannot promise to keep increasing across
+  workflow renames or re-runs.
 
-What you still have to do:
+### Why signing is done by hand
 
-1. Create the app record in App Store Connect with bundle ID
-   `com.orthoprayers.western` (change it in `project.yml` if you want another).
-2. **Product › Archive**, then **Distribute App › TestFlight**.
-3. Internal testers (your own team, up to 100) need no review. **External
-   testers require Beta App Review**, which is lighter than full App Store
-   review but is still a review — and a prayer book that is entirely offline
-   content is a much easier case to make than a thin web wrapper.
+**This account's App Store Connect API key cannot reach the Developer portal.**
+It reads App Store Connect perfectly well — it lists every app on the team —
+but all three provisioning endpoints refuse it:
+
+    GET /v1/certificates  -> 403
+    GET /v1/bundleIds     -> 403
+    GET /v1/profiles      -> 403
+    "Unable to find a team with the given Content Provider ID
+     '<issuer>' to which you belong."
+
+That is Apple answering a plain HTTPS GET, with no Xcode involved —
+`.github/asc_probe.py` is the script that asks, if you want to re-check it
+after an account change. Everything Xcode reported during automatic signing was
+this error relayed: it could never obtain a distribution identity, so it fell
+back to looking for *development* profiles and failed.
+
+The team ID, the role (Admin), the membership and the app record were all
+checked and are all fine. The refusal is something about how this key is scoped
+to the team, and it is not fixable from the repository.
+
+So the certificate and profile are created in a browser and handed to CI:
+
+| secret | what it is |
+|---|---|
+| `SIGNING_KEY` | the RSA private key the CSR was made from |
+| `SIGNING_PROFILE` | base64 of the `.mobileprovision` |
+| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY` | the API key — for *uploading*, which App Store Connect does accept |
+
+There is no `SIGNING_CERT`: the profile already carries the certificate, and
+the workflow extracts it from there. One artifact, so a certificate and a
+profile cannot be uploaded out of step with each other.
+
+### Renewing, when the certificate expires
+
+Both the certificate and the profile expire **15 November 2027**. The TestFlight
+workflow prints the days remaining on every run, warns under 30 days, and fails
+outright once past it — so this should not arrive as a surprise upload failure.
+
+Renewing is the same manual round, because the portal still will not issue to
+the API key:
+
+```sh
+openssl genrsa -out distribution.key 2048
+openssl req -new -key distribution.key -out distribution.csr \
+  -subj "/CN=OthroPrayers Distribution/C=US"
+```
+
+1. developer.apple.com → Certificates → **+** → **Apple Distribution** → upload
+   the CSR → download the `.cer`.
+2. Profiles → **+** → **App Store Connect** → app ID `com.orthoprayers.western`
+   → pick that certificate → download the `.mobileprovision`.
+3. Update `SIGNING_KEY` with the new private key, and `SIGNING_PROFILE` with
+   `base64 -w0` (or `base64 -i` on macOS) of the new profile.
+
+The CSR deliberately carries no email address: it ends up inside a certificate
+committed nowhere, but quoted in logs, and an address there serves no purpose.
+
+### If you do get to a Mac
+
+None of the above applies. Xcode signs with your logged-in Apple ID rather than
+the API key, which sidesteps the portal refusal entirely: open
+`Prayers.xcodeproj`, **Product › Archive**, **Distribute App**.
 
 ### The worship recordings
 

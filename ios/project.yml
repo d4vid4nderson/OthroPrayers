@@ -6,6 +6,13 @@
 #   cd ios && xcodegen generate && open Prayers.xcodeproj
 #
 name: Prayers
+
+# The 160 alternate app icons, generated alongside their PNGs by
+# tools_build_icons.py so the declarations and the files cannot drift apart.
+# It is long and mechanical, which is exactly why it is not in this file.
+include:
+  - alticons.yml
+
 options:
   bundleIdPrefix: com.orthoprayers
   deploymentTarget:
@@ -23,7 +30,10 @@ settings:
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "7"
     SWIFT_VERSION: "6.0"
-    DEVELOPMENT_TEAM: RN599658F9   # David Anderson (personal team)
+    DEVELOPMENT_TEAM: RN599658F9   # David Anderson — the paid team;
+                                   # "personal team" was a misnomer, and sent
+                                   # me looking for a signing bug that was not
+                                   # there
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: minimal   # tighten once it builds clean
@@ -37,6 +47,10 @@ targets:
       # groups, not folder references: the fonts, the privacy manifest and the
       # JSON must land at the bundle root, where UIAppFonts and Bundle.main
       # look for them. A folder reference would bury them a level down.
+      #
+      # App/Resources/AltIcons rides on this. A group is flattened on the way
+      # into the bundle, which is what CFBundleIconFiles needs — it looks for
+      # its PNGs at the root and nowhere else.
       - path: App/Resources
       # the generated content model, referenced where build.py writes it and
       # never copied, so the app cannot drift from the site
@@ -82,6 +96,16 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.orthoprayers.western
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # The alternates are declared in Info.plist (see alticons.yml), not
+        # here. An asset-catalog appiconset holds one 1024px image, which is
+        # what the App Store listing wants and roughly eight times what a
+        # home screen ever draws; at 160 icons that was about 40MB of detail
+        # no one would ever see. Loose 120 and 180px files cost 6MB for the
+        # whole set, and double as the picker's thumbnails.
+        #
+        # AppIcon stays in the catalogue: it is the default, so it is the one
+        # the listing is cut from, and the only one that can carry separate
+        # light, dark and tinted appearances.
         # iPhone only. The design is portrait and dark by construction, and
         # App Store validation requires an iPad-capable build to offer all four
         # orientations for multitasking — which would mean shipping a layout

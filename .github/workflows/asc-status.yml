@@ -1,0 +1,41 @@
+name: App Store Connect status
+
+# What Apple thinks of the builds we have uploaded.
+#
+# A successful upload only means Apple accepted the bytes. The build then has
+# to process, and can sit in PROCESSING for a while, come back INVALID, or be
+# held waiting on export compliance — none of which the upload step can see,
+# and none of which produces an error anywhere we would notice.
+#
+# Read-only. It asks and prints; it changes nothing.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  status:
+    runs-on: ubuntu-latest    # no Xcode needed: this is an HTTPS GET
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ask App Store Connect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: |
+          for n in ASC_KEY_ID ASC_ISSUER_ID ASC_PRIVATE_KEY; do
+            [ -n "${!n}" ] || { echo "::error::secret $n is not set"; exit 1; }
+          done
+          mkdir -p ~/private_keys
+          printf '%s\n' "$ASC_PRIVATE_KEY" > ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          bundle="$(grep -E '^[[:space:]]*PRODUCT_BUNDLE_IDENTIFIER:' ios/project.yml | head -1 | sed -E 's/.*:[[:space:]]*//')"
+          python3 .github/asc_probe.py \
+            "$ASC_KEY_ID" "$ASC_ISSUER_ID" \
+            ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 "$bundle" --builds
+
+      - name: Always remove the key
+        if: always()
+        run: rm -rf ~/private_keys
