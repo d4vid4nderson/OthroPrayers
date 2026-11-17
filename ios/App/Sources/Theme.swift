@@ -179,7 +179,9 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     }
 }
 
-struct Palette {
+/// Equatable so SwiftUI can tell when the environment's Design actually
+/// changed, rather than invalidating every dependent view on each pass.
+struct Palette: Equatable {
     let ground: Color
     let surface: Color
     let ink: Color

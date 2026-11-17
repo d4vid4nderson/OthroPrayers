@@ -2,6 +2,10 @@ import SwiftUI
 
 /// A book's contents: numerals and hairlines, no boxes.
 struct BookView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let book: Book
     @EnvironmentObject private var library: Library
     // observed so a theme change re-renders this screen

@@ -8,15 +8,66 @@ import UIKit
 // highlights, blur and motion right in ways a hand-rolled material cannot.
 // What this file supplies is the palette, the type and the restraint.
 
-/// The palette in force. A free function rather than an environment value so
-/// that leaf views need not all be rewritten to carry it; Settings is a
-/// MainActor singleton and publishes on change, so any view observing it
-/// re-renders with the new colours.
-@MainActor
-var palette: Palette {
-    Settings.shared.effectiveTheme.palette(phosphor: Settings.shared.terminalPhosphor)
+/// How the app is drawn: the palette in force, and the inputs the typeface
+/// depends on.
+///
+/// This used to be a free `palette` variable reading `Settings.shared`, on the
+/// reasoning that Settings publishes on change so "any view observing it
+/// re-renders with the new colours". The catch is in those three words.
+/// Reading a global inside `body` creates no dependency: SwiftUI re-renders a
+/// view when something the view *observes* changes, and a global is observed
+/// by nobody. Views that happened to hold an `@EnvironmentObject settings`
+/// repainted; views that only called `palette` were never invalidated and kept
+/// whatever colours they were first drawn with. Changing the theme left a
+/// black page carrying cream cards, with the headings in the new ink and
+/// invisible against them.
+///
+/// Carrying it in the environment is what makes the dependency real, and it
+/// does so without changing view identity — so the colours follow a theme
+/// change while the navigation stack stays exactly where the reader left it.
+///
+/// `theme` and `dyslexic` are here even though `Typeface` reads them itself.
+/// They are what makes this value differ when only the font changed, so the
+/// views depending on it are invalidated and the static lookups below are
+/// re-read. Without them, turning on the dyslexic face would repaint nothing.
+struct Design: Equatable {
+    var palette: Palette
+    var theme: Theme
+    var dyslexic: Bool
+
+    @MainActor
+    init(_ settings: Settings) {
+        let theme = settings.effectiveTheme
+        self.palette = theme.palette(phosphor: settings.terminalPhosphor)
+        self.theme = theme
+        self.dyslexic = settings.dyslexicFont
+    }
+
+    /// For the environment's default, which cannot reach a MainActor
+    /// singleton from a static initialiser.
+    fileprivate init(palette: Palette, theme: Theme, dyslexic: Bool) {
+        self.palette = palette
+        self.theme = theme
+        self.dyslexic = dyslexic
+    }
 }
 
+private struct DesignKey: EnvironmentKey {
+    // Only ever seen by a view with no app above it, such as a preview.
+    static let defaultValue = Design(palette: Theme.sanctuary.palette,
+                                     theme: .sanctuary, dyslexic: false)
+}
+
+extension EnvironmentValues {
+    var design: Design {
+        get { self[DesignKey.self] }
+        set { self[DesignKey.self] = newValue }
+    }
+}
+
+/// Reads `Settings.shared` directly, which is correct *at the moment a view
+/// renders*. What was missing was never the value — it was a reason for the
+/// view to render again. `@Environment(\.design)` supplies that.
 @MainActor
 enum Typeface {
     private static var theme: Theme { Settings.shared.effectiveTheme }
@@ -58,6 +109,10 @@ extension Font.TextStyle {
 
 /// A label in the app's quiet voice: wide tracking, small, secondary.
 struct MicroLabel: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let text: String
     var body: some View {
         Text(text.uppercased())
@@ -70,6 +125,10 @@ struct MicroLabel: View {
 /// The short accent rule under a page title, doing the work the printed
 /// ornament used to.
 struct AccentRule: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     var width: CGFloat = 28
     var body: some View {
         Capsule()
@@ -119,6 +178,10 @@ enum Container {
 /// dark but nothing about which theme is on — so on Terminal it was a grey
 /// line through green text.
 struct ThemedRule: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     var body: some View {
         Rectangle()
             .fill(palette.hairline)

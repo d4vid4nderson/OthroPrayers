@@ -6,6 +6,10 @@ import SwiftUI
 /// prayer gets type, white space and one hairline. So there are no cards here,
 /// no icons, no tinted containers — only text, set well.
 struct BlockView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let block: Block
     @EnvironmentObject private var settings: Settings
     /// Tapping a cross-reference opens that page.

@@ -6,6 +6,10 @@ import SwiftUI
 /// is recomputed when the app returns to the foreground, so leaving it open
 /// overnight does not leave Compline showing at breakfast.
 struct TodayView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var library: Library
     // observed so a theme change re-renders this screen
     @EnvironmentObject private var settings: Settings
@@ -49,6 +53,10 @@ struct TodayView: View {
 /// The lit card. Its glow is the only thing on the screen competing for
 /// attention, which is the whole point.
 private struct HeroCard: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let hour: Hour
 
     var body: some View {
@@ -90,6 +98,10 @@ private struct HeroCard: View {
 }
 
 private struct HourList: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let hours: [Hour]
 
     var body: some View {
@@ -116,6 +128,10 @@ private struct HourList: View {
 }
 
 private struct BookList: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var library: Library
 
     var body: some View {

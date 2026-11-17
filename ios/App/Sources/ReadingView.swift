@@ -9,6 +9,10 @@ import SwiftUI
 /// prayer is the unit the reader arranges. When an arrangement exists it drives
 /// the order; otherwise the printed order does.
 struct ReadingView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let slug: String
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var settings: Settings

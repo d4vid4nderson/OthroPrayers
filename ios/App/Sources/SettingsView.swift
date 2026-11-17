@@ -11,6 +11,10 @@ import UserNotifications
 /// and background temperature the web version carried are gone too — one
 /// designed system cannot honour them.
 struct SettingsView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var settings: Settings
     @EnvironmentObject private var library: Library
 
@@ -342,6 +346,10 @@ enum Reminders {
 /// One icon in the picker: the artwork itself, masked to the shape iOS will
 /// mask it to, with the chosen one ringed.
 private struct IconTile: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let preview: String
     let label: String
     let selected: Bool

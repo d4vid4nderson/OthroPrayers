@@ -5,6 +5,10 @@ import SwiftUI
 /// Nothing here touches the published text. The reader is arranging references
 /// to prayers, and "Restore printed order" throws the arrangement away.
 struct ArrangeView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let slug: String
     let title: String
     // The palette reads Settings.shared directly, which SwiftUI cannot see, so
@@ -111,6 +115,10 @@ struct ArrangeView: View {
 /// The prayers available to add: all of A Little Prayer Book, grouped by the
 /// section each comes from.
 struct PaletteView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let onPick: (PrayerUnit) -> Void
 
     @EnvironmentObject private var library: Library

@@ -7,6 +7,10 @@ import SwiftUI
 /// a single recording sits here in full. The only lit thing on either screen
 /// is whatever is sounding.
 struct WorshipView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var player: Player
     // observed so a theme change re-renders this screen: `palette` reads
     // Settings.shared directly, which SwiftUI cannot see on its own
@@ -102,6 +106,10 @@ struct WorshipView: View {
 
 /// One album's page: the whole of it, in the order it is sung.
 struct AlbumView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let album: Album
     // see WorshipView: the palette is not observable by itself
     @EnvironmentObject private var settings: Settings
@@ -143,6 +151,10 @@ struct AlbumView: View {
 /// it, so a collection runs on to its end and the singles run on through each
 /// other — never across the two.
 struct TrackList: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let tracks: [Track]
     @EnvironmentObject private var player: Player
 
@@ -203,13 +215,23 @@ struct TrackList: View {
     }
 }
 
-private extension View {
-    /// The one card shape both lists sit on.
-    func card() -> some View {
-        self
-            .background(palette.surface, in: Container.shape())
-            .overlay(Container.shape().stroke(palette.hairline, lineWidth: 1))
+/// The one card shape both lists sit on.
+///
+/// A ViewModifier rather than a method on View, because a method has nowhere
+/// to put an `@Environment` and so had no way to be told the palette changed.
+/// It read a global and kept the colours it was first drawn with.
+private struct Card: ViewModifier {
+    @Environment(\.design) var design
+
+    func body(content: Content) -> some View {
+        content
+            .background(design.palette.surface, in: Container.shape())
+            .overlay(Container.shape().stroke(design.palette.hairline, lineWidth: 1))
     }
+}
+
+private extension View {
+    func card() -> some View { modifier(Card()) }
 }
 
 extension View {
@@ -230,6 +252,10 @@ private struct NowPlayingBar: ViewModifier {
 
 /// The bar that sits above the tab bar while something is sounding.
 private struct NowPlaying: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var player: Player
 
     var body: some View {

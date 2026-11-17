@@ -9,6 +9,11 @@ struct PrayersApp: App {
     /// Where a cross-reference inside a prayer sends the reader.
     @State private var deepLink: String?
 
+    /// Read from the observed `settings`, so this whole body re-runs when the
+    /// theme, the phosphor or the font changes — which is what pushes a new
+    /// value into the environment below.
+    private var design: Design { Design(settings) }
+
     var body: some Scene {
         WindowGroup {
             RootView(deepLink: $deepLink)
@@ -16,6 +21,16 @@ struct PrayersApp: App {
                 .environmentObject(settings)
                 .environmentObject(arrangements)
                 .environmentObject(player)
+                // The colours and type, handed down the tree.
+                //
+                // Built here from the observed `settings`, so this one read
+                // is the dependency the whole app's appearance hangs off:
+                // Settings publishes, this body re-runs, the environment
+                // value changes, and every view that declared
+                // @Environment(\.design) is invalidated. Leaf views reading a
+                // global got none of that, which is how a theme change used
+                // to repaint half a screen.
+                .environment(\.design, design)
                 // dark themes get a dark interface; the system does the rest
                 .preferredColorScheme(settings.preferredScheme)
                 // Applied at the root so the whole app scales together —
@@ -29,7 +44,7 @@ struct PrayersApp: App {
                 // Settings every time they touched it.
                 .dynamicTypeSize(settings.textSizeRange)
                 // the single accent: the system tints every stock control with it
-                .tint(settings.effectiveTheme.palette(phosphor: settings.terminalPhosphor).accent)
+                .tint(design.palette.accent)
                 // The default colour for any text that does not name one.
                 //
                 // Replacing every explicit .primary with palette.ink was not
@@ -38,7 +53,7 @@ struct PrayersApp: App {
                 // which is why Terminal had green headings over white prayers.
                 // Setting it here catches the ones that say nothing, and
                 // anything that names its own colour still wins.
-                .foregroundStyle(settings.effectiveTheme.palette(phosphor: settings.terminalPhosphor).ink)
+                .foregroundStyle(design.palette.ink)
                 .onOpenURL { url in
                     guard url.scheme == "prayers", url.host == "page" else { return }
                     deepLink = url.lastPathComponent
