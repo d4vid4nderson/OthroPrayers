@@ -26,36 +26,36 @@ import UIKit
 /// does so without changing view identity — so the colours follow a theme
 /// change while the navigation stack stays exactly where the reader left it.
 ///
-/// `theme` and `dyslexic` are here even though `Typeface` reads them itself.
+/// `theme` and `face` are here even though `Typeface` reads them itself.
 /// They are what makes this value differ when only the font changed, so the
 /// views depending on it are invalidated and the static lookups below are
 /// re-read. Without them, turning on the dyslexic face would repaint nothing.
 struct Design: Equatable {
     var palette: Palette
     var theme: Theme
-    var dyslexic: Bool
+    var face: ReadingFace
 
     @MainActor
     init(_ settings: Settings) {
         let theme = settings.effectiveTheme
         self.palette = theme.palette(phosphor: settings.terminalPhosphor)
         self.theme = theme
-        self.dyslexic = settings.dyslexicFont
+        self.face = settings.readingFace
     }
 
     /// For the environment's default, which cannot reach a MainActor
     /// singleton from a static initialiser.
-    fileprivate init(palette: Palette, theme: Theme, dyslexic: Bool) {
+    fileprivate init(palette: Palette, theme: Theme, face: ReadingFace) {
         self.palette = palette
         self.theme = theme
-        self.dyslexic = dyslexic
+        self.face = face
     }
 }
 
 private struct DesignKey: EnvironmentKey {
     // Only ever seen by a view with no app above it, such as a preview.
     static let defaultValue = Design(palette: Theme.sanctuary.palette,
-                                     theme: .sanctuary, dyslexic: false)
+                                     theme: .sanctuary, face: .theme)
 }
 
 extension EnvironmentValues {
@@ -71,21 +71,21 @@ extension EnvironmentValues {
 @MainActor
 enum Typeface {
     private static var theme: Theme { Settings.shared.effectiveTheme }
-    private static var dyslexic: Bool { Settings.shared.dyslexicFont }
+    private static var face: ReadingFace { Settings.shared.readingFace }
 
     /// Anything read at length.
     static func prayer(_ style: Font.TextStyle = .body) -> Font {
-        theme.bodyFont(style, dyslexic: dyslexic)
+        theme.bodyFont(style, face: face)
     }
 
     /// Titles.
     static func display(_ style: Font.TextStyle = .largeTitle) -> Font {
-        theme.displayFont(style, dyslexic: dyslexic)
+        theme.displayFont(style, face: face)
     }
 
     /// Interface labels — "On rising", "The Lord's Prayer".
     static func label(_ style: Font.TextStyle = .caption) -> Font {
-        theme.uiFont(style, dyslexic: dyslexic)
+        theme.uiFont(style, face: face)
     }
 }
 

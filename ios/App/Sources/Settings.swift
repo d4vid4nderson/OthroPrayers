@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// The app's preferences. Few, on purpose — but the style is one of them: the
-/// app carries all four, and which one a reader wants is theirs to say.
+/// app carries several, and which one a reader wants is theirs to say — as
+/// is the letter it is set in, which is a separate choice from the colours.
 ///
 /// Backed by UserDefaults directly rather than @AppStorage: @AppStorage is
 /// built for use inside a View, and does not drive objectWillChange when it
@@ -71,7 +72,10 @@ final class Settings: ObservableObject {
     var preferredScheme: ColorScheme? {
         effectiveTheme.colorScheme
     }
-    @Published var dyslexicFont: Bool { didSet { store.set(dyslexicFont, forKey: Key.dyslexic) } }
+    /// The letter the book is set in, chosen apart from the theme.
+    @Published var readingFace: ReadingFace {
+        didSet { store.set(readingFace.rawValue, forKey: Key.readingFace) }
+    }
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
     @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
 
@@ -308,6 +312,8 @@ final class Settings: ObservableObject {
         static let lightTheme = "lightTheme"
         static let darkTheme = "darkTheme"
         static let phosphor = "terminalPhosphor"
+        static let readingFace = "readingFace"
+        /// The switch this replaced, read once on upgrade.
         static let dyslexic = "dyslexicFont"
         static let reminders = "hourReminders"
         static let lastRead = "lastRead"
@@ -364,7 +370,10 @@ final class Settings: ObservableObject {
         lightTheme = Theme(rawValue: store.string(forKey: Key.lightTheme) ?? "") ?? .paper
         darkTheme = Theme(rawValue: store.string(forKey: Key.darkTheme) ?? "") ?? .sanctuary
         terminalPhosphor = Theme.Phosphor(rawValue: store.string(forKey: Key.phosphor) ?? "") ?? .green
-        dyslexicFont = store.bool(forKey: Key.dyslexic)
+        // A reader who had turned the old switch on asked for that face and
+        // should keep it; everyone else gets the theme's own letter.
+        readingFace = ReadingFace(rawValue: store.string(forKey: Key.readingFace) ?? "")
+            ?? (store.bool(forKey: Key.dyslexic) ? .dyslexic : .theme)
         hourReminders = store.bool(forKey: Key.reminders)
         lastRead = store.string(forKey: Key.lastRead) ?? ""
         reminderTimes = store.dictionary(forKey: Key.reminderTimes) as? [String: Int] ?? [:]

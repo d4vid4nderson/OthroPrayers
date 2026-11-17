@@ -3,7 +3,7 @@ import UIKit
 import UserNotifications
 
 /// Few controls, on purpose — but the style is one of them: the app carries
-/// all four, and which one a reader wants is theirs to say.
+/// several, and which one a reader wants is theirs to say.
 ///
 /// Text size is gone: the app follows the phone's own Dynamic Type setting, so
 /// there is no bespoke three-step control that nothing else on the device knows
@@ -56,12 +56,15 @@ struct SettingsView: View {
                        + "theme you pick for each. "
                        + settings.effectiveTheme.detail
                      : "Fixed to this theme whatever the phone is set to. "
-                       + settings.theme.detail
-                     + " Dyslexia-friendly text overrides whichever you pick.")
+                       + settings.theme.detail)
             }
 
             Section {
-                Toggle("Dyslexia-friendly text", isOn: $settings.dyslexicFont)
+                // Apart from the theme: a style is a set of colours, and
+                // being fond of one is no reason to be held to its letter.
+                Picker("Letter", selection: $settings.readingFace) {
+                    ForEach(ReadingFace.allCases) { Text($0.name).tag($0) }
+                }
                 Toggle("Match phone text size", isOn: $settings.followSystemTextSize)
                 if !settings.followSystemTextSize {
                     Picker("Text size", selection: $settings.textSize) {
@@ -74,11 +77,12 @@ struct SettingsView: View {
             } header: {
                 Text("Reading")
             } footer: {
-                Text(settings.followSystemTextSize
-                     ? "Text size follows iOS. Change it in Settings › Display & "
-                       + "Brightness, or Accessibility, and every app follows together."
-                     : "This app only. Bold text and contrast still follow iOS. "
-                       + "The very largest accessibility sizes are set in iOS itself.")
+                Text(settings.readingFace.detail + " "
+                     + (settings.followSystemTextSize
+                        ? "Text size follows iOS. Change it in Settings › Display & "
+                          + "Brightness, or Accessibility, and every app follows together."
+                        : "This app only. Bold text and contrast still follow iOS. "
+                          + "The very largest accessibility sizes are set in iOS itself."))
             }
 
             Section {
