@@ -136,14 +136,18 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
                     accent: .hex(0xD4675C), onAccent: .hex(0x14120E),
                     hairline: .hex(0xEDE7DB, 0.12))
         case .advent:
-            // Evergreen and red. The ink carries the green so the season is
-            // in the prose and not only in the furniture, and the red is kept
-            // for what the printed book sets in red — which in Advent is most
-            // of the direction.
+            // Evergreen and red, with the green in the prose rather than only
+            // under it: the ink was a green-tinted white, which read as white.
+            // This is a sage that is plainly green and still holds 7:1 against
+            // the ground, so a long reading is no harder for it.
+            //
+            // The red was lifted from 0xD2413A, which measured 4.2:1 — under
+            // the 4.5 that small text wants, and the accent is what the
+            // citations and the directions are set in.
             Palette(ground: .hex(0x0B130D), surface: .hex(0x121C14),
-                    ink: .hex(0xD9E7D7), inkSoft: .hex(0x93AA97), inkFaint: .hex(0x627D68),
-                    accent: .hex(0xD2413A), onAccent: .hex(0x0B130D),
-                    hairline: .hex(0xD9E7D7, 0.12))
+                    ink: .hex(0xAED3A6), inkSoft: .hex(0x7FA47B), inkFaint: .hex(0x6B8F66),
+                    accent: .hex(0xDE5048), onAccent: .hex(0x0B130D),
+                    hairline: .hex(0xAED3A6, 0.12))
         case .adventTerminal:
             // The same two colours as a console wears them: green phosphor
             // for the body, red for the second phosphor. Terminal's own amber
