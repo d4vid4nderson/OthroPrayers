@@ -5,6 +5,10 @@ import SwiftUI
 /// Nothing here touches the published text. The reader is arranging references
 /// to prayers, and "Restore printed order" throws the arrangement away.
 struct ArrangeView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let slug: String
     let title: String
     // The palette reads Settings.shared directly, which SwiftUI cannot see, so
@@ -91,7 +95,7 @@ struct ArrangeView: View {
                 if unit.pageSlug != slug, let from = library.page(unit.pageSlug)?.title {
                     Text(from)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(palette.inkSoft)
                 }
             }
             .padding(.vertical, 2)
@@ -103,7 +107,7 @@ struct ArrangeView: View {
             // The content was regenerated and this heading is gone.
             Label("No longer in this edition", systemImage: "exclamationmark.triangle")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
         }
     }
 }
@@ -111,6 +115,10 @@ struct ArrangeView: View {
 /// The prayers available to add: all of A Little Prayer Book, grouped by the
 /// section each comes from.
 struct PaletteView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let onPick: (PrayerUnit) -> Void
 
     @EnvironmentObject private var library: Library
@@ -140,7 +148,7 @@ struct PaletteView: View {
                             HStack {
                                 Text(unit.title)
                                     .font(Typeface.display(.body))
-                                    .foregroundStyle(.primary)
+                                    .foregroundStyle(palette.ink)
                                 Spacer(minLength: 8)
                                 Image(systemName: "plus")
                                     .font(.footnote.weight(.semibold))

@@ -50,9 +50,22 @@ BLOCKS = {
     ("p", "res-intro"): "lead",
     ("p", "topic-intro"): "lead",
     ("p", "lead"): "lead",
+    ("p", "svc-cue"): "cue",        # the celebrant's versicle
+    ("p", "svc-say"): "response",   # the people's answer
+    ("p", "pb-terms"): "terms",     # "Faith · Hope · Charity"
+    ("p", "pb-open"): "opening",    # the office's opening line
+    ("p", "res-foot"): "colophon",  # a page's closing credit, not a prayer
+    ("p", "art"): "art",            # an ornament: an illuminated capital, a woodcut
     ("p", None): "paragraph",
     ("li", None): "item",
 }
+
+# `<p class="...">` with a class nobody has mapped used to fall back silently
+# to a plain paragraph, which is how the versicle and the response came to look
+# identical in the app, and how a colophon came to be part of the prayer above
+# it. These are the classes that are deliberately presentational and carry no
+# structure worth keeping; anything else is a mistake and should be noticed.
+IGNORABLE_P_CLASSES = {"svc-r", "svc-note", "article-lead"}
 
 # inline marks, by class on a span (or by tag)
 MARKS = {"r": "rubric", "signum": "signum", "dropcap": "dropcap",
@@ -141,6 +154,12 @@ class PageParser(HTMLParser):
                 return
         key = (tag, first)
         if key not in BLOCKS and (tag, None) in BLOCKS and tag in ("p", "li", "h1"):
+            # Only fall back for a class that is known to be presentational.
+            # Falling back for *any* class is what silently flattened the
+            # versicle and response into identical paragraphs.
+            if tag == "p" and first is not None and first not in IGNORABLE_P_CLASSES:
+                self.unknown.add(f'<p class="{first}"> — not in BLOCKS; map it '
+                                 f'or add it to IGNORABLE_P_CLASSES')
             key = (tag, None)
         if key in BLOCKS:
             self._close_block()
@@ -166,6 +185,15 @@ class PageParser(HTMLParser):
             target = d.get("href", "")
             # only in-app page links; external ones are not in this build
             self._links.append(target[:-5] if target.endswith(".html") else None)
+            return
+        if tag == "img":
+            # An ornament. The file goes in the block's meta and the alt text
+            # becomes its only run — which is also what keeps the block alive,
+            # since a block with no runs is dropped as empty.
+            if self._block is not None:
+                self._block[2]["art"] = os.path.basename(d.get("src", ""))
+                self._push_text(d.get("alt", ""))
+            self._depth -= 1          # void element: no end tag will balance it
             return
         if tag == "br":
             # a hymn's line breaks are the verse form, not whitespace — keep

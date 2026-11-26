@@ -65,7 +65,16 @@ final class ArrangeUITests: XCTestCase {
         let grab = CGVector(dx: 0.92, dy: 0.5)
         let from = prayerCells.element(boundBy: 0).coordinate(withNormalizedOffset: grab)
         let to = prayerCells.element(boundBy: 3).coordinate(withNormalizedOffset: grab)
-        from.press(forDuration: 1.2, thenDragTo: to)
+        // Slow, and held at the end. The plain press-and-drag was flaky — it
+        // passed, failed twice, passed, failed across five runs of unrelated
+        // commits — because a List reorder needs the lift to register before
+        // the move and the drop to settle before the fingers lift. Velocity
+        // and the trailing hold are what make that deterministic; the
+        // assertions below are unchanged.
+        from.press(forDuration: 1.5,
+                   thenDragTo: to,
+                   withVelocity: .slow,
+                   thenHoldForDuration: 0.8)
 
         let after = rowTitles()
         attach(name: "2-after-drag")

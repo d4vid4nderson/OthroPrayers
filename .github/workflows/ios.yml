@@ -6,9 +6,12 @@ name: iOS
 #
 # macOS runners are free for public repositories.
 
+# push only on main, and pull_request for everything else. Both were firing
+# on every commit while a PR was open — two runs of the same work, in
+# different concurrency groups so neither cancelled the other.
 on:
   push:
-    branches: [main, "claude/**"]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -46,24 +49,77 @@ jobs:
           git diff --exit-code ios/Content/ \
             || { echo "::error::ios/Content is stale — run build.py && export_content.py and commit"; exit 1; }
 
+      # A file an asset catalog names but git does not carry ships as nothing.
+      - name: Assets are present and tracked
+        run: python3 .github/check_assets.py
+
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Generate the project
         run: cd ios && xcodegen generate
 
+      # Which simulator exists varies with the runner's Xcode, so it is asked
+      # for rather than named. A hardcoded "iPhone 17" breaks silently the day
+      # the image changes.
+      - name: Pick a simulator
+        id: sim
+        run: |
+          name="$(xcrun simctl list devices available --json | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; print(next((x["name"] for r,v in d.items() if "iOS" in r for x in v if x["name"].startswith("iPhone")), ""))')"
+          [ -n "$name" ] || { echo '::error::no iPhone simulator on this runner'; exit 1; }
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "using: $name"
+
       # No signing: this proves the code compiles, which is the thing that
       # cannot be checked anywhere else. Signing belongs to the release job.
-      - name: Build
+      #
+      # `test`, not `build`: compiling proves the Swift is well-formed, and
+      # nothing more. It cannot tell you the app launches. Every runtime bug
+      # this project has hit — a palette that never redrew, rows that did
+      # nothing when tapped — was invisible to the compiler.
+      - name: Build and test
         run: |
           cd ios
           set -o pipefail
-          xcodebuild build \
+          xcodebuild test \
             -project Prayers.xcodeproj \
             -scheme Prayers \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
             CODE_SIGNING_ALLOWED=NO \
             | tee /tmp/build.log
+
+      # The alternates are declared in the target's Info.plist, while the
+      # default icon comes from the asset catalogue — and the catalogue
+      # compiler writes a CFBundleIcons of its own, which the build merges
+      # into the same key. If that merge replaced the key rather than adding
+      # to it, every alternate would be gone and nothing would say so: the
+      # app would build, install, and simply refuse to change its icon.
+      #
+      # So the built bundle is asked directly, which is the only place the
+      # answer exists.
+      - name: The built app really declares its alternate icons
+        run: |
+          app="$(find ~/Library/Developer/Xcode/DerivedData -type d \
+                 -name 'Prayers.app' -path '*iphonesimulator*' | head -1)"
+          [ -n "$app" ] || { echo '::error::no built Prayers.app found'; exit 1; }
+          echo "inspecting $app/Info.plist"
+          plutil -convert json -o /tmp/info.json "$app/Info.plist"
+          declared="$(python3 -c 'import json;print(len(json.load(open("/tmp/info.json")).get("CFBundleIcons",{}).get("CFBundleAlternateIcons",{})))')"
+          # anchored: the file's own header comment mentions the key too, and
+          # counting that line made this fail against a bundle that was right
+          want="$(grep -c '^ \{14\}CFBundleIconFiles:' ios/alticons.yml)"
+          echo "alticons.yml declares $want; the bundle has $declared"
+          [ "$declared" = "$want" ] || {
+            echo "::error::the built Info.plist has $declared alternate icons, expected $want"
+            python3 -c 'import json;print(json.dumps(json.load(open("/tmp/info.json")).get("CFBundleIcons"),indent=1)[:2000])'
+            exit 1; }
+          # and the images themselves have to be at the bundle root, where
+          # CFBundleIconFiles looks for them and nowhere else
+          png="$(ls "$app" | grep -c '^alt-.*@3x\.png$' || true)"
+          echo "loose @3x icons at the bundle root: $png"
+          [ "$png" = "$want" ] || {
+            echo "::error::$png icon files at the bundle root, expected $want"
+            exit 1; }
 
       - name: Upload build log
         if: always()

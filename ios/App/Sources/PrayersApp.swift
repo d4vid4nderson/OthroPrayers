@@ -9,6 +9,11 @@ struct PrayersApp: App {
     /// Where a cross-reference inside a prayer sends the reader.
     @State private var deepLink: String?
 
+    /// Read from the observed `settings`, so this whole body re-runs when the
+    /// theme, the phosphor or the font changes — which is what pushes a new
+    /// value into the environment below.
+    private var design: Design { Design(settings) }
+
     var body: some Scene {
         WindowGroup {
             RootView(deepLink: $deepLink)
@@ -16,10 +21,39 @@ struct PrayersApp: App {
                 .environmentObject(settings)
                 .environmentObject(arrangements)
                 .environmentObject(player)
+                // The colours and type, handed down the tree.
+                //
+                // Built here from the observed `settings`, so this one read
+                // is the dependency the whole app's appearance hangs off:
+                // Settings publishes, this body re-runs, the environment
+                // value changes, and every view that declared
+                // @Environment(\.design) is invalidated. Leaf views reading a
+                // global got none of that, which is how a theme change used
+                // to repaint half a screen.
+                .environment(\.design, design)
                 // dark themes get a dark interface; the system does the rest
-                .preferredColorScheme(settings.theme.colorScheme)
+                .preferredColorScheme(settings.preferredScheme)
+                // Applied at the root so the whole app scales together —
+                // prayer text, tab bar, settings — rather than the prayers
+                // growing out of step with the chrome around them.
+                //
+                // Always this one modifier, never a conditional one: see
+                // Settings.textSizeRange. Attaching it only when unlinked
+                // changed the view's type as the toggle flipped, which tore
+                // down the navigation stack and bounced the reader out of
+                // Settings every time they touched it.
+                .dynamicTypeSize(settings.textSizeRange)
                 // the single accent: the system tints every stock control with it
-                .tint(settings.theme.palette.accent)
+                .tint(design.palette.accent)
+                // The default colour for any text that does not name one.
+                //
+                // Replacing every explicit .primary with palette.ink was not
+                // enough: most prayer text never set a colour at all, so it
+                // fell through to the system default — white in dark mode,
+                // which is why Terminal had green headings over white prayers.
+                // Setting it here catches the ones that say nothing, and
+                // anything that names its own colour still wins.
+                .foregroundStyle(design.palette.ink)
                 .onOpenURL { url in
                     guard url.scheme == "prayers", url.host == "page" else { return }
                     deepLink = url.lastPathComponent
@@ -31,25 +65,39 @@ struct PrayersApp: App {
 struct RootView: View {
     @Binding var deepLink: String?
     @EnvironmentObject private var library: Library
-    @State private var pane = Pane.prayers
+    @EnvironmentObject private var settings: Settings
+    @Environment(\.scenePhase) private var phase
 
     /// Named `Pane` rather than `Tab`: SwiftUI's own `Tab` builder is used
     /// below, and a nested type called `Tab` would shadow it.
-    enum Pane: Hashable { case prayers, missal, worship, settings }
+    enum Pane: String, Hashable { case prayers, missal, worship, settings }
+
+    /// Bound through Settings rather than held here. @State and @SceneStorage
+    /// were both lost when a theme change rebuilt this view; the singleton is
+    /// not rebuilt, so the tab survives.
+    private var pane: Binding<Pane> {
+        Binding(get: { Pane(rawValue: settings.pane) ?? .prayers },
+                set: { settings.pane = $0.rawValue })
+    }
 
     var body: some View {
         // The iOS 18+ `Tab` builder, which is what the newer bar behaviours —
         // minimising, the glass morph between bar and content — are written
         // against. The old `.tabItem` form still compiles but opts out of them.
-        TabView(selection: $pane) {
+        TabView(selection: pane) {
             Tab("Prayers", systemImage: "sun.horizon", value: Pane.prayers) {
                 NavigationStack { TodayView() }
             }
             Tab("Missal", systemImage: "book.pages", value: Pane.missal) {
                 NavigationStack { bookView(slug: "st-peter-missal", fallback: "Missal") }
             }
-            Tab("Worship", systemImage: "music.note.list", value: Pane.worship) {
-                NavigationStack { WorshipView() }
+            // Only when there is something to hear. A build made from a clean
+            // checkout has the manifest but none of the audio, and a tab full
+            // of rows that do nothing when tapped is worse than no tab.
+            if Chant.hasAudio {
+                Tab("Worship", systemImage: "music.note.list", value: Pane.worship) {
+                    NavigationStack { WorshipView() }
+                }
             }
             Tab("Settings", systemImage: "gearshape", value: Pane.settings) {
                 NavigationStack { SettingsView() }
@@ -58,6 +106,14 @@ struct RootView: View {
         // The bar collapses to a pill as the reader scrolls down into a prayer
         // and returns on the way back up: more page, and no gesture to learn.
         .tabBarMinimizeBehavior(.onScrollDown)
+        // Read from the window scene, not from the environment: the app
+        // forces a colour scheme, and the environment would report that back
+        // rather than the phone's own setting. Refreshed whenever the app
+        // comes forward, which is when a change made in Settings.app lands.
+        .onAppear { settings.systemIsDark = Appearance.systemIsDark }
+        .onChange(of: phase) { _, new in
+            if new == .active { settings.systemIsDark = Appearance.systemIsDark }
+        }
         .sheet(item: linkedPage) { linked in
             NavigationStack { ReadingView(slug: linked.slug) }
         }
@@ -83,3 +139,5 @@ struct LinkedPage: Identifiable {
     let slug: String
     var id: String { slug }
 }
+
+

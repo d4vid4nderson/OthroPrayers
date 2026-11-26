@@ -25,12 +25,30 @@ struct Run: Codable, Hashable {
 struct Block: Codable, Hashable {
     enum Kind: String, Codable {
         case heading, subheading, rubric, verse, lead, paragraph, item, term, definition
+        /// The versicle and the response, at the Angelus and the Asperges.
+        /// They were being exported as plain paragraphs, which left a reader
+        /// no way to tell the celebrant's line from their own.
+        case cue, response
+        /// Centred terms — "Faith · Hope · Charity".
+        case terms
+        /// The office's opening line, which carries the cross-mark.
+        case opening
+        /// A page's closing credit: who wrote it, whose memory it honours.
+        /// Not a prayer, and not part of the prayer above it.
+        case colophon
+        /// An ornament lifted from the printed page: an illuminated capital,
+        /// or the woodcut that closes the Advent booklet. Its runs hold the
+        /// description, and `art` names the image.
+        case art
     }
 
     let type: Kind
     let runs: [Run]
     let style: String?
     let id: String?
+    /// The ornament's file, for a `.art` block. Carried as an alpha mask and
+    /// filled with the theme's accent, so one engraving suits every style.
+    let art: String?
 
     var isHymn: Bool { style == "hymn" }
     var plain: String { runs.map(\.t).joined() }

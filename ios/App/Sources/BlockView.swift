@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Renders one block of the content model.
 ///
@@ -6,6 +7,10 @@ import SwiftUI
 /// prayer gets type, white space and one hairline. So there are no cards here,
 /// no icons, no tinted containers — only text, set well.
 struct BlockView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let block: Block
     @EnvironmentObject private var settings: Settings
     /// Tapping a cross-reference opens that page.
@@ -18,7 +23,7 @@ struct BlockView: View {
                 MicroLabel(text: settings.theme.sigil(for: block.type) + block.plain)
                     .multilineTextAlignment(.center)
                 Rectangle()
-                    .fill(.quaternary)
+                    .fill(palette.inkFaint.opacity(0.4))
                     .frame(width: 16, height: 1)
             }
             .frame(maxWidth: .infinity)
@@ -47,7 +52,7 @@ struct BlockView: View {
         case .lead:
             Text(attributed)
                 .font(Typeface.prayer(.callout).italic())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 8)
@@ -66,14 +71,85 @@ struct BlockView: View {
         case .verse, .paragraph, .item:
             Text(attributed)
                 .font(Typeface.prayer())
+                .foregroundStyle(palette.ink)
                 .lineSpacing(5)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 6)
+
+        // The versicle: the celebrant's line, set like a direction rather than
+        // like the prayer, so the reader can see at a glance which words are
+        // theirs to say. The web build said it this way too — "the celebrant's
+        // prompt, set like a rubric direction; the people's words in ink".
+        case .cue:
+            Text(attributed)
+                .font(Typeface.prayer(.callout).italic())
+                .foregroundStyle(palette.inkSoft)
+                .lineSpacing(3)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 8)
+
+        // The response: the people's words, in full ink directly beneath.
+        case .response:
+            Text(attributed)
+                .font(Typeface.prayer())
+                .lineSpacing(5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 8)
+
+        case .terms:
+            Text(attributed)
+                .font(Typeface.display(.callout))
+                .foregroundStyle(palette.accent)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+
+        case .opening:
+            Text(attributed)
+                .font(Typeface.prayer(.title3))
+                .lineSpacing(5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 8)
+
+        case .colophon:
+            VStack(alignment: .leading, spacing: 0) {
+                ThemedRule().padding(.bottom, 14)
+                Text(attributed)
+                    .font(.footnote.italic())
+                    .foregroundStyle(palette.inkSoft)
+                    .lineSpacing(3)
+            }
+            .padding(.top, 20)
 
         case .term:
             Text(attributed)
                 .font(Typeface.prayer(.callout))
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+        // An ornament off the printed page. Shipped as an alpha mask and
+        // drawn as a template, so one engraving serves all five themes
+        // instead of a fixed red fighting whichever one is on.
+        //
+        // The illuminated capital sits above the paragraph it opens rather
+        // than set into it: text cannot be flowed around an image here, and
+        // the letter keeps its place in the prose below, so the prayer reads
+        // whole whether or not the ornament draws.
+        case .art:
+            if let name = block.art, let art = UIImage(named: name) {
+                let wide = art.size.width > art.size.height * 1.6
+                Image(uiImage: art)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: wide ? .infinity : 64,
+                           maxHeight: wide ? .infinity : 64)
+                    .foregroundStyle(palette.accent)
+                    .frame(maxWidth: .infinity,
+                           alignment: wide ? .center : .leading)
+                    .padding(.top, wide ? 30 : 18)
+                    .padding(.bottom, wide ? 8 : 4)
+                    .accessibilityLabel(block.plain)
+            }
 
         case .definition:
             Text(attributed)
@@ -90,15 +166,57 @@ struct BlockView: View {
 
     /// Inline marks, assembled into one attributed string so the text still
     /// wraps, selects and reads aloud as a single passage.
+    /// The runs with the cross-mark's spacing made even.
+    ///
+    /// The printed book sets ✠ tight against the word that follows it — "✠and
+    /// the love of God" — and relies on whatever space happens to precede it.
+    /// Neither side can be trusted, so both are stripped here and the gap is
+    /// put back by the renderer, the same on each side.
+    private var spacedRuns: [Run] {
+        var rs = block.runs
+        for i in rs.indices where rs[i].mark == .signum {
+            if i > 0 {
+                rs[i - 1] = Run(t: trimmingTrailingSpaces(rs[i - 1].t),
+                                mark: rs[i - 1].mark, href: rs[i - 1].href)
+            }
+            if i + 1 < rs.count {
+                var next = rs[i + 1].t
+                while next.first == " " { next.removeFirst() }
+                rs[i + 1] = Run(t: next, mark: rs[i + 1].mark, href: rs[i + 1].href)
+            }
+        }
+        return rs
+    }
+
+    private func trimmingTrailingSpaces(_ s: String) -> String {
+        var t = s
+        while t.last == " " { t.removeLast() }
+        return t
+    }
+
     private var attributed: AttributedString {
         var out = AttributedString()
-        for run in block.runs {
+        for (i, run) in spacedRuns.enumerated() {
             var piece = AttributedString(run.t.replacingOccurrences(of: "\n", with: " "))
             switch run.mark {
             case .rubric:
                 piece.foregroundColor = palette.inkSoft
             case .signum:
+                // Set larger than the text it sits in: it is an instruction to
+                // make the sign of the cross, and at body size it disappeared
+                // into the line. The spaces are added here rather than trusted
+                // from the source, so the mark is evenly set on both sides —
+                // except at the very start of a block, where a leading space
+                // would indent the line. Each office opens on this mark.
+                let glyph = run.t.trimmingCharacters(in: .whitespaces)
+                piece = AttributedString((i == 0 ? "" : " ") + glyph + " ")
                 piece.foregroundColor = palette.accent
+                // .title against body text — roughly two steps up from the
+                // prayer it sits in. This does open the line it falls on,
+                // because a line is as tall as its tallest glyph; that is the
+                // price of the mark being visible at a glance, which is the
+                // point of it.
+                piece.font = Typeface.prayer(.title)
             case .dropcap, .versal:
                 piece.foregroundColor = palette.accent
                 piece.font = Typeface.display(.title)

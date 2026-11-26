@@ -1,14 +1,14 @@
 import SwiftUI
 import UIKit
 
-/// The four styles the prayer book comes in, matching the website exactly.
+/// The styles the prayer book comes in.
 ///
-/// A theme is a palette plus a pair of faces: one for anything read at length,
-/// one for the interface. Nothing else varies — the layout, the spacing and the
-/// restraint are the same in all four, which is why a prayer looks like the
-/// same prayer whichever you pick.
+/// A theme is a palette plus the faces it defaults to. Nothing else varies —
+/// the layout, the spacing and the restraint are the same in all of them,
+/// which is why a prayer looks like the same prayer whichever you pick. The
+/// faces are only a default now: see ReadingFace.
 enum Theme: String, CaseIterable, Identifiable, Codable {
-    case paper, manuscript, sanctuary, terminal
+    case paper, manuscript, sanctuary, darkPaper, terminal
 
     var id: String { rawValue }
 
@@ -17,6 +17,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
         case .paper: "Paper"
         case .manuscript: "Manuscript"
         case .sanctuary: "Sanctuary"
+        case .darkPaper: "Dark Paper"
         case .terminal: "Terminal"
         }
     }
@@ -26,6 +27,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
         case .paper: "The printed booklet."
         case .manuscript: "Vellum, iron gall and an insular hand."
         case .sanctuary: "Dark, for early and late."
+        case .darkPaper: "The printed booklet, after dark."
         case .terminal: "A green-phosphor console."
         }
     }
@@ -34,8 +36,70 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     var colorScheme: ColorScheme {
         switch self {
         case .paper, .manuscript: .light
-        case .sanctuary, .terminal: .dark
+        case .sanctuary, .darkPaper, .terminal: .dark
         }
+    }
+
+    /// Which phosphor the Terminal theme glows in.
+    ///
+    /// A real terminal is one colour on black, and which colour was a property
+    /// of the tube — P1 green, P3 amber — or, later, of the scheme someone
+    /// chose. So it is a choice here too rather than one hardcoded green.
+    enum Phosphor: String, CaseIterable, Identifiable {
+        case green, teal, cyan, amber
+        var id: String { rawValue }
+
+        var name: String {
+            switch self {
+            case .green: return "Green"
+            case .teal:  return "Teal"
+            case .cyan:  return "Cyan"
+            case .amber: return "Amber"
+            }
+        }
+
+        var ink: Color {
+            switch self {
+            case .green: .hex(0x9BE89B)
+            case .teal:  .hex(0x5EE6D0)
+            case .cyan:  .hex(0x6BD5F5)
+            case .amber: .hex(0xFFC777)
+            }
+        }
+
+        var inkSoft: Color {
+            switch self {
+            case .green: .hex(0x6FAE78)
+            case .teal:  .hex(0x46A89A)
+            case .cyan:  .hex(0x4C9DB8)
+            case .amber: .hex(0xC2975A)
+            }
+        }
+
+        var inkFaint: Color {
+            switch self {
+            case .green: .hex(0x4E8A5A)
+            case .teal:  .hex(0x357F75)
+            case .cyan:  .hex(0x3A788C)
+            case .amber: .hex(0x8F6F43)
+            }
+        }
+
+        /// The second phosphor, for whatever the printed book set in red.
+        /// Amber against the cool ones, green against amber itself.
+        var accent: Color {
+            self == .amber ? .hex(0x9BE89B) : .hex(0xFFB454)
+        }
+    }
+
+    /// The palette, with the Terminal theme's phosphor supplied.
+    func palette(phosphor: Phosphor) -> Palette {
+        guard case .terminal = self else { return palette }
+        return Palette(ground: .hex(0x070A07), surface: .hex(0x0C120C),
+                       ink: phosphor.ink, inkSoft: phosphor.inkSoft,
+                       inkFaint: phosphor.inkFaint,
+                       accent: phosphor.accent, onAccent: .hex(0x070A07),
+                       hairline: phosphor.ink.opacity(0.16))
     }
 
     var palette: Palette {
@@ -52,6 +116,16 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
             Palette(ground: .hex(0x0C0D10), surface: .hex(0x15171C),
                     ink: .hex(0xECEAE6), inkSoft: .hex(0x9AA0AB), inkFaint: .hex(0x646B77),
                     accent: .hex(0xD9B36C), onAccent: .hex(0x1A1508), hairline: .hex(0xECEAE6, 0.09))
+        case .darkPaper:
+            // Paper turned down, not Sanctuary in another colour: the same
+            // warm off-white and the same cinnabar, on a brown-black rather
+            // than Sanctuary's blue-black. The accent is lifted from Paper's
+            // 0xB3322A, which is a red meant to sit on cream and goes muddy
+            // against a dark ground.
+            Palette(ground: .hex(0x14120E), surface: .hex(0x1E1B16),
+                    ink: .hex(0xEDE7DB), inkSoft: .hex(0xA69E90), inkFaint: .hex(0x756D61),
+                    accent: .hex(0xD4675C), onAccent: .hex(0x14120E),
+                    hairline: .hex(0xEDE7DB, 0.12))
         case .terminal:
             // two phosphors: green for the body, amber for whatever the printed
             // book set in red
@@ -63,10 +137,8 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
 
     /// The face for prayer text. Terminal is the only one that is not a serif —
     /// a console has exactly one kind of letter.
-    func bodyFont(_ style: Font.TextStyle, dyslexic: Bool) -> Font {
-        if dyslexic, let name = BundledFont.openDyslexic {
-            return .custom(name, size: style.pointSize, relativeTo: style)
-        }
+    func bodyFont(_ style: Font.TextStyle, face: ReadingFace) -> Font {
+        if let chosen = face.font(style) { return chosen }
         if self == .terminal, let name = BundledFont.jetBrainsMono {
             return .custom(name, size: style.pointSize * 0.94, relativeTo: style)
         }
@@ -74,10 +146,11 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     }
 
     /// The face for titles.
-    func displayFont(_ style: Font.TextStyle, dyslexic: Bool) -> Font {
-        if dyslexic, let name = BundledFont.openDyslexic {
-            return .custom(name, size: style.pointSize, relativeTo: style)
-        }
+    func displayFont(_ style: Font.TextStyle, face: ReadingFace) -> Font {
+        // A chosen face is chosen everywhere. Leaving titles in the theme's
+        // own letter would mean a reader who picked a face because the serif
+        // was hard going still met it at the top of every office.
+        if let chosen = face.font(style) { return chosen.weight(.semibold) }
         switch self {
         case .terminal:
             if let name = BundledFont.jetBrainsMono {
@@ -89,16 +162,14 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
                 return .custom(name, size: style.pointSize * 0.92, relativeTo: style)
             }
             return .system(style, design: .serif).weight(.semibold)
-        case .paper, .sanctuary:
+        case .paper, .sanctuary, .darkPaper:
             return .system(style, design: .serif).weight(.semibold)
         }
     }
 
     /// The face for interface labels.
-    func uiFont(_ style: Font.TextStyle, dyslexic: Bool) -> Font {
-        if dyslexic, let name = BundledFont.openDyslexic {
-            return .custom(name, size: style.pointSize, relativeTo: style)
-        }
+    func uiFont(_ style: Font.TextStyle, face: ReadingFace) -> Font {
+        if let chosen = face.font(style) { return chosen.weight(.semibold) }
         if self == .terminal, let name = BundledFont.jetBrainsMono {
             return .custom(name, size: style.pointSize * 0.94, relativeTo: style)
         }
@@ -117,7 +188,9 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     }
 }
 
-struct Palette {
+/// Equatable so SwiftUI can tell when the environment's Design actually
+/// changed, rather than invalidating every dependent view on each pass.
+struct Palette: Equatable {
     let ground: Color
     let surface: Color
     let ink: Color
@@ -141,6 +214,69 @@ extension Color {
 /// Faces bundled with the app, looked up by family name once. iOS cannot load
 /// the woff2 files the website uses, so these are converted to TTF at build
 /// time (see export in the repo's font pipeline).
+/// The letter the book is set in, chosen apart from the theme.
+///
+/// It used to be a single "dyslexia-friendly text" switch, which answered one
+/// reader's difficulty and nobody else's. A theme's palette and its face are
+/// separate preferences — liking Sanctuary's dark gold is no reason to be
+/// held to a serif at body size on a dark ground, which is a genuinely hard
+/// read — so the face is now its own choice and `.theme` keeps whatever the
+/// theme would have picked.
+enum ReadingFace: String, CaseIterable, Identifiable, Codable {
+    case theme, serif, sans, rounded, mono, dyslexic
+
+    var id: String { rawValue }
+
+    var name: String {
+        switch self {
+        case .theme:    "Match the style"
+        case .serif:    "Serif"
+        case .sans:     "Sans"
+        case .rounded:  "Rounded"
+        case .mono:     "Monospaced"
+        case .dyslexic: "Dyslexia-friendly"
+        }
+    }
+
+    var detail: String {
+        switch self {
+        case .theme:    "Each style's own letter."
+        case .serif:    "The printed book's letter."
+        case .sans:     "Plainest, and the easiest at small sizes."
+        case .rounded:  "Softer, with open shapes."
+        case .mono:     "Every letter the same width."
+        case .dyslexic: "Weighted feet, to hold the line steady."
+        }
+    }
+
+    /// The font this face asks for, or nil to leave it to the theme.
+    func font(_ style: Font.TextStyle) -> Font? {
+        switch self {
+        case .theme:
+            return nil
+        case .serif:
+            return .system(style, design: .serif)
+        case .sans:
+            return .system(style, design: .default)
+        case .rounded:
+            return .system(style, design: .rounded)
+        case .mono:
+            // the bundled face if it is there, the system's if it is not
+            if let name = BundledFont.jetBrainsMono {
+                return .custom(name, size: style.pointSize * 0.94, relativeTo: style)
+            }
+            return .system(style, design: .monospaced)
+        case .dyslexic:
+            if let name = BundledFont.openDyslexic {
+                return .custom(name, size: style.pointSize, relativeTo: style)
+            }
+            // Nothing is gained by pretending: without the bundled face this
+            // is just the plainest system one.
+            return .system(style, design: .default)
+        }
+    }
+}
+
 enum BundledFont {
     static let openDyslexic = family(containing: "dyslexic")
     static let jetBrainsMono = family(containing: "jetbrains")

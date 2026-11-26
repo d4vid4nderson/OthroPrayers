@@ -55,6 +55,18 @@ enum Chant {
     static var singles: [Track] { file.singles }
     /// Folders of recordings, each of which opens its own page.
     static var albums: [Album] { file.collections }
+
+    /// Whether any recording is actually in this build.
+    ///
+    /// The manifest is committed but the audio is not — the recordings are
+    /// other people's published work and the repository is public — so a build
+    /// made from a clean checkout lists tracks it cannot play. Rather than
+    /// offer rows that silently do nothing when tapped, the Worship tab is
+    /// hidden entirely when nothing is there to hear.
+    static var hasAudio: Bool {
+        singles.contains { $0.url != nil }
+            || albums.contains { $0.tracks.contains { $0.url != nil } }
+    }
 }
 
 /// One player for the whole app, so the now-playing bar and the track list
@@ -74,7 +86,8 @@ final class Player: NSObject, ObservableObject {
 
     private override init() {
         super.init()
-        configureSession()
+        // No audio session here. See activateSession(): claiming it at launch
+        // is what stopped the reader's own music when they opened the app.
         configureRemoteCommands()
     }
 
@@ -133,6 +146,10 @@ final class Player: NSObject, ObservableObject {
         progress = 0
         ticker?.invalidate()
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        // Only here, not on pause: a pause means the reader intends to come
+        // back, and handing the session over would make their music start up
+        // underneath them.
+        releaseSession()
     }
 
     // MARK: - Machinery
@@ -144,6 +161,11 @@ final class Player: NSObject, ObservableObject {
             return
         }
         audio?.stop()
+        // Before play(), not after: an inactive session will not sound.
+        // Re-activating between tracks is cheap and keeps the session held
+        // across a queue, so the reader's own music does not flicker back in
+        // the gap between two chants.
+        activateSession()
         player.delegate = self
         player.prepareToPlay()
         player.play()
@@ -183,10 +205,29 @@ final class Player: NSObject, ObservableObject {
         progress = audio.currentTime / audio.duration
     }
 
-    private func configureSession() {
+    /// Take the audio session, and only when there is something to play.
+    ///
+    /// This used to run at launch, from `init`, because the app holds a
+    /// `Player.shared` from the moment it starts. `.playback` does not mix
+    /// with other audio — that is the point of it, and the right category for
+    /// chant — and `setActive(true)` is the call that actually takes the
+    /// session away from whoever had it. Between them, opening the app to
+    /// read Morning Prayer stopped whatever the reader had been listening to,
+    /// without playing a note itself.
+    ///
+    /// Nothing is claimed now until a track is about to sound.
+    private func activateSession() {
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.playback, mode: .default)
         try? session.setActive(true)
+    }
+
+    /// Give it back, and say so, so the other app can pick up where it left
+    /// off. Without `notifyOthersOnDeactivation` the session is released but
+    /// nobody is told, and their music stays stopped.
+    private func releaseSession() {
+        try? AVAudioSession.sharedInstance()
+            .setActive(false, options: .notifyOthersOnDeactivation)
     }
 
     private func configureRemoteCommands() {

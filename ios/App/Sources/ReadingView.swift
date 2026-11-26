@@ -9,6 +9,10 @@ import SwiftUI
 /// prayer is the unit the reader arranges. When an arrangement exists it drives
 /// the order; otherwise the printed order does.
 struct ReadingView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let slug: String
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var settings: Settings
@@ -56,6 +60,12 @@ struct ReadingView: View {
                                 }
                             }
                             .id(item.id)
+                        }
+
+                        // after the prayers, whatever the office is reordered
+                        // into: a credit belongs to the page, not to a prayer
+                        ForEach(library.colophon(of: slug), id: \.stableID) { block in
+                            BlockView(block: block)
                         }
 
                         pageTurn
@@ -130,13 +140,13 @@ struct ReadingView: View {
                     } label: {
                         Text(item.unit.title)
                             .font(Typeface.prayer(.callout))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(palette.inkSoft)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.vertical, 11)
                             .contentShape(.rect)
                     }
                     .buttonStyle(.plain)
-                    Divider()
+                    ThemedRule()
                 }
             }
         } label: {
@@ -151,7 +161,7 @@ struct ReadingView: View {
         let (previous, next) = library.neighbours(of: slug)
         if previous != nil || next != nil {
             VStack(spacing: 0) {
-                Divider().padding(.bottom, 20)
+                ThemedRule().padding(.bottom, 20)
                 HStack(spacing: 10) {
                     if let previous {
                         turn(previous, direction: .backward)
@@ -172,7 +182,7 @@ struct ReadingView: View {
             HStack(spacing: 9) {
                 if direction == .backward {
                     Image(systemName: "chevron.left").font(.footnote.weight(.semibold))
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(palette.inkFaint)
                 }
                 VStack(alignment: direction == .backward ? .leading : .trailing, spacing: 1) {
                     MicroLabel(text: direction == .backward ? "Previous" : "Next")
@@ -182,7 +192,7 @@ struct ReadingView: View {
                 }
                 if direction == .forward {
                     Image(systemName: "chevron.right").font(.footnote.weight(.semibold))
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(palette.inkFaint)
                 }
             }
             .frame(maxWidth: .infinity,
@@ -191,7 +201,7 @@ struct ReadingView: View {
             .padding(.horizontal, 16)
             // pills, never squares
             .background(palette.surface, in: Capsule())
-            .overlay(Capsule().stroke(.separator, lineWidth: 1))
+            .overlay(Capsule().stroke(palette.hairline, lineWidth: 1))
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)

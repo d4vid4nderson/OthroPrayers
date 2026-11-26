@@ -7,6 +7,10 @@ import SwiftUI
 /// a single recording sits here in full. The only lit thing on either screen
 /// is whatever is sounding.
 struct WorshipView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var player: Player
     // observed so a theme change re-renders this screen: `palette` reads
     // Settings.shared directly, which SwiftUI cannot see on its own
@@ -25,7 +29,7 @@ struct WorshipView: View {
                                 NavigationLink(value: album) { row(album) }
                                     .buttonStyle(.plain)
                                 if album.id != albums.last?.id {
-                                    Divider().padding(.leading, 18)
+                                    ThemedRule().padding(.leading, 18)
                                 }
                             }
                         }
@@ -69,7 +73,7 @@ struct WorshipView: View {
                 } else {
                     Image(systemName: "music.note.list")
                         .font(.footnote)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(palette.inkFaint)
                 }
             }
             .frame(width: 18)
@@ -82,14 +86,14 @@ struct WorshipView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Text(album.summary)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(palette.inkSoft)
             }
 
             Spacer(minLength: 10)
 
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(palette.inkFaint)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 18)
@@ -102,6 +106,10 @@ struct WorshipView: View {
 
 /// One album's page: the whole of it, in the order it is sung.
 struct AlbumView: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let album: Album
     // see WorshipView: the palette is not observable by itself
     @EnvironmentObject private var settings: Settings
@@ -143,6 +151,10 @@ struct AlbumView: View {
 /// it, so a collection runs on to its end and the singles run on through each
 /// other — never across the two.
 struct TrackList: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     let tracks: [Track]
     @EnvironmentObject private var player: Player
 
@@ -155,8 +167,12 @@ struct TrackList: View {
                     row(track)
                 }
                 .buttonStyle(.plain)
+                // A recording whose file is not in this build cannot play, so
+                // the row says so rather than ignoring the tap in silence.
+                .disabled(track.url == nil)
+                .opacity(track.url == nil ? 0.4 : 1)
                 if track.id != tracks.last?.id {
-                    Divider().padding(.leading, 18)
+                    ThemedRule().padding(.leading, 18)
                 }
             }
         }
@@ -173,7 +189,7 @@ struct TrackList: View {
                         .foregroundStyle(palette.accent)
                         .symbolEffect(.variableColor, isActive: player.isPlaying)
                 } else {
-                    Circle().fill(.tertiary).frame(width: 7, height: 7)
+                    Circle().fill(palette.inkFaint).frame(width: 7, height: 7)
                 }
             }
             .frame(width: 18)
@@ -188,7 +204,7 @@ struct TrackList: View {
 
             Text(track.length)
                 .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.inkSoft)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 18)
@@ -199,13 +215,23 @@ struct TrackList: View {
     }
 }
 
-private extension View {
-    /// The one card shape both lists sit on.
-    func card() -> some View {
-        self
-            .background(palette.surface, in: RoundedRectangle(cornerRadius: 20))
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(.separator, lineWidth: 1))
+/// The one card shape both lists sit on.
+///
+/// A ViewModifier rather than a method on View, because a method has nowhere
+/// to put an `@Environment` and so had no way to be told the palette changed.
+/// It read a global and kept the colours it was first drawn with.
+private struct Card: ViewModifier {
+    @Environment(\.design) var design
+
+    func body(content: Content) -> some View {
+        content
+            .background(design.palette.surface, in: Container.shape())
+            .overlay(Container.shape().stroke(design.palette.hairline, lineWidth: 1))
     }
+}
+
+private extension View {
+    func card() -> some View { modifier(Card()) }
 }
 
 extension View {
@@ -226,6 +252,10 @@ private struct NowPlayingBar: ViewModifier {
 
 /// The bar that sits above the tab bar while something is sounding.
 private struct NowPlaying: View {
+    /// Colours and type, from the environment so this view is
+    /// invalidated when they change. See Design.
+    @Environment(\.design) var design
+    private var palette: Palette { design.palette }
     @EnvironmentObject private var player: Player
 
     var body: some View {
@@ -263,7 +293,7 @@ private struct NowPlaying: View {
             .padding(.vertical, 12)
         }
         .glassEffect(.regular.tint(palette.accent.opacity(0.12)),
-                     in: .rect(cornerRadius: 20))
+                     in: Container.shape())
         .padding(.horizontal, 12)
         .padding(.bottom, 6)
     }
