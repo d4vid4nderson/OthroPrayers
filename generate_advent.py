@@ -406,16 +406,16 @@ def render(bs):
     for b in bs:
         s = inline(b["segs"])
         if b.get("art"):
-            # The illuminated capital, above the paragraph it opens rather
-            # than set into it: text cannot be flowed around an image on a
-            # phone, and a paragraph that began "nd it came to pass" would be
-            # one failed image away from nonsense. The letter below keeps its
-            # place in the text, so the prayer reads whole either way — but
-            # it is set plain, since the ornament is the illumination now.
+            # The illuminated capital set into the paragraph it opens, as the
+            # booklet sets it: the ornament *is* the first letter, so that
+            # letter leaves the text and the opening lines are laid around the
+            # ornament rather than beneath it. The image carries the letter in
+            # its alt text, so nothing is lost to a reader who cannot see it.
             letter = b["art"].rstrip("2")
-            out.append(f'<p class="art"><img src="adv-initial-{b["art"]}.png" '
-                       f'alt="Illuminated {letter}"></p>')
-            s = re.sub(r'^<span class="dropcap">(.)</span>', r"\1", s)
+            s = re.sub(r'^<span class="dropcap">.</span>', "", s)
+            out.append(f'<p><img src="adv-initial-{b["art"]}.png" '
+                       f'alt="Illuminated {letter}">{s}</p>')
+            continue
         if b["kind"] == "rubric":
             if not (s.startswith('<span class="r">') and s.endswith("</span>")):
                 s = f'<span class="r">{s}</span>'

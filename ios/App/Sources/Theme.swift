@@ -277,6 +277,59 @@ enum ReadingFace: String, CaseIterable, Identifiable, Codable {
     }
 }
 
+extension ReadingFace {
+    /// The same choice, as a UIKit font.
+    ///
+    /// TextKit needs one, and the illuminated capitals are laid out there —
+    /// SwiftUI's Text cannot flow around a shape, and a text container can.
+    /// `sized` is the point size already scaled for the reader's text size;
+    /// scaling is done by the caller because the app clamps Dynamic Type
+    /// itself and UIKit would otherwise read the system's instead.
+    func uiKitFont(sized size: CGFloat) -> UIFont? {
+        switch self {
+        case .theme:
+            return nil
+        case .serif:
+            return .systemFont(ofSize: size).withDesign(.serif)
+        case .sans:
+            return .systemFont(ofSize: size)
+        case .rounded:
+            return .systemFont(ofSize: size).withDesign(.rounded)
+        case .mono:
+            if let name = BundledFont.jetBrainsMono {
+                return UIFont(name: name, size: size * 0.94)
+            }
+            return .monospacedSystemFont(ofSize: size, weight: .regular)
+        case .dyslexic:
+            if let name = BundledFont.openDyslexic {
+                return UIFont(name: name, size: size)
+            }
+            return .systemFont(ofSize: size)
+        }
+    }
+}
+
+extension UIFont {
+    /// The same face in another design, or this one where that is unavailable.
+    func withDesign(_ design: UIFontDescriptor.SystemDesign) -> UIFont {
+        guard let d = fontDescriptor.withDesign(design) else { return self }
+        return UIFont(descriptor: d, size: pointSize)
+    }
+}
+
+extension Theme {
+    /// The prayer face as a UIKit font, for paragraphs TextKit lays out.
+    /// Named apart from `uiFont` above, which is the interface face.
+    func bodyUIKitFont(sized size: CGFloat, face: ReadingFace) -> UIFont {
+        if let chosen = face.uiKitFont(sized: size) { return chosen }
+        if self == .terminal, let name = BundledFont.jetBrainsMono,
+           let f = UIFont(name: name, size: size * 0.94) {
+            return f
+        }
+        return UIFont.systemFont(ofSize: size).withDesign(.serif)
+    }
+}
+
 enum BundledFont {
     static let openDyslexic = family(containing: "dyslexic")
     static let jetBrainsMono = family(containing: "jetbrains")

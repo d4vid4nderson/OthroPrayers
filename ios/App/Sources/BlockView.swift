@@ -68,6 +68,14 @@ struct BlockView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 8)
 
+        // A paragraph the booklet opens with an illuminated capital. The
+        // ornament stands where the first letter would and the opening lines
+        // are laid around it, which SwiftUI's Text cannot do — see DropCap.
+        case .paragraph where block.art != nil:
+            DropCapParagraph(text: block.plain,
+                             art: block.art ?? "",
+                             label: block.artAlt ?? "")
+
         case .verse, .paragraph, .item:
             Text(attributed)
                 .font(Typeface.prayer())
