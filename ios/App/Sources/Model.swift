@@ -46,9 +46,14 @@ struct Block: Codable, Hashable {
     let runs: [Run]
     let style: String?
     let id: String?
-    /// The ornament's file, for a `.art` block. Carried as an alpha mask and
-    /// filled with the theme's accent, so one engraving suits every style.
+    /// The ornament's file. On an `.art` block it is the whole block; on a
+    /// paragraph it is the illuminated capital the paragraph opens with, and
+    /// the first letter has already left `runs` because the ornament is it.
+    /// Carried as an alpha mask and filled with the theme's accent, so one
+    /// engraving suits every style.
     let art: String?
+    /// What the ornament shows, for anyone who cannot see it.
+    let artAlt: String?
 
     var isHymn: Bool { style == "hymn" }
     var plain: String { runs.map(\.t).joined() }

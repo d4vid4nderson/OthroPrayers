@@ -187,12 +187,21 @@ class PageParser(HTMLParser):
             self._links.append(target[:-5] if target.endswith(".html") else None)
             return
         if tag == "img":
-            # An ornament. The file goes in the block's meta and the alt text
-            # becomes its only run — which is also what keeps the block alive,
-            # since a block with no runs is dropped as empty.
+            # An ornament. The file goes in the block's meta either way; where
+            # the alt text goes depends on what the ornament is.
+            #
+            # On its own in an `art` block it is the only content, so the alt
+            # becomes the block's run — which is also what keeps the block
+            # alive, since a block with no runs is dropped as empty. Set into
+            # a paragraph, as an illuminated capital is, the alt is the
+            # image's label and must stay out of the prayer: pushing it as
+            # text would read "Illuminated F" into the middle of the sentence.
             if self._block is not None:
                 self._block[2]["art"] = os.path.basename(d.get("src", ""))
-                self._push_text(d.get("alt", ""))
+                if self._block[0] == "art":
+                    self._push_text(d.get("alt", ""))
+                else:
+                    self._block[2]["artAlt"] = d.get("alt", "")
             self._depth -= 1          # void element: no end tag will balance it
             return
         if tag == "br":
