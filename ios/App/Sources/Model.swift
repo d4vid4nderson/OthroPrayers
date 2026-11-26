@@ -120,6 +120,21 @@ private struct StructureFile: Codable {
     let extras: [Extra]
 }
 
+/// Everywhere a tap can go.
+///
+/// One type, so one `navigationDestination` at each stack's root can answer
+/// for all of it. The app used to push books with a view-carrying
+/// NavigationLink and pages with a value-carrying one, which looks equivalent
+/// and is not: a destination declared at the root was not reachable from a
+/// view that a view-carrying link had pushed, so a book opened from the
+/// Prayers screen could not open its own sections. The Missal, which is its
+/// own tab's root and so declared the destination itself, worked — and that
+/// difference is what the UI test caught.
+enum Route: Hashable {
+    case page(String)
+    case book(String)
+}
+
 // MARK: - Library
 
 /// Everything the app knows, loaded once from the bundle.

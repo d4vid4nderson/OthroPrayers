@@ -86,12 +86,12 @@ struct RootView: View {
         // against. The old `.tabItem` form still compiles but opts out of them.
         TabView(selection: pane) {
             Tab("Prayers", systemImage: "sun.horizon", value: Pane.prayers) {
-                NavigationStack { TodayView().readingDestination() }
+                NavigationStack { TodayView().appDestination() }
             }
             Tab("Missal", systemImage: "book.pages", value: Pane.missal) {
                 NavigationStack {
                     bookView(slug: "st-peter-missal", fallback: "Missal")
-                        .readingDestination()
+                        .appDestination()
                 }
             }
             // Only when there is something to hear. A build made from a clean
@@ -122,7 +122,7 @@ struct RootView: View {
             // cross-reference followed from inside a linked page, or its
             // previous/next, simply did nothing.
             NavigationStack {
-                ReadingView(slug: linked.slug).readingDestination()
+                ReadingView(slug: linked.slug).appDestination()
             }
         }
     }
@@ -144,18 +144,37 @@ struct RootView: View {
 }
 
 private extension View {
-    /// Where a slug becomes a page — exactly one per NavigationStack, at its
-    /// root.
+    /// Where a tap goes — exactly one per NavigationStack, at its root.
     ///
-    /// SwiftUI leaves the behaviour undefined when the same type is
-    /// registered twice in one stack. BookView used to carry its own, which
-    /// was right while it was a stack's root (the Missal tab) and wrong the
-    /// moment it was pushed into the Prayers stack, which already had one:
-    /// tapping a section pushed the section list again, with the page it
-    /// should have opened sitting underneath it. Declaring it only at the
-    /// roots makes a second registration impossible to reach.
-    func readingDestination() -> some View {
-        navigationDestination(for: String.self) { ReadingView(slug: $0) }
+    /// Every link in the app carries a `Route`, so this one modifier answers
+    /// for all of them. That matters more than it looks: a destination
+    /// declared at a stack's root is not reachable from a view pushed by a
+    /// view-carrying NavigationLink, which is how a book used to arrive, so
+    /// its own section links had nothing to resolve them.
+    func appDestination() -> some View {
+        navigationDestination(for: Route.self) { route in
+            switch route {
+            case .page(let slug):
+                ReadingView(slug: slug)
+            case .book(let slug):
+                BookRoute(slug: slug)
+            }
+        }
+    }
+}
+
+/// A book reached through the routing table rather than by carrying the view
+/// itself, so the stack it lands in can resolve what it then links to.
+struct BookRoute: View {
+    let slug: String
+    @EnvironmentObject private var library: Library
+
+    var body: some View {
+        if let book = library.books.first(where: { $0.slug == slug }) {
+            BookView(book: book)
+        } else {
+            ContentUnavailableView("Not in this build", systemImage: "book.closed")
+        }
     }
 }
 

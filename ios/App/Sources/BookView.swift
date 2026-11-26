@@ -25,7 +25,7 @@ struct BookView: View {
                         .padding(.bottom, 22)
                 }
                 ForEach(Array(book.sections.enumerated()), id: \.element.id) { i, section in
-                    NavigationLink(value: section.slug) {
+                    NavigationLink(value: Route.page(section.slug)) {
                         HStack(alignment: .firstTextBaseline, spacing: 15) {
                             Text(Self.numerals[safe: i] ?? "\(i + 1)")
                                 .font(Typeface.display(.callout))

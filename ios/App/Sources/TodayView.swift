@@ -24,7 +24,7 @@ struct TodayView: View {
                 MicroLabel(text: now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
                     .padding(.bottom, 6)
 
-                NavigationLink(value: current.slug) {
+                NavigationLink(value: Route.page(current.slug)) {
                     HeroCard(hour: current)
                 }
                 .buttonStyle(.plain)
@@ -106,7 +106,7 @@ private struct HourList: View {
     var body: some View {
         VStack(spacing: 0) {
             ForEach(hours) { hour in
-                NavigationLink(value: hour.slug) {
+                NavigationLink(value: Route.page(hour.slug)) {
                     HStack(spacing: 14) {
                         Circle().fill(palette.inkFaint).frame(width: 7, height: 7)
                         Text(hour.title).font(Typeface.display(.title3))
@@ -136,7 +136,7 @@ private struct BookList: View {
     var body: some View {
         VStack(spacing: 0) {
             ForEach(library.books) { book in
-                NavigationLink { BookView(book: book) } label: {
+                NavigationLink(value: Route.book(book.slug)) {
                     row(title: book.title,
                         detail: "\(book.sections.count) sections",
                         symbol: book.slug == "prayerbook" ? "book.closed" : "book.pages")
@@ -145,7 +145,7 @@ private struct BookList: View {
                 ThemedRule().padding(.leading, 70)
             }
             ForEach(Array(library.extras.enumerated()), id: \.element.id) { i, extra in
-                NavigationLink(value: extra.slug) {
+                NavigationLink(value: Route.page(extra.slug)) {
                     row(title: extra.title, detail: extra.blurb, symbol: "cross")
                 }
                 .buttonStyle(.plain)
