@@ -8,7 +8,7 @@ import UIKit
 /// which is why a prayer looks like the same prayer whichever you pick. The
 /// faces are only a default now: see ReadingFace.
 enum Theme: String, CaseIterable, Identifiable, Codable {
-    case paper, manuscript, sanctuary, darkPaper, terminal
+    case paper, manuscript, sanctuary, darkPaper, advent, terminal, adventTerminal
 
     var id: String { rawValue }
 
@@ -18,7 +18,9 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
         case .manuscript: "Manuscript"
         case .sanctuary: "Sanctuary"
         case .darkPaper: "Dark Paper"
+        case .advent: "Advent"
         case .terminal: "Terminal"
+        case .adventTerminal: "Advent Terminal"
         }
     }
 
@@ -28,7 +30,9 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
         case .manuscript: "Vellum, iron gall and an insular hand."
         case .sanctuary: "Dark, for early and late."
         case .darkPaper: "The printed booklet, after dark."
+        case .advent: "Evergreen and red, for the weeks of waiting."
         case .terminal: "A green-phosphor console."
+        case .adventTerminal: "The console, keeping Advent."
         }
     }
 
@@ -36,9 +40,14 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     var colorScheme: ColorScheme {
         switch self {
         case .paper, .manuscript: .light
-        case .sanctuary, .darkPaper, .terminal: .dark
+        case .sanctuary, .darkPaper, .advent, .terminal, .adventTerminal: .dark
         }
     }
+
+    /// Set like a console: one colour on black, in a monospaced face, with
+    /// the directions marked rather than ornamented. Two themes do it, so it
+    /// is asked as a question rather than compared against one of them.
+    var isConsole: Bool { self == .terminal || self == .adventTerminal }
 
     /// Which phosphor the Terminal theme glows in.
     ///
@@ -126,6 +135,24 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
                     ink: .hex(0xEDE7DB), inkSoft: .hex(0xA69E90), inkFaint: .hex(0x756D61),
                     accent: .hex(0xD4675C), onAccent: .hex(0x14120E),
                     hairline: .hex(0xEDE7DB, 0.12))
+        case .advent:
+            // Evergreen and red. The ink carries the green so the season is
+            // in the prose and not only in the furniture, and the red is kept
+            // for what the printed book sets in red — which in Advent is most
+            // of the direction.
+            Palette(ground: .hex(0x0B130D), surface: .hex(0x121C14),
+                    ink: .hex(0xD9E7D7), inkSoft: .hex(0x93AA97), inkFaint: .hex(0x627D68),
+                    accent: .hex(0xD2413A), onAccent: .hex(0x0B130D),
+                    hairline: .hex(0xD9E7D7, 0.12))
+        case .adventTerminal:
+            // The same two colours as a console wears them: green phosphor
+            // for the body, red for the second phosphor. Terminal's own amber
+            // is the wrong red for Advent, which is why this is a theme and
+            // not another phosphor.
+            Palette(ground: .hex(0x050A06), surface: .hex(0x0A120B),
+                    ink: .hex(0x8FE08F), inkSoft: .hex(0x63A869), inkFaint: .hex(0x447A4B),
+                    accent: .hex(0xFF5F52), onAccent: .hex(0x050A06),
+                    hairline: .hex(0x8FE08F, 0.16))
         case .terminal:
             // two phosphors: green for the body, amber for whatever the printed
             // book set in red
@@ -139,7 +166,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     /// a console has exactly one kind of letter.
     func bodyFont(_ style: Font.TextStyle, face: ReadingFace) -> Font {
         if let chosen = face.font(style) { return chosen }
-        if self == .terminal, let name = BundledFont.jetBrainsMono {
+        if isConsole, let name = BundledFont.jetBrainsMono {
             return .custom(name, size: style.pointSize * 0.94, relativeTo: style)
         }
         return .system(style, design: .serif)
@@ -152,7 +179,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
         // was hard going still met it at the top of every office.
         if let chosen = face.font(style) { return chosen.weight(.semibold) }
         switch self {
-        case .terminal:
+        case .terminal, .adventTerminal:
             if let name = BundledFont.jetBrainsMono {
                 return .custom(name, size: style.pointSize * 0.9, relativeTo: style).weight(.bold)
             }
@@ -162,7 +189,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
                 return .custom(name, size: style.pointSize * 0.92, relativeTo: style)
             }
             return .system(style, design: .serif).weight(.semibold)
-        case .paper, .sanctuary, .darkPaper:
+        case .paper, .sanctuary, .darkPaper, .advent:
             return .system(style, design: .serif).weight(.semibold)
         }
     }
@@ -170,7 +197,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     /// The face for interface labels.
     func uiFont(_ style: Font.TextStyle, face: ReadingFace) -> Font {
         if let chosen = face.font(style) { return chosen.weight(.semibold) }
-        if self == .terminal, let name = BundledFont.jetBrainsMono {
+        if isConsole, let name = BundledFont.jetBrainsMono {
             return .custom(name, size: style.pointSize * 0.94, relativeTo: style)
         }
         return .system(style, design: .default).weight(.semibold)
@@ -179,7 +206,7 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     /// The sigil a terminal puts before a title, a heading or a rubric. The
     /// other three say the same thing with ornament and colour.
     func sigil(for kind: Block.Kind) -> String {
-        guard self == .terminal else { return "" }
+        guard isConsole else { return "" }
         switch kind {
         case .heading, .subheading: return "## "
         case .rubric: return "# "
@@ -322,7 +349,7 @@ extension Theme {
     /// Named apart from `uiFont` above, which is the interface face.
     func bodyUIKitFont(sized size: CGFloat, face: ReadingFace) -> UIFont {
         if let chosen = face.uiKitFont(sized: size) { return chosen }
-        if self == .terminal, let name = BundledFont.jetBrainsMono,
+        if isConsole, let name = BundledFont.jetBrainsMono,
            let f = UIFont(name: name, size: size * 0.94) {
             return f
         }
