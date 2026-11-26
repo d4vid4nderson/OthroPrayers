@@ -178,7 +178,7 @@ struct ReadingView: View {
     private enum Direction { case backward, forward }
 
     private func turn(_ section: BookSection, direction: Direction) -> some View {
-        NavigationLink(value: section.slug) {
+        NavigationLink(value: Route.page(section.slug)) {
             HStack(spacing: 9) {
                 if direction == .backward {
                     Image(systemName: "chevron.left").font(.footnote.weight(.semibold))
