@@ -12,7 +12,6 @@ struct BlockView: View {
     @Environment(\.design) var design
     private var palette: Palette { design.palette }
     let block: Block
-    @EnvironmentObject private var settings: Settings
     /// Tapping a cross-reference opens that page.
     var onLink: (String) -> Void = { _ in }
 
@@ -20,7 +19,7 @@ struct BlockView: View {
         switch block.type {
         case .heading:
             VStack(spacing: 10) {
-                MicroLabel(text: settings.theme.sigil(for: block.type) + block.plain)
+                MicroLabel(text: design.theme.sigil(for: block.type) + block.plain)
                     .multilineTextAlignment(.center)
                 Rectangle()
                     .fill(palette.inkFaint.opacity(0.4))
@@ -40,12 +39,17 @@ struct BlockView: View {
             // the direction, not the prayer. A console sets it as a comment,
             // flush left in the second phosphor; the other three italicise and
             // centre it, as the printed book does.
-            Text(AttributedString(settings.theme.sigil(for: .rubric)) + attributed)
-                .font(settings.theme == .terminal
+            Text(AttributedString(design.theme.sigil(for: .rubric)) + attributed)
+                // `design.theme` is the theme actually drawn. This asked
+                // `settings.theme`, which under "match phone appearance" is
+                // not the one on screen — so a console rubric could be set in
+                // italics on a console, and a printed one marked like a
+                // comment. A second console theme would only have spread it.
+                .font(design.theme.isConsole
                       ? Typeface.prayer(.callout)
                       : Typeface.prayer(.callout).italic())
-                .foregroundStyle(settings.theme == .terminal ? palette.accent : palette.inkSoft)
-                .multilineTextAlignment(settings.theme == .terminal ? .leading : .center)
+                .foregroundStyle(design.theme.isConsole ? palette.accent : palette.inkSoft)
+                .multilineTextAlignment(design.theme.isConsole ? .leading : .center)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
 
