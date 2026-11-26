@@ -51,7 +51,9 @@ instead of a second, drifting copy.
 |---|---|
 | `ios/` | the SwiftUI app — see [`ios/NATIVE.md`](ios/NATIVE.md) |
 | `source.pdf`, `generate.py` | the booklet, and the script that reads it |
+| `advent-source.pdf`, `generate_advent.py` | the Advent booklet, and the script that reads it |
 | `prayers.content.html` | the prayer text, generated from the PDF |
+| `advent.content.html` | the Advent devotions, generated from their PDF |
 | `build.py` | assembles the pages (intermediate, into `build/`) |
 | `export_content.py` | pages → `ios/Content/content.json` |
 | `export_music.py` | recordings → `ios/Content/music.json` |

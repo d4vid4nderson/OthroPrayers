@@ -28,12 +28,12 @@ OUT_DIR = os.environ.get("OUT_DIR", "build")
 
 # the only pages the Western-only build emits; the hub becomes index.html
 WESTERN_KEEP = {"western.html", "western-compline.html", "western-fasting.html",
-                "prayerbook.html", "st-peter-missal.html"}
+                "prayerbook.html", "st-peter-missal.html", "advent.html"}
 
 
 def _wanted(path):
     """Is this page part of the Western-only build?"""
-    return path in WESTERN_KEEP or path.startswith(("pb-", "spm-"))
+    return path in WESTERN_KEEP or path.startswith(("pb-", "spm-", "adv-"))
 
 
 def _out(path):
@@ -1341,6 +1341,37 @@ ANCIENT = {}
 for _ai, _am in enumerate(_amarks):
     _aend = _amarks[_ai + 1].start() if _ai + 1 < len(_amarks) else len(_ancient_src)
     ANCIENT[_am.group(1)] = _ancient_src[_am.start():_aend]
+
+
+# ---- Lay Devotions for the Season of Advent --------------------------------
+# A separate booklet, transcribed from its own PDF into advent.content.html by
+# the same route the other books took. It is one page per day — the reader
+# wants the day they are on, not a chapter to scroll — so the section list is
+# derived from the file rather than written out again here: thirty entries
+# repeated in two places would only drift.
+#
+# The blurb under each day is its citation, which is the first rubric on the
+# page, so it is read from the content rather than restated.
+_advent_src = open("advent.content.html").read() if os.path.exists("advent.content.html") else ""
+_vmarks = list(re.finditer(r'<section class="divider advent" id="(adv-[a-z0-9-]+)">',
+                           _advent_src))
+ADVENT = {}
+ADVENT_SECTIONS = []
+for _vi, _vm in enumerate(_vmarks):
+    _vend = _vmarks[_vi + 1].start() if _vi + 1 < len(_vmarks) else len(_advent_src)
+    _slug = _vm.group(1)
+    _body = _advent_src[_vm.start():_vend]
+    ADVENT[_slug] = _body
+    _t = re.search(r'<h1>(.*?)</h1>', _body)
+    _feast = re.search(r'<h3 class="subhead2">(.*?)</h3>', _body)
+    _cite = re.search(r'<p class="rubric"><span class="r">(.*?)</span></p>', _body)
+    _blurb = {"adv-opening": "The Advent Wreath, the Versicle and the household prayers.",
+              "adv-closing": "The closing Versicle, the Advent hymns and the "
+                             "St. Andrew Prayer."}.get(_slug)
+    if _blurb is None:
+        _blurb = ((_feast.group(1) + " &mdash; ") if _feast else "") + \
+                 (_cite.group(1) if _cite else "")
+    ADVENT_SECTIONS.append((_slug, _t.group(1) if _t else _slug, _blurb))
 
 
 # the five offices of the AFPB daily cycle, with time-of-day windows; emblem
@@ -3120,6 +3151,25 @@ if ANCIENT:
              + seq_nav(_AFPB_SEQ, slug, "In this prayer book") + CLOSING,
              active="prayers", scripts=PLAYER)
 
+# Lay Devotions for the Season of Advent: a hub and one page per day
+_ADVENT_SEQ = [(s_, t) for s_, t, _b in ADVENT_SECTIONS]
+if ADVENT:
+    page("advent.html", "Lay Devotions for the Season of Advent",
+         "A household devotion for Advent: opening prayers, a scripture reading and a "
+         "patristic reflection for each day from November 27 to Christmas Eve, and the "
+         "concluding prayers with the Advent hymns.",
+         _divider("Advent")
+         + '<p class="res-intro">A household devotion for the season: the Advent Wreath '
+           'and the opening prayers, a reading and a reflection for each day from '
+           'November 27 to Christmas Eve, and the concluding prayers with the Advent '
+           'hymns and the St. Andrew Prayer.</p>',
+         active="home")
+    for _slug, _title, _blurb in ADVENT_SECTIONS:
+        page(f"{_slug}.html", f"{_title} — Lay Devotions for Advent",
+             re.sub(r"<[^>]+>", "", _blurb) or _title,
+             back_link("advent.html", "Advent") + with_jump_nav(ADVENT[_slug])
+             + seq_nav(_ADVENT_SEQ, _slug, "In this booklet") + CLOSING, active="home")
+
 # resources hub + a page per topic/section
 page("resources.html", "Resources — Daily Prayers",
      "Topics, early-Church writings, creeds, councils, catechisms and recommended reading.",
@@ -3175,7 +3225,8 @@ if WESTERN_ONLY:
     }
     for _bslug, _btitle, _sections, _content in (
             ("prayerbook", "A Little Prayer Book", PB_SECTIONS, PB_CONTENT),
-            ("st-peter-missal", "The St. Peter Pew Missal", SPM_SECTIONS, SPM_CONTENT)):
+            ("st-peter-missal", "The St. Peter Pew Missal", SPM_SECTIONS, SPM_CONTENT),
+            ("advent", "Advent 2026", ADVENT_SECTIONS, ADVENT)):
         _items = [{"slug": s_, "title": _plain(t), "blurb": _plain(b)}
                   for s_, t, b, *_rest in _sections if s_ in _content]
         if _items:
