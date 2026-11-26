@@ -55,7 +55,6 @@ struct BookView: View {
         .scrollEdgeEffectStyle(.soft, for: .top)
         .background(palette.ground)
         .navigationTitle(book.title)
-        .navigationDestination(for: String.self) { ReadingView(slug: $0) }
     }
 }
 
