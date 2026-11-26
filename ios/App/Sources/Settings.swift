@@ -39,7 +39,15 @@ final class Settings: ObservableObject {
 
     /// The phone's current appearance, pushed in from the view tree, which is
     /// the only place it can be read. Not persisted: it is a fact about now.
-    @Published var systemIsDark = false
+    ///
+    /// Set through `noteAppearance` so an unchanged value publishes nothing:
+    /// it is pushed in every time the app comes forward, and assigning the
+    /// same Bool to an @Published still tells every observer to redraw.
+    @Published private(set) var systemIsDark = false
+
+    func noteAppearance(dark: Bool) {
+        if dark != systemIsDark { systemIsDark = dark }
+    }
 
     /// Which tab is open.
     ///
@@ -77,7 +85,15 @@ final class Settings: ObservableObject {
         didSet { store.set(readingFace.rawValue, forKey: Key.readingFace) }
     }
     @Published var hourReminders: Bool { didSet { store.set(hourReminders, forKey: Key.reminders) } }
-    @Published var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
+    /// The last page opened. Deliberately *not* @Published.
+    ///
+    /// It is written from ReadingView.onAppear, which is to say on every page
+    /// open, and nothing anywhere reads it back. Publishing it invalidated
+    /// every view observing Settings — since the palette moved into the
+    /// environment, that is the whole app — in the middle of the navigation
+    /// transition that had just begun. A write-only crumb has no business
+    /// doing that.
+    var lastRead: String { didSet { store.set(lastRead, forKey: Key.lastRead) } }
 
     /// The home-screen icon, in three parts that do not constrain each other:
     /// what it shows, what it stands on, and what colour it is drawn in.

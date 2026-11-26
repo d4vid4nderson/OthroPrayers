@@ -113,9 +113,9 @@ struct RootView: View {
         // forces a colour scheme, and the environment would report that back
         // rather than the phone's own setting. Refreshed whenever the app
         // comes forward, which is when a change made in Settings.app lands.
-        .onAppear { settings.systemIsDark = Appearance.systemIsDark }
+        .onAppear { settings.noteAppearance(dark: Appearance.systemIsDark) }
         .onChange(of: phase) { _, new in
-            if new == .active { settings.systemIsDark = Appearance.systemIsDark }
+            if new == .active { settings.noteAppearance(dark: Appearance.systemIsDark) }
         }
         .sheet(item: linkedPage) { linked in
             // Its own stack, so it needs its own destination: without one a
