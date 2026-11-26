@@ -37,11 +37,14 @@ import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 SRC = os.environ.get("ADVENT_PDF", "advent-source.pdf")
 OUT = os.environ.get("ADVENT_OUT", "advent.content.html")
+ART = os.environ.get("ADVENT_ART", "ios/App/Resources/Art")
 
 S = 1.5                      # px per pt: the XML is 1188px wide for 792pt
 COLS = [206 * S, 396 * S, 587 * S, 1e9]          # column right edges
@@ -52,6 +55,11 @@ RED = "#c00000"
 FIG = {chr(0xF643 + i): str(i) for i in range(10)}   # old-style figures 0-9
 LIG = {"ﬀ": "ff", "ﬁ": "fi", "ﬂ": "fl",
        "ﬃ": "ffi", "ﬄ": "ffl"}
+
+# The illuminated capitals are glyphs of an embedded ornamental face, and the
+# woodcut at the end is the booklet's one raster image.
+ARABESQUE = "ArabesqueInitialen"
+BANNER = "adv-nativitas"
 
 SPAN_HEAD = re.compile(r'^(OPENI\s*NG|CONCLUDI\s*NG|DAILY READINGS)')
 NOISE = re.compile(r'^(Lay Devotions for the Season of Advent|OPENI\s*NG PRAYERS'
@@ -84,7 +92,8 @@ def read_runs(path):
                 continue
             size, fam, col = fonts[int(f)]
             runs.append({"top": int(top), "left": int(left), "w": int(w),
-                         "t": t, "size": size, "fam": fam, "red": col == RED})
+                         "h": int(_h), "t": t, "size": size, "fam": fam,
+                         "red": col == RED, "page": len(pages) + 1})
         pages.append(runs)
     return pages
 
@@ -164,6 +173,20 @@ def line_of(L):
     return txt, segs
 
 
+# Which ornament a glyph code draws. The face carries alternates: the
+# lowercase codes are second designs for the same letters, so "a" draws
+# another A and "f" draws an F. Keyed so two designs of one letter cannot
+# collide on a case-insensitive filesystem.
+_ART_UPPER = set("AHINOTWY")
+
+def art_key(code):
+    c = code.strip()
+    if not c:
+        return None
+    return c if c.isupper() else (c.upper() + "2" if c.upper() in _ART_UPPER
+                                  else c.upper())
+
+
 def folio(lines):
     """The printed page number: the bottom-most line that is just a numeral."""
     for l in sorted(lines, key=lambda l: -l["top"]):
@@ -194,9 +217,12 @@ def booklet_pages(sheets):
             txt, segs = line_of(L)
             if not txt:
                 continue
+            art = next((art_key(r["t"]) for r in L
+                        if ARABESQUE in r["fam"] and r["red"] and r["t"].strip()),
+                       None)
             built.append({"t": txt, "segs": segs, "top": L[0]["top"],
                           "col": col_of(min(r["left"] for r in L)),
-                          "dc": any(r["size"] >= 40 for r in L)})
+                          "dc": any(r["size"] >= 40 for r in L), "art": art})
 
         for half, cols in ((0, (0, 1)), (1, (2, 3))):
             sel = [l for l in built if l["col"] in cols]
@@ -246,6 +272,7 @@ def blocks(lines):
                 cur["segs"].append(dict(sg))
         if cur:
             cur["dc"] = cur.get("dc") or l.get("dc")
+            cur["art"] = cur.get("art") or l.get("art")
     if cur:
         groups.append(cur)
 
@@ -257,7 +284,8 @@ def blocks(lines):
             continue
         segs[0]["t"] = segs[0]["t"].lstrip()
         segs[-1]["t"] = segs[-1]["t"].rstrip()
-        out.append({"kind": "rubric" if g["red"] else "para", "segs": segs})
+        out.append({"kind": "rubric" if g["red"] else "para", "segs": segs,
+                    "art": g.get("art")})
     return out
 
 
@@ -377,6 +405,17 @@ def render(bs):
     out = []
     for b in bs:
         s = inline(b["segs"])
+        if b.get("art"):
+            # The illuminated capital, above the paragraph it opens rather
+            # than set into it: text cannot be flowed around an image on a
+            # phone, and a paragraph that began "nd it came to pass" would be
+            # one failed image away from nonsense. The letter below keeps its
+            # place in the text, so the prayer reads whole either way — but
+            # it is set plain, since the ornament is the illumination now.
+            letter = b["art"].rstrip("2")
+            out.append(f'<p class="art"><img src="adv-initial-{b["art"]}.png" '
+                       f'alt="Illuminated {letter}"></p>')
+            s = re.sub(r'^<span class="dropcap">(.)</span>', r"\1", s)
         if b["kind"] == "rubric":
             if not (s.startswith('<span class="r">') and s.endswith("</span>")):
                 s = f'<span class="r">{s}</span>'
@@ -397,10 +436,79 @@ def section(slug, title, parts):
             + "\n".join(parts))
 
 
+def write_art(sheets):
+    """Lift the booklet's ornaments out as alpha masks.
+
+    Masks, not pictures: the initials are printed in one red, and the app has
+    five themes to draw them in. Keeping only the ink's coverage lets each
+    one be filled with whatever the theme's accent is, the same trick the
+    rest of this project's ornaments use.
+
+    Needs Pillow and pdftoppm. Without them the committed art is kept, which
+    matters because this runs from a checkout that may have neither.
+    """
+    try:
+        from PIL import Image, ImageChops, ImageOps
+    except ImportError:
+        print("Pillow not available \u2014 keeping the committed artwork")
+        return
+    if not shutil.which("pdftoppm"):
+        print("pdftoppm not available \u2014 keeping the committed artwork")
+        return
+    os.makedirs(ART, exist_ok=True)
+
+    def to_mask(im, side=None):
+        im = im.convert("RGB")
+        r, g, b = im.split()
+        mn = ImageChops.darker(ImageChops.darker(r, g), b)   # per-pixel minimum
+        alpha = ImageOps.autocontrast(ImageChops.invert(mn))  # ink -> coverage
+        out = Image.new("RGBA", im.size, (0, 0, 0, 0))
+        out.putalpha(alpha)
+        return out.resize(side, Image.LANCZOS) if side else out
+
+    # one crop per distinct ornament, at 400dpi
+    DPI, want = 400, {}
+    for runs in sheets:
+        for r in runs:
+            k = art_key(r["t"]) if ARABESQUE in r["fam"] and r["red"] else None
+            if k and k not in want:
+                want[k] = r
+    scale = DPI / 72 / S
+    with tempfile.TemporaryDirectory() as tmp:
+        rendered = {}
+        for k, r in sorted(want.items()):
+            pg = r["page"]
+            if pg not in rendered:
+                base = os.path.join(tmp, f"p{pg}")
+                subprocess.run(["pdftoppm", "-f", str(pg), "-l", str(pg), "-r",
+                                str(DPI), "-png", "-singlefile", SRC, base],
+                               check=True)
+                rendered[pg] = Image.open(base + ".png")
+            im = rendered[pg]
+            box = (round(r["left"] * scale), round(r["top"] * scale),
+                   round((r["left"] + r["w"]) * scale),
+                   round((r["top"] + r["h"]) * scale))
+            to_mask(im.crop(box), (256, 256)).save(
+                os.path.join(ART, f"adv-initial-{k}.png"))
+
+        # the one raster image in the booklet: the Nativity woodcut
+        if shutil.which("pdfimages"):
+            base = os.path.join(tmp, "img")
+            subprocess.run(["pdfimages", "-png", "-f", "1", "-l", "1", SRC, base],
+                           check=True)
+            found = sorted(f for f in os.listdir(tmp) if f.startswith("img"))
+            if found:
+                im = Image.open(os.path.join(tmp, found[0]))
+                to_mask(im).save(os.path.join(ART, f"{BANNER}.png"))
+    print(f"wrote {len(want)} initials and the woodcut to {ART}/")
+
+
 def main():
     if not os.path.exists(SRC):
         sys.exit(f"{SRC} not found")
-    model = parse(booklet_pages(read_runs(SRC)))
+    sheets = read_runs(SRC)
+    write_art(sheets)
+    model = parse(booklet_pages(sheets))
     if len(model["days"]) != 28:
         sys.exit(f"expected 28 days, parsed {len(model['days'])}")
 
@@ -431,6 +539,8 @@ def main():
                          + "<br>".join(esc(x) for x in b["lines"]) + "</p>")
         else:
             parts += render([b])
+    parts.append(f'<p class="art"><img src="{BANNER}.png" '
+                 'alt="Woodcut of angels bearing a banner, Nativitas Domini"></p>')
     out.append(section("adv-closing", "Concluding Prayers", parts))
 
     with open(OUT, "w") as f:

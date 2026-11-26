@@ -306,14 +306,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated H"
+      }
+     ],
+     "art": "adv-initial-H.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "H",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ail and blessed be the hour and moment in which the Son of God was born of the most pure Virgin Mary, at midnight, in Bethlehem, in the piercing cold. In that hour vouchsafe, O my God, to hear my prayer and grant my desires, "
+       "t": "Hail and blessed be the hour and moment in which the Son of God was born of the most pure Virgin Mary, at midnight, in Bethlehem, in the piercing cold. In that hour vouchsafe, O my God, to hear my prayer and grant my desires, "
       },
       {
        "t": "(here mention your request)",
@@ -323,6 +328,15 @@
        "t": " Through the merits of Our Saviour Jesus Christ, and of His blessed Mother. Amen."
       }
      ]
+    },
+    {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Woodcut of angels bearing a banner, Nativitas Domini"
+      }
+     ],
+     "art": "adv-nativitas.png"
     }
    ]
   },
@@ -341,14 +355,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated W"
+      }
+     ],
+     "art": "adv-initial-W.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "W",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ash you, make you clean; put away the evil of your doings from before mine eyes; cease to do evil; Learn to do well; seek judgment, relieve the oppressed, judge the fatherless, plead for the widow. Come now, and let us reason together, saith the Lord: though your sins be as scarlet, they shall be as white as snow; though they be red like crimson, they shall be as wool. If ye be willing and obedient, ye shall eat the good of the land: But if ye refuse and rebel, ye shall be devoured with the sword: for the mouth of the Lord hath spoken it. How is the faithful city become an harlot! it was full of judgment; righteousness lodged in it; but now murderers. Thy silver is become dross, thy wine mixed with water: Thy princes are rebellious, and companions of thieves: every one loveth gifts, and followeth after rewards: they judge not the fatherless, neither doth the cause of the widow come unto them. Therefore saith the Lord, the Lord of hosts, the mighty One of Israel, Ah, I will ease me of mine adversaries, and avenge me of mine enemies: And I will turn my hand upon thee, and purely purge away thy dross, and take away all thy tin: And I will restore thy judges as at the first, and thy counsellors as at the beginning: afterward thou shalt be called, The city of righteousness, the faithful city. Zion shall be redeemed with judgment, and her converts with righteousness. And the destruction of the transgressors and of the sinners shall be together, and they that forsake the Lord shall be consumed."
+       "t": "Wash you, make you clean; put away the evil of your doings from before mine eyes; cease to do evil; Learn to do well; seek judgment, relieve the oppressed, judge the fatherless, plead for the widow. Come now, and let us reason together, saith the Lord: though your sins be as scarlet, they shall be as white as snow; though they be red like crimson, they shall be as wool. If ye be willing and obedient, ye shall eat the good of the land: But if ye refuse and rebel, ye shall be devoured with the sword: for the mouth of the Lord hath spoken it. How is the faithful city become an harlot! it was full of judgment; righteousness lodged in it; but now murderers. Thy silver is become dross, thy wine mixed with water: Thy princes are rebellious, and companions of thieves: every one loveth gifts, and followeth after rewards: they judge not the fatherless, neither doth the cause of the widow come unto them. Therefore saith the Lord, the Lord of hosts, the mighty One of Israel, Ah, I will ease me of mine adversaries, and avenge me of mine enemies: And I will turn my hand upon thee, and purely purge away thy dross, and take away all thy tin: And I will restore thy judges as at the first, and thy counsellors as at the beginning: afterward thou shalt be called, The city of righteousness, the faithful city. Zion shall be redeemed with judgment, and her converts with righteousness. And the destruction of the transgressors and of the sinners shall be together, and they that forsake the Lord shall be consumed."
       }
      ]
     },
@@ -411,14 +430,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated N"
+      }
+     ],
+     "art": "adv-initial-N2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "N",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ow the birth of Jesus Christ was on this wise: When as his mother Mary was espoused to Joseph, before they came together, she was found with child of the Holy Ghost. Then Joseph her husband, being a just man, and not willing to make her a public example, was minded to put her away privily. But while he thought on these things, behold, the angel of the Lord appeared unto him in a dream, saying, Joseph, thou son of David, fear not to take unto thee Mary thy wife: for that which is conceived in her is of the Holy Ghost. And she shall bring forth a son, and thou shalt call his name JESUS: for he shall save his people from their sins. Now all this was done, that it might be fulfilled which was spoken of the Lord by the prophet, saying, Behold, a virgin shall be with child, and shall bring forth a son, and they shall call his name Emmanuel, which being interpreted is, God with us. Then Joseph being raised from sleep did as the angel of the Lord had bidden him, and took unto him his wife."
+       "t": "Now the birth of Jesus Christ was on this wise: When as his mother Mary was espoused to Joseph, before they came together, she was found with child of the Holy Ghost. Then Joseph her husband, being a just man, and not willing to make her a public example, was minded to put her away privily. But while he thought on these things, behold, the angel of the Lord appeared unto him in a dream, saying, Joseph, thou son of David, fear not to take unto thee Mary thy wife: for that which is conceived in her is of the Holy Ghost. And she shall bring forth a son, and thou shalt call his name JESUS: for he shall save his people from their sins. Now all this was done, that it might be fulfilled which was spoken of the Lord by the prophet, saying, Behold, a virgin shall be with child, and shall bring forth a son, and they shall call his name Emmanuel, which being interpreted is, God with us. Then Joseph being raised from sleep did as the angel of the Lord had bidden him, and took unto him his wife."
       }
      ]
     },
@@ -481,14 +505,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd he showed me a pure river of water of life, clear as crystal, proceeding out of the throne of God and of the Lamb. In the midst of the street of it, and on either side of the river, was there the tree of life, which bare twelve manner of fruits, and yielded her fruit every month: and the leaves of the tree were for the healing of the nations. And there shall be no more curse: but the throne of God and of the Lamb shall be in it; and his servants shall serve him: And they shall see his face; and his name shall be in their foreheads. And there shall be no night there; and they need no candle, neither light of the sun; for the Lord God giveth them light: and they shall reign for ever and ever. And he said unto me, These sayings are faithful and true: and the Lord God of the holy prophets sent his angel to show unto his servants the things which must shortly be done. Behold, I come quickly: blessed is he that keepeth the sayings of the prophecy of this book. And I John saw these things, and heard them. And when I had heard and seen, I fell down to worship before the feet of the angel which showed me these things. Then saith he unto me, See thou do it not: for I am thy fellowservant, and of thy brethren the prophets, and of them which keep the sayings of this book: worship God. And he saith unto me, Seal not the sayings of the prophecy of this book: for the time is at hand."
+       "t": "And he showed me a pure river of water of life, clear as crystal, proceeding out of the throne of God and of the Lamb. In the midst of the street of it, and on either side of the river, was there the tree of life, which bare twelve manner of fruits, and yielded her fruit every month: and the leaves of the tree were for the healing of the nations. And there shall be no more curse: but the throne of God and of the Lamb shall be in it; and his servants shall serve him: And they shall see his face; and his name shall be in their foreheads. And there shall be no night there; and they need no candle, neither light of the sun; for the Lord God giveth them light: and they shall reign for ever and ever. And he said unto me, These sayings are faithful and true: and the Lord God of the holy prophets sent his angel to show unto his servants the things which must shortly be done. Behold, I come quickly: blessed is he that keepeth the sayings of the prophecy of this book. And I John saw these things, and heard them. And when I had heard and seen, I fell down to worship before the feet of the angel which showed me these things. Then saith he unto me, See thou do it not: for I am thy fellowservant, and of thy brethren the prophets, and of them which keep the sayings of this book: worship God. And he saith unto me, Seal not the sayings of the prophecy of this book: for the time is at hand."
       }
      ]
     },
@@ -551,14 +580,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated H"
+      }
+     ],
+     "art": "adv-initial-H.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "H",
-       "mark": "dropcap"
-      },
-      {
-       "t": "e that is unjust, let him be unjust still: and he which is filthy, let him be filthy still: and he that is righteous, let him be righteous still: and he that is holy, let him be holy still. And, behold, I come quickly; and my reward is with me, to give every man according as his work shall be. I am Alpha and Omega, the beginning and the end, the first and the last. Blessed are they that do his commandments, that they may have right to the tree of life, and may enter in through the gates into the city. For without are dogs, and sorcerers, and whore-mongers, and murderers, and idolaters, and whosoever loveth and maketh a lie. I Jesus have sent mine angel to testify unto you these things in the churches. I am the root and the offspring of David, and the bright and morning star. And the Spirit and the bride say, Come. And let him that heareth say, Come. And let him that is athirst come. And whosoever will, let him take the water of life freely. For I testify unto every man that heareth the words of the prophecy of this book, If any man shall add unto these things, God shall add unto him the plagues that are written in this book: And if any man shall take away from the words of the book of this prophecy, God shall take away his part out of the book of life, and out of the holy city, and from the things which are written in this book. He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus. The grace of our Lord Jesus Christ be with you all. Amen."
+       "t": "He that is unjust, let him be unjust still: and he which is filthy, let him be filthy still: and he that is righteous, let him be righteous still: and he that is holy, let him be holy still. And, behold, I come quickly; and my reward is with me, to give every man according as his work shall be. I am Alpha and Omega, the beginning and the end, the first and the last. Blessed are they that do his commandments, that they may have right to the tree of life, and may enter in through the gates into the city. For without are dogs, and sorcerers, and whore-mongers, and murderers, and idolaters, and whosoever loveth and maketh a lie. I Jesus have sent mine angel to testify unto you these things in the churches. I am the root and the offspring of David, and the bright and morning star. And the Spirit and the bride say, Come. And let him that heareth say, Come. And let him that is athirst come. And whosoever will, let him take the water of life freely. For I testify unto every man that heareth the words of the prophecy of this book, If any man shall add unto these things, God shall add unto him the plagues that are written in this book: And if any man shall take away from the words of the book of this prophecy, God shall take away his part out of the book of life, and out of the holy city, and from the things which are written in this book. He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus. The grace of our Lord Jesus Christ be with you all. Amen."
       }
      ]
     },
@@ -629,14 +663,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "gain, the kingdom of heaven is like unto treasure hid in a field; the which when a man hath found, he hideth, and for joy thereof goeth and selleth all that he hath, and buyeth that field. Again, the kingdom of heaven is like unto a merchant man, seeking goodly pearls: Who, when he had found one pearl of great price, went and sold all that he had, and bought it. Again, the kingdom of heaven is like unto a net, that was cast into the sea, and gathered of every kind: Which, when it was full, they drew to shore, and sat down, and gathered the good into vessels, but cast the bad away. So shall it be at the end of the world: the angels shall come forth, and sever the wicked from among the just, And shall cast them into the furnace of fire: there shall be wailing and gnashing of teeth. Jesus saith unto them, Have ye understood all these things? They say unto him, Yea, Lord. Then said he unto them, Therefore every scribe which is instructed unto the kingdom of heaven is like unto a man that is an householder, which bringeth forth out of his treasure things new and old."
+       "t": "Again, the kingdom of heaven is like unto treasure hid in a field; the which when a man hath found, he hideth, and for joy thereof goeth and selleth all that he hath, and buyeth that field. Again, the kingdom of heaven is like unto a merchant man, seeking goodly pearls: Who, when he had found one pearl of great price, went and sold all that he had, and bought it. Again, the kingdom of heaven is like unto a net, that was cast into the sea, and gathered of every kind: Which, when it was full, they drew to shore, and sat down, and gathered the good into vessels, but cast the bad away. So shall it be at the end of the world: the angels shall come forth, and sever the wicked from among the just, And shall cast them into the furnace of fire: there shall be wailing and gnashing of teeth. Jesus saith unto them, Have ye understood all these things? They say unto him, Yea, Lord. Then said he unto them, Therefore every scribe which is instructed unto the kingdom of heaven is like unto a man that is an householder, which bringeth forth out of his treasure things new and old."
       }
      ]
     },
@@ -699,14 +738,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated T"
+      }
+     ],
+     "art": "adv-initial-T2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "T",
-       "mark": "dropcap"
-      },
-      {
-       "t": "he people that walked in darkness have seen a great light: they that dwell in the land of the shadow of death, upon them hath the light shined. Thou hast multiplied the nation, and not increased the joy: they joy before thee according to the joy in harvest, and as men rejoice when they divide the spoil. For thou hast broken the yoke of his burden, and the staff of his shoulder, the rod of his oppressor, as in the day of Midian. For every battle of the warrior is with confused noise, and garments rolled in blood; but this shall be with burning and fuel of fire. For unto us a child is born, unto us a son is given: and the government shall be upon his shoulder: and his name shall be called Wonderful, Counsellor, The mighty God, The everlasting Father, The Prince of Peace. Of the increase of his government and peace there shall be no end, upon the throne of David, and upon his kingdom, to order it, and to establish it with judgment and with justice from henceforth even forever. The zeal of the LORD of hosts will perform this."
+       "t": "The people that walked in darkness have seen a great light: they that dwell in the land of the shadow of death, upon them hath the light shined. Thou hast multiplied the nation, and not increased the joy: they joy before thee according to the joy in harvest, and as men rejoice when they divide the spoil. For thou hast broken the yoke of his burden, and the staff of his shoulder, the rod of his oppressor, as in the day of Midian. For every battle of the warrior is with confused noise, and garments rolled in blood; but this shall be with burning and fuel of fire. For unto us a child is born, unto us a son is given: and the government shall be upon his shoulder: and his name shall be called Wonderful, Counsellor, The mighty God, The everlasting Father, The Prince of Peace. Of the increase of his government and peace there shall be no end, upon the throne of David, and upon his kingdom, to order it, and to establish it with judgment and with justice from henceforth even forever. The zeal of the LORD of hosts will perform this."
       }
      ]
     },
@@ -777,14 +821,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd there shall come forth a rod out of the stem of Jesse, and a Branch shall grow out of his roots: And the spirit of the Lord shall rest upon him, the spirit of wisdom and understanding, the spirit of counsel and might, the spirit of knowledge and of the fear of the Lord; And shall make him of quick understanding in the fear of the Lord: and he shall not judge after the sight of his eyes, neither reprove after the hearing of his ears: But with righteousness shall he judge the poor, and reprove with equity for the meek of the earth: and he shall smite the earth: with the rod of his mouth, and with the breath of his lips shall he slay the wicked. And righteousness shall be the girdle of his loins, and faithfulness the girdle of his reins. The wolf also shall dwell with the lamb, and the leopard shall lie down with the kid; and the calf and the young lion and the fatling together; and a little child shall lead them. And the cow and the bear shall feed; their young ones shall lie down together: and the lion shall eat straw like the ox. And the sucking child shall play on the hole of the asp, and the weaned child shall put his hand on the cockatrice’ den. They shall not hurt nor destroy in all my holy mountain: for the earth shall be full of the knowledge of the Lord, as the waters cover the sea. And in that day there shall be a root of Jesse, which shall stand for an ensign of the people; to it shall the Gentiles seek: and his rest shall be glorious. And it shall come to pass in that day, that the Lord shall set his hand again the second time to recover the remnant of his people, which shall be left, from Assyria, and from Egypt, and from Pathros, and from Cush, and from Elam, and from Shinar, and from Hamath, and from the islands of the sea. And he shall set up an ensign for the nations, and shall assemble the outcasts of Israel, and gather together the dispersed of Judah from the four corners of the earth. The envy also of Ephraim shall depart, and the adversaries of Judah shall be cut off: Ephraim shall not envy Judah, and Judah shall not vex Ephraim."
+       "t": "And there shall come forth a rod out of the stem of Jesse, and a Branch shall grow out of his roots: And the spirit of the Lord shall rest upon him, the spirit of wisdom and understanding, the spirit of counsel and might, the spirit of knowledge and of the fear of the Lord; And shall make him of quick understanding in the fear of the Lord: and he shall not judge after the sight of his eyes, neither reprove after the hearing of his ears: But with righteousness shall he judge the poor, and reprove with equity for the meek of the earth: and he shall smite the earth: with the rod of his mouth, and with the breath of his lips shall he slay the wicked. And righteousness shall be the girdle of his loins, and faithfulness the girdle of his reins. The wolf also shall dwell with the lamb, and the leopard shall lie down with the kid; and the calf and the young lion and the fatling together; and a little child shall lead them. And the cow and the bear shall feed; their young ones shall lie down together: and the lion shall eat straw like the ox. And the sucking child shall play on the hole of the asp, and the weaned child shall put his hand on the cockatrice’ den. They shall not hurt nor destroy in all my holy mountain: for the earth shall be full of the knowledge of the Lord, as the waters cover the sea. And in that day there shall be a root of Jesse, which shall stand for an ensign of the people; to it shall the Gentiles seek: and his rest shall be glorious. And it shall come to pass in that day, that the Lord shall set his hand again the second time to recover the remnant of his people, which shall be left, from Assyria, and from Egypt, and from Pathros, and from Cush, and from Elam, and from Shinar, and from Hamath, and from the islands of the sea. And he shall set up an ensign for the nations, and shall assemble the outcasts of Israel, and gather together the dispersed of Judah from the four corners of the earth. The envy also of Ephraim shall depart, and the adversaries of Judah shall be cut off: Ephraim shall not envy Judah, and Judah shall not vex Ephraim."
       }
      ]
     },
@@ -847,14 +896,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated T"
+      }
+     ],
+     "art": "adv-initial-T.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "T",
-       "mark": "dropcap"
-      },
-      {
-       "t": "he beginning of the gospel of Jesus Christ, the Son of God; As it is written in the prophets, Behold, I send my messenger before thy face, which shall prepare thy way before thee. The voice of one crying in the wilderness, Prepare ye the way of the Lord, make his paths straight. John did baptize in the wilderness, and preach the baptism of repentance for the remission of sins. And there went out unto him all the land of Judaea, and they of Jerusalem, and were all baptized of him in the river of Jordan, confessing their sins. And John was clothed with camel’s hair, and with a girdle of a skin about his loins; and he did eat locusts and wild honey; And preached, saying, There cometh one mightier than I after me, the latchet of whose shoes I am not worthy to stoop down and unloose. I indeed have baptized you with water: but he shall baptize you with the Holy Ghost. And it came to pass in those days, that Jesus came from Nazareth of Galilee, and was baptized of John in Jordan. And straightway coming up out of the water, he saw the heavens opened, and the Spirit like a dove descending upon him: And there came a voice from heaven, saying, Thou art my beloved Son, in whom I am well pleased. And immediately the Spirit driveth him into the wilderness. And he was there in the wilderness forty days, tempted of Satan; and was with the wild beasts; and the angels ministered unto him. Now after that John was put in prison, Jesus came into Galilee, preaching the gospel of the kingdom of God, And saying, The time is fulfilled, and the kingdom of God is at hand: repent ye, and believe the gospel."
+       "t": "The beginning of the gospel of Jesus Christ, the Son of God; As it is written in the prophets, Behold, I send my messenger before thy face, which shall prepare thy way before thee. The voice of one crying in the wilderness, Prepare ye the way of the Lord, make his paths straight. John did baptize in the wilderness, and preach the baptism of repentance for the remission of sins. And there went out unto him all the land of Judaea, and they of Jerusalem, and were all baptized of him in the river of Jordan, confessing their sins. And John was clothed with camel’s hair, and with a girdle of a skin about his loins; and he did eat locusts and wild honey; And preached, saying, There cometh one mightier than I after me, the latchet of whose shoes I am not worthy to stoop down and unloose. I indeed have baptized you with water: but he shall baptize you with the Holy Ghost. And it came to pass in those days, that Jesus came from Nazareth of Galilee, and was baptized of John in Jordan. And straightway coming up out of the water, he saw the heavens opened, and the Spirit like a dove descending upon him: And there came a voice from heaven, saying, Thou art my beloved Son, in whom I am well pleased. And immediately the Spirit driveth him into the wilderness. And he was there in the wilderness forty days, tempted of Satan; and was with the wild beasts; and the angels ministered unto him. Now after that John was put in prison, Jesus came into Galilee, preaching the gospel of the kingdom of God, And saying, The time is fulfilled, and the kingdom of God is at hand: repent ye, and believe the gospel."
       }
      ]
     },
@@ -917,14 +971,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated N"
+      }
+     ],
+     "art": "adv-initial-N.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "N",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ow we beseech you, brethren, by the coming of our Lord Jesus Christ, and by our gathering together unto him, That ye be not soon shaken in mind, or be troubled, neither by spirit, nor by word, nor by letter as from us, as that the day of Christ is at hand. Let no man deceive you by any means: for that day shall not come, except there come a falling away first, and that man of sin be revealed, the son of perdition; Who opposeth and exalteth himself above all that is called God, or that is worshipped; so that he as God sitteth in the temple of God, shewing himself that he is God. Remember ye not, that, when I was yet with you, I told you these things? And now ye know what withholdeth that he might be revealed in his time. For the mystery of iniquity doth already work: only he who now letteth will let, until he be taken out of the way. And then shall that Wicked be revealed, whom the Lord shall consume with the spirit of his mouth, and shall destroy with the brightness of his coming… Whereunto he called you by our gospel, to the obtaining of the glory of our Lord Jesus Christ. Therefore, brethren, stand fast, and hold the traditions which ye have been taught, whether by word, or our epistle. Now our Lord Jesus Christ himself, and God, even our Father, which hath loved us, and hath given us everlasting consolation and good hope through grace, Comfort your hearts, and stablish you in every good word and work."
+       "t": "Now we beseech you, brethren, by the coming of our Lord Jesus Christ, and by our gathering together unto him, That ye be not soon shaken in mind, or be troubled, neither by spirit, nor by word, nor by letter as from us, as that the day of Christ is at hand. Let no man deceive you by any means: for that day shall not come, except there come a falling away first, and that man of sin be revealed, the son of perdition; Who opposeth and exalteth himself above all that is called God, or that is worshipped; so that he as God sitteth in the temple of God, shewing himself that he is God. Remember ye not, that, when I was yet with you, I told you these things? And now ye know what withholdeth that he might be revealed in his time. For the mystery of iniquity doth already work: only he who now letteth will let, until he be taken out of the way. And then shall that Wicked be revealed, whom the Lord shall consume with the spirit of his mouth, and shall destroy with the brightness of his coming… Whereunto he called you by our gospel, to the obtaining of the glory of our Lord Jesus Christ. Therefore, brethren, stand fast, and hold the traditions which ye have been taught, whether by word, or our epistle. Now our Lord Jesus Christ himself, and God, even our Father, which hath loved us, and hath given us everlasting consolation and good hope through grace, Comfort your hearts, and stablish you in every good word and work."
       }
      ]
     },
@@ -995,14 +1054,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd there shall be signs in the sun, and in the moon, and in the stars; and upon the earth distress of nations, with perplexity; the sea and the waves roaring; Men’s hearts failing them for fear, and for looking after those things which are coming on the earth: for the powers of heaven shall be shaken. And then shall they see the Son of man coming in a cloud with power and great glory. And when these things begin to come to pass, then look up, and lift up your heads; for your redemption draweth nigh. And he spake to them a parable; Behold the fig tree, and all the trees; When they now shoot forth, ye see and know of your own selves that summer is now nigh at hand. So likewise ye, when ye see these things come to pass, know ye that the kingdom of God is nigh at hand. Verily I say unto you, This generation shall not pass away, till all be fulfilled. Heaven and earth shall pass away: but my words shall not pass away."
+       "t": "And there shall be signs in the sun, and in the moon, and in the stars; and upon the earth distress of nations, with perplexity; the sea and the waves roaring; Men’s hearts failing them for fear, and for looking after those things which are coming on the earth: for the powers of heaven shall be shaken. And then shall they see the Son of man coming in a cloud with power and great glory. And when these things begin to come to pass, then look up, and lift up your heads; for your redemption draweth nigh. And he spake to them a parable; Behold the fig tree, and all the trees; When they now shoot forth, ye see and know of your own selves that summer is now nigh at hand. So likewise ye, when ye see these things come to pass, know ye that the kingdom of God is nigh at hand. Verily I say unto you, This generation shall not pass away, till all be fulfilled. Heaven and earth shall pass away: but my words shall not pass away."
       }
      ]
     },
@@ -1065,14 +1129,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated T"
+      }
+     ],
+     "art": "adv-initial-T2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "T",
-       "mark": "dropcap"
-      },
-      {
-       "t": "he burden of Babylon, which Isaiah the son of Amoz did see. Lift ye up a banner upon the high mountain, exalt the voice unto them, shake the hand, that they may go into the gates of the nobles. I have commanded my sanctified ones, I have also called my mighty ones for mine anger, even them that rejoice in my highness. The noise of a multitude in the mountains, like as of a great people; a tumultuous noise of the kingdoms of nations gathered together: the Lord of hosts mustereth the host of the battle. They come from a far country, from the end of heaven, even the Lord, and the weapons of his indignation, to destroy the whole land. Howl ye; for the day of the Lord is at hand; it shall come as a destruction from the Almighty. Therefore shall all hands be faint, and every man’s heart shall melt: And they shall be afraid: pangs and sorrows shall take hold of them; they shall be in pain as a woman that travaileth: they shall be amazed one at another; their faces shall be as flames. Behold, the day of the Lord cometh, cruel both with wrath and fierce anger, to lay the land desolate: and he shall destroy the sinners thereof out of it. For the stars of heaven and the constellations thereof shall not give their light: the sun shall be darkened in his going forth, and the moon shall not cause her light to shine. And I will punish the world for their evil, and the wicked for their iniquity; and I will cause the arrogancy of the proud to cease, and will lay low the haughtiness of the terrible."
+       "t": "The burden of Babylon, which Isaiah the son of Amoz did see. Lift ye up a banner upon the high mountain, exalt the voice unto them, shake the hand, that they may go into the gates of the nobles. I have commanded my sanctified ones, I have also called my mighty ones for mine anger, even them that rejoice in my highness. The noise of a multitude in the mountains, like as of a great people; a tumultuous noise of the kingdoms of nations gathered together: the Lord of hosts mustereth the host of the battle. They come from a far country, from the end of heaven, even the Lord, and the weapons of his indignation, to destroy the whole land. Howl ye; for the day of the Lord is at hand; it shall come as a destruction from the Almighty. Therefore shall all hands be faint, and every man’s heart shall melt: And they shall be afraid: pangs and sorrows shall take hold of them; they shall be in pain as a woman that travaileth: they shall be amazed one at another; their faces shall be as flames. Behold, the day of the Lord cometh, cruel both with wrath and fierce anger, to lay the land desolate: and he shall destroy the sinners thereof out of it. For the stars of heaven and the constellations thereof shall not give their light: the sun shall be darkened in his going forth, and the moon shall not cause her light to shine. And I will punish the world for their evil, and the wicked for their iniquity; and I will cause the arrogancy of the proud to cease, and will lay low the haughtiness of the terrible."
       }
      ]
     },
@@ -1143,14 +1212,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated O"
+      }
+     ],
+     "art": "adv-initial-O.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "O",
-       "mark": "dropcap"
-      },
-      {
-       "t": " Lord my God, Thou has exalted my dwelling place upon the earth, and I have prayed for death to pass away. I called upon the Lord, the Father of my Lord, that He would not leave me in the day of my trouble, and in the time of the proud without help. I will praise Thy name continually, and will praise it with thanksgiving, and my prayer was heard. And Thou hast saved me from destruction, and hast delivered me from the evil time. Therefore I will give thanks and praise to Thee, O Lord our God."
+       "t": "O Lord my God, Thou has exalted my dwelling place upon the earth, and I have prayed for death to pass away. I called upon the Lord, the Father of my Lord, that He would not leave me in the day of my trouble, and in the time of the proud without help. I will praise Thy name continually, and will praise it with thanksgiving, and my prayer was heard. And Thou hast saved me from destruction, and hast delivered me from the evil time. Therefore I will give thanks and praise to Thee, O Lord our God."
       }
      ]
     },
@@ -1221,14 +1295,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated T"
+      }
+     ],
+     "art": "adv-initial-T.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "T",
-       "mark": "dropcap"
-      },
-      {
-       "t": "he wilderness and the solitary place shall be glad for them; and the desert shall rejoice, and blossom as the rose. It shall blossom abundantly, and rejoice even with joy and singing: the glory of Lebanon shall be given unto it, the excellency of Carmel and Sharon, they shall see the glory of the LORD, and the excellency of our God. Strengthen ye the weak hands, and confirm the feeble knees. Say to them that are of a fearful heart, Be strong, fear not: behold, your God will come with vengeance, even God with a recompense; he will come and save you. Then the eyes of the blind shall be opened, and the ears of the deaf shall be unstopped. Then shall the lame man leap as an hart, and the tongue of the dumb sing: for in the wilderness shall waters break out, and streams in the desert."
+       "t": "The wilderness and the solitary place shall be glad for them; and the desert shall rejoice, and blossom as the rose. It shall blossom abundantly, and rejoice even with joy and singing: the glory of Lebanon shall be given unto it, the excellency of Carmel and Sharon, they shall see the glory of the LORD, and the excellency of our God. Strengthen ye the weak hands, and confirm the feeble knees. Say to them that are of a fearful heart, Be strong, fear not: behold, your God will come with vengeance, even God with a recompense; he will come and save you. Then the eyes of the blind shall be opened, and the ears of the deaf shall be unstopped. Then shall the lame man leap as an hart, and the tongue of the dumb sing: for in the wilderness shall waters break out, and streams in the desert."
       }
      ]
     },
@@ -1299,14 +1378,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated C"
+      }
+     ],
+     "art": "adv-initial-C.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "C",
-       "mark": "dropcap"
-      },
-      {
-       "t": "omfort ye, comfort ye my people, saith your God. Speak ye comfortably to Jerusalem, and cry unto her, that her warfare is accomplished, that her iniquity is pardoned: for she hath received of the Lord’s hand double for all her sins. The voice of him that crieth in the wilderness, Prepare ye the way of the LORD, make straight in the desert a highway for our God. Every valley shall be exalted, and every mountain and hill shall be made low: and the crooked shall be made straight, and the rough places plain: And the glory of the LORD shall be revealed, and all flesh shall see it together: for the mouth of the LORD hath spoken it. The voice said, Cry. And he said, What shall I cry? All flesh is grass, and all the goodliness thereof is as the flower of the field: The grass withereth, the flower fadeth: because the spirit of the LORD bloweth upon it: surely the people is grass. The grass withereth, the flower fadeth: but the word of our God shall stand for ever."
+       "t": "Comfort ye, comfort ye my people, saith your God. Speak ye comfortably to Jerusalem, and cry unto her, that her warfare is accomplished, that her iniquity is pardoned: for she hath received of the Lord’s hand double for all her sins. The voice of him that crieth in the wilderness, Prepare ye the way of the LORD, make straight in the desert a highway for our God. Every valley shall be exalted, and every mountain and hill shall be made low: and the crooked shall be made straight, and the rough places plain: And the glory of the LORD shall be revealed, and all flesh shall see it together: for the mouth of the LORD hath spoken it. The voice said, Cry. And he said, What shall I cry? All flesh is grass, and all the goodliness thereof is as the flower of the field: The grass withereth, the flower fadeth: because the spirit of the LORD bloweth upon it: surely the people is grass. The grass withereth, the flower fadeth: but the word of our God shall stand for ever."
       }
      ]
     },
@@ -1369,14 +1453,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated N"
+      }
+     ],
+     "art": "adv-initial-N2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "N",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ow when John had heard in the prison the works of Christ, he sent two of his disciples, And said unto him, Art thou he that should come, or do we look for another? Jesus answered and said unto them, Go and shew John again those things which ye do hear and see: The blind receive their sight, and the lame walk, the lepers are cleansed, and the deaf hear, the dead are raised up, and the poor have the gospel preached to them. And blessed is he, whosoever shall not be offended in me. And as they departed, Jesus began to say unto the multitudes concerning John, What went ye out into the wilderness to see? A reed shaken with the wind? But what went ye out for to see? A man clothed in soft raiment? behold, they that wear soft clothing are in kings’ houses. But what went ye out for to see? A prophet? yea, I say unto you, and more than a prophet. For this is he, of whom it is written, Behold, I send my messenger before thy face, which shall prepare thy way before thee."
+       "t": "Now when John had heard in the prison the works of Christ, he sent two of his disciples, And said unto him, Art thou he that should come, or do we look for another? Jesus answered and said unto them, Go and shew John again those things which ye do hear and see: The blind receive their sight, and the lame walk, the lepers are cleansed, and the deaf hear, the dead are raised up, and the poor have the gospel preached to them. And blessed is he, whosoever shall not be offended in me. And as they departed, Jesus began to say unto the multitudes concerning John, What went ye out into the wilderness to see? A reed shaken with the wind? But what went ye out for to see? A man clothed in soft raiment? behold, they that wear soft clothing are in kings’ houses. But what went ye out for to see? A prophet? yea, I say unto you, and more than a prophet. For this is he, of whom it is written, Behold, I send my messenger before thy face, which shall prepare thy way before thee."
       }
      ]
     },
@@ -1439,14 +1528,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd this is the record of John, when the Jews sent priests and Levites from Jerusalem to ask him, Who art thou? And he confessed, and denied not; but confessed, I am not the Christ. And they asked him, What then? Art thou Elijah? And he saith, I am not. Art thou that prophet? And he answered, No. Then said they unto him, Who art thou? that we may give an answer to them that sent us. What sayest thou of thyself? He said, I am the voice of one crying in the wilderness, Make straight the way of the Lord, as said the prophet Isaiah. And they which were sent were of the Pharisees. And they asked him, and said unto him, Why baptizest thou then, if thou be not that Christ, nor Elijah, neither that prophet? John answered them, saying, I baptize with water: but there standeth one among you, whom ye know not; He it is, who coming after me is preferred before me, whose shoe’s latchet I am not worthy to unloose. These things were done in Bethabara beyond Jordan, where John was baptizing."
+       "t": "And this is the record of John, when the Jews sent priests and Levites from Jerusalem to ask him, Who art thou? And he confessed, and denied not; but confessed, I am not the Christ. And they asked him, What then? Art thou Elijah? And he saith, I am not. Art thou that prophet? And he answered, No. Then said they unto him, Who art thou? that we may give an answer to them that sent us. What sayest thou of thyself? He said, I am the voice of one crying in the wilderness, Make straight the way of the Lord, as said the prophet Isaiah. And they which were sent were of the Pharisees. And they asked him, and said unto him, Why baptizest thou then, if thou be not that Christ, nor Elijah, neither that prophet? John answered them, saying, I baptize with water: but there standeth one among you, whom ye know not; He it is, who coming after me is preferred before me, whose shoe’s latchet I am not worthy to unloose. These things were done in Bethabara beyond Jordan, where John was baptizing."
       }
      ]
     },
@@ -1517,14 +1611,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated N"
+      }
+     ],
+     "art": "adv-initial-N.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "N",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ow in the fifteenth year of the reign of Tiberius Caesar, Pontius Pilate being governor of Judæa, and Herod being tetrarch of Galilee, and his brother Philip tetrarch of Ituraea and of the region of Trachonitis, and Lysanias the tetrarch of Abilene, Annas and Caiaphas being the high priests, the word of God came unto John the son of Zacharias in the wilderness. And he came into all the country about Jordan, preaching the baptism of repentance for the remission of sins; As it is written in the book of the words of Esaias the prophet, saying, The voice of one crying in the wilderness, Prepare ye the way of the Lord, make his paths straight. Every valley shall be filled, and every mountain and hill shall be brought low; and the crooked shall be made straight, and the rough ways shall be made smooth; And all flesh shall see the salvation of God."
+       "t": "Now in the fifteenth year of the reign of Tiberius Caesar, Pontius Pilate being governor of Judæa, and Herod being tetrarch of Galilee, and his brother Philip tetrarch of Ituraea and of the region of Trachonitis, and Lysanias the tetrarch of Abilene, Annas and Caiaphas being the high priests, the word of God came unto John the son of Zacharias in the wilderness. And he came into all the country about Jordan, preaching the baptism of repentance for the remission of sins; As it is written in the book of the words of Esaias the prophet, saying, The voice of one crying in the wilderness, Prepare ye the way of the Lord, make his paths straight. Every valley shall be filled, and every mountain and hill shall be brought low; and the crooked shall be made straight, and the rough ways shall be made smooth; And all flesh shall see the salvation of God."
       }
      ]
     },
@@ -1587,14 +1686,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated F"
+      }
+     ],
+     "art": "adv-initial-F.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "F",
-       "mark": "dropcap"
-      },
-      {
-       "t": "or, behold, the Lord, the Lord of hosts, doth take away from Jerusalem and from Judah the stay and the staff, the whole stay of bread, and the whole stay of water. The mighty man, and the man of war, the judge, and the prophet, and the prudent, and the ancient, The captain of fifty, and the honourable man, and the counsellor, and the cunning artificer, and the eloquent orator. And I will give children to be their princes, and babes shall rule over them. And the people shall be oppressed, every one by another, and every one by his neighbour: the child shall behave himself proudly against the ancient, and the base against the honourable. When a man shall take hold of his brother of the house of his father, saying, Thou hast clothing, be thou our ruler, and let this ruin be under thy hand: In that day shall he swear, saying, I will not be an healer; for in my house is neither bread nor clothing: make me not a ruler of the people. For Jerusalem is ruined, and Judah is fallen: because their tongue and their doings are against the Lord, to provoke the eyes of his glory. The shew of their countenance doth witness against them; and they declare their sin as Sodom, they hide it not. Woe unto their soul! for they have rewarded evil unto themselves. Say ye to the righteous, that it shall be well with him: for they shall eat the fruit of their doings. Woe unto the wicked! it shall be ill with him: for the reward of his hands shall be given him."
+       "t": "For, behold, the Lord, the Lord of hosts, doth take away from Jerusalem and from Judah the stay and the staff, the whole stay of bread, and the whole stay of water. The mighty man, and the man of war, the judge, and the prophet, and the prudent, and the ancient, The captain of fifty, and the honourable man, and the counsellor, and the cunning artificer, and the eloquent orator. And I will give children to be their princes, and babes shall rule over them. And the people shall be oppressed, every one by another, and every one by his neighbour: the child shall behave himself proudly against the ancient, and the base against the honourable. When a man shall take hold of his brother of the house of his father, saying, Thou hast clothing, be thou our ruler, and let this ruin be under thy hand: In that day shall he swear, saying, I will not be an healer; for in my house is neither bread nor clothing: make me not a ruler of the people. For Jerusalem is ruined, and Judah is fallen: because their tongue and their doings are against the Lord, to provoke the eyes of his glory. The shew of their countenance doth witness against them; and they declare their sin as Sodom, they hide it not. Woe unto their soul! for they have rewarded evil unto themselves. Say ye to the righteous, that it shall be well with him: for they shall eat the fruit of their doings. Woe unto the wicked! it shall be ill with him: for the reward of his hands shall be given him."
       }
      ]
     },
@@ -1665,14 +1769,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated Y"
+      }
+     ],
+     "art": "adv-initial-Y.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "Y",
-       "mark": "dropcap"
-      },
-      {
-       "t": "e are the salt of the earth: but if the salt have lost his savour, wherewith shall it be salted? it is thenceforth good for nothing, but to be cast out, and to be trodden under foot of men. Ye are the light of the world. A city that is set on an hill cannot be hid. Neither do men light a candle, and put it under a bushel, but on a candlestick; and it giveth light unto all that are in the house. Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven. Think not that I am come to destroy the law, or the prophets: I am not come to destroy, but to fulfil. For verily I say unto you, Till heaven and earth pass, one jot or one tittle shall in no wise pass from the law, till all be fulfilled. Whosoever therefore shall break one of these least commandments, and shall teach men so, he shall be called the least in the kingdom of heaven: but whosoever shall do and teach them, the same shall be called great in the kingdom of heaven."
+       "t": "Ye are the salt of the earth: but if the salt have lost his savour, wherewith shall it be salted? it is thenceforth good for nothing, but to be cast out, and to be trodden under foot of men. Ye are the light of the world. A city that is set on an hill cannot be hid. Neither do men light a candle, and put it under a bushel, but on a candlestick; and it giveth light unto all that are in the house. Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven. Think not that I am come to destroy the law, or the prophets: I am not come to destroy, but to fulfil. For verily I say unto you, Till heaven and earth pass, one jot or one tittle shall in no wise pass from the law, till all be fulfilled. Whosoever therefore shall break one of these least commandments, and shall teach men so, he shall be called the least in the kingdom of heaven: but whosoever shall do and teach them, the same shall be called great in the kingdom of heaven."
       }
      ]
     },
@@ -1735,14 +1844,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd in the sixth month the angel Gabriel was sent from God unto a city of Galilee, named Nazareth, To a virgin espoused to a man whose name was Joseph, of the house of David; and the virgin’s name was Mary. And the angel came in unto her, and said, Hail, thou that art highly favoured, the Lord is with thee: blessed art thou among women. And when she saw him, she was troubled at his saying, and cast in her mind what manner of salutation this should be. And the angel said unto her, Fear not, Mary: for thou hast found favour with God. And, behold, thou shalt conceive in thy womb, and bring forth a son, and shalt call his name JESUS. He shall be great, and shall be called the Son of the Highest: and the Lord God shall give unto him the throne of his father David: And he shall reign over the house of Jacob forever; and of his kingdom there shall be no end. Then said Mary unto the angel, How shall this be, seeing I know not a man? And the angel answered and said unto her, The Holy Ghost shall come upon thee, and the power of the Highest shall overshadow thee: therefore also that holy thing which shall be born of thee shall be called the Son of God. And Mary said, Behold the handmaid of the Lord; be it unto me according to thy word. And the angel departed from her."
+       "t": "And in the sixth month the angel Gabriel was sent from God unto a city of Galilee, named Nazareth, To a virgin espoused to a man whose name was Joseph, of the house of David; and the virgin’s name was Mary. And the angel came in unto her, and said, Hail, thou that art highly favoured, the Lord is with thee: blessed art thou among women. And when she saw him, she was troubled at his saying, and cast in her mind what manner of salutation this should be. And the angel said unto her, Fear not, Mary: for thou hast found favour with God. And, behold, thou shalt conceive in thy womb, and bring forth a son, and shalt call his name JESUS. He shall be great, and shall be called the Son of the Highest: and the Lord God shall give unto him the throne of his father David: And he shall reign over the house of Jacob forever; and of his kingdom there shall be no end. Then said Mary unto the angel, How shall this be, seeing I know not a man? And the angel answered and said unto her, The Holy Ghost shall come upon thee, and the power of the Highest shall overshadow thee: therefore also that holy thing which shall be born of thee shall be called the Son of God. And Mary said, Behold the handmaid of the Lord; be it unto me according to thy word. And the angel departed from her."
       }
      ]
     },
@@ -1813,14 +1927,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd Mary arose in those days, and went into the hill country with haste, into a city of Juda; And entered into the house of Zacharias, and saluted Elisabeth. And it came to pass, that, when Elisabeth heard the salutation of Mary, the babe leaped in her womb; and Elisabeth was filled with the Holy Ghost: And she spake out with a loud voice, and said, Blessed art thou among women, and blessed is the fruit of thy womb. And whence is this to me, that the mother of my Lord should come to me? For, lo, as soon as the voice of thy salutation sounded in mine ears, the babe leaped in my womb for joy. And blessed is she that believed: for there shall be a performance of those things which were told her from the Lord. And Mary said, My soul doth magnify the Lord, And my spirit hath rejoiced in God my Savior."
+       "t": "And Mary arose in those days, and went into the hill country with haste, into a city of Juda; And entered into the house of Zacharias, and saluted Elisabeth. And it came to pass, that, when Elisabeth heard the salutation of Mary, the babe leaped in her womb; and Elisabeth was filled with the Holy Ghost: And she spake out with a loud voice, and said, Blessed art thou among women, and blessed is the fruit of thy womb. And whence is this to me, that the mother of my Lord should come to me? For, lo, as soon as the voice of thy salutation sounded in mine ears, the babe leaped in my womb for joy. And blessed is she that believed: for there shall be a performance of those things which were told her from the Lord. And Mary said, My soul doth magnify the Lord, And my spirit hath rejoiced in God my Savior."
       }
      ]
     },
@@ -1898,14 +2017,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd in that day seven women shall take hold of one man, saying, We will eat our own bread, and wear our own apparel: only let us be called by thy name, to take away our reproach. In that day shall the branch of the Lord be beautiful and glorious, and the fruit of the earth shall be excellent and comely for them that are escaped of Israel. And it shall come to pass, that he that is left in Zion, and he that remaineth in Jerusalem, shall be called holy, even every one that is written among the living in Jerusalem: When the Lord shall have washed away the filth of the daughters of Zion, and shall have purged the blood of Jerusalem from the midst thereof by the spirit of judgment, and by the spirit of burning. And the Lord will create upon every dwelling place of mount Zion, and upon her assemblies, a cloud and smoke by day, and the shining of a flaming fire by night: for upon all the glory shall be a defence. And there shall be a tabernacle for a shadow in the day time from the heat, and for a place of refuge, and for a covert from storm and from rain."
+       "t": "And in that day seven women shall take hold of one man, saying, We will eat our own bread, and wear our own apparel: only let us be called by thy name, to take away our reproach. In that day shall the branch of the Lord be beautiful and glorious, and the fruit of the earth shall be excellent and comely for them that are escaped of Israel. And it shall come to pass, that he that is left in Zion, and he that remaineth in Jerusalem, shall be called holy, even every one that is written among the living in Jerusalem: When the Lord shall have washed away the filth of the daughters of Zion, and shall have purged the blood of Jerusalem from the midst thereof by the spirit of judgment, and by the spirit of burning. And the Lord will create upon every dwelling place of mount Zion, and upon her assemblies, a cloud and smoke by day, and the shining of a flaming fire by night: for upon all the glory shall be a defence. And there shall be a tabernacle for a shadow in the day time from the heat, and for a place of refuge, and for a covert from storm and from rain."
       }
      ]
     },
@@ -1976,14 +2100,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated N"
+      }
+     ],
+     "art": "adv-initial-N.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "N",
-       "mark": "dropcap"
-      },
-      {
-       "t": "ow will I sing to my well beloved a song of my beloved touching his vineyard. My well beloved hath a vineyard in a very fruitful hill: And he fenced it, and gathered out the stones thereof, and planted it with the choicest vine, and built a tower in the midst of it, and also made a winepress therein: and he looked that it should bring forth grapes, and it brought forth wild grapes. And now, O inhabitants of Jerusalem, and men of Judah, judge, I pray you, betwixt me and my vineyard. What could have been done more to my vineyard, that I have not done in it? wherefore, when I looked that it should bring forth grapes, brought it forth wild grapes? And now go to; I will tell you what I will do to my vineyard: I will take away the hedge thereof, and it shall be eaten up; and break down the wall thereof, and it shall be trodden down: And I will lay it waste: it shall not be pruned, nor digged; but there shall come up briers and thorns: I will also command the clouds that they rain no rain upon it. For the vineyard of the Lord of hosts is the house of Israel, and the men of Judah his pleasant plant: and he looked for judgment, but behold oppression; for righteousness, but behold a cry."
+       "t": "Now will I sing to my well beloved a song of my beloved touching his vineyard. My well beloved hath a vineyard in a very fruitful hill: And he fenced it, and gathered out the stones thereof, and planted it with the choicest vine, and built a tower in the midst of it, and also made a winepress therein: and he looked that it should bring forth grapes, and it brought forth wild grapes. And now, O inhabitants of Jerusalem, and men of Judah, judge, I pray you, betwixt me and my vineyard. What could have been done more to my vineyard, that I have not done in it? wherefore, when I looked that it should bring forth grapes, brought it forth wild grapes? And now go to; I will tell you what I will do to my vineyard: I will take away the hedge thereof, and it shall be eaten up; and break down the wall thereof, and it shall be trodden down: And I will lay it waste: it shall not be pruned, nor digged; but there shall come up briers and thorns: I will also command the clouds that they rain no rain upon it. For the vineyard of the Lord of hosts is the house of Israel, and the men of Judah his pleasant plant: and he looked for judgment, but behold oppression; for righteousness, but behold a cry."
       }
      ]
     },
@@ -2046,14 +2175,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated I"
+      }
+     ],
+     "art": "adv-initial-I.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "I",
-       "mark": "dropcap"
-      },
-      {
-       "t": "n the year that king Uzziah died I saw also the Lord sitting upon a throne, high and lifted up, and his train filled the temple. Above it stood the seraphims: each one had six wings; with twain he covered his face, and with twain he covered his feet, and with twain he did fly. And one cried unto another, and said, Holy, holy, holy, is the Lord of hosts: the whole earth is full of his glory. And the posts of the door moved at the voice of him that cried, and the house was filled with smoke. Then said I, Woe is me! for I am undone; because I am a man of unclean lips, and I dwell in the midst of a people of unclean lips: for mine eyes have seen the King, the Lord of hosts. Then flew one of the seraphims unto me, having a live coal in his hand, which he had taken with the tongs from off the altar: And he laid it upon my mouth, and said, Lo, this hath touched thy lips; and thine iniquity is taken away, and thy sin purged. Also I heard the voice of the Lord, saying, Whom shall I send, and who will go for us? Then said I, Here am I; send me. And he said, Go, and tell this people, Hear ye indeed, but understand not; and see ye indeed, but perceive not. Make the heart of this people fat, and make their ears heavy, and shut their eyes; lest they see with their eyes, and hear with their ears, and understand with their heart, and convert, and be healed."
+       "t": "In the year that king Uzziah died I saw also the Lord sitting upon a throne, high and lifted up, and his train filled the temple. Above it stood the seraphims: each one had six wings; with twain he covered his face, and with twain he covered his feet, and with twain he did fly. And one cried unto another, and said, Holy, holy, holy, is the Lord of hosts: the whole earth is full of his glory. And the posts of the door moved at the voice of him that cried, and the house was filled with smoke. Then said I, Woe is me! for I am undone; because I am a man of unclean lips, and I dwell in the midst of a people of unclean lips: for mine eyes have seen the King, the Lord of hosts. Then flew one of the seraphims unto me, having a live coal in his hand, which he had taken with the tongs from off the altar: And he laid it upon my mouth, and said, Lo, this hath touched thy lips; and thine iniquity is taken away, and thy sin purged. Also I heard the voice of the Lord, saying, Whom shall I send, and who will go for us? Then said I, Here am I; send me. And he said, Go, and tell this people, Hear ye indeed, but understand not; and see ye indeed, but perceive not. Make the heart of this people fat, and make their ears heavy, and shut their eyes; lest they see with their eyes, and hear with their ears, and understand with their heart, and convert, and be healed."
       }
      ]
     },
@@ -2116,14 +2250,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A2.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "nd it came to pass in the days of Ahaz the son of Jotham, the son of Uzziah, king of Judah, that Rezin the king of Syria, and Pekah the son of Remaliah, king of Israel, went up toward Jerusalem to war against it, but could not prevail against it. And it was told the house of David, saying, Syria is confederate with Ephraim. And his heart was moved, and the heart of his people, as the trees of the wood are moved with the wind. Then said the Lord unto Isaiah, Go forth now to meet Ahaz, thou, and Shearjashub thy son, at the end of the conduit of the upper pool in the highway of the fuller’s field; And say unto him, Take heed, and be quiet; fear not, neither be fainthearted for the two tails of these smoking firebrands, for the fierce anger of Rezin with Syria, and of the son of Remaliah. Because Syria, Ephraim, and the son of Remaliah, have taken evil counsel against thee, saying, Let us go up against Judah, and vex it, and let us make a breach therein for us, and set a king in the midst of it, even the son of Tabeal: Thus saith the Lord God, It shall not stand, neither shall it come to pass. … Moreover the Lord spake again unto Ahaz, saying, Ask thee a sign of the Lord thy God; ask it either in the depth, or in the height above. But Ahaz said, I will not ask, neither will I tempt the Lord. And he said, Hear ye now, O house of David; Is it a small thing for you to weary men, but will ye weary my God also? Therefore the Lord himself shall give you a sign; Behold, a virgin shall conceive, and bear a son, and shall call his name Immanuel. Butter and honey shall he eat, that he may know to refuse the evil, and choose the good."
+       "t": "And it came to pass in the days of Ahaz the son of Jotham, the son of Uzziah, king of Judah, that Rezin the king of Syria, and Pekah the son of Remaliah, king of Israel, went up toward Jerusalem to war against it, but could not prevail against it. And it was told the house of David, saying, Syria is confederate with Ephraim. And his heart was moved, and the heart of his people, as the trees of the wood are moved with the wind. Then said the Lord unto Isaiah, Go forth now to meet Ahaz, thou, and Shearjashub thy son, at the end of the conduit of the upper pool in the highway of the fuller’s field; And say unto him, Take heed, and be quiet; fear not, neither be fainthearted for the two tails of these smoking firebrands, for the fierce anger of Rezin with Syria, and of the son of Remaliah. Because Syria, Ephraim, and the son of Remaliah, have taken evil counsel against thee, saying, Let us go up against Judah, and vex it, and let us make a breach therein for us, and set a king in the midst of it, even the son of Tabeal: Thus saith the Lord God, It shall not stand, neither shall it come to pass. … Moreover the Lord spake again unto Ahaz, saying, Ask thee a sign of the Lord thy God; ask it either in the depth, or in the height above. But Ahaz said, I will not ask, neither will I tempt the Lord. And he said, Hear ye now, O house of David; Is it a small thing for you to weary men, but will ye weary my God also? Therefore the Lord himself shall give you a sign; Behold, a virgin shall conceive, and bear a son, and shall call his name Immanuel. Butter and honey shall he eat, that he may know to refuse the evil, and choose the good."
       }
      ]
     },
@@ -2193,14 +2332,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated T"
+      }
+     ],
+     "art": "adv-initial-T.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "T",
-       "mark": "dropcap"
-      },
-      {
-       "t": "he word that Isaiah the son of Amoz saw concerning Judah and Jerusalem. And it shall come to pass in the last days, that the mountain of the Lord’s house shall be established in the top of the mountains, and shall be exalted above the hills; and all nations shall flow unto it. And many people shall go and say, Come ye, and let us go up to the mountain of the Lord, to the house of the God of Jacob; and he will teach us of his ways, and we will walk in his paths: for out of Zion shall go forth the law, and the word of the Lord from Jerusalem. And he shall judge among the nations, and shall rebuke many people: and they shall beat their swords into plowshares, and their spears into pruning hooks: nation shall not lift up sword against nation, neither shall they learn war any more. O house of Jacob, come ye, and let us walk in the light of the Lord. Therefore thou hast forsaken thy people the house of Jacob, because they be replenished from the east, and are soothsayers like the Philistines, and they please themselves in the children of strangers. Their land also is full of silver and gold, neither is there any end of their treasures; their land is also full of horses, neither is there any end of their chariots: Their land also is full of idols; they worship the work of their own hands, that which their own fingers have made: And the mean man boweth down, and the great man humbleth himself: therefore forgive them not."
+       "t": "The word that Isaiah the son of Amoz saw concerning Judah and Jerusalem. And it shall come to pass in the last days, that the mountain of the Lord’s house shall be established in the top of the mountains, and shall be exalted above the hills; and all nations shall flow unto it. And many people shall go and say, Come ye, and let us go up to the mountain of the Lord, to the house of the God of Jacob; and he will teach us of his ways, and we will walk in his paths: for out of Zion shall go forth the law, and the word of the Lord from Jerusalem. And he shall judge among the nations, and shall rebuke many people: and they shall beat their swords into plowshares, and their spears into pruning hooks: nation shall not lift up sword against nation, neither shall they learn war any more. O house of Jacob, come ye, and let us walk in the light of the Lord. Therefore thou hast forsaken thy people the house of Jacob, because they be replenished from the east, and are soothsayers like the Philistines, and they please themselves in the children of strangers. Their land also is full of silver and gold, neither is there any end of their treasures; their land is also full of horses, neither is there any end of their chariots: Their land also is full of idols; they worship the work of their own hands, that which their own fingers have made: And the mean man boweth down, and the great man humbleth himself: therefore forgive them not."
       }
      ]
     },
@@ -2263,14 +2407,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated A"
+      }
+     ],
+     "art": "adv-initial-A.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "A",
-       "mark": "dropcap"
-      },
-      {
-       "t": "t that time, Jesus said unto them: Then shall the kingdom of heaven be likened unto ten virgins, which took their lamps, and went forth to meet the bridegroom. And five of them were wise, and five were foolish. They that were foolish took their lamps, and took no oil with them: But the wise took oil in their vessels with their lamps. While the bridegroom tarried, they all slumbered and slept. And at midnight there was a cry made, Behold, the bridegroom cometh; go ye out to meet him. Then all those virgins arose, and trimmed their lamps. And the foolish said unto the wise, Give us of your oil; for our lamps are gone out. But the wise answered, saying, Not so; lest there be not enough for us and you: but go ye rather to them that sell, and buy for yourselves. And while they went to buy, the bridegroom came; and they that were ready went in with him to the marriage: and the door was shut. Afterward came also the other virgins, saying, Lord, Lord, open to us. But he answered and said, Verily I say unto you, I know you not. Watch therefore, for ye know neither the day nor the hour wherein the Son of man cometh."
+       "t": "At that time, Jesus said unto them: Then shall the kingdom of heaven be likened unto ten virgins, which took their lamps, and went forth to meet the bridegroom. And five of them were wise, and five were foolish. They that were foolish took their lamps, and took no oil with them: But the wise took oil in their vessels with their lamps. While the bridegroom tarried, they all slumbered and slept. And at midnight there was a cry made, Behold, the bridegroom cometh; go ye out to meet him. Then all those virgins arose, and trimmed their lamps. And the foolish said unto the wise, Give us of your oil; for our lamps are gone out. But the wise answered, saying, Not so; lest there be not enough for us and you: but go ye rather to them that sell, and buy for yourselves. And while they went to buy, the bridegroom came; and they that were ready went in with him to the marriage: and the door was shut. Afterward came also the other virgins, saying, Lord, Lord, open to us. But he answered and said, Verily I say unto you, I know you not. Watch therefore, for ye know neither the day nor the hour wherein the Son of man cometh."
       }
      ]
     },
@@ -2341,14 +2490,19 @@
      ]
     },
     {
+     "type": "art",
+     "runs": [
+      {
+       "t": "Illuminated F"
+      }
+     ],
+     "art": "adv-initial-F.png"
+    },
+    {
      "type": "paragraph",
      "runs": [
       {
-       "t": "F",
-       "mark": "dropcap"
-      },
-      {
-       "t": "or with the heart man believeth unto righteousness; and with the mouth confession is made unto salvation. For the scripture saith, Whosoever believeth on him shall not be ashamed. For there is no difference between the Jew and the Greek: for the same Lord over all is rich unto all that call upon him. For whosoever shall call upon the name of the Lord shall be saved. How then shall they call on him in whom they have not believed? and how shall they believe in him of whom they have not heard? and how shall they hear without a preacher? And how shall they preach, except they be sent? as it is written, How beautiful are the feet of them that preach the gospel of peace, and bring glad tidings of good things! But they have not all obeyed the gospel. For Esaias saith, Lord, who hath believed our report? So then faith cometh by hearing, and hearing by the word of God. But I say, Have they not heard? Yes verily, their sound went into all the earth, and their words unto the ends of the world."
+       "t": "For with the heart man believeth unto righteousness; and with the mouth confession is made unto salvation. For the scripture saith, Whosoever believeth on him shall not be ashamed. For there is no difference between the Jew and the Greek: for the same Lord over all is rich unto all that call upon him. For whosoever shall call upon the name of the Lord shall be saved. How then shall they call on him in whom they have not believed? and how shall they believe in him of whom they have not heard? and how shall they hear without a preacher? And how shall they preach, except they be sent? as it is written, How beautiful are the feet of them that preach the gospel of peace, and bring glad tidings of good things! But they have not all obeyed the gospel. For Esaias saith, Lord, who hath believed our report? So then faith cometh by hearing, and hearing by the word of God. But I say, Have they not heard? Yes verily, their sound went into all the earth, and their words unto the ends of the world."
       }
      ]
     },

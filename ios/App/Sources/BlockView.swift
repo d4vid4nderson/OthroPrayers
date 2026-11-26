@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Renders one block of the content model.
 ///
@@ -124,6 +125,31 @@ struct BlockView: View {
             Text(attributed)
                 .font(Typeface.prayer(.callout))
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+        // An ornament off the printed page. Shipped as an alpha mask and
+        // drawn as a template, so one engraving serves all five themes
+        // instead of a fixed red fighting whichever one is on.
+        //
+        // The illuminated capital sits above the paragraph it opens rather
+        // than set into it: text cannot be flowed around an image here, and
+        // the letter keeps its place in the prose below, so the prayer reads
+        // whole whether or not the ornament draws.
+        case .art:
+            if let name = block.art, let art = UIImage(named: name) {
+                let wide = art.size.width > art.size.height * 1.6
+                Image(uiImage: art)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: wide ? .infinity : 64,
+                           maxHeight: wide ? .infinity : 64)
+                    .foregroundStyle(palette.accent)
+                    .frame(maxWidth: .infinity,
+                           alignment: wide ? .center : .leading)
+                    .padding(.top, wide ? 30 : 18)
+                    .padding(.bottom, wide ? 8 : 4)
+                    .accessibilityLabel(block.plain)
+            }
 
         case .definition:
             Text(attributed)

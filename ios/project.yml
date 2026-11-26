@@ -48,9 +48,10 @@ targets:
       # JSON must land at the bundle root, where UIAppFonts and Bundle.main
       # look for them. A folder reference would bury them a level down.
       #
-      # App/Resources/AltIcons rides on this. A group is flattened on the way
-      # into the bundle, which is what CFBundleIconFiles needs — it looks for
-      # its PNGs at the root and nowhere else.
+      # App/Resources/AltIcons and App/Resources/Art ride on this. A group is
+      # flattened on the way into the bundle, which is what CFBundleIconFiles
+      # needs — it looks for its PNGs at the root and nowhere else — and what
+      # lets UIImage(named:) find the ornaments by bare name.
       - path: App/Resources
       # the generated content model, referenced where build.py writes it and
       # never copied, so the app cannot drift from the site

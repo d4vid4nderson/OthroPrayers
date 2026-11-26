@@ -36,12 +36,19 @@ struct Block: Codable, Hashable {
         /// A page's closing credit: who wrote it, whose memory it honours.
         /// Not a prayer, and not part of the prayer above it.
         case colophon
+        /// An ornament lifted from the printed page: an illuminated capital,
+        /// or the woodcut that closes the Advent booklet. Its runs hold the
+        /// description, and `art` names the image.
+        case art
     }
 
     let type: Kind
     let runs: [Run]
     let style: String?
     let id: String?
+    /// The ornament's file, for a `.art` block. Carried as an alpha mask and
+    /// filled with the theme's accent, so one engraving suits every style.
+    let art: String?
 
     var isHymn: Bool { style == "hymn" }
     var plain: String { runs.map(\.t).joined() }

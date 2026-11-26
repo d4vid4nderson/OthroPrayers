@@ -65,6 +65,25 @@ for path in sorted(alt.glob("*.png")):
     if path.name not in declared:
         missing.append((str(path), "shipped but declared by nothing"))
 
+# The ornaments are named by the content model and loaded by bare name at
+# runtime, so a missing one is a blank space in a prayer and nothing says so
+# until someone opens that page. Same failure as the blank icon tiles.
+art_dir = pathlib.Path("ios/App/Resources/Art")
+content = pathlib.Path("ios/Content/content.json")
+if content.exists():
+    model = json.loads(content.read_text())
+    art_tracked = tracked_under(art_dir)
+    named = {b["art"] for p in model["pages"] for b in p["blocks"] if b.get("art")}
+    for name in sorted(named):
+        path = art_dir / name
+        if not path.exists():
+            missing.append((str(path), "named by content.json, not on disk"))
+        elif str(path) not in art_tracked:
+            missing.append((str(path), "on disk but not tracked by git"))
+    for path in sorted(art_dir.glob("*.png")) if art_dir.exists() else []:
+        if path.name not in named:
+            missing.append((str(path), "shipped but named by nothing"))
+
 if missing:
     print(f"{len(missing)} image files are declared but will not ship, "
           "or ship for nothing:\n")
@@ -73,3 +92,5 @@ if missing:
     sys.exit(1)
 print(f"{root}: every referenced file is present and tracked")
 print(f"{spec}: {len(names)} alternate icons, all present and tracked")
+if content.exists():
+    print(f"{art_dir}: {len(named)} ornaments, all present and tracked")
