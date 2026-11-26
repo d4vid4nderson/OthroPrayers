@@ -45,7 +45,6 @@ struct TodayView: View {
         .scrollEdgeEffectStyle(.soft, for: .top)
         .background(palette.ground)
         .navigationTitle("Western Rite")
-        .navigationDestination(for: String.self) { ReadingView(slug: $0) }
         .onChange(of: phase) { _, new in if new == .active { now = .now } }
     }
 }

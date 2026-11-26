@@ -86,10 +86,13 @@ struct RootView: View {
         // against. The old `.tabItem` form still compiles but opts out of them.
         TabView(selection: pane) {
             Tab("Prayers", systemImage: "sun.horizon", value: Pane.prayers) {
-                NavigationStack { TodayView() }
+                NavigationStack { TodayView().readingDestination() }
             }
             Tab("Missal", systemImage: "book.pages", value: Pane.missal) {
-                NavigationStack { bookView(slug: "st-peter-missal", fallback: "Missal") }
+                NavigationStack {
+                    bookView(slug: "st-peter-missal", fallback: "Missal")
+                        .readingDestination()
+                }
             }
             // Only when there is something to hear. A build made from a clean
             // checkout has the manifest but none of the audio, and a tab full
@@ -115,7 +118,12 @@ struct RootView: View {
             if new == .active { settings.systemIsDark = Appearance.systemIsDark }
         }
         .sheet(item: linkedPage) { linked in
-            NavigationStack { ReadingView(slug: linked.slug) }
+            // Its own stack, so it needs its own destination: without one a
+            // cross-reference followed from inside a linked page, or its
+            // previous/next, simply did nothing.
+            NavigationStack {
+                ReadingView(slug: linked.slug).readingDestination()
+            }
         }
     }
 
@@ -132,6 +140,22 @@ struct RootView: View {
     private var linkedPage: Binding<LinkedPage?> {
         Binding(get: { deepLink.map(LinkedPage.init) },
                 set: { deepLink = $0?.slug })
+    }
+}
+
+private extension View {
+    /// Where a slug becomes a page — exactly one per NavigationStack, at its
+    /// root.
+    ///
+    /// SwiftUI leaves the behaviour undefined when the same type is
+    /// registered twice in one stack. BookView used to carry its own, which
+    /// was right while it was a stack's root (the Missal tab) and wrong the
+    /// moment it was pushed into the Prayers stack, which already had one:
+    /// tapping a section pushed the section list again, with the page it
+    /// should have opened sitting underneath it. Declaring it only at the
+    /// roots makes a second registration impossible to reach.
+    func readingDestination() -> some View {
+        navigationDestination(for: String.self) { ReadingView(slug: $0) }
     }
 }
 
