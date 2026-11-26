@@ -139,7 +139,7 @@ struct BlockView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
         // An ornament off the printed page. Shipped as an alpha mask and
-        // drawn as a template, so one engraving serves all five themes
+        // drawn as a template, so one engraving serves every theme
         // instead of a fixed red fighting whichever one is on.
         //
         // The illuminated capital sits above the paragraph it opens rather
